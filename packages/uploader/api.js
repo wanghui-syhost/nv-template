@@ -1,0 +1,73 @@
+export function getTreeDocuments(reqParams) {
+  return unfetch({
+    url: '/document/tree/documents',
+    params: reqParams
+  });
+}
+
+// 文件重命名
+export function FileRename(fileInfo) {
+  return unfetch.put('/file/rename', fileInfo);
+}
+
+export function FileDelete(fileId) {
+  return unfetch.delete('/file', {
+    params: {
+      ID: fileId
+    }
+  });
+}
+
+export function FileAdd(fileInfo) {
+  return unfetch({
+    url: '/file',
+    method: 'post',
+    data: {
+      files: JSON.stringify(fileInfo)
+    }
+  });
+}
+
+export function FileDownload(fileId) {
+  return unfetch.get('/file/download/compress', {
+    params: {
+      ID: fileId
+    }
+  })
+}
+
+// 新建文件夹
+export function FileCreatedNewFolder(reqParams) {
+  return unfetch.post('/document/tree/directory', reqParams)
+}
+
+// 文件夹重命名
+export function FileRenameFolder(reqParams) {
+  return unfetch.post('/document/tree/rename', reqParams)
+}
+
+// 删除文件夹
+export function FileDeleteFolder(fileId) {
+  return unfetch.delete('/document/tree/directory', {
+    params: {
+      ID: fileId
+    }
+  })
+}
+
+// 批量删除文件或者文件夹
+export function deleteDirAndFiles(ids) {
+  return unfetch.delete('/document/tree/batDelete', {
+    params: {
+      IDS: ids
+    }
+  });
+}
+
+// 文件预览
+export function FileView(FILE_ID) {
+  return unfetch({
+    url: '/file/view',
+    params: FILE_ID
+  });
+}

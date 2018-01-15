@@ -1,0 +1,366 @@
+<template>
+  <div>
+      <section class="search-form" style="padding: 20px;">
+        <el-form>
+            <!-- 搜索框  -->
+  			<div class="search-form-one">
+  			    <span class="search-form-label">关键字</span>
+            <el-input v-model="KEYWORD" placeholder="请输入关键字" size="middle" style="width:332px;"></el-input>
+            <el-button type="infor" @click="getList();">搜索</el-button>
+
+  				<el-button type="primary" @click="dialogVisible = true">新增</el-button>
+          <el-button type="primary" @click="batchDialogVisible = true">批量添加</el-button>
+  			</div>
+        </el-form>
+      </section>
+
+
+    <section class="search-table">
+        <el-table :data="list" v-loading.body="listLoading" element-loading-text="拼命加载中" border fit highlight-current-row>
+          <el-table-column label="配置名称">
+            <template slot-scope="scope">
+               <span  v-show="!scope.row.isEdit">{{scope.row.NAME}}</span>
+               <el-input v-show="scope.row.isEdit" size="small" v-model="scope.row.NAME"></el-input>
+            </template>
+          </el-table-column>
+          <el-table-column label="配置key">
+            <template slot-scope="scope">
+              <span> {{scope.row.KEY}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="配置值">
+            <template slot-scope="scope">
+              <span  v-show="!scope.row.isEdit">{{scope.row.VALUE}}</span>
+              <el-input v-show="scope.row.isEdit" size="small" v-model="scope.row.VALUE"></el-input>
+            </template>
+          </el-table-column>
+           <el-table-column label="操作">
+            <template slot-scope="scope">
+              <el-button v-show='!scope.row.isEdit' type="primary" @click='scope.row.isEdit = true' size="small" icon="edit">编辑</el-button>
+              <el-button v-show='scope.row.isEdit' type="success" @click='modifyConfig(scope.row)' size="small" icon="check">完成</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+
+        <!-- 分页  -->
+        <div class="search-pagination">
+            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageIndex" :page-sizes="[10, 20, 30, 40]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="totalCount">
+            </el-pagination>
+        </div>
+    </section>
+
+     <!-- 新增 -->
+    <el-dialog title="项目信息" :visible.sync="dialogVisible" size="small">
+      <el-form :model="form" ref="form" :rules="rules" label-width="120px">
+        <el-row type="flex" class="row-bg" justify="space-around">
+        <el-col :span="12">
+          <el-form-item label="配置名称" prop="NAME">
+            <el-input v-model="form.NAME" placeholder="请输入配置名称">配置名称</el-input>
+          </el-form-item>
+        </el-col>
+        </el-row>
+        <el-row type="flex" class="row-bg" justify="space-around">
+        <el-col :span="12">
+          <el-form-item label="配置key" prop="KEY">
+            <el-input v-model="form.KEY" placeholder="请输入配置key">配置key</el-input>
+          </el-form-item>
+        </el-col>
+	    </el-row>
+      <el-row type="flex" class="row-bg" justify="space-around">
+        <el-col :span="12">
+          <el-form-item label="配置值" prop="VALUE">
+            <el-input v-model="form.VALUE" placeholder="请输入配置值">配置值</el-input>
+          </el-form-item>
+        </el-col>
+	    </el-row>
+	
+        <el-row type="flex" justify="space-around">
+            <el-col :span="8" :offset="4">
+              <el-button @click="dialogVisible = false">取消</el-button>
+              <el-button type="primary" @click="save();">保存</el-button>
+            </el-col>
+        </el-row>
+      </el-form>
+  </el-dialog>
+
+
+  <!-- 批量新增 -->
+    <el-dialog title="批量添加配置" :visible.sync="batchDialogVisible" size="small">
+      <el-form :model="dynamicValidateForm" ref="dynamicValidateForm"  label-width="120px">
+        <el-row type="flex" class="row-bg" justify="space-around" 
+        v-for="(domain, index) in dynamicValidateForm.domains"
+         :key="domain.key">
+          <el-form-item label="配置名称"  :prop="'domains.' + index + '.NAME'" :rules="[{ required: true, message: '配置名称不能为空', trigger: 'blur'}]">
+            <el-input v-model="domain.NAME" placeholder="请输入配置名称"></el-input>
+          </el-form-item>
+          <el-form-item label="配置key"  :prop="'domains.' + index + '.KEY'" 
+          :rules="keyRules">
+            <el-input v-model="domain.KEY" placeholder="请输入配置key"></el-input>
+          </el-form-item>
+          <el-form-item label="配置值"  :prop="'domains.' + index + '.VALUE'" :rules="[{required:true, message:'配置值不能为空', trigger: 'blur'}]">
+            <el-input v-model="domain.VALUE" placeholder="请输入配置值"></el-input>
+          </el-form-item>
+           <el-button @click.prevent="removeDomain(domain)" style="margin-left:20px; height: 40px;">删除</el-button>
+	    </el-row>
+      
+	
+        <el-row type="flex" justify="space-around">
+            <el-col :span="8" :offset="4">
+              <el-button @click="batchDialogVisible = false">取消</el-button>
+               <el-button @click="addDomain">添加行</el-button>
+              <el-button type="primary" @click="batchSave"  :disabled="dynamicValidateForm.domains.length >= 1 ? false : true">保存</el-button>
+            </el-col>
+        </el-row>
+      </el-form>
+  </el-dialog>
+
+
+  </div>
+</template>
+<script>
+import axios from 'axios';
+import { getConfigDatas, saveConfig, batchSaveConfig, validConfigKey, updateConfig } from '@core/api'
+export default {
+  name: 'Config',
+  data() {
+    var keyValid = (rule, value, callback) => {
+      var reg = /^[A-Za-z0-9_\.]+$/; 
+      if(!value.match(reg)){
+          callback(new Error('配置key只能是数字字母下划线和小数点'));
+      } else {
+        const params = {
+          CODE: value
+        };
+        validConfigKey(params).then(response => {
+          if (response.data.code == 0) {
+            var e = response.data.data; 
+            if(response.data.data == true){
+              callback(new Error('该配置已存在'));
+              return;
+            }
+          } else {
+            callback(new Error('验证失败'));
+            return;
+          }
+          callback();
+        });
+      
+      }
+    };
+    var dupValid = (rule, value, callback) => {
+      const arr = this.dynamicValidateForm.domains;
+      var i = 0;
+      var d;
+      for(var j =0; j < arr.length; j ++){
+        d = arr[j];
+        if(d.KEY == value) {
+            i ++;
+        }
+        if (i > 1){
+          callback(new Error('不能重复添加key'));
+          return;
+        } else {
+            if (j == arr.length - 1){
+              callback();
+            } else {
+              continue;
+            }
+           
+        }
+       
+      }
+    };
+    return {
+      dialogVisible: false,
+      batchDialogVisible: false,
+      list: null,
+      listLoading: true,
+      pageIndex: 1,
+      pageSize: 10,
+      totalCount: 0,
+      KEYWORD: '',
+      keyValid:'',
+      
+      form: {
+        NAME: null, // 配置名称
+        KEY: null, // 配置key
+		    VALUE: null // 配置值
+      },
+      keyRules:[ 
+              {required:true, message:'配置key不能为空', trigger: 'blur'},
+              {validator: dupValid, trigger: 'blur'},
+              {validator: keyValid, trigger: 'blur'}
+        ],
+        
+      rules: {
+        NAME:[{required:true, message:'配置名称不能为空', trigger: 'blur'}],
+        VALUE:[{required:true, message:'配置值不能为空', trigger: 'blur'}],
+        KEY:[
+          {required:true, message:'配置key不能为空', trigger: 'blur'},
+          {validator: keyValid, trigger: 'blur'}
+          ]
+      },
+
+     dynamicValidateForm: {
+          domains: [{
+            NAME: null, // 配置名称
+            KEY: null, // 配置key
+            VALUE: null // 配置值
+          }],
+          email: ''
+        }
+    };
+  },
+  created() {
+    this.getList();
+  },
+  methods: {
+    getList() {
+      this.listLoading = true;
+      const pageParams = {
+        pageIndex: this.pageIndex,
+        pageSize: this.pageSize,
+        KEYWORD: this.KEYWORD
+      }
+      getConfigDatas(pageParams).then(response => {
+        this.listLoading = false;
+        const { data, msg, code } = response.data;
+        if (code == 0) {
+          if (data.list == undefined){
+              this.list = null;
+              return;
+          }
+          this.list = data.list.map(v => {
+                v.isEdit = false;
+                return v
+              });
+          this.totalCount = data.totalCount;
+        } else {
+          this.$message.error(msg);
+        }
+      }).catch(err => {
+        console.log(err);
+      })
+    },
+  modifyConfig(row){
+      let me = this;
+      let data = {
+        ID: row.ID,
+        NAME: row.NAME,
+        VALUE : row.VALUE
+      }
+      updateConfig(data).then( response=>{
+        let {code, msg, data} = response.data;
+        if(code==0){
+          row.isEdit = false;
+          me.$message({
+            showClose: true,
+            message: '修改成功'
+          });
+        }else{
+          me.$message.error('修改失败');
+        }
+      }).catch(err=>{
+        console.error(err);
+      })
+    },
+  reqData(params){
+    deleteConfig(params).then(response => {
+      const { data, code, msg } = response.data;
+      if (code == 0) {
+        this.$message.info("删除成功");
+        this.getList();
+      } else {
+        this.$message.err("删除失败");
+      }
+    })
+  },
+   // 保存项目信息
+  save() {
+     this.$refs['form'].validate((valid) => {
+          if (valid) {
+            saveConfig(this.form).then(response => {
+              if (response.data.code == 0) {
+                this.$message({
+                  message: response.data.msg,
+                  type: "success"
+                });
+                this.resetForm('form');
+                // 重新加载数据
+                this.getList();
+              } else {
+                this.$message({
+                  message: response.data.msg,
+                  type: "error"
+                });
+              }
+
+              // 隐藏弹出框
+              this.dialogVisible = false;
+            });
+        } else {
+        return false;
+      }
+    });
+  },
+ // 批量保存项目信息
+  batchSave() {
+     this.$refs['dynamicValidateForm'].validate((valid) => {
+          if (valid) {
+            const arr = this.dynamicValidateForm.domains;
+            var data = {
+              CONFIGS: JSON.stringify(arr)
+            }
+            batchSaveConfig(data).then(response => {
+              if (response.data.code == 0) {
+                this.$message({
+                  message: response.data.msg,
+                  type: "success"
+                });
+                this.resetForm('dynamicValidateForm');
+                // 重新加载数据
+                this.getList();
+              } else {
+                this.$message({
+                  message: response.data.msg,
+                  type: "error"
+                });
+              }
+
+              // 隐藏弹出框
+              this.batchDialogVisible = false;
+            });
+        } else {
+        return false;
+      }
+    });
+  },
+  
+  handleSizeChange(pageIndex) {
+    this.queryPrams.pageSize = pageIndex;
+    this.getList();
+  },
+  handleCurrentChange(pageIndex) {
+    this.pageIndex = pageIndex;
+    this.getList();
+  },
+  resetForm(formName) {
+    this.$refs[formName].resetFields();
+  },
+   removeDomain(item) {
+    var index = this.dynamicValidateForm.domains.indexOf(item)
+    if (index !== -1) {
+      this.dynamicValidateForm.domains.splice(index, 1)
+    }
+  },
+  addDomain() {
+    this.dynamicValidateForm.domains.push({
+      NAME: null, // 配置名称
+      KEY: null, // 配置key
+      VALUE: null, // 配置值
+      key: Date.now()
+    });
+  }
+}
+}
+</script>

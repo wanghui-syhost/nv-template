@@ -1,0 +1,12 @@
+@import '~nenv/styles/_mixins.scss';
+
+$icons: (
+   done-task: './assets/icons/done-task', 
+   fav-task: './assets/icons/fav-task',
+   new-task: './assets/icons/new-task',
+   project-add: './assets/icons/project-add'
+);
+
+i.png-icon {
+    @include make-icons($icons)
+}

@@ -1,0 +1,335 @@
+<template>
+  <div>
+      <section class="search-form" style="padding:20px;">
+        <el-form>
+            <!-- 搜索框  -->
+  			<div class="search-form-one">
+  			    
+
+  				<el-button type="primary" @click="isShowAddDialog = true">新增</el-button>
+  			</div>
+        </el-form>
+      </section>
+
+      <div style="float: left; margin-bottom: 10px; margin-left: 20px; font-size: 14px">
+        <el-breadcrumb separator=">">
+					<el-breadcrumb-item :to="{ path: '/system/dictionary/' }">数据字典</el-breadcrumb-item>
+					<el-breadcrumb-item>{{PNAME}}</el-breadcrumb-item>
+				</el-breadcrumb>
+      </div>
+
+
+    <section class="search-table">
+        <el-table :data="list" v-loading.body="listLoading" element-loading-text="拼命加载中" border fit highlight-current-row>
+          
+          <el-table-column label="类别名称">
+            <template slot-scope="scope">
+              <span> {{scope.row.NAME}}</span>
+            </template>
+          </el-table-column>
+      
+          <el-table-column label="类别值">
+            <template slot-scope="scope">
+              <span> {{scope.row.VALUE}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="描述信息">
+            <template slot-scope="scope">
+              <span> {{scope.row.DESCRIPTION}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="排序">
+            <template slot-scope="scope">
+              <span> {{scope.row.SORT}}</span>
+            </template>
+          </el-table-column>
+
+          <el-table-column label="操作">
+            <template slot-scope="scope">
+               <el-button size="small" type="primary" @click="modifyInfo(scope.row)">编辑</el-button>
+              <el-button size="small" type="danger" @click="removeInfo(scope.row)" icon="delete">删除</el-button>
+            </template>
+          </el-table-column>
+          
+        </el-table>
+    </section>
+
+     <!-- 新增 -->
+    <el-dialog title="字典信息" :visible.sync="isShowAddDialog" size="small">
+      <el-form :model="addForm" ref="addForm" :rules="addRules" label-width="120px">
+        <el-row type="flex" class="row-bg" justify="space-around">
+        <el-col :span="12">
+          <el-form-item label="类别名称" prop="NAME">
+            <el-input v-model="addForm.NAME" placeholder="请输入类别名称" :maxlength="20">类别名称</el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row type="flex" class="row-bg" justify="space-around">
+        <el-col :span="12">
+          <el-form-item label="类别值" prop="VALUE">
+            <el-input v-model="addForm.VALUE" placeholder="请输入类别值" :maxlength="20">类别值</el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row type="flex" class="row-bg" justify="space-around">
+        <el-col :span="12">
+          <el-form-item label="描述信息" prop="DESCRIPTION">
+            <el-input v-model="addForm.DESCRIPTION" placeholder="请输入描述信息" :maxlength="50">描述信息</el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row type="flex" class="row-bg" justify="space-around">
+        <el-col :span="12">
+          <el-form-item label="排序序号" prop="SORT">
+            <el-input v-model.number="addForm.SORT" placeholder="请输入排序序号" :maxlength="3">排序顺序</el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+	
+      <el-row type="flex" justify="space-around">
+          <el-col :span="8" :offset="4">
+            <el-button @click="isShowAddDialog = false">取消</el-button>
+            <el-button type="primary" @click="save();">保存</el-button>
+          </el-col>
+      </el-row>
+    </el-form>
+  </el-dialog>
+
+
+   <!-- 修改 -->
+    <el-dialog title="字典信息" :visible.sync="isShowEditDialog" size="small">
+      <el-form :model="modifyForm" ref="modifyForm" :rules="modifyRules" label-width="120px">
+        <el-row type="flex" class="row-bg" justify="space-around">
+        <el-col :span="12">
+          <el-form-item label="类别名称" prop="NAME">
+            <el-input v-model="modifyForm.NAME" placeholder="请输入类别名称" :maxlength="20">类别名称</el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row type="flex" class="row-bg" justify="space-around">
+        <el-col :span="12">
+          <el-form-item label="类别值" prop="VALUE">
+            <el-input v-model="modifyForm.VALUE" placeholder="请输入类别值" :disabled="true" :maxlength="20">类别值</el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row type="flex" class="row-bg" justify="space-around">
+        <el-col :span="12">
+          <el-form-item label="描述信息" prop="DESCRIPTION">
+            <el-input v-model="modifyForm.DESCRIPTION" placeholder="请输入描述信息" :maxlength="50">描述信息</el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row type="flex" class="row-bg" justify="space-around">
+        <el-col :span="12">
+          <el-form-item label="排序序号" prop="SORT">
+            <el-input v-model.number="modifyForm.SORT" placeholder="请输入排序序号" :maxlength="3">排序顺序</el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+	
+      <el-row type="flex" justify="space-around">
+          <el-col :span="8" :offset="4">
+            <el-button @click="isShowEditDialog = false">取消</el-button>
+            <el-button type="primary" @click="update();">保存</el-button>
+          </el-col>
+      </el-row>
+    </el-form>
+  </el-dialog>
+  </div>
+</template>
+<script>
+import axios from "axios";
+import {
+  getDictionaryDatas,
+  deleteDictionaryData,
+  saveDictionaryData,
+  validDictionaryData,
+  updateDictionaryData
+} from "@core/api";
+export default {
+  name: "DictionaryData",
+  data() {
+    var codeValid = (rule, value, callback) => {
+      var reg = /^[A-Za-z_]+$/; 
+      if(!value.match(reg)){
+          callback(new Error('类别代码只能是字母和下划线'));
+      } else {
+        const params = {
+          CODE: this.CODE,
+          VALUE: value
+        };
+        validDictionaryData(params).then(response => {
+          if (response.data.code == 0) {
+            var e = response.data.data; 
+            if(response.data.data == true){
+              callback(new Error('该类别已存在'));
+              return;
+            }
+          } else {
+            callback(new Error('验证失败'));
+            return;
+          }
+          callback();
+        });
+      
+      }
+    };
+    return {
+      isShowAddDialog: false,
+      isShowEditDialog: false,
+      CODE: '',
+      PNAME:'',
+      list: null,
+      listLoading: true,
+
+      addForm: {
+        CODE: this.CODE, // 类别-代码（类别区分唯一标识）
+        NAME: null, // 类别名称
+        VALUE: null, // 类别值
+        DESCRIPTION: null, // 描述信息
+        SORT: null // 排序字段
+      },
+      addRules: {
+        NAME: [{required: true, message: '类别名称不能为空', trigger: 'blur'}],
+        VALUE:[
+          {required: true, message: '编码不能为空', trigger: 'blur'},
+          {validator: codeValid, trigger: 'blur'}
+         ],
+        SORT: [{ type: 'number', message: '序号必须为数字值', trigger: 'blur'}],
+      },
+
+      modifyForm:{},
+      modifyRules: {}
+    };
+  },
+  mounted() {
+    this.CODE = this.$route.query.CODE || '';
+    this.PNAME = this.$route.query.NAME || '';
+    this.addForm.CODE = this.CODE;
+    this.getList();
+  },
+  methods: {
+    getList() {
+      this.listLoading = true;
+      const pageParams = {
+        CODE: this.CODE
+      };
+
+      console.log(pageParams)
+      getDictionaryDatas(pageParams)
+        .then(response => {
+          this.listLoading = false;
+          const { data, msg, code } = response.data;
+          if (code == 0) {
+            this.list = data.map(v => v);
+            console.log(this.list)
+          } else {
+            this.$message.error(msg);
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    removeInfo(row) {
+      let me = this;
+      const params = {
+        ID: row.ID
+      };
+      this.$confirm("此操作将永久删除记录, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+        callback: (action, instance) => {
+          if (action == "confirm") {
+            me.reqData(params);
+          }
+        }
+      });
+    },
+    reqData(params) {
+      deleteDictionaryData(params).then(response => {
+        const { data, code, msg } = response.data;
+        if (code == 0) {
+          this.$message.info("删除成功");
+          this.getList();
+        } else {
+          this.$message.err("删除失败");
+        }
+      });
+    },
+    // 保存项目信息
+    save() {
+       this.$refs['addForm'].validate((valid) => {
+          if (valid) {
+            saveDictionaryData(this.addForm).then(response => {
+              if (response.data.code == 0) {
+                this.$message({
+                  message: response.data.msg,
+                  type: "success"
+                });
+                this.resetForm('addForm');
+                // 重新加载数据
+                this.getList();
+              } else {
+                this.$message({
+                  message: response.data.msg,
+                  type: "error"
+                });
+              }
+
+              // 隐藏弹出框
+              this.isShowAddDialog = false;
+            });
+          } else {
+            return false;
+          }
+       });  
+    },
+
+    modifyInfo(row){  
+      let backdata = JSON.parse(JSON.stringify(row));
+      this.modifyForm = backdata;
+      this.isShowEditDialog = true;
+    },
+    update(){
+      this.$refs['modifyForm'].validate((valid) => {
+          if (valid) {
+            const params = {
+              ID: this.modifyForm.ID,
+              NAME: this.modifyForm.NAME,
+              DESCRIPTION: this.modifyForm.DESCRIPTION,
+              SORT: this.modifyForm.SORT
+            }
+            updateDictionaryData(params).then(response => {
+              if (response.data.code == 0) {
+                this.$message({
+                  message: response.data.msg,
+                  type: "success"
+                });
+                this.resetForm('modifyForm');
+                // 重新加载数据
+                this.getList();
+              } else {
+                this.$message({
+                  message: response.data.msg,
+                  type: "error"
+                });
+              }
+
+              // 隐藏弹出框
+              this.isShowEditDialog = false;
+            });
+          } else {
+            return false;
+          }
+      });
+    },
+
+     resetForm(formName) {
+      this.$refs[formName].resetFields();
+    }
+  }
+};
+</script>

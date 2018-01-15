@@ -1,0 +1,29 @@
+{
+  "name": "infore-base",
+  "version": "2.0.0",
+  "license": "MIT",
+  "description": "infore base",
+  "versiondate": "2017-11-20",
+  "author": "JUN <xuej@infore.com>",
+  "scripts": {
+    "nenv": "node node_modules/nenv/bin/nenv dev",
+    "dev": "nenv dev",
+    "build": "nenv build",
+    "lint": "eslint --ext .vue,.js src"
+  },
+  "dependencies": {
+    "js-cookie": "^2.1.4",
+    "md5": "^2.2.1",
+    "screenfull": "^3.3.1"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">= 4.0.0",
+    "npm": ">= 3.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "ie >= 9"
+  ]
+}
