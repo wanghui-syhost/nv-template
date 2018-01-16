@@ -49,7 +49,7 @@ export function updateConfig(params) {
 }
 
 export function updateDictionary(params) {
-  return fetch({
+  return unfetch({
     url: '/dictionary',
     method: 'put',
     params
