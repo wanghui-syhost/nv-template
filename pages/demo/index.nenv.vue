@@ -30,7 +30,7 @@
 
         <div>
           <h3>省市区级联</h3>
-          <nv-region-select v-model="regionSelectedOptions"></nv-region-select >
+          <nv-region-select v-model="nvRegionSelectedResult"></nv-region-select >
         </div>
 
     </section>
@@ -70,7 +70,7 @@ export default {
     return {
       nvCheckboxResult: [],
       nvSelectResult: '',
-      regionSelectedOptions:["44","4406","440606"],
+      nvRegionSelectedResult:["44","4406","440606"],
        keyRules:[ 
               {required:true, message:'请选择性别', trigger:'changeTitle'}
         ],

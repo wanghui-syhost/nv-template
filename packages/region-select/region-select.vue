@@ -7,10 +7,10 @@
         ></el-cascader>
 </template>
 <script>
-import nvInpterMixins from 'nenv/mixins/inputerMixins'
+//import nvInpterMixins from 'nenv/mixins/inputerMixins'
   export default {
     name: 'NvRegionSelect',
-    mixins: [nvInpterMixins],
+    //mixins: [nvInpterMixins],
     props: {
         value: {
             type: String,
@@ -28,7 +28,16 @@ import nvInpterMixins from 'nenv/mixins/inputerMixins'
         //currentValue:["44","4406","440606"]
       };
     },
-
+    computed: {
+        currentValue: {
+        get () {
+            return this.value
+        },
+        set (val) {
+            this.$emit('input', val)
+        }
+        }
+    },
     created() {
       this.init();
     }, 
