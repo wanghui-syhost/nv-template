@@ -27,6 +27,12 @@
             <p>{{ nvSelectResult }}</p>
           </blockquote>
         </div>
+
+        <div>
+          <h3>省市区级联</h3>
+          <nv-region-select></nv-region-select >
+        </div>
+
     </section>
   </div>
 </template>

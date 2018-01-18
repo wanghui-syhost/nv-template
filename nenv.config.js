@@ -6,7 +6,7 @@ module.exports = {
   },
   proxy: {
     '/api/*': {
-      target: 'http://192.168.37.6:8089',
+      target: 'http://192.168.39.168:8089',
       filter(pathname, req) {
         if (pathname.match(/\/api/)) {
           return true
