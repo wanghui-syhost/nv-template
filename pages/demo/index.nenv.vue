@@ -8,7 +8,11 @@
     <section>
         <h2>2.输入控件</h2>
         <div>
-          <h3>2.1多选框</h3>
+          <h3>2.1单项框</h3>
+          <nv-radio nv-code="RADIO" v-model="nvRadioResult"></nv-radio>
+        </div>
+        <div>
+          <h3>2.2多选框</h3>
           <nv-checkbox nv-code="HOBBY" v-model="nvCheckboxResult"/>
           <blockquote>
             <p>
@@ -18,7 +22,7 @@
           </blockquote>
         </div>
         <div>
-          <h3>2.1下拉框</h3>
+          <h3>2.3下拉框</h3>
           <nv-select nv-code="PROCESS" v-model="nvSelectResult"></nv-select>
           <blockquote>
             <p>
@@ -59,6 +63,14 @@
         </el-row>
       </el-form>
     </section>
+    <section>
+      <h2>2.通用组件 </h2>
+      <div>
+        <h3>2.1 组织人员选择器</h3>
+        <nv-organize-user-selector url="/user/organize/all" title="从组织架构选择"  label="name" mutil="mutil" v-model="nvOrganizeUserSelectResult" />
+      </div>
+      <div></div>
+    </section>
   </div>
 </template>
 
@@ -68,11 +80,12 @@ export default {
   name: 'demo',
   data () {
     return {
+      nvRadioResult: null,
       nvCheckboxResult: [],
       nvSelectResult: '',
-       keyRules:[ 
-              {required:true, message:'请选择性别', trigger:'changeTitle'}
-        ],
+      keyRules:[ 
+        { required:true, message:'请选择性别', trigger:'changeTitle' }
+      ],
       dynamicValidateForm: {
         domains: [{
           NAME: '', // 配置名称
@@ -80,7 +93,8 @@ export default {
           VALUE: [] // 配置值
         }],
         email: ''
-      }
+      },
+      nvOrganizeUserSelectResult: []
     }
   },
   methods: {

@@ -1,4 +1,4 @@
-const build = require('nenv/server/build')
+const build = require('../nenv/server/build')
 const dir = __dirname
 console.log(dir)
 

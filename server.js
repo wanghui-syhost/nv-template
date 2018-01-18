@@ -46,6 +46,22 @@ module.exports = function (router, mockjs) {
           //   VALUE:"s4"
           // }
         ])
+      case 'RADIO': {
+        return res.reply([
+          {
+            NAME: "选项一",
+            VALUE: 'value1'
+          },
+          {
+            NAME: "选项二",
+            VALUE: 'value2'
+          },
+          {
+            NAME: "选项三",
+            VALUE: 'value3'
+          }
+        ])
+      }
       default:
         return next()
     }
