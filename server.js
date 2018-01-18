@@ -31,20 +31,20 @@ module.exports = function (router, mockjs) {
             VALUE:"s1"
           },
           {
-            ID:"11E7D960D65AC4E4AC7AE58809333CF0",
+            ID:"11E7D960D65AC4E4AC7AE58809333CF1",
             NAME:"第二赛季",
             VALUE:"s2"
           },
-          {
-            ID:"11E7D960D65AC4E4AC7AE58809333CF0",
-            NAME:"第三赛季",
-            VALUE:"s3"
-          },
-          {
-            ID:"11E7D960D65AC4E4AC7AE58809333CF0",
-            NAME:"第四赛季",
-            VALUE:"s4"
-          }
+          // {
+          //   ID:"11E7D960D65AC4E4AC7AE58809333CF2",
+          //   NAME:"第三赛季",
+          //   VALUE:"s3"
+          // },
+          // {
+          //   ID:"11E7D960D65AC4E4AC7AE58809333CF3",
+          //   NAME:"第四赛季",
+          //   VALUE:"s4"
+          // }
         ])
       default:
         return next()
