@@ -1,23 +1,31 @@
 <template>
     <el-cascader
-        :options="options2"
+        :options="nvOptions"
         @active-item-change="handleItemChange"
-        v-model="selectedOptions"
+        v-model="currentValue"
         :props="props"
         ></el-cascader>
 </template>
 <script>
+import nvInpterMixins from 'nenv/mixins/inputerMixins'
   export default {
     name: 'NvRegionSelect',
+    mixins: [nvInpterMixins],
+    props: {
+        value: {
+            type: String,
+            required: true
+        }
+    },
     data() {
       return {
-        options2: [],
+        nvOptions: [],
         props: {
           value: 'CODE',
           label: 'NAME',
           children: 'children'
         },
-        selectedOptions:["44","4406","440606"]
+        //currentValue:["44","4406","440606"]
       };
     },
 
@@ -31,19 +39,19 @@
             const self = this;
             //获取省份列表
 			unfetch("region/getAllProvince", {}).then(({ data }) => {
-                self.options2 = data;
-                if(self.selectedOptions && self.selectedOptions.length>1){
-                    self.options2.forEach((item,prince_index) => {
-                        if(item.CODE == self.selectedOptions[0]){
+                self.nvOptions = data;
+                if(self.currentValue && self.currentValue.length>1){
+                    self.nvOptions.forEach((item,prince_index) => {
+                        if(item.CODE == self.currentValue[0]){
                             //根据Pcode获取城市列表
                             unfetch("region/getChildernsByCode?CODE="+item.CODE, {}).then(({ data }) => {
-                                self.options2[prince_index].children = data;
-                                if(self.selectedOptions.length>2){
-                                   self.options2[prince_index].children.forEach((item2,city_index) =>{
-                                       if(item2.CODE == self.selectedOptions[1]){
+                                self.nvOptions[prince_index].children = data;
+                                if(self.currentValue.length>2){
+                                   self.nvOptions[prince_index].children.forEach((item2,city_index) =>{
+                                       if(item2.CODE == self.currentValue[1]){
                                          //根据Pcode获取区域列表
                                          unfetch("region/getChildernsByCode?CODE="+item2.CODE+"&LEVEL=3", {}).then(({ data }) => {
-                                            self.options2[prince_index].children[city_index].children = data;
+                                            self.nvOptions[prince_index].children[city_index].children = data;
                                          });
                                        }
                                    });
@@ -57,11 +65,11 @@
 
       handleItemChange(val) {
           
-              this.options2.forEach((element,index) => {
+              this.nvOptions.forEach((element,index) => {
                   if(val.length == 1){
                         if(element.CODE == val[0]){
                             unfetch("region/getChildernsByCode?CODE="+element.CODE, {}).then(({ data }) => {
-                                this.options2[index].children = data;
+                                this.nvOptions[index].children = data;
                             });
                         }
                   }else if(val.length == 2) {
@@ -69,7 +77,7 @@
                             element.children.forEach((city,city_index) => {
                                if(city.CODE == val[1]){
                                     unfetch("region/getChildernsByCode?CODE="+city.CODE+"&LEVEL=3", {}).then(({ data }) => {
-                                       this.options2[index].children[city_index].children = data;
+                                       this.nvOptions[index].children[city_index].children = data;
                                     });
                                }
 
