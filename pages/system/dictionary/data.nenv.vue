@@ -146,7 +146,7 @@ import {
   saveDictionaryData,
   validDictionaryData,
   updateDictionaryData
-} from "@core/api";
+} from "./api";
 export default {
   name: "DictionaryData",
   data() {
@@ -160,17 +160,14 @@ export default {
           VALUE: value
         };
         validDictionaryData(params).then(response => {
-          if (response.data.code == 0) {
-            var e = response.data.data; 
-            if(response.data.data == true){
+           var e = response.data; 
+            if(e == true){
               callback(new Error('该类别已存在'));
               return;
             }
-          } else {
-            callback(new Error('验证失败'));
-            return;
-          }
-          callback();
+            callback();
+        }).catch(err =>{
+          console.log(err);
         });
       
       }
@@ -221,12 +218,8 @@ export default {
         .then(response => {
           this.listLoading = false;
           const { data, msg, code } = response.data;
-          if (code == 0) {
-            this.list = data.map(v => v);
+            this.list = response.data.map(v => v);
             console.log(this.list)
-          } else {
-            this.$message.error(msg);
-          }
         })
         .catch(err => {
           console.log(err);
@@ -250,13 +243,13 @@ export default {
     },
     reqData(params) {
       deleteDictionaryData(params).then(response => {
-        const { data, code, msg } = response.data;
-        if (code == 0) {
           this.$message.info("删除成功");
           this.getList();
-        } else {
-          this.$message.err("删除失败");
-        }
+      }).catch(e => {
+         this.$message({
+            message: '删除失败',
+            type: "error"
+          });
       });
     },
     // 保存项目信息
@@ -303,23 +296,20 @@ export default {
               SORT: this.modifyForm.SORT
             }
             updateDictionaryData(params).then(response => {
-              if (response.data.code == 0) {
-                this.$message({
-                  message: response.data.msg,
-                  type: "success"
-                });
-                this.resetForm('modifyForm');
-                // 重新加载数据
-                this.getList();
-              } else {
-                this.$message({
-                  message: response.data.msg,
-                  type: "error"
-                });
-              }
-
+              this.$message({
+                message: response.rawData.msg,
+                type: "success"
+              });
+              this.resetForm('modifyForm');
+              // 重新加载数据
+              this.getList();
               // 隐藏弹出框
               this.isShowEditDialog = false;
+            }).catch(err => {
+              this.$message({
+                  message: '修改失败',
+                  type: "error"
+                });
             });
           } else {
             return false;

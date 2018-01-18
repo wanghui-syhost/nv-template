@@ -118,7 +118,7 @@
 </template>
 <script>
 import axios from "axios";
-import { getDictionaries, deleteDictionary, saveDictionary , validDictionary, updateDictionary} from "@core/api";
+import { getDictionaries, deleteDictionary, saveDictionary , validDictionary, updateDictionary} from "./api";
 export default {
   name: "Dictionary",
   data() {
@@ -131,17 +131,14 @@ export default {
           CODE: value
         };
         validDictionary(params).then(response => {
-          if (response.data.code == 0) {
-            var e = response.data.data; 
-            if(response.data.data == true){
+            var e = response.data; 
+            if(e == true){
               callback(new Error('该类别已存在'));
               return;
             }
-          } else {
-            callback(new Error('验证失败'));
-            return;
-          }
-          callback();
+            callback();
+        }).catch(err =>{
+          console.log(err);
         });
       
       }
@@ -215,17 +212,14 @@ export default {
       getDictionaries(pageParams)
         .then(response => {
           this.listLoading = false;
-          const { data, msg, code } = response.data;
-          if (code == 0) {
-            if (data.list == undefined){
-              this.list = null;
-              return;
-            }
-            this.list = data.list.map(v => v);
-            this.totalCount = data.totalCount;
-          } else {
-            this.$message.error(msg);
+          const data = response.data;
+
+          if (data.list == undefined){
+            this.list = null;
+            return;
           }
+          this.list = data.list.map(v => v);
+          this.totalCount = data.totalCount;
         })
         .catch(err => {
           console.log(err);
@@ -249,37 +243,37 @@ export default {
     },
     reqData(params) {
       deleteDictionary(params).then(response => {
-        const { data, code, msg } = response.data;
-        if (code == 0) {
+        //const { data, code, msg } = response.data;
           this.$message.info("删除成功");
           this.getList();
-        } else {
+      }).catch(e =>{
           this.$message.err("删除失败");
-        }
       });
     },
     // 保存项目信息
     save() {
        this.$refs['addForm'].validate((valid) => {
           if (valid) {
-            saveDictionary(this.form).then(response => {
-              if (response.data.code == 0) {
+            // const param = {
+            //    CODE: this.addForm.CODE, // 类别-代码（类别区分唯一标识）
+            //    NAME: this.addForm.NAME
+            // }
+            saveDictionary(this.addForm).then(response => {
                 this.$message({
-                  message: response.data.msg,
+                  message: '保存成功',
                   type: "success"
                 });
                 this.resetForm('addForm');
                 // 重新加载数据
                 this.getList();
-              } else {
-                this.$message({
-                  message: response.data.msg,
-                  type: "error"
-                });
-              }
-
               // 隐藏弹出框
               this.isShowAddDialog = false;
+            }).catch(err =>{
+              console.log(err);
+              this.$message({
+                message: '保存失败',
+                type: "error"
+              });
             });
           } else {
             return false;
@@ -300,24 +294,23 @@ export default {
                     ID: this.modifyForm.ID,
                     NAME: this.modifyForm.NAME
                   }
-                  updateDictionary(params).then(response => {
-                    if (response.data.code == 0) {
-                      this.$message({
-                        message: response.data.msg,
-                        type: "success"
-                      });
-                      this.resetForm('modifyForm');
-                      // 重新加载数据
-                      this.getList();
-                    } else {
-                      this.$message({
-                        message: response.data.msg,
-                        type: "error"
-                      });
-                    }
-
+                  updateDictionary(params)
+                  .then(response => {
+                   
+                    this.$message({
+                      message: response.rawData.msg,
+                      type: "success"
+                    });
+                    this.resetForm('modifyForm');
+                    // 重新加载数据
+                    this.getList();
                     // 隐藏弹出框
                     this.isShowEditDialog = false;
+                  }).catch(e => {
+                    this.$message({
+                        message: '修改失败',
+                        type: "error"
+                      });
                   });
                 } else {
                   return false;
@@ -331,19 +324,12 @@ export default {
         STATUS: status
       };
       updateDictionary(params).then(response => {
-         if (response.data.code == 0) {
-            this.$message({
-                  message: response.data.msg,
-                  type: "success"
-                });
-                // 重新加载数据
-                this.getList();
-         } else {
-                this.$message({
-                  message: response.data.msg,
-                  type: "error"
-                });
-              }
+         this.$message({
+            message: response.rawData.msg,
+            type: "success"
+          });
+          // 重新加载数据
+          this.getList();
       });
     },
 
