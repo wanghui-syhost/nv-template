@@ -14,7 +14,7 @@
         props: {
           value: 'CODE',
           label: 'NAME',
-          children: 'cities'
+          children: 'children'
         }
       };
     },
@@ -38,15 +38,15 @@
                                 unfetch("region/getChildernsByCode?CODE="+element.CODE, {}).then(({ data }) => {
                                 console.log('index:', index);
                                 console.log('dataindex:', data);
-                                this.options2[index].cities = data;
+                                this.options2[index].children = data;
                                 });
                         }
                   }else if(val.length == 2) {
                         if(element.CODE == val[0]){
-                            element.cities.forEach((city,city_index) => {
+                            element.children.forEach((city,city_index) => {
                                if(city.CODE == val[1]){
                                     unfetch("region/getChildernsByCode?CODE="+city.CODE+"&LEVEL=3", {}).then(({ data }) => {
-                                       this.options2[index].cities[city_index].cities = data;
+                                       this.options2[index].children[city_index].children = data;
                                     });
                                }
 
