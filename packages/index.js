@@ -5,6 +5,7 @@ import NvSelect from './select'
 import NvScrollPane from './scroll-pane'
 import NvUploader from './uploader'
 import NvUserSelector from './user-selector'
+import NvRegionSelect from './region-select'
 
 const components = [
   NvCalendar,
@@ -13,7 +14,8 @@ const components = [
   NvScrollPane,
   NvSelect,
   NvUploader,
-  NvUserSelector
+  NvUserSelector,
+  NvRegionSelect
 ]
 
 const install = function(Vue, opts = {}) {

@@ -27,6 +27,12 @@
             <p>{{ nvSelectResult }}</p>
           </blockquote>
         </div>
+
+        <div>
+          <h3>省市区级联</h3>
+          <nv-region-select></nv-region-select >
+        </div>
+
     </section>
     <section style="width:1200px">
         <h2>3.子表配置</h2>
