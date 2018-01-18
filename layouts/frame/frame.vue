@@ -1,7 +1,7 @@
 <template>
     <div id="frame">
         <div class="frame-header">
-            <e-header v-if="isShowHeader" :current-choose-name="currentTopMenuName" />
+            <e-header v-if="isShowHeader" />
         </div>
         <div class="e-app-wrapper" v-show="true">
             <div class="e-sidebar-wrapper" v-if="isShowSidebar">
@@ -17,9 +17,9 @@
 
 <script>
 import store from './store'
-import { EHeader, EMain, ESidebar, ETab } from './components';
-import vuex, {createNamespacedHelpers} from 'vuex';
-const {mapState ,mapGetters, mapActions } = createNamespacedHelpers(store.name)
+import { EHeader, EMain, ESidebar, ETab } from './components'
+import vuex, { createNamespacedHelpers } from 'vuex'
+const { mapState ,mapGetters, mapActions } = createNamespacedHelpers(store.name)
 
 
 export default {
@@ -52,8 +52,7 @@ export default {
             isShowSidebar: 'isShowSidebar',
             isShowHomeNav: 'isShowHomeNav',
             isShowHeader: 'isShowHeader',
-            isShowTabs: 'isShowTabs',
-            currentTopMenuName : 'currentTopMenuName',
+            isShowTabs: 'isShowTabs'
         })
     },
     data() {

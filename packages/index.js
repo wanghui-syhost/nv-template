@@ -1,6 +1,7 @@
 import NvCalendar from './calendar'
 import NvCheckbox from './checkbox'
 import NvOrganizeUserSelector from './organize-user-selector'
+import NvRadio from './radio'
 import NvSelect from './select'
 import NvScrollPane from './scroll-pane'
 import NvUploader from './uploader'
@@ -10,6 +11,7 @@ const components = [
   NvCalendar,
   NvCheckbox,
   NvOrganizeUserSelector,
+  NvRadio,
   NvScrollPane,
   NvSelect,
   NvUploader,
