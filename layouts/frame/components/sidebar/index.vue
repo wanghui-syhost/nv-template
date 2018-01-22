@@ -7,6 +7,7 @@
 <script>
     import ESidebarItem from './components/esidebaritem';
     export default {
+      name: 'FrameSidebar',
       components: { ESidebarItem },
       props:{
         'routes':{

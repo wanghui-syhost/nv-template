@@ -1,4 +1,4 @@
-export { default as ESidebar } from './esidebar';
-export { default as EHeader } from './e-header'
-export { default as EMain } from './emain';
-export { default as ETab } from './etab';
+export { default as frameSidebar } from './sidebar';
+export { default as frameHeader } from './header'
+export { default as frameMain } from './main';
+export { default as frameTab } from './tab';

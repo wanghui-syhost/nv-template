@@ -23,7 +23,7 @@ export const router = {
   children: [{
     path: 'home',
     component: Home,
-    meta: { nosideBar: true }
+    meta: { noSidebar: true }
   }]
 }
 

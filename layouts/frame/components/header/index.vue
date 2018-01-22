@@ -35,7 +35,7 @@ import OuterLink from '../nav-link/outer-link'
 import vuex, { mapGetters, mapActions } from 'vuex';
 
 export default {
-    name: 'EHeader',
+    name: 'FrameHeader',
     components: { OuterLink },
     props: {
         header: {

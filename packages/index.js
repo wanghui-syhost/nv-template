@@ -6,10 +6,12 @@ import NvScrollPane from './scroll-pane'
 import NvUploader from './uploader'
 import NvUserSelector from './user-selector'
 import NvRegionSelect from './region-select'
+import NvLeger from './ledger'
 
 const components = [
   NvCalendar,
   NvCheckbox,
+  NvLeger,
   NvOrganizeUserSelector,
   NvScrollPane,
   NvSelect,

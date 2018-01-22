@@ -1,5 +1,7 @@
 // 引入布局
 
-import './layouts/frame'
+import '@layouts/frame'
 
 import './packages'
+
+import './modules'

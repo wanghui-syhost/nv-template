@@ -16,7 +16,7 @@
 
   const { mapState, mapGetters, mapActions } = createNamespacedHelpers(store.name)
   export default {
-    name:'ETab',
+    name:'FrameTab',
     // components: { ScrollPane },
     data () {
       return {

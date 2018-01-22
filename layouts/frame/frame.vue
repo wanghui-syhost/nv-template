@@ -1,15 +1,15 @@
 <template>
-    <div id="frame">
-        <div class="frame-header">
-            <e-header v-if="isShowHeader" :current-choose-name="currentTopMenuName" />
+    <div id="frame" class="frame">
+        <div class="frame__header-wrapper">
+            <frame-header />
         </div>
-        <div class="e-app-wrapper" v-show="true">
-            <div class="e-sidebar-wrapper" v-if="isShowSidebar">
-                <e-sidebar class="sidebar-container" :routes="childRoutes" />
+        <div class="e-app-wrapper" v-show="true" :class="{'has-sidebar': hasSidebar}">
+            <div class="e-sidebar-wrapper" v-if="hasSidebar">
+                <frame-sidebar class="sidebar-container" :routes="childRoutes"/>
             </div>
-            <div class="e-main-container">
-                <e-tab v-if="isShowTabs" />
-                <e-main />
+            <div class="e-main-container" :class= "{'has-sidebar': hasSidebar } ">
+                <!--e-tab v-if="isShowTabs" /-->
+                <frame-main />
             </div>
         </div>
     </div>
@@ -17,18 +17,18 @@
 
 <script>
 import store from './store'
-import { EHeader, EMain, ESidebar, ETab } from './components';
-import vuex, {createNamespacedHelpers} from 'vuex';
-const {mapState ,mapGetters, mapActions } = createNamespacedHelpers(store.name)
+import { frameHeader, frameMain, frameSidebar, frameTab } from './components'
+import vuex, { createNamespacedHelpers } from 'vuex'
+const { mapState ,mapGetters, mapActions } = createNamespacedHelpers(store.name)
 
 
 export default {
     name: 'Frame',
     components: {
-        EHeader,
-        ESidebar,
-        EMain,
-        ETab,
+        frameHeader,
+        frameMain,
+        frameSidebar,
+        frameTab,
     },
     computed: {
         childRoutes () {
@@ -39,11 +39,7 @@ export default {
             const parentRoute = menus.find(m => {
                return  rules.exec(m.linkUrl)[0] === parentPath
             })
-            if (parentRoute && parentRoute.childrens) {
-                return parentRoute.childrens
-            } else {
-                return []
-            }
+            return parentRoute ? parentRoute.childrens || [] : []
         },
         ...vuex.mapState('platform', {
             menus: state => state.menus
@@ -51,12 +47,13 @@ export default {
         ...mapState({
             isShowSidebar: 'isShowSidebar',
             isShowHomeNav: 'isShowHomeNav',
-            isShowHeader: 'isShowHeader',
-            isShowTabs: 'isShowTabs',
-            currentTopMenuName : 'currentTopMenuName',
-        })
+            isShowTabs: 'isShowTabs'
+        }),
+        hasSidebar () {
+            return this.childRoutes.length > 0
+        }
     },
-    data() {
+    data () {
         return {
             current_routers: [],
             routers: [],
@@ -79,21 +76,25 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss" scoped>
 #frame {
-    .frame-header {
-        position: fixed;
-        z-index: 999;
-        width: 100%;
+    .frame {
+        &__header-wrapper {
+            position: fixed;
+            z-index: 999;
+            width: 100%;    
+        }
     }
     .e-app-wrapper {
-        //@include clearfix;
         position: relative;
         padding-top: 72px;
         height: 100%;
         width: 100%;
+
         &:after {
-          clear: both;
+            content: '';
+            clear: both;
         }
-        &.hideSidebar {
+
+        &.auto-sidebar {
             .e-sidebar-wrapper {
                 transform: translate(-140px, 0);
                 .e-sidebar-container {
@@ -133,7 +134,10 @@ export default {
         .e-main-container {
             min-height: 100%;
             transition: all .28s ease-out;
-            margin-left: 240px;
+            
+            &.has-sidebar {
+                margin-left: 240px;
+            }
         }
     }
 }

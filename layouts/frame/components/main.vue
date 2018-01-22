@@ -8,12 +8,21 @@
 
 <script>
     export default {
-      name: 'EMain',
+      name: 'FrameMain',  
     }
 </script>
-<style scoped>
+<style scoped lang="scss">
     .main{
         padding-left:20px;
+    }
+
+    .fade-enter-active, .fade-leave-active {
+        // margin-top: 0px;
+        // transition: opacity .5s;
+    }
+    .fade-enter, .fade-leave-to {
+        //margin-top: 500px;
+        //opacity: 0;
     }
 </style>
 

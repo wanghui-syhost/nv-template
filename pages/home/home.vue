@@ -262,6 +262,8 @@ export default {
                 let {TODO_NUM, DONE_NUM} = response.data;
                 self.todayTodoCnt = TODO_NUM;
                 self.todayDoCnt = DONE_NUM;
+            }).catch(() => {
+                
             });
             self.changeData(1);
             self.changeData1(1);
@@ -273,10 +275,14 @@ export default {
         changeData1(pageIndex) {
             let me = this;
             me.pageParams1.pageIndex = pageIndex;
-            getTrail(me.pageParams1).then(response => {
+            getTrail(me.pageParams1)
+            .then(response => {
                 let  data = response.data;
                 me.homeGtask1 = data.list;
                 me.homeGtask1Total = data.totalCount;
+            })
+            .catch(() => {
+
             });
         },
         changeData(pageIndex) {
@@ -289,6 +295,9 @@ export default {
                 let data = response.data;
                 self.homeGtask = data.list;
                 self.homeGtaskTotal = data.totalCount;
+            })
+            .catch(() => {
+
             });
        
         }
