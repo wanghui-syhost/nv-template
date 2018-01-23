@@ -1,31 +1,53 @@
 <template>
-	<div class="dialog-select">
-		<el-button size="mini" type="primary" @click="handleClick">{{title}}</el-button>
+	<div class="dialog-select nv-organize-user-dialog">
+		<div class="nv-organize-user-dialog__input" @click="handleClick">
+			<span v-if = "!currectValue || currectValue.length === 0" class="nv-organize-user-dialog__placeholder" >
+				{{ placeholder }}
+			</span>
+			<el-tag 
+				v-for = "node in currectValue" 
+				:key="node.id" 
+				closable
+				size = "small"
+				@close = "removeSelected(node)"
+				>
+				{{ node.name }}
+			</el-tag>
+			<el-tag size = "small" type="info" @click="handleClick">
+				+添加更多
+			</el-tag>
+		</div>
 		<el-dialog :title="title" :visible.sync="dialogVisible" width="800px">
-			<el-form :model="dialogForm">
-				<div class="select-tree">
-					<div class="select-tree__left">
-						<div class="search-div">
-							<el-input class="search" placeholder="输入关键字进行搜索" v-model="filterText"></el-input>
-						</div>
-						<div class="tree-div">
-							<el-tree ref="selectTree" class="filter-tree" :disabled="true" :data="treeData" :props="defaultProps" 
-								@check-change="checkChange" node-key="id" default-expand-all
-								show-checkbox :filter-node-method="filterNode">
-							</el-tree>
-						</div>
+			<div class="select-tree">
+				<div class="select-tree__left">
+					<div class="search-div">
+						<el-input class="search" placeholder="输入关键字进行搜索" v-model="filterText" />
 					</div>
-					<div class="select-tree__right">
-						<div v-for="node in nodeList" :key="node.id" @mouseenter="nodeEnter($event);" @mouseout="nodeOut($event);">
-						    <li>{{ node.text }}</li>
-						    <li class="user-dept">{{ node.deptPath }}</li>
-						    <i @mouseenter="nodeEnter($event, true);" @click="removeSelected(node);">×</i>
-						</div>
+					<div class="tree-div">
+						<el-tree ref="selectTree"
+								class="filter-tree" 
+							:disabled="true" 
+							:data="treeData" 
+							:props="defaultProps" 
+							node-key="id" 
+							render-after-expand
+							default-expand-all
+							show-checkbox
+							:filter-node-method="filterNode"
+							@check-change="checkChange" >
+						</el-tree>
 					</div>
 				</div>
-			</el-form>
+				<div class="select-tree__right">
+					<div v-for="node in nodeList" class="selected-user-item" :key="node.id">
+						<li>{{ node.name }}</li>
+						<li class="user-dept">{{ '/' + node.parents.map(item => item.name).join('/') }}</li>
+						<i @click="removeSelected(node)">×</i>
+					</div>
+				</div>
+			</div>
 			<div slot="footer" class="dialog-footer">
-				<el-button type="primary" @click="getCheckedNodes">确 定</el-button>
+				<el-button type="primary" @click="commitResult">确 定</el-button>
 				<el-button @click="dialogVisible = false">取 消</el-button>
 			</div>
 		</el-dialog>
@@ -33,94 +55,104 @@
 </template>
 
 <script>
-	// import { getAjaxData } from "@core/api/";
 	export default {
 		name: 'NvOrganizeUserSelector',
 		props: {
 			title: {
 				type: String,
-				default: '选择'
+				default: '请选择人员'
 			},
 			// 匹配的label
 			label: {
 				type: String,
-				default: 'label'
+				default: 'name'
 			},
 			// 请求url地址
 			url: {
 				type: String,
 				required: true
 			},
-			callback: {
-				type: Function
-			},
 			mutil: {
 				type: String
+			},
+			value: {
+				required: true
+			},
+			placeholder: {
+				type: String,
+				default: '请选择人员'
 			}
 		},
-		data() {
+		data () {
 			return {
 		        defaultProps: {
 		          	children: 'children',
 		          	label: this.label
 		        },
 				dialogVisible: false,
-				dialogForm: {
-					
-				},
 			    filterText: '',
 				treeData: [],
 				nodeList: []
-			};
+			}
 		},
-		mounted() {
-			const self = this;
-			unfetch(this.url, {}).then(({ data }) => {
-		        self.loopData(data[0].children, '');
-		        self.treeData = data;
-		    });
-		},
-		watch: {
-	      	filterText(val) {
-	        	this.$refs.selectTree.filter(val);
-	      	}
-	    },
-		methods: {
-			loopData(data, deptPath) {
-				for (const node of data) {
-					let tempPath = deptPath;
-					if (node.children) {
-						//node.disabled = true;
-						tempPath += ' / '+ node.text;
-						this.loopData(node.children, tempPath);
-					} else {
-						node.deptPath = deptPath;
-					}
+		computed: {
+			currectValue: {
+				set (val) {
+					this.$emit('input', val)
+				},
+				get () {
+					return this.value
 				}
+			}
+		},
+		created () {
+			this.fetchData()
+		},
+		methods: {
+			fetchData () {
+				const self = this
+				unfetch(this.url, {})
+				.then(({ data }) => {
+					// 处理父节点
+					function recursivelyProcessNode (tree, parents) {
+						tree.forEach(leaf => {
+							leaf.name = leaf.text
+							delete leaf.text
+							if (leaf.children) {
+								recursivelyProcessNode(leaf.children, parents.concat({ name: leaf.name, id: leaf.id}))
+							} else {
+								leaf.parents = parents
+							}
+						})
+					}
+
+					self.$nextTick(() => {
+						recursivelyProcessNode(data, [])
+					})
+					self.treeData = data
+				});
 			},
 			// 点开弹出
-			handleClick() {
+			handleClick () {
 				this.dialogVisible = true;
 			},
 			filterNode(value, data) {
 		        if (!value) return true;
 		        return data[this.label].indexOf(value) !== -1;
 		    },
-		    getCheckedNodes() {
-		        if (this.nodeList.length < 1) {
-		        	this.$message.error('需要勾选人员才能确定哦');
-		        } else {
-		    		this.dialogVisible = false;
-		    		if (this.callback) {
-		    			this.callback(this.nodeList);
-		    		}
+		    commitResult () {
+				const self = this
+		        if (self.nodeList.length < 1) {
+		        	self.$message.error('需要勾选人员才能确定哦');
 		        }
+				self.currectValue = this.nodeList
+				self.dialogVisible = false
 		    },
-		    checkChange(node, isChecked, isChildChecked) {
-                debugger
+		    checkChange (node, isChecked, isChildChecked) {
+				const self = this
 		    	if (!node.children) {
 		    		if (isChecked) {
-		    			if (this.filterText && node.text.indexOf(this.filterText) == -1) {
+		    			if (this.filterText && node.name.indexOf(this.filterText) == -1) {
 		    				// 如果是搜索，不在搜索范围的取消
 					    	const selectTree = this.$refs.selectTree;
 					    	selectTree.setChecked(node.id, false, false);
@@ -131,65 +163,148 @@
 		    					// 移除其他勾选的
 		    					this.removeSelected(nodeObj);
 		    				}
-		    				this.nodeList.push({ id: node.id, text: node.text, deptPath: node.deptPath });
+		    				this.nodeList.push({ id: node.id, name: node.name, parents: node.parents });
 		    			}
 			    	} else {
-			    		// 取消勾选
-			    		for(let i = 0; i < this.nodeList.length; i++) {
-						    if(this.nodeList[i].id == node.id) {
-						      this.nodeList.splice(i, 1);
-						      break;
-						    }
-						}
-			    	}
+						// 取消勾选
+						self.nodeList = self.nodeList.filter(item => item.id !== node.id)
+					}
+					self.currectValue = self.nodeList
 		    	}
 		    },
-		    nodeEnter(e, flag) {
-		    	if (flag) e.target.parentNode.classList.add('active');
-		    	else e.target.classList.add('active');
-		    },
-		    nodeOut(e) {
-		    	e.target.classList.remove('active');
-		    },
-		    removeSelected(node) {
-		    	for (let i = 0; i < this.nodeList.length; i++) {
-		    		const nodeObj = this.nodeList[i];
-		    		if (nodeObj.id == node.id) {
-		    			this.nodeList.splice(i, 1);
-		    			break;
-		    		}
-		    	}
-		    	const selectTree = this.$refs.selectTree;
-		    	selectTree.setChecked(node.id, false, false);
+		    removeSelected (node) {
+				const self = this
+				const { nodeList, $refs } = self
+				self.nodeList = nodeList.filter(item => item.id !== node.id)
+				if ($refs.selectTree) {
+					$refs.selectTree.setChecked(node.id, false, false);
+				}
 		    }
-		}
+		},
+		watch: {
+	      	filterText(val) {
+	        	this.$refs.selectTree.filter(val)
+	      	}
+	    },
 	}
 </script>
 
+<style lang="scss">
+	.nv-organize-user-dialog {
+		&__input {
+			cursor: pointer;
+			min-height: 22px;
+			border: 1px solid #dcdfe6;
+			padding: 10px 10px 0 0px;
+
+			&:hover {
+				border-color: #c0c4cc
+			}
+
+			.el-tag {
+				margin-bottom: 10px;
+				margin-left: 10px;
+			}
+		}
+
+		&__placeholder {
+			display: inline-block;
+			font-size: 14px;
+			margin: 0 0 10px 10px;
+			color: #dcdfe6;
+		}
+	}
+</style>
+
+
 <style lang="scss" scoped>
+
 	.dialog-footer {
 		text-align: center;
 	}
 	.select-tree {
 		height: 335px;
 		border: 1px solid #DEDEDE;
+
 		&__left { 
-			display: inline-block; width: 48%; height: 100%; border-right: 1px solid #DEDEDE; position: relative;
-			.search-div { padding: 10px; position: absolute; border-bottom: 1px solid #DEDEDE; left: 0; top: 0; right: 0; background-color: #fff; z-index: 2; }
-			.tree-div { overflow: auto; height: 271px; margin-top: 62px; }
+
+			display: inline-block;
+			width: 48%;
+			height: 100%;
+			border-right: 1px solid #DEDEDE;
+			position: relative;
+
+			.search-div {
+
+				padding: 10px; 
+				position: absolute; 
+				border-bottom: 1px solid #DEDEDE; 
+				left: 0; 
+				top: 0; 
+				right: 0; 
+				background-color: #fff; 
+				z-index: 2; 
+			}
+			
+			.tree-div {
+
+				overflow: auto;
+				height: 271px;
+				margin-top: 62px; 
+			}
 		}
 		&__right { 
-			display: inline-block; width: 48%; height: 100%; border-left: 1px solid #DEDEDE; 
-			vertical-align: top; float: right; overflow: auto; 
+			display: inline-block;
+			width: 48%;
+			height: 100%;
+			border-left: 1px solid #DEDEDE; 
+			vertical-align: top;
+			float: right;
+			overflow: auto; 
+
 			div {
-				position: relative; padding: 6px 10px; border-bottom: 1px solid #DEDEDE;
-				li { list-style-type: none; line-height: 21px; color: #333; pointer-events: none; }
-				li.user-dept { color: #999; font-size: 12px; line-height: 20px; }
-				i { display: none; background-color: #398DEE; padding: 0px 5px 0 4px; color: #fff; border-radius: 10px; 
-					position: absolute; right: 5px; top: 18px; height: 18px; line-height: 18px; cursor: pointer; }
+				position: relative; 
+				padding: 6px 10px; 
+				border-bottom: 1px solid #DEDEDE;
+
+				li { 
+					list-style-type: none; 
+					line-height: 21px; 
+					color: #333; 
+					pointer-events: none;
+
+					&.user-dept {
+						color: #999;
+						font-size: 12px;
+						line-height: 20px;
+					}
+				}
+
+				i { 
+					display: none; 
+					background-color: #398DEE;
+					padding: 0px 5px 0 4px;
+					color: #fff;
+					border-radius: 10px; 
+					position: absolute; 
+					right: 5px;
+					top: 18px;
+					height: 18px;
+					line-height: 18px;
+					cursor: pointer; 
+				}
 			}
-			div.active { background-color: #D9EBFE; }
-			div.active i { display: block; }
+		}
+	}
+</style>
+
+<style lang="scss">
+	.selected-user-item {
+		&:hover {
+			background-color: #D9EBFE;
+			i {
+				display: block !important;
+			}
 		}
 	}
 </style>
