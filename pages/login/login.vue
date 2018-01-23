@@ -225,28 +225,10 @@ export default {
     downloadChrome(){
       window.location = this.downloadChromeUrl;
     },
-    handlerRouters(allRouters, accessKeys) {
-      let me = this;
-      if (allRouters == null || accessKeys == null || !Array.isArray(allRouters) || !Array.isArray(accessKeys)) {
-        console.error("全局路由配置和访问的key 需要传入数组");
-        return;
-      }
-      const viaRouters = allRouters.map(function(item, index, arr) {
-
-        me.$set(item, 'isShow', accessKeys.indexOf(item.key) != -1);
-        me.$set(item, 'meta', accessKeys);
-        if (item.children != null && Array.isArray(item.children)) {
-          item.children = me.handlerRouters(item.children, accessKeys);
-        }
-        return item;
-      });
-      return viaRouters;
-    },
 
     handleLogin() {
       const self = this;
       self.$refs.loginForm.validate(valid => {
-        console.log("是否验证通过", valid);
         if (valid) {
           //debugger
           self.loading = true;
@@ -259,49 +241,13 @@ export default {
           .login(reqParams)
           .then(() => {
             self.$router.push('/home')
-            //window.location.reload()
+            self.loading = false
 
           }).catch((error) => {
+            self.loading = false
             console.log(error)
           })
           return
-          self.$store.dispatch('Login', reqParams).then((res) => {
-            self.loading = false;
-            let {code, msg, data} = res.data;
-            if(code==0){
-                getUserMenu().then(resp => {
-                  if (resp.data.code === 0) {
-                    console.log(resp.data.data);
-                    let realData = resp.data.data;
-                    //处理 同步控制串 
-                    store.dispatch('set_menus', realData);
-                    let accessKeys = realData.map(x => {
-                      return x.menuKey;
-                    });
-                    store.dispatch('SET_ACCESSKEYS', accessKeys);
-                    // 同步全局路由
-                    store.dispatch('SyncRoutes', AllRoutes);
-                    // 处理路由
-                    const viaRouterMap = self.handlerRouters(AllRoutes, accessKeys);
-
-                    // 同步处理权限的全局路由
-                    store.dispatch('SET_VIAROUTERS', viaRouterMap);
-                    //同步下权限数据
-                    store.dispatch('SYNC_PERMISSION');
-                    // 跳转
-                    self.$router.push({ path: '/home' });
-                  }
-                }).catch(err => {
-                  self.loading = false;
-                  console.error(err);
-                });
-            }else{
-                self.$message.error(msg);
-            }
-          }).catch((err) => {
-            self.loading = false;
-            console.log(err);
-          });
         } else {
           console.log('错误的信息提交');
           return false;
@@ -342,7 +288,7 @@ export default {
             }
         });
     },
-    // 提价修改密码
+    // 提交修改密码
     confirmToMofifyPass(){
       let me = this;
       me.$refs.modifyForm.validate(valid => {
