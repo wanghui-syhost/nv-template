@@ -257,23 +257,20 @@ export default {
        this.$refs['addForm'].validate((valid) => {
           if (valid) {
             saveDictionaryData(this.addForm).then(response => {
-              if (response.data.code == 0) {
                 this.$message({
-                  message: response.data.msg,
+                  message: response.rawData.msg,
                   type: "success"
                 });
                 this.resetForm('addForm');
                 // 重新加载数据
                 this.getList();
-              } else {
-                this.$message({
-                  message: response.data.msg,
-                  type: "error"
-                });
-              }
-
               // 隐藏弹出框
               this.isShowAddDialog = false;
+            }).catch(err => {
+              this.$message({
+                  message: '添加失败',
+                  type: "error"
+                });
             });
           } else {
             return false;
