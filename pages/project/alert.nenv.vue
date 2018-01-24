@@ -331,10 +331,10 @@
             </div>
         </div>
 
-        <div>
+        <!-- <div>
             <h3>组织人员选择器</h3>
             <nv-organize-user-selector url="/user/organize/all" title="从组织架构选择" label="text" :callback="userSelectBack" />
-        </div>
+        </div> -->
     </div>
 </template>
 

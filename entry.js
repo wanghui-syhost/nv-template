@@ -1,8 +1,13 @@
 // 引入布局
 
-// import '@layouts/frame'
+// 上部单极左侧导航
+import '@layouts/frame'
 
-import '@layouts/halo'
+// 上侧边栏
+//import '@layouts/halo'
+
+// 左侧边栏
+// import '@layouts/hola'
 
 import './packages'
 

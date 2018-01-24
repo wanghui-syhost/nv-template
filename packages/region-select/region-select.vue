@@ -13,7 +13,7 @@
     //mixins: [nvInpterMixins],
     props: {
         value: {
-            type: String,
+            type: Array,
             required: true
         }
     },
