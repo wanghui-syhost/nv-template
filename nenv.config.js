@@ -5,8 +5,8 @@ module.exports = {
   },
   proxy: {
     '/api/*': {
-      target: 'http://192.168.37.6:8089', // 平台
-      //target: 'http://192.168.31.22:8089', // 刑光辉
+      //target: 'http://192.168.37.6:8089', // 平台
+      target: 'http://192.168.31.22:8089', // 刑光辉
       filter(pathname, req) {
         if (pathname.match(/\/api/)) {
           return true

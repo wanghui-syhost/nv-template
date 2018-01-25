@@ -17,7 +17,9 @@
     "nenv": "git+http://192.168.37.5/nenv/nenv.git",
     "screenfull": "^3.3.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "deepmerge": "^2.0.1"
+  },
   "engines": {
     "node": ">= 4.0.0",
     "npm": ">= 3.0.0"

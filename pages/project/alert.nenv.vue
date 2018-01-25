@@ -351,7 +351,7 @@ function getDictionaryDataByCode(params) {
 
 // import {getDictionaryDataByCode} from '@core/api';
 export default {
-    // name: 'Demo2',
+    name: 'DemoAlert',
     components: {
         // EPersonChoose
     },

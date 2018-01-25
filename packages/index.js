@@ -6,12 +6,17 @@ import NvScrollPane from './scroll-pane'
 import NvUploader from './uploader'
 import NvUserSelector from './user-selector'
 import NvRegionSelect from './region-select'
-import NvLeger from './ledger'
+import NvIframe from './iframe'
+import NvDynamic from './dynamic'
+import index from './checkbox';
+//import NvDynamicLeger from './dynamic-ledger'
 
 const components = [
   NvCalendar,
   NvCheckbox,
-  NvLeger,
+  NvDynamic,
+  //NvDynamicLeger,
+  NvIframe,
   NvOrganizeUserSelector,
   NvScrollPane,
   NvSelect,
@@ -21,7 +26,8 @@ const components = [
 ]
 
 const install = function(Vue, opts = {}) {
-  components.map(component => Vue.component(component.name, component))
+  components.map(component => component.install(Vue))
+  //components.map(component => Vue.component(component.name, component))
 }
 
 if (typeof window !== undefined && window.Vue) {

@@ -33,6 +33,8 @@
           <nv-region-select v-model="nvRegionSelectedResult"></nv-region-select >
         </div>
 
+        <nv-organize-user-selector :multi="true"  v-model="nvOrganizeUserSelectResult" />
+        <nv-organize-user-selector :only-organize="true" :multi="true"  v-model="nvOrganizeSelectResult" />
     </section>
     <section style="width:1200px">
         <h2>3.子表配置</h2>
@@ -71,6 +73,8 @@ export default {
       nvCheckboxResult: [],
       nvSelectResult: '',
       nvRegionSelectedResult:["44","4406","440606"],
+      nvOrganizeSelectResult: [],
+      nvOrganizeUserSelectResult: [],
        keyRules:[ 
               {required:true, message:'请选择性别', trigger:'changeTitle'}
         ],

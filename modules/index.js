@@ -1,6 +1,9 @@
 import './notification'
+import './theme'
+
 
 window.Notification.requestPermission((x) => {
+    return 
     console.log("获取授权", x)
 
     const notity = new Notification("标题", {

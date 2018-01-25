@@ -16,7 +16,7 @@
 </template>
 <script>
 export default {
-    name: 'NvLedger',
+    name: 'NvDynamicLedger',
     props:{
         nvUrl: {
             default: '/ledger/menus'

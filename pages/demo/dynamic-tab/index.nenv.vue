@@ -1,11 +1,13 @@
 <template>
-  <nv-dynamic-ledger nv-code="FIRST_LEDGER"></nv-dynamic-ledger>
+    <nv-dynamic-tab nvCode="PROJECT_TAB" />
 </template>
+
 <script>
 export default {
-  name: 'LedgerDemo'
+    name: 'DynamicTabDemo'
 }
 </script>
+
 <style lang="scss" scoped>
 
 </style>

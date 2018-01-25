@@ -3,7 +3,7 @@
 </template>
 <script>
 export default {
-    name: "Ledger"
+    name: "DynamicLedger"
 }
 </script>
 <style lang="scss" scoped>

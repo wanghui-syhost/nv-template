@@ -17,7 +17,7 @@
 				+添加更多
 			</el-tag>
 		</div>
-		<el-dialog :title="title" :visible.sync="dialogVisible" width="800px">
+		<el-dialog :title="realTitle" :visible.sync="dialogVisible" width="800px">
 			<div class="select-tree">
 				<div class="select-tree__left">
 					<div class="search-div">
@@ -58,9 +58,12 @@
 	export default {
 		name: 'NvOrganizeUserSelector',
 		props: {
+			onlyOrganize: {
+				type: Boolean,
+				default: false
+			},
 			title: {
 				type: String,
-				default: '请选择人员'
 			},
 			// 匹配的label
 			label: {
@@ -70,10 +73,15 @@
 			// 请求url地址
 			url: {
 				type: String,
-				required: true
+				default: '/user/organize/all'
 			},
-			mutil: {
-				type: String
+			organizeUrl: {
+				type: String,
+				default: '/user/organize'
+			},
+			multi: {
+				type: Boolean,
+				default: false
 			},
 			value: {
 				required: true
@@ -96,6 +104,16 @@
 			}
 		},
 		computed: {
+			realTitle () {
+				const self = this
+				if (self.title) {
+					return title
+				} else if (self.onlyOrganize) {
+					return "请选择部门"
+				} else {
+					return "请选择人员"
+				}
+			},
 			currectValue: {
 				set (val) {
 					this.$emit('input', val)
@@ -111,7 +129,8 @@
 		methods: {
 			fetchData () {
 				const self = this
-				unfetch(this.url, {})
+				const url = self.onlyOrganize ? self.organizeUrl : self.url
+				unfetch(url, {})
 				.then(({ data }) => {
 					// 处理父节点
 					function recursivelyProcessNode (tree, parents) {
@@ -157,7 +176,7 @@
 					    	const selectTree = this.$refs.selectTree;
 					    	selectTree.setChecked(node.id, false, false);
 		    			} else {
-		    				if (!this.mutil && this.nodeList.length > 0) {
+		    				if (!this.multi && this.nodeList.length > 0) {
 		    					// 单选
 		    					const nodeObj = this.nodeList[0];
 		    					// 移除其他勾选的
@@ -196,6 +215,8 @@
 			min-height: 22px;
 			border: 1px solid #dcdfe6;
 			padding: 10px 10px 0 0px;
+
+			max-width: 400px;
 
 			&:hover {
 				border-color: #c0c4cc
