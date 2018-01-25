@@ -42,7 +42,7 @@
            <el-table-column label="操作">
             <template slot-scope="scope">
                <el-button size="small" type="infor" @click="goDictionaryData(scope.row)" icon="information">小类</el-button>
-              
+               <el-button size="small" type="infor" @click="goDictionaryRole(scope.row)" icon="information">配置角色</el-button>
                <el-button size="small" type="infor" @click="setDictionaryStatus(scope.row, scope.row.STATUS == 0 ? 1: 0)">{{scope.row.STATUS == 0 ? '设为有效': '设为无效'}}</el-button>
                <el-button size="small" type="primary" @click="modifyInfo(scope.row)">编辑</el-button>
               <el-button size="small" type="danger" @click="removeInfo(scope.row)" icon="delete">删除</el-button>
@@ -335,6 +335,10 @@ export default {
 
     goDictionaryData(row){
         this.$router.push({path:'/system/dictionary/data',query:{CODE:row.CODE,NAME:row.NAME}});
+    },
+
+    goDictionaryRole(row){
+        this.$router.push({path:'/system/dictionary/role',query:{CODE:row.CODE,NAME:row.NAME}});
     },
 
     handleSizeChange(pageIndex) {

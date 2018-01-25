@@ -38,11 +38,32 @@ export function saveDictionary(params) {
     data: params
   })
 }
+export function savePortalRole(params) {
+  return unfetch({
+    url: '/roles/insertRole',
+    method: 'post',
+    data: params
+  })
+}
 
 
 export function getDictionaryDatas(params) {
   return unfetch({
     url: '/dictionary/datas',
+    method: 'get',
+    params
+  })
+}
+export function getPortalRoleDatas(params) {
+  return unfetch({ 
+    url: '/roles/selectList',
+    method: 'get',
+    params
+  })
+}
+export function getRoleList(params) {
+  return unfetch({ 
+    url: '/roles/getRoles',
     method: 'get',
     params
   })

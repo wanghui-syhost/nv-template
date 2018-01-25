@@ -50,6 +50,7 @@ module.exports = function (router, mockjs) {
         return next()
     }
   })
+<<<<<<< Updated upstream
 
   // 动态选项卡接口
   router.get('/api/tab/menus', function (req, res, nenxt) {
@@ -105,6 +106,18 @@ module.exports = function (router, mockjs) {
     }
   })
 
+=======
+  router.get('/api/user/getPath', function (req, res, next) {
+    const { CODE } = req.query
+    return res.reply([
+      {
+        homePath: 'wwwwwwwwwwwwwww'
+      }
+    ])
+    // return next()
+  })
+  
+>>>>>>> Stashed changes
 
   return router
 }
