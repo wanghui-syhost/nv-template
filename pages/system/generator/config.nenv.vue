@@ -110,7 +110,8 @@ export default {
                   type: "success"
                 });
                 this.resetForm('addForm');
-                localStorage.removeItem("generatorListParam");
+                sessionStorage.removeItem("generatorListParam");
+                sessionStorage.removeItem("generatorListTable");
             }).catch(err => {
               this.$message({
                   message: '添加失败',

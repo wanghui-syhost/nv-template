@@ -9,25 +9,15 @@
         <el-form>
             <!-- 搜索框  -->
   			<div class="search-form-one">
-          <el-row>
-          
-              <el-form-item label="表名"  :rules="[{ required: true, message: '配置名称不能为空', trigger: 'blur'}]">
                 <el-input v-model="tablename" placeholder="请输入表名"  size="middle" style="width:332px;"></el-input>
-            </el-form-item>
-             
-
             <el-button type="infor" @click="getList();">连接</el-button>
-             
-          </el-row>
   			</div>
         </el-form>
       </section>
 
-
     <section class="search-table">
-     
       
-            <el-table :data="list" v-loading.body="listLoading" element-loading-text="拼命加载中" border fit highlight-current-row>
+            <el-table :data="list" v-loading.body="listLoading" element-loading-text="拼命加载中" border fit highlight-current-row >
            
           
             <el-table-column label="字段" prop = "COLUMNNAME" />
@@ -36,27 +26,27 @@
 
             <el-table-column label="字段信息" prop="COMMENTS" />
 
-             <el-table-column label="展示" >
+             <el-table-column label="展示" class="show-checked" :render-header="showCheckbox">
                <!-- <el-table-column label="展示" type="selection" > -->
               <template slot-scope="scope">
                 <el-checkbox v-model="scope.row.IS_SHOW"></el-checkbox>
               </template>
             </el-table-column>
-            <el-table-column label="编辑" >
+            <el-table-column label="编辑" :render-header="editCheckbox">
                <!-- <el-table-column label="展示" type="selection" > -->
               <template slot-scope="scope">
                 <el-checkbox v-model="scope.row.IS_EDIT"></el-checkbox>
               </template>
             </el-table-column>
 
-            <el-table-column label="编辑必填" >
+            <el-table-column label="必填" :render-header="requiredCheckbox">
                <!-- <el-table-column label="展示" type="selection" > -->
               <template slot-scope="scope">
                 <el-checkbox v-model="scope.row.IS_REQUIRED"></el-checkbox>
               </template>
             </el-table-column>
 
-             <el-table-column label="排序">
+             <el-table-column label="排序" :render-header="orderCheckbox">
               <template slot-scope="scope">
                 <el-checkbox v-model="scope.row.IS_ORDER"></el-checkbox>
               </template>
@@ -68,7 +58,7 @@
               </template>
             </el-table-column>
 
-             <el-table-column label="查询">
+             <el-table-column label="查询" :render-header="searchCheckbox">
               <template slot-scope="scope">
                 <el-checkbox v-model="scope.row.IS_SEARCH"></el-checkbox>
               </template>
@@ -146,29 +136,38 @@ export default {
           label: '日期'
         }],
     };
-
-    
   },
   created() {
-    const data = localStorage.getItem("generatorListParam");
+    this.disabledNext = true;
+    // debugger
+    const data = sessionStorage.getItem("generatorListParam");
     if (data){
+      this.tablename = sessionStorage.getItem("generatorListTable");
       this.list = JSON.parse(data);
-      this.disabledNext = false;
+      if(this.list.length > 0){
+        this.disabledNext = false;
+      }
+      
     }
    
   },
 
   methods: {
     getList() {
+      if(!this.tablename){
+       // return;
+      }
       this.listLoading = true;
       const pageParams = {
         tablename: this.tablename
       };
+
+      
       getTableColumns(pageParams)
         .then(response => {
           this.listLoading = false;
           const data = response.data;
-          if (data == undefined){
+          if (data.length == 0){
             this.list = null;
             return;
           }
@@ -178,7 +177,7 @@ export default {
             v.IS_ORDER = false;
             v.IS_EDIT = false;
             v.IS_REQUIRED = false;
-            v.NAME = '';
+            v.NAME = v.COMMENTS;
             v.TYPE = 'TEXT';
             v.SORT = null;
             return v;
@@ -196,10 +195,115 @@ export default {
     },
 
     goNext(){
-
-      localStorage.setItem("generatorListParam", JSON.stringify(this.list));
+      sessionStorage.setItem("generatorListTable", this.tablename);
+      sessionStorage.setItem("generatorListParam", JSON.stringify(this.list));
       this.$router.push({path:'/system/generator/config'});
-    }
+    },
+    allShow(value){
+      this.list = this.list.map(x => {
+        x.IS_SHOW = value; 
+        return x;
+        }
+      )
+    },
+    showCheckbox(h, { column, $index }){
+        return [h('span',  {
+                  class: "e-select-bar"
+                }, '展示 '),
+                h('el-checkbox',{
+                    data: {
+                      value: false
+                    },
+                    on:{
+                      change: this.allShow
+                    }
+                })
+              ];
+    },
+    allEdit(value){
+      this.list = this.list.map(x => {
+        x.IS_EDIT = value; 
+        return x;
+        }
+      )
+    },
+    editCheckbox(h, { column, $index }){
+        return [h('span',  {
+                  class: "e-select-bar"
+                }, '编辑 '),
+                h('el-checkbox',{
+                    data: {
+                      value: false
+                    },
+                    on:{
+                      change: this.allEdit
+                    }
+                })
+              ];
+    },
+    allRequired(value){
+      this.list = this.list.map(x => {
+        x.IS_REQUIRED = value; 
+        return x;
+        }
+      )
+    },
+    requiredCheckbox(h, { column, $index }){
+        return [h('span',  {
+                  class: "e-select-bar"
+                }, '必填 '),
+                h('el-checkbox',{
+                    data: {
+                      value: false
+                    },
+                    on:{
+                      change: this.allRequired
+                    }
+                })
+              ];
+    },
+    allSearch(value){
+      this.list = this.list.map(x => {
+        x.IS_SEARCH = value; 
+        return x;
+        }
+      )
+    },
+    searchCheckbox(h, { column, $index }){
+        return [h('span',  {
+                  class: "e-select-bar"
+                }, '查询 '),
+                h('el-checkbox',{
+                    data: {
+                      value: false
+                    },
+                    on:{
+                      change: this.allSearch
+                    }
+                })
+              ];
+    },
+    allOrder(value){
+      this.list = this.list.map(x => {
+        x.IS_ORDER = value; 
+        return x;
+        }
+      )
+    },
+    orderCheckbox(h, { column, $index }){
+        return [h('span',  {
+                  class: "e-select-bar"
+                }, '排序 '),
+                h('el-checkbox',{
+                    data: {
+                      value: false
+                    },
+                    on:{
+                      change: this.allOrder
+                    }
+                })
+              ];
+    },
   }
 };
 </script>
