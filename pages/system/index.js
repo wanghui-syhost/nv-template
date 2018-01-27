@@ -2,6 +2,8 @@
 import Dictionary from './components/dictionary.vue'
 import DictionaryData from './components/dictionary-data.vue'
 import Config from './components/config.vue'
+import Portal from './portal/index.nenv.vue'
+import Portal2 from './components/portal.vue'
 
 const platform = window.platform
 

@@ -1,0 +1,413 @@
+<template>
+  <div>
+      <section class="search-form" style="padding:20px;">
+        <el-form>
+            <!-- 搜索框  -->
+  			<div class="search-form-one">
+  				<el-button type="primary" @click="isShowAddDialog = true">新增</el-button>
+  			</div>
+        </el-form>
+      </section>
+
+    <section class="search-table">
+        <el-table :data="list" v-loading.body="listLoading" element-loading-text="拼命加载中" border fit highlight-current-row>
+          
+          <el-table-column label="首页名称">
+            <template slot-scope="scope">
+              <span> {{scope.row.NAME}}</span>
+            </template>
+          </el-table-column>
+      
+          <el-table-column label="首页地址">
+            <template slot-scope="scope">
+              <span> {{scope.row.VALUE}}</span>
+            </template>
+          </el-table-column>
+          <!-- <el-table-column label="首页地址">
+            <template slot-scope="scope">
+              <span> {{scope.row.ROLE_IDS}}</span>
+            </template>
+          </el-table-column> -->
+          <el-table-column label="描述信息">
+            <template slot-scope="scope">
+              <span> {{scope.row.DESCRIPTION}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="排序">
+            <template slot-scope="scope">
+              <span> {{scope.row.SORT}}</span>
+            </template>
+          </el-table-column>
+
+          <el-table-column label="操作">
+            <template slot-scope="scope">
+              <el-button size="small" type="primary" @click="roleListDialogInfo(scope.row)">分配角色</el-button>
+               <el-button size="small" type="primary" @click="modifyInfo(scope.row)">编辑</el-button>
+              <el-button size="small" type="danger" @click="removeInfo(scope.row)" icon="delete">删除</el-button>
+            </template>
+          </el-table-column>
+          
+        </el-table>
+    </section>
+
+       <!-- 新增 -->
+    <el-dialog title="字典信息" :visible.sync="isShowAddDialog" size="small">
+      <el-form :model="addForm" ref="addForm" :rules="addRules" label-width="120px">
+        <el-row type="flex" class="row-bg" justify="space-around">
+        <el-col :span="12">
+          <el-form-item label="首页名称" prop="NAME">
+            <el-input v-model="addForm.NAME" placeholder="请输入类别名称" :maxlength="20">类别名称</el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row type="flex" class="row-bg" justify="space-around">
+        <el-col :span="12">
+          <el-form-item label="首页地址" prop="VALUE">
+            <el-input v-model="addForm.VALUE" placeholder="请输入类别值" :maxlength="20">类别值</el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row type="flex" class="row-bg" justify="space-around">
+        <el-col :span="12">
+          <el-form-item label="描述信息" prop="DESCRIPTION">
+            <el-input v-model="addForm.DESCRIPTION" placeholder="请输入描述信息" :maxlength="50">描述信息</el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row type="flex" class="row-bg" justify="space-around">
+        <el-col :span="12">
+          <el-form-item label="排序序号" prop="SORT">
+            <el-input v-model.number="addForm.SORT" placeholder="请输入排序序号" :maxlength="3">排序顺序</el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+	
+      <el-row type="flex" justify="space-around">
+          <el-col :span="8" :offset="4">
+            <el-button @click="isShowAddDialog = false">取消</el-button>
+            <el-button type="primary" @click="saveDictionary">保存</el-button>
+          </el-col>
+      </el-row>
+    </el-form>
+  </el-dialog>
+
+
+<el-dialog title="选择角色" :visible.sync="isShowRoleListDialog" size="small">
+        <el-table ref="multipleTable" :data="roleList" v-loading.body="listLoading" element-loading-text="拼命加载中" @selection-change="handleSelectionChange" border fit highlight-current-row>
+          <el-table-column  type="selection" width="55">
+          </el-table-column>
+          <el-table-column label="角色名称">
+            <template slot-scope="scope">
+              <span> {{scope.row.ROLE_NAME}}</span>
+            </template>
+          </el-table-column>    
+        </el-table>
+         <div style="margin-top: 20px">
+            <el-button @click="isShowRoleListDialog = false">取消</el-button>
+            <el-button type="primary" @click="savePortalRole">保存</el-button>
+          </div>
+</el-dialog>
+
+   <!-- 修改 -->
+    <el-dialog title="字典信息" :visible.sync="isShowEditDialog" size="small">
+      <el-form :model="modifyForm" ref="modifyForm" :rules="modifyRules" label-width="120px">
+        <el-row type="flex" class="row-bg" justify="space-around">
+        <el-col :span="12">
+          <el-form-item label="首页名称" prop="NAME">
+            <el-input v-model="modifyForm.NAME" placeholder="请输入首页名称" :maxlength="20">类别名称</el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row type="flex" class="row-bg" justify="space-around">
+        <el-col :span="12">
+          <el-form-item label="首页地址" prop="VALUE">
+            <el-input v-model="modifyForm.VALUE" placeholder="请输入首页地址" :disabled="true" :maxlength="20">类别值</el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row type="flex" class="row-bg" justify="space-around">
+        <el-col :span="12">
+          <el-form-item label="描述信息" prop="DESCRIPTION">
+            <el-input v-model="modifyForm.DESCRIPTION" placeholder="请输入描述信息" :maxlength="50">描述信息</el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row type="flex" class="row-bg" justify="space-around">
+        <el-col :span="12">
+          <el-form-item label="排序" prop="SORT">
+            <el-input v-model.number="modifyForm.SORT" placeholder="请输入排序序号" :maxlength="3">排序顺序</el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+	
+      <el-row type="flex" justify="space-around">
+          <el-col :span="8" :offset="4">
+            <el-button @click="isShowEditDialog = false">取消</el-button>
+            <el-button type="primary" @click="update();">保存</el-button>
+          </el-col>
+      </el-row>
+    </el-form>
+  </el-dialog>
+  <p ref="xxx"></p>
+  </div>
+</template>
+<script>
+import axios from "axios";
+import {
+  deletePortalRole,
+  savePortalRoleData,
+  getRoleList,
+  getDictionaryDatas,
+  deleteDictionaryData,
+  saveDictionaryData,
+  validDictionaryData,
+  updateDictionaryData
+} from "./api";
+
+export default {
+  name: "PortalData",
+  data() {
+    var codeValid = (rule, value, callback) => {
+      var reg = /^[A-Za-z_]+$/; 
+      if(!value.match(reg)){
+          callback(new Error('类别代码只能是字母和下划线'));
+      } else {
+        const params = {
+          CODE: this.CODE,
+          VALUE: value
+        };
+        validDictionaryData(params).then(response => {
+           var e = response.data; 
+            if(e == true){
+              callback(new Error('该类别已存在'));
+              return;
+            }
+            callback();
+        }).catch(err =>{
+          console.log(err);
+        });
+      
+      }
+    };
+
+    return {
+      isShowAddDialog: false,
+      isShowEditDialog: false,
+      isShowAddDialog:false,
+      isShowRoleListDialog:false,
+      CODE: '',
+      PNAME:'',
+      checked:false,
+      list: null,
+      roleList: null,
+      listLoading: true,
+      roleIds:'',
+      multipleSelection: [],
+      addPortalRole:{
+        ROLE_IDS: null, // 角色ID
+        PORTAL_ID: null, // 首页ID
+      },
+      addForm: {
+        CODE: this.CODE, // 类别-代码（类别区分唯一标识）
+        NAME: null, // 类别名称
+        VALUE: null, // 类别值
+        DESCRIPTION: null, // 描述信息
+        SORT: null // 排序字段
+      },
+      addRules: {
+        NAME: [{required: true, message: '类别名称不能为空', trigger: 'blur'}],
+        VALUE:[
+          {required: true, message: '编码不能为空', trigger: 'blur'},
+          {validator: codeValid, trigger: 'blur'}
+         ],
+        SORT: [{ type: 'number', message: '序号必须为数字值', trigger: 'blur'}],
+      },
+
+      modifyForm:{},
+      modifyRules: {}
+    };
+  },
+  mounted() {
+    this.CODE = 'HOME';
+    this.PNAME =  '';
+    this.addForm.CODE = this.CODE;
+    this.getList();
+  },
+  methods: {
+    getList() {
+      this.listLoading = true;
+      const pageParams = {
+        CODE: this.CODE
+      };
+      console.log(pageParams)
+      getDictionaryDatas(pageParams)
+        .then(response => {
+          this.listLoading = false;
+          const { data, msg, code } = response.data;
+            this.list = response.data;
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },  
+    getRoleData(){
+        this.listLoading = true;
+        const pageParams = {
+          CODE: this.CODE
+        };
+        getRoleList(pageParams)
+        .then(response => {
+          this.listLoading = false;
+            let me = this;
+          const { data, msg, code } = response.data.map((v) => {
+               if(me.roleIds.indexOf(v.ROLE_ID) != -1){
+                  v.checked=true;
+               }else{
+                  v.checked=false;
+               }
+               return v;
+          });
+              this.roleList = response.data;
+              this.$nextTick(()=>{
+              this.handerCurrentChoose();
+            })
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+     
+    handerCurrentChoose(){
+      let me = this;
+      me.roleList.forEach(x=>{
+        debugger;
+          me.$refs.multipleTable.toggleRowSelection(x, x.checked);
+      })
+    },
+    roleListDialogInfo(row){  
+      let backdata = JSON.parse(JSON.stringify(row));
+      this.addPortalRole.PORTAL_ID = backdata.ID;
+      this.roleIds=backdata.ROLE_IDS;
+      this.getRoleData();
+      this.isShowRoleListDialog = true;
+    },
+    removeInfo(row) {
+      let me = this;
+      const params = {
+        ID: row.ID
+      };
+      this.$confirm("此操作将永久删除记录, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+        callback: (action, instance) => {
+          if (action == "confirm") {
+            me.reqData(params);
+          }
+        }
+      });
+    },
+    reqData(params) {
+      deletePortalRole(params).then(response => {
+          this.$message.info("删除成功");
+          this.getList();
+      }).catch(e => {
+         this.$message({
+            message: '删除失败',
+            type: "error"
+          });
+      });
+    },
+
+    // 保存项目信息
+    handleSelectionChange(val) {
+      debugger;
+      this.multipleSelection = val;
+    },
+    savePortalRole(){
+        var ids='';
+        this.multipleSelection.forEach(x=>{
+           ids+=x.ROLE_ID+",";
+           this.addPortalRole.ROLE_IDS=ids;
+        })
+        savePortalRoleData(this.addPortalRole).then(response => {
+            this.$message({
+              message: '分配角色成功',
+              type: "success"
+            });
+          // 重新加载数据
+           this.getList();
+          // 隐藏弹出框
+          this.isShowRoleListDialog = false;
+        }).catch(err =>{
+          console.log(err);
+          this.$message({
+            message: '保存失败',
+            type: "error"
+          });
+        });
+       },
+       saveDictionary() {
+       this.$refs['addForm'].validate((valid) => {
+         debugger;
+          saveDictionaryData(this.addForm).then(response => {
+                this.$message({
+                  message:response.rawData.msg,
+                  type: "success"
+                });
+                this.resetForm('addForm');
+                // 重新加载数据
+                this.getList();
+                }).catch(err =>{
+                this.$message({
+                  message: '保存失败',
+                  type: "error"
+                });
+              });
+              // 隐藏弹出框
+              this.isShowAddDialog = false;
+            });
+    },
+
+    modifyInfo(row){  
+      let backdata = JSON.parse(JSON.stringify(row));
+      this.modifyForm = backdata;
+      this.isShowEditDialog = true;
+    },
+    update(){
+      this.$refs['modifyForm'].validate((valid) => {
+          if (valid) {
+            const params = {
+              ID: this.modifyForm.ID,
+              NAME: this.modifyForm.NAME,
+              DESCRIPTION: this.modifyForm.DESCRIPTION,
+              SORT: this.modifyForm.SORT
+            }
+            updateDictionaryData(params).then(response => {
+              this.$message({
+                message: response.rawData.msg,
+                type: "success"
+              });
+              this.resetForm('modifyForm');
+              // 重新加载数据
+              this.getList();
+              // 隐藏弹出框
+              this.isShowEditDialog = false;
+            }).catch(err => {
+              this.$message({
+                  message: '修改失败',
+                  type: "error"
+                });
+            });
+          } else {
+            return false;
+          }
+      });
+    },
+
+     resetForm(formName) {
+      this.$refs[formName].resetFields();
+    }
+  }
+};
+</script>
