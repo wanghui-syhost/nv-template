@@ -170,7 +170,7 @@ export default {
     var codeValid = (rule, value, callback) => {
       var reg = /^[A-Za-z_]+$/; 
       if(!value.match(reg)){
-          callback(new Error('类别代码只能是字母和下划线'));
+          callback(new Error('首页地址只能是字母和下划线'));
       } else {
         const params = {
           CODE: this.CODE,
@@ -179,7 +179,7 @@ export default {
         validDictionaryData(params).then(response => {
            var e = response.data; 
             if(e == true){
-              callback(new Error('该类别已存在'));
+              callback(new Error('该地址已存在'));
               return;
             }
             callback();
@@ -215,9 +215,9 @@ export default {
         SORT: null // 排序字段
       },
       addRules: {
-        NAME: [{required: true, message: '类别名称不能为空', trigger: 'blur'}],
+        NAME: [{required: true, message: '首页名称不能为空', trigger: 'blur'}],
         VALUE:[
-          {required: true, message: '编码不能为空', trigger: 'blur'},
+          {required: true, message: '类别地址不能为空', trigger: 'blur'},
           {validator: codeValid, trigger: 'blur'}
          ],
         SORT: [{ type: 'number', message: '序号必须为数字值', trigger: 'blur'}],

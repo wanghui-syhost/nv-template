@@ -103,7 +103,7 @@ export function getDictionaries(params) {
   }
   export function deletePortalRole(params) {
     return unfetch({
-      url: '/dictionary/data',
+      url: '/dictionary/delete',
       method: 'delete',
      params
     })
