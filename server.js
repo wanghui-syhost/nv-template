@@ -52,7 +52,7 @@ module.exports = function (router, mockjs) {
   })
 
   // 动态选项卡接口
-  router.get('/api/tab/menus', function (req, res, nenxt) {
+  router.get('/api/tab/menus', function (req, res, next) {
     const { CODE } = req.query
     switch (CODE) {
       case 'PROJECT_TAB':
@@ -103,6 +103,77 @@ module.exports = function (router, mockjs) {
       default:
         next()
     }
+
+    // 动态台账
+    router.get('/api/ledger/menus', function (req, res, next) {
+      const { CODE } = req.query
+      switch ( CODE ) {
+        case 'FIRST_LEDGER':
+          res.reply(
+            [
+              {
+                IS_DELETED: "NO",
+                APPLICATION_KEY: "business",
+                LEDGER_CODE: "FIRST_LEDGER",
+                CREATE_USER: "11E787B2A7179B4E9911D583E7E8BEA9",
+                children: [ 
+                  {
+                    IS_DELETED: "NO",
+                    APPLICATION_KEY: "business",
+                    LEDGER_CODE: "FIRST_LEDGER",
+                    CREATE_USER: "11E787B2A7179B4E9911D583E7E8BEA9",
+                    UPDATE_USER: "11E787B2A7179B4E9911D583E7E8BEA9",
+                    SORT: 1,
+                    ID: "11E7F047C30617B68247CBE8414DC77C",
+                    CREATE_TIME: 1514957666000,
+                    UPDATE_TIME: 1514957666000,
+                    URL: "http://www.baidu.com",
+                    PARENT_ID: "11E7F047BA4382248247CBE8414DC77C",
+                    NAME: "二级1"
+                  }
+                ],
+                UPDATE_USER: "11E787B2A7179B4E9911D583E7E8BEA9",
+                SORT: 1,
+                ID: "11E7F047BA4382248247CBE8414DC77C",
+                CREATE_TIME: 1514957652000,
+                UPDATE_TIME: 1514957652000,
+                URL: "http://www.baidu.com",
+                NAME: "百度"
+              },
+              {
+                IS_DELETED: "NO",
+                APPLICATION_KEY: "business",
+                LEDGER_CODE: "FIRST_LEDGER",
+                CREATE_USER: "11E787B2A7179B4E9911D583E7E8BEA9",
+                UPDATE_USER: "11E787B2A7179B4E9911D583E7E8BEA9",
+                SORT: 2,
+                ID: "11E7F047C30617B68247CBE8414DC77D",
+                CREATE_TIME: 1516329345000,
+                UPDATE_TIME: 1516329347000,
+                URL: "http://www.qq.com",
+                NAME: "腾讯",
+              },
+              {
+                IS_DELETED: "NO",
+                APPLICATION_KEY: "business",
+                LEDGER_CODE: "FIRST_LEDGER",
+                CREATE_USER: "11E787B2A7179B4E9911D583E7E8BEA9",
+                UPDATE_USER: "11E787B2A7179B4E9911D583E7E8BEA9",
+                SORT: 2,
+                ID: "11E7F047C30617B68247CBE8414DC77X",
+                CREATE_TIME: 1516329345000,
+                UPDATE_TIME: 1516329347000,
+                URL: "/project/alert",
+                NAME: "内嵌页面",
+              }
+            ]
+          )
+          break
+        default:
+          next()
+      }
+    })
+
   })
 
   // router.get('/api/user/getPath', function (req, res, next) {

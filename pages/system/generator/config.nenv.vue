@@ -101,7 +101,7 @@ export default {
     save() {
        this.$refs['addForm'].validate((valid) => {
           if (valid) {
-            const columns = localStorage.getItem("generatorListParam");
+            const columns = sessionStorage.getItem("generatorListParam");
             this.addForm.columns = columns;
             console.log(this.addForm);
             buildFile(this.addForm).then(response => {
@@ -110,8 +110,8 @@ export default {
                   type: "success"
                 });
                 this.resetForm('addForm');
-                sessionStorage.removeItem("generatorListParam");
-                sessionStorage.removeItem("generatorListTable");
+               // sessionStorage.removeItem("generatorListParam");
+                //sessionStorage.removeItem("generatorListTable");
             }).catch(err => {
               this.$message({
                   message: '添加失败',

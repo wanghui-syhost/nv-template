@@ -1,0 +1,30 @@
+.nv-ledger {
+
+    position: relative;
+
+    &__nav {
+        background-color: blue;
+        width: 90px;
+        position: absolute
+    }
+
+    &__item {
+        padding: 15px 10px;
+        cursor: pointer;
+        &:hover {
+            background-color: yellow
+        }
+    }
+
+    &.nv-left {
+        .nv-ledger__nav {
+            left: 40px;
+        }
+    }
+
+    &.nv-right {
+        .nv-ledger__nav {
+            right: 40px;
+        }
+    }
+}
