@@ -4,7 +4,6 @@
       <el-form>
         <!-- 搜索框  -->
         <div class="search-form-one" style="padding: 10px 0">
-          
           <el-button type="primary" @click="showAdd">新增</el-button>
         </div>
       </el-form>
@@ -17,7 +16,7 @@
         <el-table-column label="运行时间" prop = "CRON_EXPRESSION" width="150" />
         <el-table-column label="状态" width="150">
           <template slot-scope="scope">
-            {{scope.row.STATUS | statusFilter}}
+            {{ scope.row.STATUS | statusFilter }}
           </template>
         </el-table-column>
         <el-table-column label="任务描述" prop = "DESCRIPTION" width="300" />
@@ -42,22 +41,28 @@
 
     <!-- 新增 -->
     <el-dialog title="添加任务" :visible.sync="isShowAddDialog" size="small">
-      <scheduler-editor :isShow="true"></scheduler-editor>
-
+      <scheduler-editor @close="closeAddDialog" ></scheduler-editor>
     </el-dialog>
 
     <!-- 修改 -->
-    <el-dialog title="修改任务" :visible.sync="isShowEditDialog" size="small">
-      <scheduler-editor  :id="ID"></scheduler-editor>
+    <el-dialog title="修改任务" :visible.sync="isShowEditDialog"  size="small">
+      <scheduler-editor  :id="ID" @close="closeEditDialog"></scheduler-editor>
     </el-dialog>
   </div>
 </template>
 <script>
-import axios from 'axios';
-import SchedulerEditor from './edit.nenv'
-import {  getSchedulerDatas, deleteScheduler, runOnceScheduler, resumeScheduler, pauseScheduler } from './api'
+import SchedulerEditor from "./edit.nenv";
+
+import {
+  getSchedulerDatas,
+  deleteScheduler,
+  runOnceScheduler,
+  resumeScheduler,
+  pauseScheduler
+} from "./api";
+
 export default {
-  name: 'Scheduler',
+  name: "Scheduler",
   components: { SchedulerEditor },
   data() {
     return {
@@ -69,9 +74,7 @@ export default {
       pageSize: 10,
       orderBy: null,
       totalCount: 0,
-      ID:''
-      
-
+      ID: ""
     };
   },
   created() {
@@ -80,154 +83,168 @@ export default {
   filters: {
     statusFilter: function(value) {
       const map = {
-        'OPENED': '运行中',
-        'PAUSED': '已暂停'
-      }
-      return map[value]
+        OPENED: "运行中",
+        PAUSED: "已暂停"
+      };
+      return map[value];
     }
   },
   methods: {
     getList() {
-      this.listLoading = true;
-      const pageParams = {
-        pageIndex: this.pageIndex,
-        pageSize: this.pageSize,
-        orderBy: this.orderBy,
-      }
-      getSchedulerDatas(pageParams)
-      .then(response => {
-        this.listLoading = false;
-        const data = response.data;
-        if (data.list == undefined){
-            this.list = null;
-            return;
+      const self = this
+      const { pageIndex, pageSize, orderBy } = self
+      
+      self.listLoading = true;
+
+      getSchedulerDatas(
+        {
+          pageIndex,
+          pageSize,
+          orderBy
         }
-        this.list = data.list.map(v => v);
-        this.totalCount = data.totalCount;
-      }).catch(err => {
-        console.log(err);
+      ).then(({ data }) => {
+          self.listLoading = false;
+          self.list = data.list || null
+          self.totalCount = data.totalCount;
       })
+      .catch(err => {
+        console.log(err);
+      });
     },
     removeInfo(row) {
       let me = this;
       const params = {
-          ID: row.ID
-        }
-      this.$confirm('此操作将永久删除记录, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-        callback:(action,instance)=>{
-          if(action=='confirm'){
+        ID: row.ID
+      };
+      this.$confirm("此操作将永久删除记录, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+        callback: (action, instance) => {
+          if (action == "confirm") {
             me.reqData(params);
           }
         }
       });
-  },
-  reqData(params){
-    deleteScheduler(params).then(response => {
-      this.$message.info("删除成功");
-      this.getList();
-    }).catch(e => {
-      this.$message.err("删除失败");
-    });
-  },
-  showAdd(){
-    this.isShowAddDialog = true; 
-  },
-  showEdit(row){
-    this.isShowEditDialog = true; 
-    this.ID= row.ID
-  },
-  
-  sortChange(data){
-    const culomn = data.prop;
-    if(!culomn){
-      this.orderBy = null;
-      this.getList();
-      return;
-    }
-    var order = data.order == 'descending' ? ' DESC' : ' ASC';
-    this.orderBy = culomn + order;
-    this.getList()
-  },
+    },
+    reqData(params) {
+      deleteScheduler(params)
+        .then(response => {
+          this.$message.info("删除成功");
+          this.getList();
+        })
+        .catch(e => {
+          this.$message.err("删除失败");
+        });
+    },
+    showAdd() {
+      this.isShowAddDialog = true;
+    },
+    showEdit(row) {
+      this.isShowEditDialog = true;
+      this.ID = row.ID;
+    },
+    closeEditDialog () {
+      this.isShowEditDialog = false
+    },
+    closeAddDialog () {
+      this.isShowAddDialog = false
+    },
 
-  runOnce(id){
-      let me = this;
-      const params = {
-          ID: id
-        }
-      this.$confirm('立即运行一次该任务?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-        callback:(action,instance)=>{
-          if(action=='confirm'){
-            runOnceScheduler(params).then(response => {
-              this.$message.info("运行成功");
-              this.getList();
-            }).catch(e => {
-              this.$message.err("运行失败");
-            });
-          }
-        }
-      });
-  },
-
-  pauseScheduler(row){
-      let me = this;
-      const params = {
-          ID: row.ID
-        }
-      this.$confirm('确定暂停该任务?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-        callback:(action,instance)=>{
-          if(action=='confirm'){
-            pauseScheduler(params).then(response => {
-              this.$message.info("设置成功");
-              this.getList();
-            }).catch(e => {
-              this.$message.err("设置失败");
-            });
-          }
-        }
-      });
-  },
-   resumeScheduler(row){
-      let me = this;
-      const params = {
-          ID: row.ID
+    sortChange(data) {
+      const culomn = data.prop;
+      if (!culomn) {
+        this.orderBy = null;
+        this.getList();
+        return;
       }
-      this.$confirm('确定暂停该任务?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-        callback:(action,instance)=>{
-          if(action=='confirm'){
-            resumeScheduler(params).then(response => {
-              this.$message.info("设置成功");
-              this.getList();
-            }).catch(e => {
-              this.$message.err("设置失败");
-            });
+      var order = data.order == "descending" ? " DESC" : " ASC";
+      this.orderBy = culomn + order;
+      this.getList();
+    },
+
+    runOnce(id) {
+      let me = this;
+      const params = {
+        ID: id
+      };
+      this.$confirm("立即运行一次该任务?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+        callback: (action, instance) => {
+          if (action == "confirm") {
+            runOnceScheduler(params)
+              .then(response => {
+                this.$message.info("运行成功");
+                this.getList();
+              })
+              .catch(e => {
+                this.$message.err("运行失败");
+              });
           }
         }
       });
-  },
+    },
 
-  handleSizeChange(pageIndex) {
-    this.queryPrams.pageSize = pageIndex;
-    this.getList();
-  },
-  handleCurrentChange(pageIndex) {
-    this.pageIndex = pageIndex;
-    this.getList();
-  },
-  resetForm(formName) {
-    this.$refs[formName].resetFields();
+    pauseScheduler(row) {
+      let me = this;
+      const params = {
+        ID: row.ID
+      };
+      this.$confirm("确定暂停该任务?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+        callback: (action, instance) => {
+          if (action == "confirm") {
+            pauseScheduler(params)
+              .then(response => {
+                this.$message.info("设置成功");
+                this.getList();
+              })
+              .catch(e => {
+                this.$message.err("设置失败");
+              });
+          }
+        }
+      });
+    },
+    resumeScheduler(row) {
+      let me = this;
+      const params = {
+        ID: row.ID
+      };
+      this.$confirm("确定暂停该任务?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+        callback: (action, instance) => {
+          if (action == "confirm") {
+            resumeScheduler(params)
+              .then(response => {
+                this.$message.info("设置成功");
+                this.getList();
+              })
+              .catch(e => {
+                this.$message.err("设置失败");
+              });
+          }
+        }
+      });
+    },
+
+    handleSizeChange(pageIndex) {
+      this.queryPrams.pageSize = pageIndex;
+      this.getList();
+    },
+    handleCurrentChange(pageIndex) {
+      this.pageIndex = pageIndex;
+      this.getList();
+    },
+    resetForm(formName) {
+      this.$refs[formName].resetFields();
+    }
   }
-}
-}
+};
 </script>

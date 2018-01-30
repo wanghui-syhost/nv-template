@@ -40,7 +40,6 @@
             </el-col>
         </el-row>
       </el-form >
-
   </div>
 </template>
 <script>
@@ -51,14 +50,9 @@ export default {
     id: {
       type: String,
       required: false
-    },
-    isShow: {
-      type: Boolean,
-      default: false
     }
   },
   data() {
-    const self = this
     return {
       addForm: {
         ID: null, // 主键ID
@@ -81,28 +75,27 @@ export default {
   },
   methods: {
       getData() {
-        console.log(this.ID)
-        if (!this.ID){
-          return;
+        const self = this
+        const { ID } = this
+  
+        if (ID) {
+          getScheduler({ ID })
+          .then(({ data }) => {
+            const { addForm } = self
+            addForm.ID = ID
+            addForm.JOB_GROUP = data.JOB_GROUP;
+            addForm.JOB_NAME = data.JOB_NAME;
+            addForm.CRON_EXPRESSION = data.CRON_EXPRESSION;
+            addForm.DESCRIPTION = data.DESCRIPTION;
+            addForm.CLASS_NAME = data.CLASS_NAME;
+          }).catch(err => {
+            console.log(err);
+          })
         }
-        const param = {
-          ID: this.ID
-        }
-        getScheduler(param)
-        .then(response => {
-          const data = response.data;
-          this.addForm.JOB_GROUP = data.JOB_GROUP;
-          this.addForm.JOB_NAME = data.JOB_NAME;
-          this.addForm.CRON_EXPRESSION = data.CRON_EXPRESSION;
-          this.addForm.DESCRIPTION = data.DESCRIPTION;
-          this.addForm.CLASS_NAME = data.CLASS_NAME;
-          //this.totalCount = data.totalCount;
-        }).catch(err => {
-          console.log(err);
-        })
       },
       reqData(params){
-        deleteScheduler(params).then(response => {
+        deleteScheduler(params)
+        .then(response => {
           this.$message.info("删除成功");
           this.getList();
         }).catch(e => {
@@ -110,74 +103,43 @@ export default {
         });
       },
       saveOrEdit(){
-        if (!this.ID){
-          this.save();
-        } else {
-          this.update();
-        }
-      },
-       // 保存
-      save() {
-        debugger;
-        this.$refs['addForm'].validate((valid) => {
+        const self = this
+        const { ID, addForm } = self
+        self.$refs.addForm.validate((valid) => {
           if (valid) {
-            saveScheduler(this.addForm).then(response => {
-               this.$message({
-                 message: '保存成功',
-                 type: "success"
-               });
-               this.resetForm('addForm');
-              
-                // 隐藏弹出框
-                this.isShowAddDialog = false;
-            }).catch(err =>{
-               console.log(err);
-               this.$message({
-                 message: '保存失败',
-                 type: "error"
-               });
-            });
+            Promise.resolve()
+            .then(() => {
+              if (ID) {
+                // addForm.ID = ID
+                return updateScheduler(addForm)
+              } else {
+                return saveScheduler(addForm)
+              }
+            })
+            .then(() => {
+              self.$message({
+                message: ID ? '更新成功' : '保存成功',
+                type: 'success'
+              })
+              self.$refs.addForm.resetFields();
+              self.$emit('close')
+            })
+            .catch(() => {
+              self.$message({
+                message: ID ? '更新失败' : '保存失败',
+                type: 'error'
+              })
+            })
           } else {
-            return false;
+            return false
           }
         })
-      },
-
-      update(){
-        this.$refs['addForm'].validate((valid) => {
-          if (valid) {
-            this.addForm.ID = this.ID;
-            updateScheduler(this.addForm)
-            .then(response => {
-               this.$message({
-                 message: response.rawData.msg,
-                 type: "success"
-               });
-               this.resetForm('addForm');
-               // 重新加载数据
-               this.getList();
-               // 隐藏弹出框
-               this.isShowAddDialog = false;
-            }).catch(e => {
-              this.$message({
-                message: '修改失败',
-                type: "error"
-              });
-            });
-          } else {
-            return false;
-          }
-        });
-      },
-      
-      resetForm(formName) {
-        this.$refs[formName].resetFields();
       }
     },
     watch: {
-      isShow(val) {
+      ID (val) {
         if (val) {
-          this.$refs['addForm'].resetFields();
+          this.getData()
         }
       }
     }
