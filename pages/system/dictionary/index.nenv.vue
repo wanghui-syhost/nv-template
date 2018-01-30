@@ -35,7 +35,7 @@
 
           <el-table-column label="状态">
             <template slot-scope="scope">
-               <el-tag :type="scope.row.STATUS | statusFilter">{{scope.row.STATUS == 0 ? '无效': '有效'}}</el-tag>
+               <el-tag :type="scope.row.STATUS | statusFilter">{{scope.row.STATUS == 'VALID' ? '有效': '无效'}}</el-tag>
             </template>
           </el-table-column>
           
@@ -43,7 +43,7 @@
             <template slot-scope="scope">
                <el-button size="small" type="infor" @click="goDictionaryData(scope.row)" icon="information">小类</el-button>
                <el-button size="small" type="infor" @click="goDictionaryRole(scope.row)" icon="information">配置角色</el-button>
-               <el-button size="small" type="infor" @click="setDictionaryStatus(scope.row, scope.row.STATUS == 0 ? 1: 0)">{{scope.row.STATUS == 0 ? '设为有效': '设为无效'}}</el-button>
+               <el-button size="small" type="infor" @click="setDictionaryStatus(scope.row, scope.row.STATUS == 'VALID' ? 'INVALID': 'VALID')">{{scope.row.STATUS == 'INVALID' ? '设为有效': '设为无效'}}</el-button>
                <el-button size="small" type="primary" @click="modifyInfo(scope.row)">编辑</el-button>
               <el-button size="small" type="danger" @click="removeInfo(scope.row)" icon="delete">删除</el-button>
             </template>
@@ -123,9 +123,9 @@ export default {
   name: "Dictionary",
   data() {
     var codeValid = (rule, value, callback) => {
-      var reg = /^[A-Za-z_]+$/; 
+      var reg = /^[A-Za-z0-9_]+$/; 
       if(!value.match(reg)){
-          callback(new Error('类别代码只能是字母和下划线'));
+          callback(new Error('类别代码只能是数字字母和下划线'));
       } else {
         const params = {
           CODE: value
@@ -149,19 +149,19 @@ export default {
       list: null,
       listLoading: true,
       NAME:null,
-      STATUS: '1',
+      STATUS: 'VALID',
       pageIndex: 1,
       pageSize: 10,
       totalCount: 0,
       searchStatus:[
          {
-          value: '',
+          value: null,
           label: '全部'
         },{
-          value: '0',
+          value: 'INVALID',
           label: '无效'
         },{
-          value: '1',
+          value: 'VALID',
           label: '有效'
         }
       ],

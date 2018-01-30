@@ -73,19 +73,19 @@
       </el-row>
       <el-row type="flex" class="row-bg" justify="space-around">
         <el-col :span="12">
-          <el-form-item label="描述信息" prop="DESCRIPTION">
-            <el-input v-model="addForm.DESCRIPTION" placeholder="请输入描述信息" :maxlength="50">描述信息</el-input>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row type="flex" class="row-bg" justify="space-around">
-        <el-col :span="12">
           <el-form-item label="排序序号" prop="SORT">
             <el-input v-model.number="addForm.SORT" placeholder="请输入排序序号" :maxlength="3">排序顺序</el-input>
           </el-form-item>
         </el-col>
       </el-row>
-	
+      <el-row type="flex" class="row-bg" justify="space-around">
+        <el-col :span="12">
+          <el-form-item label="描述信息" prop="DESCRIPTION">
+            <el-input v-model="addForm.DESCRIPTION" placeholder="请输入描述信息" :maxlength="50">描述信息</el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      
       <el-row type="flex" justify="space-around">
           <el-col :span="8" :offset="4">
             <el-button @click="isShowAddDialog = false">取消</el-button>
@@ -115,15 +115,15 @@
       </el-row>
       <el-row type="flex" class="row-bg" justify="space-around">
         <el-col :span="12">
-          <el-form-item label="描述信息" prop="DESCRIPTION">
-            <el-input v-model="modifyForm.DESCRIPTION" placeholder="请输入描述信息" :maxlength="50">描述信息</el-input>
+          <el-form-item label="排序序号" prop="SORT">
+            <el-input v-model.number="modifyForm.SORT" placeholder="请输入排序序号" :maxlength="3">排序顺序</el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row type="flex" class="row-bg" justify="space-around">
         <el-col :span="12">
-          <el-form-item label="排序序号" prop="SORT">
-            <el-input v-model.number="modifyForm.SORT" placeholder="请输入排序序号" :maxlength="3">排序顺序</el-input>
+          <el-form-item label="描述信息" prop="DESCRIPTION">
+            <el-input v-model="modifyForm.DESCRIPTION" placeholder="请输入描述信息" :maxlength="50">描述信息</el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -151,9 +151,9 @@ export default {
   name: "DictionaryData",
   data() {
     var codeValid = (rule, value, callback) => {
-      var reg = /^[A-Za-z_]+$/; 
+      var reg = /^[A-Za-z0-9_]+$/; 
       if(!value.match(reg)){
-          callback(new Error('类别代码只能是字母和下划线'));
+          callback(new Error('类别代码只能是数字字母和下划线'));
       } else {
         const params = {
           CODE: this.CODE,

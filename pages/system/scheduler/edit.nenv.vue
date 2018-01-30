@@ -15,67 +15,74 @@
         </el-row>
         <el-row type="flex" class="row-bg" justify="space-between">
           <el-col :span="12">
-            <el-form-item label="运行时间表达式" :rules="[{ required: true, message: '运行时间表达式不能为空', trigger: 'blur'}]">
+            <el-form-item label="表达式" :rules="[{ required: true, message: '运行时间表达式不能为空', trigger: 'blur'}]">
               <el-input v-model="addForm.CRON_EXPRESSION" placeholder="请输入运行时间表达式">运行时间表达式</el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="任务描述">
-              <el-input v-model="addForm.DESCRIPTION" placeholder="请输入任务描述">任务描述</el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row type="flex" class="row-bg" justify="space-between">
-          <el-col :span="12">
-            <el-form-item label="完整的类名" :rules="[{ required: true, message: '完整的类名不能为空', trigger: 'blur'}]">
+         <el-col :span="12">
+            <el-form-item label="完整类名" :rules="[{ required: true, message: '完整的类名不能为空', trigger: 'blur'}]">
               <el-input v-model="addForm.CLASS_NAME" placeholder="请输入完整的类名">完整的类名</el-input>
             </el-form-item>
           </el-col>
         </el-row>
+        <el-row type="flex" class="row-bg" justify="space-between">
+           <el-col :span="12">
+            <el-form-item label="任务描述">
+              <el-input v-model="addForm.DESCRIPTION" placeholder="请输入任务描述">任务描述</el-input>
+            </el-form-item>
+          </el-col>
+          
+        </el-row>
         
         <el-row type="flex" justify="space-around">
             <el-col :span="8" :offset="4">
-              <el-button @click="isShowAddDialog = false">取消</el-button>
               <el-button type="primary" @click="saveOrEdit();">保存</el-button>
             </el-col>
         </el-row>
-      </el-form>
+      </el-form >
 
   </div>
 </template>
 <script>
-import axios from 'axios';
 import { getScheduler, saveScheduler,updateScheduler } from './api'
 export default {
-  name: 'Scheduler',
+  name: 'SchedulerEditor',
+  props: {
+    id: {
+      type: String,
+      required: false
+    },
+    isShow: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
+    const self = this
     return {
-      ID: null,
       addForm: {
         ID: null, // 主键ID
         JOB_GROUP: null, // 任务分组
         JOB_NAME: null, // 任务名称
-        JOB_TRIGGER: null, // 触发器
-        CRON_EXPRESSION: null, // 运行时间表达式
+        CRON_EXPRESSION: '0/50 * * * * ?', // 运行时间表达式
         DESCRIPTION: null, // 任务描述
-        STATUS: null, // 任务状态
-        CREATE_USER: null, // 创建人
-        CREATE_TIME: null, // 创建时间
-        UPDATE_USER: null, // 修改人
-        UPDATE_TIME: null, // 修改时间
-        CLASS_NAME: null, // 完整的类名
-        APPLICATION_KEY: null // 所属系统
+        CLASS_NAME: 'com.infore.platform.scheduler.demo.BuyingJob', // 完整的类名
       },
       addRules: {}
     };
   },
   created() {
-    this.ID = this.$route.query.ID || '';
     this.getData();
+  },
+  computed: {
+    ID () {
+      return this.$route.query.ID || this.id;
+    }
   },
   methods: {
       getData() {
-        if (this.ID == null || this.ID == ''){
+        console.log(this.ID)
+        if (!this.ID){
           return;
         }
         const param = {
@@ -84,8 +91,12 @@ export default {
         getScheduler(param)
         .then(response => {
           const data = response.data;
-          this.addForm = data;
-          this.totalCount = data.totalCount;
+          this.addForm.JOB_GROUP = data.JOB_GROUP;
+          this.addForm.JOB_NAME = data.JOB_NAME;
+          this.addForm.CRON_EXPRESSION = data.CRON_EXPRESSION;
+          this.addForm.DESCRIPTION = data.DESCRIPTION;
+          this.addForm.CLASS_NAME = data.CLASS_NAME;
+          //this.totalCount = data.totalCount;
         }).catch(err => {
           console.log(err);
         })
@@ -99,14 +110,15 @@ export default {
         });
       },
       saveOrEdit(){
-        if (this.ID == null || this.ID == ''){
-          save();
+        if (!this.ID){
+          this.save();
         } else {
-          update();
+          this.update();
         }
       },
        // 保存
       save() {
+        debugger;
         this.$refs['addForm'].validate((valid) => {
           if (valid) {
             saveScheduler(this.addForm).then(response => {
@@ -115,8 +127,7 @@ export default {
                  type: "success"
                });
                this.resetForm('addForm');
-               // 重新加载数据
-                this.getList();
+              
                 // 隐藏弹出框
                 this.isShowAddDialog = false;
             }).catch(err =>{
@@ -136,16 +147,17 @@ export default {
         this.$refs['addForm'].validate((valid) => {
           if (valid) {
             this.addForm.ID = this.ID;
-            updateScheduler(this.addForm).then(response => {
+            updateScheduler(this.addForm)
+            .then(response => {
                this.$message({
                  message: response.rawData.msg,
                  type: "success"
                });
-               this.resetForm('modifyForm');
+               this.resetForm('addForm');
                // 重新加载数据
                this.getList();
                // 隐藏弹出框
-               this.isShowEditDialog = false;
+               this.isShowAddDialog = false;
             }).catch(e => {
               this.$message({
                 message: '修改失败',
@@ -160,6 +172,13 @@ export default {
       
       resetForm(formName) {
         this.$refs[formName].resetFields();
+      }
+    },
+    watch: {
+      isShow(val) {
+        if (val) {
+          this.$refs['addForm'].resetFields();
+        }
       }
     }
 }

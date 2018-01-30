@@ -131,17 +131,16 @@ export default {
           CODE: value
         };
         validConfigKey(params).then(response => {
-          if (response.data.code == 0) {
-            var e = response.data.data; 
-            if(response.data.data == true){
+          const data = response.data;
+          if(data){
               callback(new Error('该配置已存在'));
               return;
-            }
-          } else {
-            callback(new Error('验证失败'));
-            return;
           }
           callback();
+          
+        }).catch(e => {
+          callback(new Error('验证失败'));
+          return;
         });
       
       }
@@ -257,37 +256,32 @@ export default {
     },
   reqData(params){
     deleteConfig(params).then(response => {
-      const { data, code, msg } = response.data;
-      if (code == 0) {
-        this.$message.info("删除成功");
-        this.getList();
-      } else {
-        this.$message.err("删除失败");
-      }
-    })
+      this.$message.info("删除成功");
+      this.getList();
+    }).catch(e => {
+      this.$message.err("删除失败");
+    });
   },
    // 保存项目信息
   save() {
      this.$refs['form'].validate((valid) => {
           if (valid) {
             saveConfig(this.form).then(response => {
-              if (response.data.code == 0) {
-                this.$message({
-                  message: response.data.msg,
-                  type: "success"
-                });
-                this.resetForm('form');
-                // 重新加载数据
-                this.getList();
-              } else {
-                this.$message({
-                  message: response.data.msg,
-                  type: "error"
-                });
-              }
-
+      
+              this.$message({
+                message: response.rawData.msg,
+                type: "success"
+              });
+              this.resetForm('form');
+              // 重新加载数据
+              this.getList();
               // 隐藏弹出框
               this.dialogVisible = false;
+            }).catch(e => {
+               this.$message({
+                  message: '添加失败',
+                  type: "error"
+                });
             });
         } else {
         return false;
@@ -303,23 +297,20 @@ export default {
               CONFIGS: JSON.stringify(arr)
             }
             batchSaveConfig(data).then(response => {
-              if (response.data.code == 0) {
-                this.$message({
-                  message: response.data.msg,
-                  type: "success"
-                });
-                this.resetForm('dynamicValidateForm');
-                // 重新加载数据
-                this.getList();
-              } else {
-                this.$message({
-                  message: response.data.msg,
+              this.$message({
+                message: response.data.msg,
+                type: "success"
+              });
+              this.resetForm('dynamicValidateForm');
+              // 重新加载数据
+              this.getList();
+             // 隐藏弹出框
+              this.batchDialogVisible = false;
+            }).catch(e => {
+               this.$message({
+                  message: '添加失败',
                   type: "error"
                 });
-              }
-
-              // 隐藏弹出框
-              this.batchDialogVisible = false;
             });
         } else {
         return false;
