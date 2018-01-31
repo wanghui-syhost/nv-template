@@ -13,6 +13,7 @@
 </script>
 <style scoped lang="scss">
     .main{
+    	height: 100%;
         padding-left:20px;
     }
 

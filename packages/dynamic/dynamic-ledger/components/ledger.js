@@ -53,6 +53,10 @@ export default {
                 self.handleTabClick(data[0])
             })
         },
+        handleTabClick (tab) {
+            this.currentTab = tab
+            this.$router.push({ path: this.$route.fullPath, query: tab.query || {} })
+        }
     },
     render (h) {
         const self = this
@@ -73,6 +77,7 @@ export default {
                                             'div',
                                             {
                                                 staticClass: 'nv-ledger__item',
+                                                class: menu.ID === self.currentTab.ID ? 'active' : '',
                                                 on: {
                                                     click: function () { self.handleTabClick(menu) }
                                                 }

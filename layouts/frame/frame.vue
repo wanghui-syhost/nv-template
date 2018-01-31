@@ -84,9 +84,9 @@ export default {
         }
     }
     .e-app-wrapper {
-        position: relative;
-        padding-top: 72px;
-        height: 100%;
+        position: absolute;
+        top: 72px;
+        bottom: 0;
         width: 100%;
 
         &:after {
@@ -132,7 +132,7 @@ export default {
             overflow-y: scroll;
         }
         .e-main-container {
-            min-height: 100%;
+            height: 100%;
             transition: all .28s ease-out;
             
             &.has-sidebar {
