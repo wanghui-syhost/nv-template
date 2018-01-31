@@ -164,7 +164,7 @@
     },
     mounted(){
       this.uploadHeaders ={
-        'Authorization' : localStorage.token,
+        'Authorization' : localStorage.getItem('user.token'),
       }
     },
     created() {
