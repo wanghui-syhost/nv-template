@@ -74,7 +74,7 @@ export default {
       pageSize: 10,
       orderBy: null,
       totalCount: 0,
-      ID: ""
+      ID: null
     };
   },
   created() {
@@ -145,10 +145,12 @@ export default {
       this.ID = row.ID;
     },
     closeEditDialog () {
-      this.isShowEditDialog = false
+      this.isShowEditDialog = false;
+      this.getList();
     },
     closeAddDialog () {
-      this.isShowAddDialog = false
+      this.isShowAddDialog = false;
+      this.getList();
     },
 
     sortChange(data) {

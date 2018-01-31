@@ -1,6 +1,6 @@
 <template>
   <div>
-      <el-form :model="addForm" :rules="addRules" ref="addForm" label-width="120px">
+      <el-form :model="addForm" ref="addForm" label-width="120px">
         <el-row type="flex" class="row-bg" justify="space-between">
           <el-col :span="12">
             <el-form-item label="任务分组" :rules="[{ required: true, message: '任务分组不能为空', trigger: 'blur'}]">
@@ -92,15 +92,6 @@ export default {
             console.log(err);
           })
         }
-      },
-      reqData(params){
-        deleteScheduler(params)
-        .then(response => {
-          this.$message.info("删除成功");
-          this.getList();
-        }).catch(e => {
-          this.$message.err("删除失败");
-        });
       },
       saveOrEdit(){
         const self = this
