@@ -1,5 +1,6 @@
 import NvCalendar from './calendar'
 import NvCheckbox from './checkbox'
+import NvRadio from './radio'
 import NvOrganizeUserSelector from './organize-user-selector'
 import NvSelect from './select'
 import NvScrollPane from './scroll-pane'
@@ -8,12 +9,12 @@ import NvUserSelector from './user-selector'
 import NvRegionSelect from './region-select'
 import NvIframe from './iframe'
 import NvDynamic from './dynamic'
-import index from './checkbox';
 //import NvDynamicLeger from './dynamic-ledger'
 
 const components = [
   NvCalendar,
   NvCheckbox,
+  NvRadio,
   NvDynamic,
   //NvDynamicLeger,
   NvIframe,
