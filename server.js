@@ -59,6 +59,19 @@ module.exports = function (router, mockjs) {
             NAME: 'name2'
           }
         ])
+      case 'XSELECT': 
+        return res.reply([
+          {
+            ID: 'xxx',
+            VALUE: 'qqq',
+            NAME: 'name'
+          },
+          {
+            ID: 'xxx2',
+            VALUE: 'qqq2',
+            NAME: 'name2'
+          }
+        ])
       default:
         return next()
     }
