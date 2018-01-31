@@ -104,14 +104,9 @@
   </div>
 </template>
 <script>
-import axios from "axios";
 import { getTableColumns} from "./api";
-//import ConfigNenv from './config.nenv'
 export default {
   name: "Generator",
-  // components:{
-  //   ConfigNenv
-  // },
   data() {
     return {
       isShow: true,
@@ -139,7 +134,6 @@ export default {
   },
   created() {
     this.disabledNext = true;
-    // debugger
     const data = sessionStorage.getItem("generatorListParam");
     if (data){
       this.tablename = sessionStorage.getItem("generatorListTable");
@@ -186,6 +180,7 @@ export default {
         })
         
         .catch(err => {
+          this.listLoading = false;
           console.log(err);
         });
     },

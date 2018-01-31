@@ -117,7 +117,6 @@
   </div>
 </template>
 <script>
-import axios from "axios";
 import { getDictionaries, deleteDictionary, saveDictionary , validDictionary, updateDictionary} from "./api";
 export default {
   name: "Dictionary",
@@ -222,7 +221,7 @@ export default {
           this.totalCount = data.totalCount;
         })
         .catch(err => {
-          this.listLoading = false
+          this.listLoading = false;
           console.log(err);
         });
     },

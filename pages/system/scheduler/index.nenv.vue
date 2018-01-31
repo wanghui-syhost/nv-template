@@ -108,6 +108,7 @@ export default {
           self.totalCount = data.totalCount;
       })
       .catch(err => {
+        self.listLoading = false;
         console.log(err);
       });
     },

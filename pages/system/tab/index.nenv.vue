@@ -143,7 +143,6 @@
   </div>
 </template>
 <script>
-import axios from 'axios';
 import { getTabDatas, deleteTab, saveTab, updateTab, validTab } from './api'
 export default {
   name: 'Tab',
@@ -222,6 +221,7 @@ export default {
         this.list = data.list.map(v => v);
         this.totalCount = data.totalCount;
       }).catch(err => {
+        this.listLoading = false;
         console.log(err);
       })
     },

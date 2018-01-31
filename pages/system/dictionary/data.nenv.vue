@@ -139,7 +139,6 @@
   </div>
 </template>
 <script>
-import axios from "axios";
 import {
   getDictionaryDatas,
   deleteDictionaryData,
@@ -222,6 +221,7 @@ export default {
             console.log(this.list)
         })
         .catch(err => {
+           this.listLoading = false;
           console.log(err);
         });
     },
