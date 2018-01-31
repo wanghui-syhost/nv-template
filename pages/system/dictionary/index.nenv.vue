@@ -222,6 +222,7 @@ export default {
           this.totalCount = data.totalCount;
         })
         .catch(err => {
+          this.listLoading = false
           console.log(err);
         });
     },
