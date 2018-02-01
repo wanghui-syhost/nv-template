@@ -1,12 +1,12 @@
 <template>
-    <div class="frame-wrapper">
+    <div class="frame-wrapper" :class="{'width-limited': isWithLimited}">
         <div class="frame__header-wrapper">
                 <frame-header />
         </div>
         <div class="frame__sidebar-wrapper" v-if="hasSidebar">
             <frame-sidebar class="sidebar-container" :routes="childRoutes"/>
         </div>
-        <div id="frame" class="frame">
+        <div class="frame__body">
             <div class="frame-wrapper">
                 <div class="e-main-container" :class= "{'has-sidebar': hasSidebar } ">
                     <frame-main />
@@ -44,6 +44,7 @@ export default {
         ...vuex.mapState('platform', {
             menus: state => state.menus
         }),
+        ...mapState(['isWithLimited']),
         hasSidebar () {
             return this.childRoutes.length > 0
         }
@@ -77,6 +78,13 @@ export default {
     bottom: 0;
     left: 0;
     right: 0;
+
+    background-color: red;
+
+    &.width-limited {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
 }
 
 
@@ -85,105 +93,54 @@ export default {
     position: fixed;
     top: 72px;
     bottom: 0;
-    left: 0;
     z-index: 1001;
     background-color: #fff;
     overflow: hidden;
     transition: all .28s ease-out;
 }
 
-#frame {
+.frame__body {
     
     position: absolute;
     width: 100%;
     top: 70px;
     bottom: 0px;
     overflow: hidden;
-    background-color: red;
 
-    .frame {
-        &__header-wrapper {
-            position: fixed;
-            z-index: 999;
-            width: 100%;    
-        }
 
-        &__sidebar-wrapper {
-            width: 240px;
-            position: fixed;
-            top: 72px;
-            bottom: 0;
-            left: 0;
-            z-index: 1001;
-            background-color: #fff;
-            overflow: hidden;
-            transition: all .28s ease-out;
-        }
-    }
-    // .e-app-wrapper {
-    //     position: relative;
-    //     // padding-top: 72px;
-    //     height: 100%;
-    //     width: 100%;
-
-    //     &:after {
-    //         content: '';
-    //         clear: both;
-    //     }
-
-        &.auto-sidebar {
-            .e-sidebar-wrapper {
-                transform: translate(-140px, 0);
-                .e-sidebar-container {
-                    transform: translate(132px, 0);
-                }
-                &:hover {
-                    transform: translate(0, 0);
-                    .e-sidebar-container {
-                        transform: translate(0, 0);
-                    }
-                }
-            }
-            .e-main-container {
-                margin-left: 40px;
-            }
-        }
+    &.auto-sidebar {
         .e-sidebar-wrapper {
-            width: 240px;
-            position: fixed;
-            top: 72px;
-            bottom: 0;
-            left: 0;
-            z-index: 1001;
-            background-color: #fff;
-            overflow: hidden;
-            transition: all .28s ease-out;
-        }
-        .e-sidebar-container {
-            transition: all .28s ease-out;
-            position: absolute;
-            top: 72px;
-            bottom: 0;
-            left: 0;
-            right: -17px;
-            overflow-y: scroll;
+            transform: translate(-140px, 0);
+            .e-sidebar-container {
+                transform: translate(132px, 0);
+            }
+            &:hover {
+                transform: translate(0, 0);
+                .e-sidebar-container {
+                    transform: translate(0, 0);
+                }
+            }
         }
         .e-main-container {
-            transition: all .28s ease-out;
-
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            width: auto;
-            right: 0;
-            left: 0;
-            overflow-x: hidden;
-            overflow-y: auto;
-
-            &.has-sidebar {
-                margin-left: 240px;
-            }
+            margin-left: 40px;
         }
-    // }
+    }
+
+    .e-main-container {
+        transition: all .28s ease-out;
+
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: auto;
+        right: 0;
+        left: 0;
+        overflow-x: hidden;
+        overflow-y: auto;
+
+        &.has-sidebar {
+            margin-left: 260px;
+        }
+    }
 }
 </style>
