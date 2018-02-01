@@ -1,5 +1,5 @@
 <template>
-  <div class="page-demo">
+  <nv-layout class="page-demo">
       <section class="search-form">
         <el-form :inline="true">
           <!-- 搜索框  -->
@@ -112,7 +112,7 @@
         </el-row>
       </el-form>
   </el-dialog>
-  </div>
+  </nv-layout>
 </template>
 <script>
 import { getDictionaries, deleteDictionary, saveDictionary , validDictionary, updateDictionary} from "./api";
