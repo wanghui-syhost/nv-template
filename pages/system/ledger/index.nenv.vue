@@ -205,7 +205,6 @@ export default {
   },
   methods: {
     getList() {
-      debugger;
       this.listLoading = true;
       const pageParams = {
         pageIndex: this.pageIndex,
@@ -213,7 +212,6 @@ export default {
       }
       getLedgerDatas(pageParams)
       .then(response => {
-           debugger;
         this.listLoading = false;
         const data = response.data;
         if (data.list == undefined){

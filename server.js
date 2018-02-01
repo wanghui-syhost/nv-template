@@ -186,6 +186,19 @@ module.exports = function (router, mockjs) {
                 CREATE_USER: "11E787B2A7179B4E9911D583E7E8BEA9",
                 UPDATE_USER: "11E787B2A7179B4E9911D583E7E8BEA9",
                 SORT: 2,
+                ID: "11E7F047C30617B68247CBE8414DC77D",
+                CREATE_TIME: 1516329345000,
+                UPDATE_TIME: 1516329347000,
+                URL: "http://rewardpunish.infore.com",
+                NAME: "固废",
+              },
+              {
+                IS_DELETED: "NO",
+                APPLICATION_KEY: "business",
+                LEDGER_CODE: "FIRST_LEDGER",
+                CREATE_USER: "11E787B2A7179B4E9911D583E7E8BEA9",
+                UPDATE_USER: "11E787B2A7179B4E9911D583E7E8BEA9",
+                SORT: 2,
                 ID: "11E7F047C30617B68247CBE8414DC77X",
                 CREATE_TIME: 1516329345000,
                 UPDATE_TIME: 1516329347000,
@@ -200,6 +213,12 @@ module.exports = function (router, mockjs) {
       }
     })
 
+  })
+
+  router.get('/api/view-edit', function (req, res, next) {
+    res.reply({
+      nvCheckBoxResult: ['s2']
+    })
   })
 
   // router.get('/api/user/getPath', function (req, res, next) {

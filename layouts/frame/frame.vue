@@ -1,15 +1,16 @@
 <template>
-    <div id="frame" class="frame">
+    <div class="frame-wrapper">
         <div class="frame__header-wrapper">
-            <frame-header />
+                <frame-header />
         </div>
-        <div class="e-app-wrapper" v-show="true" :class="{'has-sidebar': hasSidebar}">
-            <div class="e-sidebar-wrapper" v-if="hasSidebar">
-                <frame-sidebar class="sidebar-container" :routes="childRoutes"/>
-            </div>
-            <div class="e-main-container" :class= "{'has-sidebar': hasSidebar } ">
-                <!--e-tab v-if="isShowTabs" /-->
-                <frame-main />
+        <div class="frame__sidebar-wrapper" v-if="hasSidebar">
+            <frame-sidebar class="sidebar-container" :routes="childRoutes"/>
+        </div>
+        <div id="frame" class="frame">
+            <div class="frame-wrapper">
+                <div class="e-main-container" :class= "{'has-sidebar': hasSidebar } ">
+                    <frame-main />
+                </div>
             </div>
         </div>
     </div>
@@ -17,7 +18,7 @@
 
 <script>
 import store from './store'
-import { frameHeader, frameMain, frameSidebar, frameTab } from './components'
+import { frameHeader, frameMain, frameSidebar } from './components'
 import vuex, { createNamespacedHelpers } from 'vuex'
 const { mapState ,mapGetters, mapActions } = createNamespacedHelpers(store.name)
 
@@ -28,7 +29,6 @@ export default {
         frameHeader,
         frameMain,
         frameSidebar,
-        frameTab,
     },
     computed: {
         childRoutes () {
@@ -43,11 +43,6 @@ export default {
         },
         ...vuex.mapState('platform', {
             menus: state => state.menus
-        }),
-        ...mapState({
-            isShowSidebar: 'isShowSidebar',
-            isShowHomeNav: 'isShowHomeNav',
-            isShowTabs: 'isShowTabs'
         }),
         hasSidebar () {
             return this.childRoutes.length > 0
@@ -75,24 +70,66 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
+
+.frame-wrapper {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+
+.frame__sidebar-wrapper {
+    width: 240px;
+    position: fixed;
+    top: 72px;
+    bottom: 0;
+    left: 0;
+    z-index: 1001;
+    background-color: #fff;
+    overflow: hidden;
+    transition: all .28s ease-out;
+}
+
 #frame {
+    
+    position: absolute;
+    width: 100%;
+    top: 70px;
+    bottom: 0px;
+    overflow: hidden;
+    background-color: red;
+
     .frame {
         &__header-wrapper {
             position: fixed;
             z-index: 999;
             width: 100%;    
         }
-    }
-    .e-app-wrapper {
-        position: absolute;
-        top: 72px;
-        bottom: 0;
-        width: 100%;
 
-        &:after {
-            content: '';
-            clear: both;
+        &__sidebar-wrapper {
+            width: 240px;
+            position: fixed;
+            top: 72px;
+            bottom: 0;
+            left: 0;
+            z-index: 1001;
+            background-color: #fff;
+            overflow: hidden;
+            transition: all .28s ease-out;
         }
+    }
+    // .e-app-wrapper {
+    //     position: relative;
+    //     // padding-top: 72px;
+    //     height: 100%;
+    //     width: 100%;
+
+    //     &:after {
+    //         content: '';
+    //         clear: both;
+    //     }
 
         &.auto-sidebar {
             .e-sidebar-wrapper {
@@ -132,13 +169,21 @@ export default {
             overflow-y: scroll;
         }
         .e-main-container {
-            height: 100%;
             transition: all .28s ease-out;
-            
+
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: auto;
+            right: 0;
+            left: 0;
+            overflow-x: hidden;
+            overflow-y: auto;
+
             &.has-sidebar {
                 margin-left: 240px;
             }
         }
-    }
+    // }
 }
 </style>

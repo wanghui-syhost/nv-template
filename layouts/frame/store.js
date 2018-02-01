@@ -10,11 +10,6 @@ const store = {
   name,
   // namespaced: true,
   state: {
-    // isShow
-    isShowSidebar: true,
-    isShowHomeNav: true,
-    isShowHeader: true,
-    isShowTabs: true,
     // 当前页面tab
     currentTabs: [],
     // 所有页面的tab

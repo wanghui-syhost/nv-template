@@ -25,13 +25,12 @@
 					</div>
 					<div class="tree-div">
 						<el-tree ref="selectTree"
-								class="filter-tree" 
+							class="filter-tree" 
 							:disabled="true" 
 							:data="treeData" 
 							:props="defaultProps" 
 							node-key="id" 
 							render-after-expand
-							default-expand-all
 							show-checkbox
 							:filter-node-method="filterNode"
 							@check-change="checkChange" >
@@ -58,10 +57,12 @@
 	export default {
 		name: 'NvOrganizeUserSelector',
 		props: {
+			// 是否为只需要组织，不需要人员
 			onlyOrganize: {
 				type: Boolean,
 				default: false
 			},
+			// 标题
 			title: {
 				type: String,
 			},
@@ -70,20 +71,24 @@
 				type: String,
 				default: 'name'
 			},
-			// 请求url地址
+			// 请求人员url地址
 			url: {
 				type: String,
 				default: '/user/organize/all'
 			},
+			// 请求组织地址
 			organizeUrl: {
 				type: String,
 				default: '/user/organize'
 			},
+			// 是否开启多选
 			multi: {
 				type: Boolean,
 				default: false
 			},
+			// 改元素的值
 			value: {
+				type: Array,
 				required: true
 			},
 			placeholder: {
@@ -156,8 +161,7 @@
 				this.dialogVisible = true;
 			},
 			filterNode(value, data) {
-		        if (!value) return true;
-		        return data[this.label].indexOf(value) !== -1;
+				return value ? data[this.label].indexOf(value) !== -1 : true
 		    },
 		    commitResult () {
 				const self = this
@@ -166,9 +170,10 @@
 		        }
 				self.currectValue = this.nodeList
 				self.dialogVisible = false
-		    },
+			},
 		    checkChange (node, isChecked, isChildChecked) {
 				const self = this
+				console.log(node, isChecked, isChildChecked)
 		    	if (!node.children) {
 		    		if (isChecked) {
 		    			if (this.filterText && node.name.indexOf(this.filterText) == -1) {
@@ -194,7 +199,12 @@
 		    removeSelected (node) {
 				const self = this
 				const { nodeList, $refs } = self
-				self.nodeList = nodeList.filter(item => item.id !== node.id)
+				for (let i = 0; i < nodeList.length; i++) {
+					if (nodeList[i].id === node.id) {
+						self.nodeList.splice(i, 1)
+					}
+				}
+				// self.nodeList = nodeList.filter(item => item.id !== node.id)
 				if ($refs.selectTree) {
 					$refs.selectTree.setChecked(node.id, false, false);
 				}

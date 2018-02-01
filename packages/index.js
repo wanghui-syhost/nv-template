@@ -10,7 +10,7 @@ import NvUserSelector from './user-selector'
 import NvRegionSelect from './region-select'
 import NvIframe from './iframe'
 import NvDynamic from './dynamic'
-//import NvDynamicLeger from './dynamic-ledger'
+import NvCard from './card'
 
 const components = [
   NvCalendar,
@@ -18,7 +18,7 @@ const components = [
   NvInput,
   NvRadio,
   NvDynamic,
-  //NvDynamicLeger,
+  NvCard,
   NvIframe,
   NvOrganizeUserSelector,
   NvScrollPane,
@@ -30,7 +30,6 @@ const components = [
 
 const install = function(Vue, opts = {}) {
   components.map(component => component.install(Vue))
-  //components.map(component => Vue.component(component.name, component))
 }
 
 if (typeof window !== undefined && window.Vue) {
