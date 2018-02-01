@@ -25,12 +25,12 @@ export default {
     background-color: #fff;
     > * {
         background-color: #fff;
+        padding: 20px;
         margin: 0;
     }
     &.is-card-layout {
         background-color: transparent;
         > * {
-            padding: 20px;
             margin-bottom: 10px;
         }
     }
