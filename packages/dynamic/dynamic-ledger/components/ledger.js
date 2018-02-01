@@ -52,6 +52,8 @@ export default {
                 self.isLoading = false
                 self.menus = data
                 self.handleTabClick(data[0])
+            }).catch(() => {
+                self.$emit('error')
             })
         },
         loopMenus(data) {
