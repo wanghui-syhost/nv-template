@@ -1,20 +1,38 @@
 <template>
-    <div class="nv-card">
+    <div class="nv-layout" :class="{'is-card-layout': isCardLayout}">
         <slot name="default" />
     </div>
 </template>
 <script>
+import store from './store'
+import vuex, { createNamespacedHelpers } from 'vuex'
+const { mapState ,mapGetters, mapActions } = createNamespacedHelpers(store.name)
 export default {
-    name: 'NvCard'
+    name: 'NvLayout',
+    data () {
+        return {
+            
+        }
+    },
+    computed: {
+        ...mapState(['isCardLayout'])
+    }
 }
 </script>
 <style lang="scss" scoped>
-.nv-card {
-    background-color: transparent;
+.nv-layout {
+    min-height: 100%;
+    background-color: #fff;
     > * {
-        padding: 20px;
-        margin-bottom: 10px;
-        background-color: green;
+        background-color: #fff;
+        margin: 0;
+    }
+    &.is-card-layout {
+        background-color: transparent;
+        > * {
+            padding: 20px;
+            margin-bottom: 10px;
+        }
     }
 }
 </style>

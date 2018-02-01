@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <nv-layout>
       <section class="search-form" style="padding:20px;">
         <el-form>
             <!-- 搜索框  -->
@@ -136,7 +136,7 @@
       </el-row>
     </el-form>
   </el-dialog>
-  </div>
+  </nv-layout>
 </template>
 <script>
 import {

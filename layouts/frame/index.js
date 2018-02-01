@@ -8,3 +8,4 @@ export const layout = Frame
 loader({ layout, store })
 
 import './assets/icons/index.scss'
+import './index.scss'

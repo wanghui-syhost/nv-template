@@ -1,5 +1,5 @@
 <template>
-    <nv-card>
+    <nv-layout>
         <div>
             1
         </div>
@@ -57,7 +57,7 @@
         <div>
             19
         </div>
-    </nv-card>
+    </nv-layout>
 </template>
 <script>
 export default {

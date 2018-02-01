@@ -79,8 +79,6 @@ export default {
     left: 0;
     right: 0;
 
-    background-color: red;
-
     &.width-limited {
         max-width: 1200px;
         margin: 0 auto;

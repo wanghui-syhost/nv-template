@@ -24,7 +24,8 @@
             <a @click="changeSkin">
                 <i class="png-icon skin middle" />
             </a>
-            <span @click = "handlerMaxWidth"> 切换布局 </span>
+            <span @click = "handlerMaxWidth"> 全屏/限宽 </span>
+            <span @click = "handerLayout"> 切换布局 </span>
             <span class="e-header__loginuser" >{{ nickName }}</span>
             <span class="e-header__btn-loginout" @click="handlerLogout">{{ header.loginoutText }}</span>
         </div>
@@ -89,6 +90,9 @@ export default {
                 this.$router.push({ path: process.env.LOGIN_PATH || '/login' })
               })
         },
+        handerLayout () {
+            this.changeLayout()
+        },
         handlerMaxWidth () {
             this.changeLimitWidth()
         },
@@ -104,6 +108,9 @@ export default {
         ),
         ...mapActions('layout', 
             ['changeLimitWidth']
+        ),
+        ...mapActions('nv-layout',
+            ['changeLayout']
         )
     }
 

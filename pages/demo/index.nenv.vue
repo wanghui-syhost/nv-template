@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <nv-layout>
     <h1>nenv 平台标准demo</h1>
     <section>
         <h2>1.切换标题</h2>
@@ -61,7 +61,7 @@
         </el-row>
       </el-form>
     </section>
-  </div>
+  </nv-layout>
 </template>
 
 <script>
