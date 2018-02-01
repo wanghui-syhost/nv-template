@@ -77,7 +77,7 @@ export default {
                                             'div',
                                             {
                                                 staticClass: 'nv-ledger__item',
-                                                class: menu.ID === self.currentTab.ID ? 'active' : '',
+                                                class: self.currentTab.path === menu.path ? 'active' : '',
                                                 on: {
                                                     click: function () { self.handleTabClick(menu) }
                                                 }

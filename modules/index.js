@@ -1,5 +1,6 @@
 import './notification'
 import './theme'
+import './autoLogin'
 
 
 window.Notification.requestPermission((x) => {

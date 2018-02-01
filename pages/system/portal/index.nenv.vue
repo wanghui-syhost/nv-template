@@ -1,7 +1,7 @@
 <template>
   <div>
-      <section class="search-form" style="padding:20px;">
-        <el-form>
+      <section class="search-form">
+        <el-form :inline="true">
             <!-- 搜索框  -->
   			<div class="search-form-one">
   				<el-button type="primary" @click="isShowAddDialog = true">新增</el-button>
