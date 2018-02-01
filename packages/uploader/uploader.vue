@@ -1,7 +1,7 @@
 <template>
-    <div class="upload-table">
+    <nv-layout class="upload-table">
         <section class="upload-table__from">
-            <h3>{{ projectName }}</h3>
+            <h3>文件管理</h3>
             <el-button @click="createdNewFolder">
                 新建文件夹
             </el-button>
@@ -11,7 +11,7 @@
             <el-button @click="downloadChooseRows">
                 下载
             </el-button>
-            <el-upload  class="upload-table__upload--btn" :action="uploadURL" :on-success="success"  :before-upload="beforeUpload" :headers="uploadHeaders" :show-file-list="false" accept=".jpg, .jpeg, .png, .gif, .rar, .zip, .doc, .docx, .xls, .xlsx,  .ppt, .pptx, .pdf, .txt">
+            <el-upload  class="upload-table__upload--btn" :action="uploadURL" :on-success="success" :before-upload="beforeUpload" :headers="uploadHeaders" :data="fileData" :show-file-list="false" accept=".jpg, .jpeg, .png, .gif, .rar, .zip, .doc, .docx, .xls, .xlsx,  .ppt, .pptx, .pdf, .txt, .wps">
                 <el-button  type="primary" v-show="levelList.length > 1 && showUpload">上传</el-button>
             </el-upload>
             <el-input style="float: right; margin-right: 50px; width:300px" icon="search"
@@ -19,12 +19,12 @@
                 v-model="fileName" 
                 @keyup.enter.native="search" 
                 :on-icon-click="search">
-                <!-- <el-button slot="append" icon="search"></el-button> -->
+                <el-button slot="append" icon="el-icon-search"></el-button>
             </el-input>
         </section>
 
         <!-- 面包屑导航 -->
-        <div style="float: left; margin-top: 10px; margin-bottom: 10px; margin-left: 20px; font-size: 14px">
+        <div style="margin-top: 10px; margin-bottom: 10px; font-size: 14px">
             <el-breadcrumb class="app-levelbar" separator=" > ">
                 <el-breadcrumb-item v-for="(item,index)  in levelList" :key="item.id">
                     <span v-if='index==levelList.length-1'>{{item.name}}</span>
@@ -34,27 +34,31 @@
         </div>
 
         <!-- 文件列表 -->
-        <el-table :data="list" ref="multipleTable"  @selection-change="handleSelectionChange" fit highlight-current-row>
-            <el-table-column type="selection" width="55"></el-table-column>
-            <el-table-column align="left" label='文件名' width="500">
+        <el-table :data="list" ref="multipleTable" v-loading="listLoading" @selection-change="handleSelectionChange" fit highlight-current-row>
+            <el-table-column type="selection" width="55" align="center"></el-table-column>
+            <el-table-column align="center" label="" width="40">
+              <template slot-scope="scope" @click="setParentCode(scope.row.ID, scope.row.NAME,scope.row.IS_DIRECTORY)">
+                <i v-if="scope.row.IS_DIRECTORY == '1'" class="png-icon file-folder"/>
+                <i v-else class="png-icon" :class="scope.row.FILE_TYPE | FileIconFilter"/>
+              </template>
+            </el-table-column>
+            <el-table-column align="left" label='文件名' show-overflow-tooltip>
                 <template slot-scope="scope">
                     <span class="file-name">
-                        <span v-if="scope.row.IS_DIRECTORY == '1'" class="file-folder"></span>
-                        <span v-else :class="scope.row.FILE_TYPE | FileIconFilter"></span>
                         <span class="file-label" v-show="!scope.row.isEdit" @click="setParentCode(scope.row.ID, scope.row.NAME,scope.row.IS_DIRECTORY)">{{scope.row.NAME}}</span>
-                        <span class="file-input" v-show="scope.row.isEdit">
-                            <span style="float: left"><el-input size="small" v-model="rename"></el-input></span>
-                            <span style="float: left; margin-left: 20px"><el-button type="primary" size="small" @click="modifyComplete(scope.row)" :disabled="rename.length<1">确认</el-button></span>
-                            <span style="float: left; margin-left: 10px"><el-button type="primary" size="small" @click="scope.row.isEdit = false">取消</el-button></span>
+                        <span class="file-input" v-if="scope.row.isEdit">
+                          <span style="float: left"><el-input id="" size="small" style="width: 310px" v-model="rename" :minlength="1" :maxlength="50" @keyup.enter.native="modifyComplete(scope.row)"></el-input></span>
+                          <span style="float: left; margin-left: 10px"><el-button type="primary" size="mini" @click="modifyComplete(scope.row)" :disabled="rename.length<1">确认</el-button></span>
+                          <span style="float: left; margin-left: 5px"><el-button type="primary" size="mini" @click="scope.row.isEdit = false">取消</el-button></span>
                         </span>
                     </span>
                 </template>
             </el-table-column>
-            <el-table-column label="" >
+            <el-table-column label="" width="180">
                 <template slot-scope="scope">
-                    <span title="重命名" class="file-rename" @click="reName(scope.row)"></span>
-                    <span title="下载" class="file-upload" @click="download(scope.row)"></span>
-                    <span title="删除" class="file-delete" @click="removeItem(scope.row)"></span>
+                    <i title="重命名" class="png-icon file-rename small" @click="reName(scope.row)"></i>
+                    <i title="下载" class="png-icon file-upload  small" @click="download(scope.row)"></i>
+                    <i title="删除" class="png-icon file-delete small" @click="removeItem(scope.row)"></i>
                 </template>
             </el-table-column>
             <!-- <el-table-column label="文件类型"  align="center">
@@ -63,34 +67,24 @@
                 <span v-else>{{ scope.row.FILE_TYPE }}</span>
                 </template>
             </el-table-column> -->
-            <el-table-column label="文件大小"  align="center">
+            <el-table-column label="文件大小"  align="center" width="100">
                 <template slot-scope="scope">
                     <span v-if=" scope.row.IS_DIRECTORY === 1">-</span>
                     <span v-else>{{ scope.row.FILE_SIZE | FileSizeFormat }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="上传人" align="center" >
+            <el-table-column label="上传人" align="center" width="150">
                 <template slot-scope="scope">
                     <span>{{ scope.row.USER_NAME }}</span>
                 </template>
             </el-table-column>
-            <el-table-column align="center" label="上传时间">
+            <el-table-column align="center" label="上传时间" width="180">
                 <template slot-scope="scope">
                     <!-- <i class="el-icon-time"></i> -->
                     <span>{{scope.row.CREATE_TIME | DateTimeFilter(5)}}</span>
                 </template>
             </el-table-column>
         
-            <!-- 编辑 -->
-            <!-- <el-table-column align="center" label="操作" width="300">
-                <template slot-scope="scope">
-                    <el-button size="small" icon="delete" @click="removeItem(scope.row)">删除</el-button>
-                    <el-button v-show='!scope.row.isEdit' type="primary" @click='scope.row.isEdit = true' size="small" icon="edit">编辑</el-button>
-                    <el-button v-show='scope.row.isEdit' type="success" @click='modifyComplete(scope.row)' size="small" icon="check">完成</el-button>
-                    <el-button v-show='scope.row.IS_DIRECTORY === 1' type="success" @click='setParentCode(scope.row.ID, scope.row.NAME)' size="small">进入</el-button>
-                    <el-button v-show='scope.row.IS_DIRECTORY !== 1' type="success" @click='download(scope.row)' size="small" >下载</el-button>
-                </template>
-            </el-table-column> -->
         </el-table>
 
         <div class="home-detail__page">
@@ -115,7 +109,7 @@
                 <el-button type="primary" @click="confirmToAddFolder" :disabled="newFolderName.length<1">确 定</el-button>
             </div>
         </el-dialog>
-    </div>
+    </nv-layout>
 </template>
 
 <script>
@@ -124,13 +118,6 @@
   const Config = {}
   export default {
     name: 'NvUploader',
-    props: {
-      // 上传地址
-      uploadURL: {
-        type: String,
-        required: true,
-      }
-    },
     data () {
       return {
         list: null,
@@ -139,7 +126,8 @@
         pageSize:10,
         totalCount: 0,
         value:'',
-        // uploadURL: Config.FILE_UPLOAD_URL,
+        uploadURL: '/api/file/upload/project/type',
+        fileData: {},
 
         uploadHeaders:{},
         // 当前选择的rows;
@@ -170,21 +158,25 @@
     props: {
       // 项目ID
       projectId: {
-        type: String
+        type: String,
       },
       // 项目名称
       projectName: {
-        type: String
+        type: String,
       },
       // 文件类型
       type: {
-        type: String
-      }
+        type: String,
+      },
     },
     mounted(){
       this.uploadHeaders ={
-        'Authorization' : localStorage.token,
-      }
+        'Authorization' : localStorage.getItem('user.token'),
+      },
+      this.fileData = {
+				projectId: this.projectId,
+				type: this.type
+			};
     },
     created() {
       this.fetchData();
@@ -202,7 +194,7 @@
         }
         getTreeDocuments(pagePrams).then(response => {
           this.listLoading = false;
-          const  {data, code ,msg} = response.data;
+          const  {data, code ,msg} = response.rawData;
           if(code===0){
               this.list = data.list.map(v => {
                 v.isEdit = false;
@@ -288,6 +280,8 @@
         this.$message.error("上传文件中");
     },
     success(resp){
+      this.listLoading = false;
+      debugger;
         let me = this;
         let {code , data,msg} = resp;
         console.log(resp);
@@ -301,7 +295,7 @@
             arr.push(item);
            FileAdd(arr).then(resp=>{
              console.log(resp);
-             let {code, data,msg} = resp.data;
+             let {code, data,msg} = resp.rawData;
               if(code==0){
                 me.$message.info('上传成功');
                 me.fetchData(me.currentId);
@@ -324,7 +318,7 @@
             }).then(()=>{
               // 当删除的是文件夹时需提示将会同时删除文件夹下的文件，确认后做删除文件夹下文件的操作，此处需完善
               FileDeleteFolder(row.ID).then(resp=>{
-                let {code, msg, data} = resp.data;
+                let {code, msg, data} = resp.rawData;
                 if(code === 0){
                 me.$message.info("删除成功");
                 me.fetchData(me.currentId);
@@ -344,7 +338,7 @@
             type:'warning'
           }).then(()=>{
             FileDelete(row.ID).then(resp=>{
-                let {code, msg, data} = resp.data;
+                let {code, msg, data} = resp.rawData;
               if(code ===0){
                 me.$message.info("删除成功");
                 me.fetchData(me.currentId);
@@ -367,20 +361,22 @@
           let req = {
             FILE_ID: parentCode
           };
+          this.listLoading = true;
           FileView(req).then(resp=>{
-              let {code, msg, data} = resp.data;
+              let {code, msg, data} = resp.rawData;
               let me = this;
               debugger;
               if(code==0){
-                let url = data.fileUrl + data.filePath;
-                let newWindow = window.open("_blank");
-                newWindow.location = url;
+                // let url = data.fileUrl + data.filePath;
+                let url = data.filePath;
+                window.location.href = url;
               }else{
                 me.$message.error('预览失败！');
               }
           }).catch(err=>{
             console.error(err);
-          })
+          });
+          this.listLoading = false;
           return;
         } 
         // 处理左上角的导航功能
@@ -425,7 +421,7 @@
       FileCreatedNewFolder(req).then(resp=>{
         console.log(resp);
         me.dialogFormVisible= false;
-        let {code, msg, data} = resp.data;
+        let {code, msg, data} = resp.rawData;
         if(code==0){
           me.$message({
             showClose: true,
@@ -467,7 +463,7 @@
             NAME: this.rename.trim()
           };
           FileRenameFolder(data).then(resp=>{
-            let {code, msg, data} = resp.data;
+            let {code, msg, data} = resp.rawData;
             if(code==0){
               me.fetchData(me.currentId);
               row.isEdit = false;
@@ -489,7 +485,7 @@
           FILE_TYPE : row.FILE_TYPE==null?'':row.FILE_TYPE
         };
         FileRename(data).then(resp=>{
-          let {code, msg, data} = resp.data;
+          let {code, msg, data} = resp.rawData;
           if(code==0){
             me.fetchData(me.currentId);
             row.isEdit = false;
@@ -530,7 +526,7 @@
           type:'warning'
       }).then(()=>{
         deleteDirAndFiles(ids).then(resp=>{
-          let {code, msg, data} = resp.data;
+          let {code, msg, data} = resp.rawData;
           if(code ===0){
             me.$message.info("删除成功");
             me.fetchData(me.currentId);
@@ -598,101 +594,6 @@
           display: inline-block;
           padding-left: 9px;
       }
-  }
-
-  // 图标样式
-  .file-folder {
-    float: left;
-    //background: url(../../assets/img/file/folder.png);
-    width: 24px;
-    height: 24px;
-    background-repeat: no-repeat;
-  }
-
-  .file-xls{
-    float: left;
-    //background: url(../../assets/img/file/xls.png);
-    width: 24px;
-    height: 24px;
-    background-repeat: no-repeat;
-  }
-
-  .file-doc{
-    float: left;
-    //background: url(../../assets/img/file/doc.png);
-    width: 24px;
-    height: 24px;
-    background-repeat: no-repeat;
-  }
-
-  .file-ppt{
-    float: left;
-    //background: url(../../assets/img/file/ppt.png);
-    width: 24px;
-    height: 24px;
-    background-repeat: no-repeat;
-  }
-
-  .file-rar{
-    float: left;
-    //background: url(../../assets/img/file/rar.png);
-    width: 24px;
-    height: 24px;
-    background-repeat: no-repeat;
-  }
-
-  .file-txt{
-    float: left;
-    //background: url(../../assets/img/file/txt.png);
-    width: 24px;
-    height: 24px;
-    background-repeat: no-repeat;
-  }
-
-  .file-pdf{
-    float: left;
-    //background: url(../../assets/img/file/pdf.png);
-    width: 24px;
-    height: 24px;
-    background-repeat: no-repeat;
-  }
-
-  .file-other{
-    float: left;
-    //background: url(../../assets/img/file/other.png);
-    width: 24px;
-    height: 24px;
-    background-repeat: no-repeat;
-  }
-
-  .file-rename{
-    float: left;
-    //background: url(../../assets/img/file/rename.png);
-    width: 24px;
-    height: 24px;
-    background-repeat: no-repeat;
-    margin-left: 5px;
-    cursor: pointer;
-  }
-
-  .file-upload{
-    float: left;
-    //background: url(../../assets/img/file/upload.png);
-    width: 24px;
-    height: 24px;
-    background-repeat: no-repeat;
-    margin-left: 5px;
-    cursor: pointer;
-  }
-
-  .file-delete{
-    float: left;
-    //background: url(../../assets/img/file/delete.png);
-    width: 24px;
-    height: 24px;
-    background-repeat: no-repeat;
-    margin-left: 5px;
-    cursor: pointer;
   }
 
   .file-name:hover {
