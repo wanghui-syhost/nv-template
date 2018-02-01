@@ -3,7 +3,7 @@
     <section class="search-form">
       <el-form>
         <!-- 搜索框  -->
-        <div class="search-form-one" style="padding: 10px 0">
+        <div class="search-form-one">
           <el-button type="primary" @click="showAdd">新增</el-button>
         </div>
       </el-form>

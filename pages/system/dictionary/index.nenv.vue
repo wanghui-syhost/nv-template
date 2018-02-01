@@ -1,25 +1,24 @@
 <template>
-  <div>
-      <section class="search-form" style="padding: 20px;">
-        <el-form>
-            <!-- 搜索框  -->
-  			<div class="search-form-one">
-  			    <span class="search-form-label">字典名称</span>
-            <el-input v-model="NAME" placeholder="请输入字典名称" size="middle" style="width:332px;"></el-input>
-             <span class="search-form-label">字典状态</span>
-            <el-select v-model="STATUS" placeholder="">
-              <el-option v-for="item in searchStatus" :key="item.value" :label="item.label" :value="item.value"></el-option>
-            </el-select>
-            <el-button type="infor" @click="getList();">搜索</el-button>
-
-
-  				<el-button type="primary" @click="isShowAddDialog = true">新增</el-button>
-  			</div>
+  <div class="page-demo">
+      <section class="search-form">
+        <el-form :inline="true">
+          <!-- 搜索框  -->
+          <div class="search-form-one">
+             <el-form-item label="字典名称">
+               <el-input v-model="NAME" placeholder="请输入字典名称" size="middle" style="width:332px;"></el-input>
+             </el-form-item>
+              <el-form-item label="字典状态">
+                 <el-select v-model="STATUS" placeholder="">
+                  <el-option v-for="item in searchStatus" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-button type="infor" @click="getList();">搜索</el-button>
+              <el-button type="primary" @click="isShowAddDialog = true">新增</el-button>
+          </div>
         </el-form>
       </section>
 
-
-    <section class="search-table">
+      <section>
         <el-table :data="list" v-loading.body="listLoading" element-loading-text="拼命加载中" border fit highlight-current-row>
          <el-table-column label="类别名称">
             <template slot-scope="scope">
@@ -42,7 +41,6 @@
            <el-table-column label="操作">
             <template slot-scope="scope">
                <el-button size="small" type="infor" @click="goDictionaryData(scope.row)" icon="information">小类</el-button>
-               <el-button size="small" type="infor" @click="goDictionaryRole(scope.row)" icon="information">配置角色</el-button>
                <el-button size="small" type="infor" @click="setDictionaryStatus(scope.row, scope.row.STATUS == 'VALID' ? 'INVALID': 'VALID')">{{scope.row.STATUS == 'INVALID' ? '设为有效': '设为无效'}}</el-button>
                <el-button size="small" type="primary" @click="modifyInfo(scope.row)">编辑</el-button>
               <el-button size="small" type="danger" @click="removeInfo(scope.row)" icon="delete">删除</el-button>
@@ -335,10 +333,6 @@ export default {
 
     goDictionaryData(row){
         this.$router.push({path:'/system/dictionary/data',query:{CODE:row.CODE,NAME:row.NAME}});
-    },
-
-    goDictionaryRole(row){
-        this.$router.push({path:'/system/dictionary/role',query:{CODE:row.CODE,NAME:row.NAME}});
     },
 
     handleSizeChange(pageIndex) {

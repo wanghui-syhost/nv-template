@@ -1,13 +1,13 @@
 <template>
   <div>
-      <section class="search-form" style="padding: 20px;">
-        <el-form>
+      <section class="search-form">
+        <el-form :inline="true">
             <!-- 搜索框  -->
   			<div class="search-form-one">
-  			    <span class="search-form-label">关键字</span>
+          <el-form-item label="关键字">
             <el-input v-model="KEYWORD" placeholder="请输入关键字" size="middle" style="width:332px;"></el-input>
-            <el-button type="infor" @click="getList();">搜索</el-button>
-
+          </el-form-item>
+          <el-button type="infor" @click="getList();">搜索</el-button>
   				<el-button type="primary" @click="dialogVisible = true">新增</el-button>
           <el-button type="primary" @click="batchDialogVisible = true">批量添加</el-button>
   			</div>
@@ -298,7 +298,7 @@ export default {
             }
             batchSaveConfig(data).then(response => {
               this.$message({
-                message: response.data.msg,
+                message: response.rawData.msg,
                 type: "success"
               });
               this.resetForm('dynamicValidateForm');
