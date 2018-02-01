@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <nv-layout>
     <section class="search-form">
       <el-form>
         <!-- 搜索框  -->
@@ -48,7 +48,7 @@
     <el-dialog title="修改任务" :visible.sync="isShowEditDialog"  size="small">
       <scheduler-editor  :id="ID" @close="closeEditDialog"></scheduler-editor>
     </el-dialog>
-  </div>
+  </nv-layout>
 </template>
 <script>
 import SchedulerEditor from "./edit.nenv";

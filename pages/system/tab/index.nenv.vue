@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <nv-layout>
     <section class="search-form">
       <el-form :inline="true">
         <!-- 搜索框  -->
@@ -140,7 +140,7 @@
         </el-row>
       </el-form>
     </el-dialog>
-  </div>
+  </nv-layout>
 </template>
 <script>
 import { getTabDatas, deleteTab, saveTab, updateTab, validTab } from './api'

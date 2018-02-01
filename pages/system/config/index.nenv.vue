@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <nv-layout>
       <section class="search-form">
         <el-form :inline="true">
             <!-- 搜索框  -->
@@ -115,7 +115,7 @@
   </el-dialog>
 
 
-  </div>
+  </nv-layout>
 </template>
 <script>
 import { getConfigDatas, saveConfig, batchSaveConfig, validConfigKey, updateConfig } from './api'

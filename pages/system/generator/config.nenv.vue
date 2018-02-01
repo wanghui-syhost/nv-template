@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <nv-layout>
      
   <el-steps :active="3"  style="margin-top: 20px">
       <el-step title="查询数据库" ></el-step>
@@ -7,7 +7,7 @@
       <el-step title="后台信息" ></el-step>
     </el-steps>
       
-  </div>
+  </nv-layout>
 </template>
 <script>
 import {
