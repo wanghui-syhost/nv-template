@@ -21,6 +21,12 @@
         
             <nv-input v-model="nvInputResult2" placeholder="请选择" :disabled = "false"/>
         </div>
+        <p>
+        <div>
+            <nv-textarea v-model="nvTextareaResult"/>
+            
+            <nv-textarea v-model="nvTextareaResult2" :disabled = "false"/>
+        </div>
     </div>
 </template>
 <script>
@@ -35,6 +41,8 @@ export default {
             nvSelectResult2:'',
             nvInputResult:'',
             nvInputResult2:'',
+            nvTextareaResult:'',
+            nvTextareaResult2:'',
         }
     },
     created () {
@@ -51,7 +59,8 @@ export default {
                 self.nvCheckBoxResult = data.nvCheckBoxResult,
                 self.nvRadioResult = data.nvRadioResult,
                 self.nvSelectResult = data.nvSelectResult,
-                self.nvInputResult = data.nvInputResult
+                self.nvInputResult = data.nvInputResult,
+                self.nvTextareaResult = data.nvTextareaResult
             })
         }
     }

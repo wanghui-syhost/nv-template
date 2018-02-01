@@ -3,6 +3,7 @@ import NvCheckbox from './checkbox'
 import NvRadio from './radio'
 import NvSelect from './select'
 import NvInput from './input'
+import NvTextarea from './textarea'
 import NvOrganizeUserSelector from './organize-user-selector'
 import NvScrollPane from './scroll-pane'
 import NvUploader from './uploader'
@@ -17,6 +18,7 @@ const components = [
   NvCheckbox,
   NvInput,
   NvRadio,
+  NvTextarea,
   NvDynamic,
   //NvDynamicLeger,
   NvIframe,
