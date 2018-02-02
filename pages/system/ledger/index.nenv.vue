@@ -34,7 +34,7 @@
         </el-table-column>
         <el-table-column label="是否显示头部">
           <template slot-scope="scope">
-            <span> {{ scope.row.IS_DELETED == 'YES' ? '是' : '否' }}</span>
+            <span> {{ scope.row.SHOW_HEAD == 'YES' ? '是' : '否' }}</span>
           </template>
         </el-table-column>
         <el-table-column label="操作">
@@ -54,7 +54,7 @@
     </section>
 
     <!-- 新增 -->
-    <el-dialog title="添加动态选项卡" :visible.sync="isShowAddDialog" size="small">
+    <el-dialog title="添加台账基本信息" :visible.sync="isShowAddDialog" size="small">
       <el-form :model="addForm" :rules="addRules" ref="addForm" label-width="120px">
         <el-row type="flex" class="row-bg" justify="space-around">
           <el-col :span="12">
@@ -73,9 +73,8 @@
         </el-row>
         <el-row type="flex" class="row-bg" justify="space-around">
           <el-col :span="12">
-            <el-form-item label="选项卡类型 " prop="TYPE">
-              <!-- <el-input v-model="addForm.TYPE" placeholder="请输入选项卡类型  ">选项卡类型 </el-input> -->
-              <nv-select nv-code='TAB_TYPE' v-model="addForm.TYPE"></nv-select>
+            <el-form-item label="台账排版类型 " prop="TYPE">
+              <nv-select nv-code='LEDGER_TYPE' v-model="addForm.TYPE"></nv-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -84,6 +83,16 @@
             <el-form-item label="描述">
               <el-input v-model="addForm.DESCRIPTION" placeholder="请输入描述">描述</el-input>
             </el-form-item>
+          </el-col>
+        </el-row>
+         <el-row type="flex" class="row-bg" justify="space-around">
+          <el-col :span="12">
+           	<el-form-item label="是否显示头部">
+								<el-radio-group v-model="addForm.SHOW_HEAD" >
+									<el-radio label="YES">是</el-radio>
+									<el-radio label="NO">否</el-radio>
+								</el-radio-group>
+							</el-form-item>
           </el-col>
         </el-row>
         
@@ -116,9 +125,9 @@
         </el-row>
         <el-row type="flex" class="row-bg" justify="space-around">
           <el-col :span="12">
-            <el-form-item label="选项卡类型 " prop="TYPE">
+            <el-form-item label="台账排版类型 " prop="TYPE">
               <!-- <el-input v-model="modifyForm.TYPE" placeholder="请输入选项卡类型 SIMPLE:普通 CARD:卡片化 ">选项卡类型 SIMPLE:普通 CARD:卡片化 </el-input> -->
-               <nv-select nv-code='TAB_TYPE' v-model="modifyForm.TYPE"></nv-select>
+               <nv-select nv-code='LEDGER_TYPE' v-model="modifyForm.TYPE"></nv-select>
             </el-form-item>
           </el-col>
           
@@ -128,6 +137,16 @@
             <el-form-item label="描述">
               <el-input v-model="modifyForm.DESCRIPTION" placeholder="请输入描述">描述</el-input>
             </el-form-item>
+          </el-col>
+        </el-row>
+         <el-row type="flex" class="row-bg" justify="space-around">
+          <el-col :span="12">
+           	<el-form-item label="是否显示头部">
+								<el-radio-group v-model="modifyForm.SHOW_HEAD" >
+									<el-radio label="YES">是</el-radio>
+									<el-radio label="NO">否</el-radio>
+								</el-radio-group>
+							</el-form-item>
           </el-col>
         </el-row>
         
@@ -142,7 +161,7 @@
   </nv-layout>
 </template>
 <script>
-import { getLedgerDatas, deleteTab, saveTab, updateTab, validTab } from './api'
+import { getLedgerDatas, deleteLedger, saveLedger, updateLedger, validTab } from './api'
 export default {
   name: 'Tab',
   data() {
@@ -182,7 +201,7 @@ export default {
         TYPE: null, // 选项卡类型 SIMPLE:普通 CARD:卡片化 
         APPLICATION_KEY: null, // 所属系统
         DESCRIPTION: null, // 描述
-        IS_DELETED: null // 是否删除 YES:是 NO:否 
+        SHOW_HEAD:'NO' //是否显示头部 YES:是 NO:否 
       },
       addRules: {
         TITLE: [{required: true, message: '选项卡名称不能为空', trigger: 'blur'}],
@@ -240,7 +259,7 @@ export default {
       });
   },
   reqData(params){
-    deleteTab(params).then(response => {
+    deleteLedger(params).then(response => {
       this.$message.info("删除成功");
       this.getList();
     }).catch(e => {
@@ -251,7 +270,7 @@ export default {
   save() {
     this.$refs['addForm'].validate((valid) => {
         if (valid) {
-            saveTab(this.addForm).then(response => {
+            saveLedger(this.addForm).then(response => {
                this.$message({
                  message: '保存成功',
                  type: "success"
@@ -289,9 +308,9 @@ export default {
           TYPE: this.modifyForm.TYPE,
           APPLICATION_KEY: this.modifyForm.APPLICATION_KEY,
           DESCRIPTION: this.modifyForm.DESCRIPTION,
-          IS_DELETED: this.modifyForm.IS_DELETED
+          SHOW_HEAD: this.modifyForm.SHOW_HEAD
         }
-        updateTab(params).then(response => {
+        updateLedger(params).then(response => {
            this.$message({
              message: response.rawData.msg,
              type: "success"
@@ -314,7 +333,7 @@ export default {
   },
 
    goTabMenus(row){
-        this.$router.push({path:'/system/tab/menu',query:{CODE:row.CODE, TITLE: row.TITLE}});
+        this.$router.push({path:'/system/ledger/menu',query:{CODE:row.CODE, TITLE: row.TITLE}});
     },
   handleSizeChange(pageIndex) {
     this.queryPrams.pageSize = pageIndex;

@@ -1,9 +1,26 @@
 <template>
-  <nv-dynamic-ledger nv-code="FIRST_LEDGER"></nv-dynamic-ledger>
+  <!-- <nv-dynamic-ledger nv-code="FIRST_LEDGER"></nv-dynamic-ledger> -->
+  <nv-layout>
+    <nv-select nv-code="LEDGER_DEMO_SELECT" v-model="ledgerCode"/>
+  </nv-layout>
 </template>
 <script>
 export default {
-  name: 'LedgerDemo'
+  name: 'LedgerDemo',
+  data () {
+    return {
+      ledgerCode: ''
+    }
+  },
+  watch: {
+    ledgerCode (val) {
+      if (val) {
+        this.$router.push({ path: '/ledger', query: {
+          'nv-code': val
+        } })
+      }
+    }
+  }
 }
 </script>
 <style lang="scss" scoped>

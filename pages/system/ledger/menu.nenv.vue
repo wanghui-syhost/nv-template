@@ -1,5 +1,5 @@
 <template>
-  <nv-layout>
+  <div>
     <section class="search-form" style="padding:10px 0">
       <el-form>
         <!-- 搜索框  -->
@@ -11,47 +11,80 @@
     </section>
       <div style="float: left; margin-bottom: 10px; margin-left: 20px; font-size: 14px">
         <el-breadcrumb separator=">">
-					<el-breadcrumb-item :to="{ path: '/system/tab' }">动态选项卡</el-breadcrumb-item>
+					<el-breadcrumb-item :to="{ path: '/system/ledger' }">动态台账</el-breadcrumb-item>
 					<el-breadcrumb-item>{{PNAME}}</el-breadcrumb-item>
 				</el-breadcrumb>
       </div>
 
     <section class="search-table">
-      <el-table :data="list" v-loading.body="listLoading" element-loading-text="拼命加载中" border fit highlight-current-row>
-        
-        
+  <el-table
+    :data="list"
+    style="width: 100%">
+    <el-table-column type="expand">
+      <template slot-scope="props">
+        <el-table :data="props.row.children" v-loading.body="listLoading" element-loading-text="拼命加载中" border fit highlight-current-row  >
         <el-table-column label="菜单名称">
           <template slot-scope="scope">
             <span> {{ scope.row.NAME }}</span>
           </template>
-        </el-table-column>
+        </el-table-column >
         <el-table-column label="菜单url">
           <template slot-scope="scope">
             <span> {{ scope.row.URL }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="父级代码">
+        <!-- <el-table-column label="父级代码">
           <template slot-scope="scope">
-            <span> {{ scope.row.TAB_CODE }}</span>
+            <span> {{ scope.row.LEDGER_CODE }}</span>
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column label="排序序号">
           <template slot-scope="scope">
             <span> {{ scope.row.SORT }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="是否删除 YES:是 NO:否 ">
+        <!-- <el-table-column label="是否删除 YES:是 NO:否 ">
           <template slot-scope="scope">
              <span> {{ scope.row.IS_DELETED == 'YES' ? '是' : '否' }}</span>
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button size="small" type="primary" @click="modifyInfo(scope.row)">编辑</el-button>
             <el-button size="small" type="danger" @click="removeInfo(scope.row)">删除</el-button>
           </template>
         </el-table-column>
-      </el-table>
+      </el-table> 
+      </template>
+    </el-table-column>
+    <el-table-column
+      label="菜单名称"
+      prop="NAME">
+    </el-table-column>
+    <el-table-column
+      label="菜单url"
+      prop="URL">
+    </el-table-column>
+    <!-- <el-table-column
+      label="父级代码"
+      prop="LEDGER_CODE">
+    </el-table-column> -->
+    <el-table-column
+      label="排序序号"
+      prop="SORT">
+    </el-table-column>
+    <!-- <el-table-column
+      label="是否删除 YES:是 NO:否"
+      prop="IS_DELETED">
+    </el-table-column> -->
+     <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button size="small" type="primary" @click="modifyInfo(scope.row)">编辑</el-button>
+            <el-button size="small" type="danger" @click="removeParentInfo(scope.row)">删除</el-button>
+          </template>
+        </el-table-column>
+  </el-table>
+      
 
       <!-- 分页  -->
       <div class="search-pagination">
@@ -61,7 +94,7 @@
     </section>
 
     <!-- 新增 -->
-    <el-dialog title="添加动态选项卡" :visible.sync="isShowAddDialog" size="small">
+    <el-dialog title="添加动态台账菜单" :visible.sync="isShowAddDialog" size="small">
       <el-form :model="addForm" :rules="addRules" ref="addForm" label-width="120px">
         
         <el-row type="flex" class="row-bg" justify="space-around">
@@ -76,6 +109,20 @@
            <el-col :span="12">
             <el-form-item label="菜单url" prop="URL">
               <el-input v-model="addForm.URL" placeholder="请输入菜单url">菜单url</el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row type="flex" class="row-bg" justify="space-around">
+           <el-col :span="12">
+            <el-form-item label="上级菜单" prop="">
+              <el-select v-model="addForm.PARENT_ID" placeholder="请选择">
+                  <el-option
+                    v-for="item in options"
+                    :key="item.ID"
+                    :label="item.NAME"
+                    :value="item.ID">
+                  </el-option>
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -116,6 +163,21 @@
             </el-form-item>
           </el-col>
         </el-row>
+
+          <el-row type="flex" class="row-bg" justify="space-around">
+           <el-col :span="12">
+            <el-form-item label="上级菜单" prop="">
+              <el-select v-model="modifyForm.PARENT_ID" placeholder="请选择">
+                  <el-option
+                    v-for="item in options"
+                    :key="item.ID"
+                    :label="item.NAME"
+                    :value="item.ID">
+                  </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
         <el-row type="flex" class="row-bg" justify="space-around">
           <el-col :span="12">
             <el-form-item label="排序序号">
@@ -132,11 +194,11 @@
         </el-row>
       </el-form>
     </el-dialog>
-  </nv-layout>
+  </div>
 </template>
 <script>
 import axios from 'axios';
-import { getTabMenuDatas, deleteTabMenu, saveTabMenu,updateTabMenu } from './api'
+import { getLedgerMenuDatas, deleteLedgerMenu,deleteParentMenu,saveLedgerMenu,updateLedgerMenu,getParentsMenu } from './api'
 export default {
   name: 'TabMenu',
   data() {
@@ -150,13 +212,15 @@ export default {
       totalCount: 0,
       CODE: '',
       PNAME:'',
+      options:null,
       
       addForm: {
-        TAB_CODE: this.CODE, // 父级代码
+        LEDGER_CODE: this.CODE, // 父级代码
         //IS_DELETED: null, // 是否删除 YES:是 NO:否 
         NAME: null, // 菜单名称
         URL: null, // 菜单url
-        SORT: null // 排序序号
+        SORT: null, // 排序序号
+        PARENT_ID:null //父级ID
       },
       addRules: {
         NAME: [{required: true, message: '菜单名称不能为空', trigger: 'blur'}],
@@ -172,8 +236,8 @@ export default {
   mounted() {
     this.CODE = this.$route.query.CODE || '';
     this.PNAME = this.$route.query.TITLE || '';
-    this.addForm.TAB_CODE = this.CODE;
-    this.modifyForm.TAB_CODE = this.CODE,
+    this.addForm.LEDGER_CODE = this.CODE;
+    this.modifyForm.LEDGER_CODE = this.CODE,
     this.getList();
   },
   
@@ -186,7 +250,7 @@ export default {
         pageSize: this.pageSize
       }
       console.log(pageParams)
-      getTabMenuDatas(pageParams)
+      getLedgerMenuDatas(pageParams)
       .then(response => {
         this.listLoading = false;
         const data = response.data;
@@ -198,13 +262,43 @@ export default {
         this.totalCount = data.totalCount;
       }).catch(err => {
         console.log(err);
+      }),
+       getParentsMenu(pageParams)
+      .then(response => {
+        this.listLoading = false;
+        const data = response.data;
+        if (data == undefined){
+            this.list = null;
+            return;
+        }
+        this.options = data;
       })
     },
+  getOptions() {
+      this.listLoading = true;
+      const pageParams = {
+        CODE: this.CODE,
+        pageIndex: this.pageIndex,
+        pageSize: this.pageSize
+      }
+     
+      getParentsMenu(pageParams)
+      .then(response => {
+        this.listLoading = false;
+        const data = response.data;
+        if (data == undefined){
+            this.list = null;
+            return;
+        }
+        this.options = data;
+      })
+    },
+   
     removeInfo(row) {
       let me = this;
       const params = {
           ID: row.ID,
-          TAB_CODE: this.CODE
+          LEDGER_CODE: this.CODE
         }
       this.$confirm('此操作将永久删除记录, 是否继续?', '提示', {
         confirmButtonText: '确定',
@@ -217,8 +311,25 @@ export default {
         }
       });
   },
+    removeParentInfo(row) {
+      let me = this;
+      const params = {
+          ID: row.ID,
+          LEDGER_CODE: this.CODE
+        }
+      this.$confirm('确定删除该记录下的所有记录, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        callback:(action,instance)=>{
+          if(action=='confirm'){
+            me.reqData(params);
+          }
+        }
+      });
+  },
   reqData(params){
-    deleteTabMenu(params).then(response => {
+    deleteLedgerMenu(params).then(response => {
       this.$message.info("删除成功");
       this.getList();
     }).catch(e => {
@@ -230,12 +341,12 @@ export default {
     this.$refs['addForm'].validate((valid) => {
         if (valid) {
           console.log(this.addForm)
-            saveTabMenu(this.addForm).then(response => {
+            saveLedgerMenu(this.addForm).then(response => {
                this.$message({
                  message: '保存成功',
                  type: "success"
                });
-               this.resetForm('addForm');
+               this.addForm.resetFields();
                // 重新加载数据
                this.getList();
                // 隐藏弹出框
@@ -263,12 +374,15 @@ export default {
       if (valid) {
         const params = {
           ID: this.modifyForm.ID,
-          TAB_CODE: this.modifyForm.TAB_CODE,
+          LEDGER_CODE: this.modifyForm.LEDGER_CODE,
           NAME: this.modifyForm.NAME,
           URL: this.modifyForm.URL,
-          SORT: this.modifyForm.SORT
+          SORT: this.modifyForm.SORT,
+          PARENT_ID:this.modifyForm.PARENT_ID
         }
-        updateTabMenu(params).then(response => {
+        debugger;
+        updateLedgerMenu(params).then(response => {
+         debugger;
            this.$message({
              message: response.rawData.msg,
              type: "success"
@@ -305,3 +419,18 @@ export default {
 }
 }
 </script>
+
+<style>
+    .demo-table-expand {
+    font-size: 0;
+  }
+  .demo-table-expand label {
+    width: 90px;
+    color: #99a9bf;
+  }
+  .demo-table-expand .el-form-item {
+    margin-right: 0;
+    margin-bottom: 0;
+    width: 50%;
+  }
+</style>
