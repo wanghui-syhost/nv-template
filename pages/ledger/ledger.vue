@@ -27,7 +27,7 @@ export default {
 <style lang="scss" scoped>
   .standard-ledger {
     position: absolute;
-    top: 0;
+    top: 70px;
     bottom: 0;
     left: 0;
     right: 0;

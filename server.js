@@ -46,6 +46,15 @@ module.exports = function (router, mockjs) {
             VALUE:"s4"
           }
         ])
+      // 台账demo页台账类型
+      case 'LEDGER_DEMO_SELECT':
+        return res.reply([
+          {
+            ID: 'xxx',
+            NAME: '百度/腾讯',
+            VALUE: 'FIRST_LEDGER'
+          }
+        ])
       case 'HAHA': 
         return res.reply([
           {
