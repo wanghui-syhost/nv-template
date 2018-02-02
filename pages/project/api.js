@@ -1,6 +1,6 @@
 export function getTrail(pageParams) {
   return unfetch({
-    url: '/info/trails',
+    url: '/demo/info/trails',
     params: pageParams
   });
 }

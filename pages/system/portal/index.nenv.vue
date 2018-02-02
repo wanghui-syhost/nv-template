@@ -1,7 +1,7 @@
 <template>
-  <div>
-      <section class="search-form" style="padding:20px;">
-        <el-form>
+  <nv-layout>
+      <section class="search-form">
+        <el-form :inline="true">
             <!-- 搜索框  -->
   			<div class="search-form-one">
   				<el-button type="primary" @click="isShowAddDialog = true">新增</el-button>
@@ -149,10 +149,9 @@
     </el-form>
   </el-dialog>
   <p ref="xxx"></p>
-  </div>
+  </nv-layout>
 </template>
 <script>
-import axios from "axios";
 import {
   deletePortalRole,
   savePortalRoleData,
@@ -169,9 +168,9 @@ export default {
   data() {
     var codeValid = (rule, value, callback) => {
       var reg = /^[A-Za-z_]+$/; 
-      if(!value.match(reg)){
-          callback(new Error('首页地址只能是字母和下划线'));
-      } else {
+      // if(!value.match(reg)){
+      //     callback(new Error('首页地址只能是字母和下划线'));
+      // } else {
         const params = {
           CODE: this.CODE,
           VALUE: value
@@ -187,7 +186,7 @@ export default {
           console.log(err);
         });
       
-      }
+      //}
     };
 
     return {
@@ -195,7 +194,7 @@ export default {
       isShowEditDialog: false,
       isShowAddDialog:false,
       isShowRoleListDialog:false,
-      CODE: '',
+      CODE: null,
       PNAME:'',
       checked:false,
       list: null,
@@ -228,7 +227,7 @@ export default {
     };
   },
   mounted() {
-    this.CODE = 'HOME';
+    this.CODE = 'HOME_PAGE';
     this.PNAME =  '';
     this.addForm.CODE = this.CODE;
     this.getList();
@@ -247,6 +246,7 @@ export default {
             this.list = response.data;
         })
         .catch(err => {
+          this.listLoading = false;
           console.log(err);
         });
     },  
@@ -273,6 +273,7 @@ export default {
             })
         })
         .catch(err => {
+          this.listLoading = false;
           console.log(err);
         });
     },

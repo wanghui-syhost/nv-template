@@ -1,19 +1,48 @@
 .nv-ledger {
 
     position: relative;
-
+    height: 100%;
+    
+    .hide { display: none; }
+    
     &__nav {
-        background-color: blue;
-        width: 90px;
-        position: absolute
+        overflow: hidden;
+        width: 120px;
+        z-index: 2;
+        background-color: rgba(255,255,255,1);
+        border-radius: 4px ;
+        box-shadow: 0 0 4px 0 #BFC4B6;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
     }
 
     &__item {
-        padding: 15px 10px;
+        padding: 0 10px;
+        height: 40px;
+        line-height: 40px;
         cursor: pointer;
-        &:hover {
-            background-color: yellow
+        /* 给横线 */
+        &:not(:first-child):before {
+            position: absolute;
+            content: '';
+            height: 1px;
+            width: calc(100% - 20px);
+            background-color: #E5E5E5;
         }
+        /* 箭头 */
+        .left-down {
+            float: right;
+            line-height: 40px;
+        }
+    }
+    
+    &__item.active {
+        background-color: rgba(228,233,236,1);
+        color: #3b8cff;
+    }
+    &__item__child {
+        padding-left: 20px;
     }
 
     &.nv-left {
@@ -26,5 +55,10 @@
         .nv-ledger__nav {
             right: 40px;
         }
+    }
+    
+    &__pane {
+        height: 100%;
+        overflow: hidden;
     }
 }

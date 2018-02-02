@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <nv-layout>
     <section class="search-form" style="padding:10px 0">
       <el-form>
         <!-- 搜索框  -->
@@ -194,7 +194,7 @@
         </el-row>
       </el-form>
     </el-dialog>
-  </div>
+  </nv-layout>
 </template>
 <script>
 import axios from 'axios';

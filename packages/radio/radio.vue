@@ -1,19 +1,15 @@
 <template>
-    <el-select v-model="currentValue" placeholder="请选择" :disabled = "isNvDisabled" :class="{'is-nv-disabled': isNvDisabled}">
-        <el-option
-        v-for="option in nvOptions"
-        :key="option.VALUE"
-        :label="option.NAME"
-        :value="option.VALUE">
-        </el-option>
-    </el-select>
+    <el-radio-group v-model="currentValue" :disabled = "isNvDisabled" :class="{'is-nv-disabled': isNvDisabled}">
+        <el-radio v-for="option in nvOptions" :label="option.VALUE" :key="option.VALUE">{{ option.NAME }}</el-radio>
+    </el-radio-group>
 </template>
 <script>
 import nvInpterMixins from 'nenv/mixins/inputerMixins'
+
 export default {
-    name: 'NvSelect',
-    mixins: [nvInpterMixins],
-    props: {
+   name: 'NvRadio',
+   mixins: [nvInpterMixins],
+   props: {
         value: {
             type: String,
             required: true
@@ -22,13 +18,13 @@ export default {
             type: Boolean,
             default: undefined
         }
-    },
-    data () {
+   },
+   data () {
         return {
             nvOptions: []
         }
-    },
-    computed: {
+   },
+   computed: {
        isNvDisabled () {
            const self = this
            return self.disabled !== undefined ? self.disabled : self.$route.query['nv-view'] === 'true'
@@ -36,12 +32,18 @@ export default {
    },
 }
 </script>
+
 <style lang="scss" scoped>
-     .el-select__input {
+
+</style>
+
+<style lang="scss">
+    .el-radio__input {
         &.is-nv-disabled  + .el-radio__label {
             cursor: default;
         }
     }
 </style>
+
 
 

@@ -33,16 +33,8 @@
               <el-option label="抽查情况2" value="type2"></el-option>
           </el-select>
       </div>
-
-
-    
-
-
     </el-form>
-
     </section>
-
-
     <!-- 表格 -->
     <section class="search-table">
     <el-table :data="list" v-loading.body="listLoading" element-loading-text="拼命加载中" border fit highlight-current-row>

@@ -120,10 +120,6 @@
 
 <script>
   import { getTreeDocuments, FileRename, FileDelete, FileAdd, FileDownload, FileCreatedNewFolder,FileRenameFolder,FileDeleteFolder,deleteDirAndFiles,FileView } from './api';
-  // import Config from '@core/config';
-  const Config = {
-
-  }
   export default {
     name: 'homeDetailList',
     data() {
@@ -164,7 +160,7 @@
     },
     mounted(){
       this.uploadHeaders ={
-        'Authorization' : localStorage.token,
+        'Authorization' : localStorage.getItem('user.token'),
       }
     },
     created() {
@@ -231,7 +227,7 @@
         return;
       }
       let queryParam = `?ID=`+this.handlerChooseRowsID();
-      window.location = Config.BASE_API+'file/download/compress' + queryParam;
+      window.location = '/api/file/download/compress' + queryParam;
     },
     // DIR-{dirId},FILE-{dirID}-{fileId}
     // 处理要下载的文件的ID
@@ -424,7 +420,7 @@
       }else{
         queryParam = `ID=FILE-${row.TREE_ID}-${row.ID}`;
       }
-      window.location = Config.BASE_API+'file/download/compress?' + queryParam;
+      window.location = '/api/file/download/compress?' + queryParam;
     },
     // 触发重命名
     reName(row){

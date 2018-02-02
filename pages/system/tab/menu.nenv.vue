@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <nv-layout>
     <section class="search-form" style="padding:10px 0">
       <el-form>
         <!-- 搜索框  -->
@@ -132,10 +132,9 @@
         </el-row>
       </el-form>
     </el-dialog>
-  </div>
+  </nv-layout>
 </template>
 <script>
-import axios from 'axios';
 import { getTabMenuDatas, deleteTabMenu, saveTabMenu,updateTabMenu } from './api'
 export default {
   name: 'TabMenu',
@@ -197,6 +196,7 @@ export default {
         this.list = data.map(v => v);
         this.totalCount = data.totalCount;
       }).catch(err => {
+        this.listLoading = false;
         console.log(err);
       })
     },

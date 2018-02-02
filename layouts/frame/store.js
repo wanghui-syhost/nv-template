@@ -3,18 +3,16 @@ const name = 'layout'
 export const types = {
   ADD_TAB_TO_GROUP: 'ADD_TAB_TO_GROUP',
   REMOVE_TAB_FROM_GROUP: 'REMOVE_TAB_FROM_GROUP',
-  CHANGE_TAB_GROUP: 'CHANRGE_TAB_GROUP'
+  CHANGE_TAB_GROUP: 'CHANRGE_TAB_GROUP',
+  CHANGE_LIMIT_WIDTH: 'LIMIT_WIDTH'
 }
 
 const store = {
   name,
   // namespaced: true,
   state: {
-    // isShow
-    isShowSidebar: true,
-    isShowHomeNav: true,
-    isShowHeader: true,
-    isShowTabs: true,
+    // 是否展开布局
+    isWithLimited: true,
     // 当前页面tab
     currentTabs: [],
     // 所有页面的tab
@@ -48,6 +46,9 @@ const store = {
       const { group, oldGroup } = groupParam
       state.tabsMap[oldGroup.path] = state.currentTabs
       state.currentTabs = state.tabsMap[group.path] || []
+    },
+    [types.CHANGE_LIMIT_WIDTH]: (state) => {
+      state.isWithLimited = !state.isWithLimited
     }
   },
   actions: {
@@ -62,8 +63,10 @@ const store = {
     // 切换tab组
     changeTabGroup: ({ commit }, groupParam) => {
       commit(types.CHANGE_TAB_GROUP, groupParam)
+    },
+    changeLimitWidth: ({ commit, state }) => {
+      commit(types.CHANGE_LIMIT_WIDTH, !state.isWithLimited)
     }
-
   }
 }
 

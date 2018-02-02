@@ -35,16 +35,51 @@ module.exports = function (router, mockjs) {
             NAME: "第二赛季",
             VALUE: "s2"
           },
-          // {
-          //   ID:"11E7D960D65AC4E4AC7AE58809333CF2",
-          //   NAME:"第三赛季",
-          //   VALUE:"s3"
-          // },
-          // {
-          //   ID:"11E7D960D65AC4E4AC7AE58809333CF3",
-          //   NAME:"第四赛季",
-          //   VALUE:"s4"
-          // }
+          {
+            ID:"11E7D960D65AC4E4AC7AE58809333CF2",
+            NAME:"第三赛季",
+            VALUE:"s3"
+          },
+          {
+            ID:"11E7D960D65AC4E4AC7AE58809333CF3",
+            NAME:"第四赛季",
+            VALUE:"s4"
+          }
+        ])
+      // 台账demo页台账类型
+      case 'LEDGER_DEMO_SELECT':
+        return res.reply([
+          {
+            ID: 'xxx',
+            NAME: '百度/腾讯',
+            VALUE: 'FIRST_LEDGER'
+          }
+        ])
+      case 'HAHA': 
+        return res.reply([
+          {
+            ID: 'xxx',
+            VALUE: 'qqq',
+            NAME: 'name'
+          },
+          {
+            ID: 'xxx2',
+            VALUE: 'qqq2',
+            NAME: 'name2'
+          }
+        ])
+      case 'XSELECT': 
+        return res.reply([
+          {
+            ID: 'xxx',
+            VALUE: 'qqq',
+            NAME: 'name'
+          },
+          {
+            ID: 'xxx2',
+            VALUE: 'qqq2',
+            NAME: 'name2'
+          }
         ])
       default:
         return next()
@@ -160,6 +195,19 @@ module.exports = function (router, mockjs) {
                 CREATE_USER: "11E787B2A7179B4E9911D583E7E8BEA9",
                 UPDATE_USER: "11E787B2A7179B4E9911D583E7E8BEA9",
                 SORT: 2,
+                ID: "11E7F047C30617B68247CBE8414DC77D",
+                CREATE_TIME: 1516329345000,
+                UPDATE_TIME: 1516329347000,
+                URL: "http://rewardpunish.infore.com",
+                NAME: "固废",
+              },
+              {
+                IS_DELETED: "NO",
+                APPLICATION_KEY: "business",
+                LEDGER_CODE: "FIRST_LEDGER",
+                CREATE_USER: "11E787B2A7179B4E9911D583E7E8BEA9",
+                UPDATE_USER: "11E787B2A7179B4E9911D583E7E8BEA9",
+                SORT: 2,
                 ID: "11E7F047C30617B68247CBE8414DC77X",
                 CREATE_TIME: 1516329345000,
                 UPDATE_TIME: 1516329347000,
@@ -174,6 +222,12 @@ module.exports = function (router, mockjs) {
       }
     })
 
+  })
+
+  router.get('/api/view-edit', function (req, res, next) {
+    res.reply({
+      nvCheckBoxResult: ['s2']
+    })
   })
 
   // router.get('/api/user/getPath', function (req, res, next) {

@@ -1,117 +1,142 @@
 <template>
   <div>
-    <el-steps :active="1"  style="margin-top: 20px">
-      <el-step title="查询数据库" ></el-step>
-      <el-step title="页面配置" ></el-step>
-      <el-step title="后台信息" ></el-step>
-    </el-steps>
-      <section class="search-form" style="padding: 20px;">
-        <el-form>
+      <section class="search-form">
+        <el-form :inline="true">
             <!-- 搜索框  -->
   			<div class="search-form-one">
-                <el-input v-model="tablename" placeholder="请输入表名"  size="middle" style="width:332px;"></el-input>
-            <el-button type="infor" @click="getList();">连接</el-button>
+          <el-form-item label="表名">
+            <el-input v-model="tablename" placeholder="请输入表名"  size="middle" style="width:332px;"></el-input>
+          </el-form-item>
+          <el-button type="infor" @click="getList();">连接</el-button>
   			</div>
         </el-form>
       </section>
 
-    <section class="search-table">
-      
-            <el-table :data="list" v-loading.body="listLoading" element-loading-text="拼命加载中" border fit highlight-current-row >
-           
+      <section class="search-table">
+        <el-table :data="list" v-loading.body="listLoading" element-loading-text="拼命加载中" border fit highlight-current-row >
+        <el-table-column label="字段" prop = "COLUMNNAME" />
+        <el-table-column label="字段类型" prop="DATATYPE" />
+        <el-table-column label="字段信息" prop="COMMENTS" />
+        <el-table-column label="列表展示" class="show-checked" :render-header="showCheckbox">
+          <template slot-scope="scope">
+            <el-checkbox v-model="scope.row.IS_SHOW"></el-checkbox>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="列表排序" :render-header="orderCheckbox">
+          <template slot-scope="scope">
+            <el-checkbox v-model="scope.row.IS_ORDER"></el-checkbox>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="查询" :render-header="searchCheckbox">
+          <template slot-scope="scope">
+            <el-checkbox v-model="scope.row.IS_SEARCH"></el-checkbox>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="列表显示先后">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.SORT" placeholder="排序号"></el-input>
+          </template>
+        </el-table-column>
           
-            <el-table-column label="字段" prop = "COLUMNNAME" />
-         
-            <el-table-column label="字段类型" prop="DATATYPE" />
+        <el-table-column label="编辑页面" :render-header="editCheckbox">
+            <!-- <el-table-column label="展示" type="selection" > -->
+          <template slot-scope="scope">
+            <el-checkbox v-model="scope.row.IS_EDIT"></el-checkbox>
+          </template>
+        </el-table-column>
 
-            <el-table-column label="字段信息" prop="COMMENTS" />
+        <el-table-column label="编辑必填" :render-header="requiredCheckbox">
+            <!-- <el-table-column label="展示" type="selection" > -->
+          <template slot-scope="scope">
+            <el-checkbox v-model="scope.row.IS_REQUIRED"></el-checkbox>
+          </template>
+        </el-table-column>
 
-             <el-table-column label="展示" class="show-checked" :render-header="showCheckbox">
-               <!-- <el-table-column label="展示" type="selection" > -->
-              <template slot-scope="scope">
-                <el-checkbox v-model="scope.row.IS_SHOW"></el-checkbox>
-              </template>
-            </el-table-column>
-            <el-table-column label="编辑" :render-header="editCheckbox">
-               <!-- <el-table-column label="展示" type="selection" > -->
-              <template slot-scope="scope">
-                <el-checkbox v-model="scope.row.IS_EDIT"></el-checkbox>
-              </template>
-            </el-table-column>
+        <el-table-column label="类型">
+          <template slot-scope="scope">
+            <el-select v-model="scope.row.TYPE" placeholder="">
+              <el-option v-for="item in options"   
+                :key="item.value"
+                :label="item.label"
+                :value="item.value" />
+            </el-select>
+          </template>
+        </el-table-column>
 
-            <el-table-column label="必填" :render-header="requiredCheckbox">
-               <!-- <el-table-column label="展示" type="selection" > -->
-              <template slot-scope="scope">
-                <el-checkbox v-model="scope.row.IS_REQUIRED"></el-checkbox>
-              </template>
-            </el-table-column>
+        <el-table-column label="字典编号">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.CODE" placeholder="字典编号"></el-input>
+          </template>
+        </el-table-column>
 
-             <el-table-column label="排序" :render-header="orderCheckbox">
-              <template slot-scope="scope">
-                <el-checkbox v-model="scope.row.IS_ORDER"></el-checkbox>
-              </template>
-            </el-table-column>
+        <el-table-column label="页面字段名">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.NAME" placeholder="字段名"></el-input>
+          </template>
+        </el-table-column>
+      </el-table>
 
-            <el-table-column label="显示先后">
-              <template slot-scope="scope">
-               <el-input v-model="scope.row.SORT" placeholder="排序号"></el-input>
-              </template>
-            </el-table-column>
-
-             <el-table-column label="查询" :render-header="searchCheckbox">
-              <template slot-scope="scope">
-                <el-checkbox v-model="scope.row.IS_SEARCH"></el-checkbox>
-              </template>
-            </el-table-column>
-
-             <el-table-column label="类型">
-              <template slot-scope="scope">
-               <el-select v-model="scope.row.TYPE" placeholder="">
-                 <el-option v-for="item in options"   
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value" />
-               </el-select>
-                
-              </template>
-            </el-table-column>
-
-            <el-table-column label="字典编号">
-              <template slot-scope="scope">
-                <el-input v-model="scope.row.CODE" placeholder="字典编号"></el-input>
-              </template>
-            </el-table-column>
-
-            
-
-              <el-table-column label="页面字段名">
-              <template slot-scope="scope">
-               <el-input v-model="scope.row.NAME" placeholder="字段名"></el-input>
-              </template>
-            </el-table-column>
-          </el-table>
-        <!-- <el-button size="small" type="infor" :disabled="disabledNext" @click="isShow=!isShow" icon="information">下一步</el-button> -->
-
-        <!-- <el-dialog title="收货地址" :visible.sync="isShow">
-            <config-nenv :id="1"></config-nenv>
-          </el-dialog> -->
-          <div style="padding: 10px">
-             <el-button size="medium" type="primary" :disabled="disabledNext" @click="goNext" icon="">下一步</el-button>
-          </div>
-         
+      <el-form :model="addForm" ref="addForm" label-position="left" :rules="addRules" label-width="120px" style="padding-top:20px; ">
+        <el-row type="flex" class="row-bg" justify="space-around">
+          <el-col :span="12">
+            <el-form-item label="生成包名" prop="packagename">
+              <el-input v-model="addForm.packagename" placeholder="请输入包名" :maxlength="100"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row type="flex" class="row-bg" justify="space-around">
+          <el-col :span="12">
+            <el-form-item label="模块名称" prop="modulename">
+              <el-input v-model="addForm.modulename" placeholder="请输入模块名称" :maxlength="100"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row type="flex" class="row-bg" justify="space-around">
+          <el-col :span="12">
+            <el-form-item label="注释内容" prop="title">
+              <el-input v-model="addForm.title" placeholder="请输入注释内容" :maxlength="50"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row type="flex" class="row-bg" justify="space-around">
+          <el-col :span="12">
+            <el-form-item label="创建人" prop="author">
+              <el-input v-model="addForm.author" placeholder="请输入创建人" :maxlength="50"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row type="flex" class="row-bg" justify="space-around">
+          <el-col :span="12">
+            <el-form-item label="后端路径" prop="outputdir">
+              <el-input v-model.number="addForm.outputdir" placeholder="请输入后端路径"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+          <el-row type="flex" class="row-bg" justify="space-around">
+          <el-col :span="12">
+            <el-form-item label="前端路径" prop="frontdir">
+              <el-input v-model="addForm.frontdir" placeholder="请输入前端路径" ></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+    
+        <el-row type="flex" justify="space-around">
+            <el-col :span="8" :offset="4">
+              <el-button size="medium" type="primary"  :disabled="disabledNext" @click="save">生成</el-button>
+            </el-col>
+        </el-row>
+      </el-form>
     </section>
   
   </div>
 </template>
 <script>
-import axios from "axios";
-import { getTableColumns} from "./api";
-//import ConfigNenv from './config.nenv'
+import { getTableColumns, buildFile} from "./api";
 export default {
   name: "Generator",
-  // components:{
-  //   ConfigNenv
-  // },
   data() {
     return {
       isShow: true,
@@ -135,11 +160,26 @@ export default {
           value: 'DATE',
           label: '日期'
         }],
+      addForm: {
+        packagename: null, 
+        modulename: null,
+        frontdir: null,
+        author: null,
+        outputdir: null,
+        title: null
+      },
+      addRules: {
+        packagename: [{required: true, message: '包名不能为空', trigger: 'blur'}],
+        modulename:[{required: true, message: '模块名不能为空', trigger: 'blur'}],
+        title: [{ required: true, message: '注释信息为数字值', trigger: 'blur'}],
+        outputdir: [{ required: true, message: '后端文件输出路径不能温控', trigger: 'blur'}],
+        frontdir: [{ required: true, message: '前端文件输出路径不能温控', trigger: 'blur'}],
+        author: [{ required: true, message: '创建人信息不能为空', trigger: 'blur'}]
+      }
     };
   },
   created() {
     this.disabledNext = true;
-    // debugger
     const data = sessionStorage.getItem("generatorListParam");
     if (data){
       this.tablename = sessionStorage.getItem("generatorListTable");
@@ -147,7 +187,6 @@ export default {
       if(this.list.length > 0){
         this.disabledNext = false;
       }
-      
     }
    
   },
@@ -186,10 +225,36 @@ export default {
         })
         
         .catch(err => {
+          this.listLoading = false;
           console.log(err);
         });
     },
 
+    // 保存项目信息
+    save() {
+       this.$refs['addForm'].validate((valid) => {
+          if (valid) {
+            this.addForm.columns = JSON.stringify(this.list);
+            console.log(this.addForm);
+            buildFile(this.addForm).then(response => {
+                this.$message({
+                  message: response.rawData.msg,
+                  type: "success"
+                });
+                this.resetForm('addForm');
+               // sessionStorage.removeItem("generatorListParam");
+                //sessionStorage.removeItem("generatorListTable");
+            }).catch(err => {
+              this.$message({
+                  message: '添加失败',
+                  type: "error"
+                });
+            });
+          } else {
+            return false;
+          }
+       });  
+    },
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },
@@ -209,7 +274,7 @@ export default {
     showCheckbox(h, { column, $index }){
         return [h('span',  {
                   class: "e-select-bar"
-                }, '展示 '),
+                }, '列表展示 '),
                 h('el-checkbox',{
                     data: {
                       value: false
@@ -230,7 +295,7 @@ export default {
     editCheckbox(h, { column, $index }){
         return [h('span',  {
                   class: "e-select-bar"
-                }, '编辑 '),
+                }, '编辑页面 '),
                 h('el-checkbox',{
                     data: {
                       value: false
@@ -251,7 +316,7 @@ export default {
     requiredCheckbox(h, { column, $index }){
         return [h('span',  {
                   class: "e-select-bar"
-                }, '必填 '),
+                }, '编辑必填 '),
                 h('el-checkbox',{
                     data: {
                       value: false
@@ -272,7 +337,7 @@ export default {
     searchCheckbox(h, { column, $index }){
         return [h('span',  {
                   class: "e-select-bar"
-                }, '查询 '),
+                }, '查询条件 '),
                 h('el-checkbox',{
                     data: {
                       value: false
@@ -293,7 +358,7 @@ export default {
     orderCheckbox(h, { column, $index }){
         return [h('span',  {
                   class: "e-select-bar"
-                }, '排序 '),
+                }, '支持排序 '),
                 h('el-checkbox',{
                     data: {
                       value: false

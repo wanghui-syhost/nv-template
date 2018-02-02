@@ -1,10 +1,9 @@
 <template>
-  <div>
+  <nv-layout>
     <section class="search-form">
-      <el-form>
+      <el-form :inline="true">
         <!-- 搜索框  -->
-        <div class="search-form-one" style="padding: 10px 0">
-          
+        <div class="search-form-one">
           <el-button type="primary" @click="isShowAddDialog = true">新增</el-button>
         </div>
       </el-form>
@@ -159,7 +158,7 @@
         </el-row>
       </el-form>
     </el-dialog>
-  </div>
+  </nv-layout>
 </template>
 <script>
 import { getLedgerDatas, deleteLedger, saveLedger, updateLedger, validTab } from './api'
@@ -224,7 +223,6 @@ export default {
   },
   methods: {
     getList() {
-      debugger;
       this.listLoading = true;
       const pageParams = {
         pageIndex: this.pageIndex,
@@ -232,7 +230,6 @@ export default {
       }
       getLedgerDatas(pageParams)
       .then(response => {
-           debugger;
         this.listLoading = false;
         const data = response.data;
         if (data.list == undefined){

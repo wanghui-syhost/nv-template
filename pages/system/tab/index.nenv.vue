@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <nv-layout>
     <section class="search-form">
-      <el-form>
+      <el-form :inline="true">
         <!-- 搜索框  -->
-        <div class="search-form-one" style="padding: 10px 0">
+        <div class="search-form-one">
           
           <el-button type="primary" @click="isShowAddDialog = true">新增</el-button>
         </div>
@@ -140,10 +140,9 @@
         </el-row>
       </el-form>
     </el-dialog>
-  </div>
+  </nv-layout>
 </template>
 <script>
-import axios from 'axios';
 import { getTabDatas, deleteTab, saveTab, updateTab, validTab } from './api'
 export default {
   name: 'Tab',
@@ -222,6 +221,7 @@ export default {
         this.list = data.list.map(v => v);
         this.totalCount = data.totalCount;
       }).catch(err => {
+        this.listLoading = false;
         console.log(err);
       })
     },

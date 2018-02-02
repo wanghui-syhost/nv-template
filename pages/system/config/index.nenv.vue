@@ -1,13 +1,13 @@
 <template>
-  <div>
-      <section class="search-form" style="padding: 20px;">
-        <el-form>
+  <nv-layout>
+      <section class="search-form">
+        <el-form :inline="true">
             <!-- 搜索框  -->
   			<div class="search-form-one">
-  			    <span class="search-form-label">关键字</span>
+          <el-form-item label="关键字">
             <el-input v-model="KEYWORD" placeholder="请输入关键字" size="middle" style="width:332px;"></el-input>
-            <el-button type="infor" @click="getList();">搜索</el-button>
-
+          </el-form-item>
+          <el-button type="infor" @click="getList();">搜索</el-button>
   				<el-button type="primary" @click="dialogVisible = true">新增</el-button>
           <el-button type="primary" @click="batchDialogVisible = true">批量添加</el-button>
   			</div>
@@ -115,7 +115,7 @@
   </el-dialog>
 
 
-  </div>
+  </nv-layout>
 </template>
 <script>
 import { getConfigDatas, saveConfig, batchSaveConfig, validConfigKey, updateConfig } from './api'
@@ -131,17 +131,16 @@ export default {
           CODE: value
         };
         validConfigKey(params).then(response => {
-          if (response.data.code == 0) {
-            var e = response.data.data; 
-            if(response.data.data == true){
+          const data = response.data;
+          if(data){
               callback(new Error('该配置已存在'));
               return;
-            }
-          } else {
-            callback(new Error('验证失败'));
-            return;
           }
           callback();
+          
+        }).catch(e => {
+          callback(new Error('验证失败'));
+          return;
         });
       
       }
@@ -257,37 +256,32 @@ export default {
     },
   reqData(params){
     deleteConfig(params).then(response => {
-      const { data, code, msg } = response.data;
-      if (code == 0) {
-        this.$message.info("删除成功");
-        this.getList();
-      } else {
-        this.$message.err("删除失败");
-      }
-    })
+      this.$message.info("删除成功");
+      this.getList();
+    }).catch(e => {
+      this.$message.err("删除失败");
+    });
   },
    // 保存项目信息
   save() {
      this.$refs['form'].validate((valid) => {
           if (valid) {
             saveConfig(this.form).then(response => {
-              if (response.data.code == 0) {
-                this.$message({
-                  message: response.data.msg,
-                  type: "success"
-                });
-                this.resetForm('form');
-                // 重新加载数据
-                this.getList();
-              } else {
-                this.$message({
-                  message: response.data.msg,
-                  type: "error"
-                });
-              }
-
+      
+              this.$message({
+                message: response.rawData.msg,
+                type: "success"
+              });
+              this.resetForm('form');
+              // 重新加载数据
+              this.getList();
               // 隐藏弹出框
               this.dialogVisible = false;
+            }).catch(e => {
+               this.$message({
+                  message: '添加失败',
+                  type: "error"
+                });
             });
         } else {
         return false;
@@ -303,23 +297,20 @@ export default {
               CONFIGS: JSON.stringify(arr)
             }
             batchSaveConfig(data).then(response => {
-              if (response.data.code == 0) {
-                this.$message({
-                  message: response.data.msg,
-                  type: "success"
-                });
-                this.resetForm('dynamicValidateForm');
-                // 重新加载数据
-                this.getList();
-              } else {
-                this.$message({
-                  message: response.data.msg,
+              this.$message({
+                message: response.rawData.msg,
+                type: "success"
+              });
+              this.resetForm('dynamicValidateForm');
+              // 重新加载数据
+              this.getList();
+             // 隐藏弹出框
+              this.batchDialogVisible = false;
+            }).catch(e => {
+               this.$message({
+                  message: '添加失败',
                   type: "error"
                 });
-              }
-
-              // 隐藏弹出框
-              this.batchDialogVisible = false;
             });
         } else {
         return false;

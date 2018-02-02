@@ -13,7 +13,7 @@
 </script>
 <style scoped lang="scss">
     .main{
-        padding-left:20px;
+    	height: 100%;
     }
 
     .fade-enter-active, .fade-leave-active {
