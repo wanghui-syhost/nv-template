@@ -6,9 +6,9 @@ export function getLedgerDatas(params){
 		params
 	});
 }
-export function validTab(params) {
+export function validLedger(params) {
 	return unfetch({
-	  url: '/tab/valid',
+	  url: '/ledger/valid',
 	  method: 'get',
 	  params
 	})

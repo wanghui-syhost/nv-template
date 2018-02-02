@@ -346,7 +346,10 @@ export default {
                  message: '保存成功',
                  type: "success"
                });
-               this.addForm.resetFields();
+               this.resetForm("addForm");
+               this.addForm.SORT='';
+               this.addForm.PARENT_ID='';
+
                // 重新加载数据
                this.getList();
                // 隐藏弹出框
@@ -388,6 +391,8 @@ export default {
              type: "success"
            });
            this.resetForm('modifyForm');
+           this.addForm.SORT='';
+           this.addForm.PARENT_ID='';
            // 重新加载数据
            this.getList();
            // 隐藏弹出框

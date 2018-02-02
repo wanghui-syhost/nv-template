@@ -106,7 +106,7 @@
     </el-dialog>
 
     <!-- 修改 -->
-    <el-dialog title="修改动态选项卡" :visible.sync="isShowEditDialog" size="small">
+    <el-dialog title="修改动态台账" :visible.sync="isShowEditDialog" size="small">
       <el-form :model="modifyForm" ref="modifyForm" :rules="modifyRules"  label-width="120px">
         <el-row type="flex" class="row-bg" justify="space-around">
           <el-col :span="12">
@@ -126,7 +126,7 @@
         <el-row type="flex" class="row-bg" justify="space-around">
           <el-col :span="12">
             <el-form-item label="台账排版类型 " prop="TYPE">
-              <!-- <el-input v-model="modifyForm.TYPE" placeholder="请输入选项卡类型 SIMPLE:普通 CARD:卡片化 ">选项卡类型 SIMPLE:普通 CARD:卡片化 </el-input> -->
+              <!-- <el-input v-model="modifyForm.TYPE" placeholder="请输入台账类型 SIMPLE:普通 CARD:卡片化 ">台账类型 SIMPLE:普通 CARD:卡片化 </el-input> -->
                <nv-select nv-code='LEDGER_TYPE' v-model="modifyForm.TYPE"></nv-select>
             </el-form-item>
           </el-col>
@@ -161,22 +161,22 @@
   </nv-layout>
 </template>
 <script>
-import { getLedgerDatas, deleteLedger, saveLedger, updateLedger, validTab } from './api'
+import { getLedgerDatas, deleteLedger, saveLedger, updateLedger, validLedger } from './api'
 export default {
   name: 'Tab',
   data() {
     var codeValid = (rule, value, callback) => {
       var reg = /^[A-Za-z_]+$/; 
       if(!value.match(reg)){
-          callback(new Error('类别代码只能是字母和下划线'));
+          callback(new Error('编号只能是字母和下划线'));
       } else {
         const params = {
           CODE: value
         };
-        validTab(params).then(response => {
+        validLedger(params).then(response => {
             var e = response.data; 
             if(e == true){
-              callback(new Error('该类别已存在'));
+              callback(new Error('该编号已存在'));
               return;
             }
             callback();
@@ -198,23 +198,23 @@ export default {
       addForm: {
         TITLE: null, // 标题
         CODE: null, // 编号
-        TYPE: null, // 选项卡类型 SIMPLE:普通 CARD:卡片化 
+        TYPE: null, // 台账类型 SIMPLE:普通 CARD:卡片化 
         APPLICATION_KEY: null, // 所属系统
         DESCRIPTION: null, // 描述
         SHOW_HEAD:'NO' //是否显示头部 YES:是 NO:否 
       },
       addRules: {
-        TITLE: [{required: true, message: '选项卡名称不能为空', trigger: 'blur'}],
-        TYPE: [{required: true, message: '选项卡类型不能为空', trigger: 'blur'}],
+        TITLE: [{required: true, message: '台账名称不能为空', trigger: 'blur'}],
+        TYPE: [{required: true, message: '台账类型不能为空', trigger: 'blur'}],
         CODE: [
-          {required: true, message: '选项卡代码不能为空', trigger: 'blur'},
+          {required: true, message: '台账代码不能为空', trigger: 'blur'},
           { validator: codeValid, trigger: 'blur'}
         ]
       },
       modifyForm: {},
       modifyRules:{ 
-          TITLE: [{required: true, message: '选项卡名称不能为空', trigger: 'blur'}],
-          TYPE: [{required: true, message: '选项卡类型不能为空', trigger: 'blur'}]
+          TITLE: [{required: true, message: '台账名称不能为空', trigger: 'blur'}],
+          TYPE: [{required: true, message: '台账类型不能为空', trigger: 'blur'}]
         }
     };
   },
@@ -276,6 +276,7 @@ export default {
                  type: "success"
                });
                this.resetForm('addForm');
+               this.addForm.DESCRIPTION='';
                // 重新加载数据
                this.getList();
                // 隐藏弹出框
@@ -316,6 +317,7 @@ export default {
              type: "success"
            });
            this.resetForm('modifyForm');
+           this.modifyForm.DESCRIPTION='';
            // 重新加载数据
            this.getList();
            // 隐藏弹出框
