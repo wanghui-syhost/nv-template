@@ -16,16 +16,14 @@ export default {
             const { currentTab } = self
             const { path } = currentTab
             const { flatRoutes } = window.nenv
-            if (!currentTab.children) {
-            	if (/https?:\/\//.exec(path)) {
-	                return 'nv-iframe'
-	            } else {
-	                for (let flatRoute of flatRoutes) {
-	                    if (flatRoute.path === path) {
-	                        return flatRoute.component
-	                    }
-	                }
-	            }
+        	if (/https?:\/\//.exec(path)) {
+                return 'nv-iframe'
+            } else {
+                for (let flatRoute of flatRoutes) {
+                    if (flatRoute.path === path) {
+                        return flatRoute.component
+                    }
+                }
             }
             
         },
@@ -33,15 +31,13 @@ export default {
             const self = this
             const { currentTab } = self
             const { path } = currentTab
-            if (!currentTab.children) {
-            	if (/https?:\/\//.exec(path)) {
-	                return {
-	                    nvUrl : path,
-	                    ...currentTab.query
-	                }
-	            } else {
-	
-	            }
+        	if (/https?:\/\//.exec(path)) {
+                return {
+                    nvUrl : path,
+                    ...currentTab.query
+                }
+            } else {
+
             }
         }
     }

@@ -3,11 +3,15 @@ export default {
     name: 'NvDynamicLedger',
     props:{
         nvUrl: {
-            default: '/ledger/menus'
+            default: '/ledger/valid/menus'
         },
         nvCode : {
             type: String,
             required: true
+        },
+        nvEmbed: {
+        	type: Boolean,
+        	default: false
         },
         nvPosition: {
             type: String,
@@ -32,6 +36,9 @@ export default {
                     CODE: nvCode
                 }
             }).then(({ data }) => {
+            	debugger;
+            	self.$emit('slider', data.ledger);
+            	data = data.menus;
             	self.loopMenus(data);
                 /*data = data.map(tab => {
                     const path = tab.URL.split('?')
@@ -81,10 +88,10 @@ export default {
             })
         },
         handleTabClick (tab) {
-        	this.currentTab = tab
         	if (tab.children) {
         		tab.isChildExpansion = !tab.isChildExpansion;
         	} else {
+        		this.currentTab = tab
             	this.$router.push({ path: this.$route.fullPath, query: tab.query || {} })
         	}
             
@@ -99,7 +106,7 @@ export default {
                         class: `nv-${self.nvPosition}`
                     },
                     [
-                        h(
+                        self.nvEmbed ? h(
                             'div',
                             {
                                 staticClass: 'nv-ledger__nav'
@@ -110,7 +117,7 @@ export default {
                                         'div',
                                         {
                                             staticClass: 'nv-ledger__item',
-                                            class: self.currentTab.ID === menu.ID ? 'active' : '',
+                                            class: menu.children ? '' : (self.currentTab.ID === menu.ID ? ' active' : ''),
                                             on: {
                                                 click: function () { self.handleTabClick(menu) }
                                             }
@@ -118,25 +125,25 @@ export default {
                                         [
                                         	menu.NAME,
                                         	/*箭头*/
-                                        	h(
+                                        	menu.children ? h(
                                         		'div',
 	                                        	{
 	                                        		staticClass: 'left-down',
-	                                        		class: menu.isChildExpansion ? 'el-icon-arrow-down' : 'el-icon-arrow-left',
+	                                        		class: menu.isChildExpansion ? 'el-icon-arrow-down' : 'el-icon-arrow-right',
 	                                        	},
 	                                        	''
-                                       		)
+                                       		) : ''
                                         ]
                                         
                                     ),
                                     // 台账二级
-                                    menu.children.map((childMenu) => {
+                                    menu.children ? menu.children.map((childMenu) => {
                                     	return [
                                     		h(
 		                                		'div',
 							                    {
 							                        staticClass: 'nv-ledger__item nv-ledger__item__child',
-		                                            class: (self.currentTab.ID === childMenu.ID ? 'active' : '') + (menu.isChildExpansion ? '' : 'hide'),
+		                                            class: (self.currentTab.ID === childMenu.ID ? ' active' : '') + (menu.isChildExpansion ? '' : ' hide'),
 		                                            on: {
 		                                                click: function () { self.handleTabClick(childMenu) }
 		                                            }
@@ -144,10 +151,10 @@ export default {
 							                    childMenu.NAME,
 							                )
                                     	]
-                                    })
+                                    }) : ''
                                 ]
                             })
-                        ),
+                        ) : null,
                         h(
                             'div',
                             {
