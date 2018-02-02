@@ -1,5 +1,5 @@
 <template>
-  <nv-layout>
+  <div>
     <section class="search-form" style="padding:10px 0">
       <el-form>
         <!-- 搜索框  -->
@@ -194,7 +194,7 @@
         </el-row>
       </el-form>
     </el-dialog>
-  </nv-layout>
+  </div>
 </template>
 <script>
 import axios from 'axios';
@@ -346,7 +346,6 @@ export default {
                  message: '保存成功',
                  type: "success"
                });
-              this.resetForm('addForm');
                this.addForm.resetFields();
                // 重新加载数据
                this.getList();
