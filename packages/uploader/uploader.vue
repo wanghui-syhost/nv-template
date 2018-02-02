@@ -17,9 +17,8 @@
             <el-input style="float: right; margin-right: 50px; width:300px" icon="search"
                 placeholder="请输入文件名称" 
                 v-model="fileName" 
-                @keyup.enter.native="search" 
-                :on-icon-click="search">
-                <el-button slot="append" icon="el-icon-search"></el-button>
+                @keyup.enter.native="search" >
+                <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
             </el-input>
         </section>
 
@@ -181,6 +180,31 @@
     created() {
       this.fetchData();
     },  
+    // 过滤器，用于处理文件管理模块根据不同类型的文件格式显示不同的图标
+    filters: {
+      FileIconFilter: function(value){
+        const map = {
+          '.xls': 'file-xls',
+          '.xlsx': 'file-xls',
+          '.et': 'file-xls',
+          '.doc': 'file-doc',
+          '.docx': 'file-doc',
+          '.wps': 'file-doc',
+          '.ppt': 'file-ppt',
+          '.pptx': 'file-ppt',
+          '.dps': 'file-ppt',
+          '.rar': 'file-rar',
+          '.zip': 'file-zip',
+          '.txt': 'file-txt',
+          '.pdf': 'file-pdf'
+        }
+        let fileClass = map[value]
+        if (fileClass == null) {
+          fileClass = 'file-other'
+        }
+      return fileClass
+      }
+    },
     methods: {
       // 获取列表数据
       fetchData(treeId='') {
@@ -246,7 +270,7 @@
         return;
       }
       let queryParam = `?ID=`+this.handlerChooseRowsID();
-      window.location=  Config.BASE_API+'file/download/compress' + queryParam;
+      window.location = '/api/file/download/compress' + queryParam;
     },
     // DIR-{dirId},FILE-{dirID}-{fileId}
     // 处理要下载的文件的ID
@@ -297,7 +321,7 @@
              console.log(resp);
              let {code, data,msg} = resp.rawData;
               if(code==0){
-                me.$message.info('上传成功');
+                me.$message.success('上传成功');
                 me.fetchData(me.currentId);
               }else{  
                 me.$message.error(msg);
@@ -320,7 +344,7 @@
               FileDeleteFolder(row.ID).then(resp=>{
                 let {code, msg, data} = resp.rawData;
                 if(code === 0){
-                me.$message.info("删除成功");
+                me.$message.success("删除成功");
                 me.fetchData(me.currentId);
                 }else{
                 me.$message.error(msg);
@@ -340,7 +364,7 @@
             FileDelete(row.ID).then(resp=>{
                 let {code, msg, data} = resp.rawData;
               if(code ===0){
-                me.$message.info("删除成功");
+                me.$message.success("删除成功");
                 me.fetchData(me.currentId);
               }else{
                 me.$message.error(msg);
@@ -363,6 +387,7 @@
           };
           this.listLoading = true;
           FileView(req).then(resp=>{
+              this.listLoading = false;
               let {code, msg, data} = resp.rawData;
               let me = this;
               debugger;
@@ -374,9 +399,9 @@
                 me.$message.error('预览失败！');
               }
           }).catch(err=>{
+            this.$message.error('预览失败！');
             console.error(err);
           });
-          this.listLoading = false;
           return;
         } 
         // 处理左上角的导航功能
@@ -528,7 +553,7 @@
         deleteDirAndFiles(ids).then(resp=>{
           let {code, msg, data} = resp.rawData;
           if(code ===0){
-            me.$message.info("删除成功");
+            me.$message.success("删除成功");
             me.fetchData(me.currentId);
           }else{
             me.$message.error(msg);
@@ -564,7 +589,7 @@
       }
       getTreeDocuments(pagePrams).then(response => {
         this.listLoading = false;
-        const  {data, code ,msg} = response.data;
+        const  {data, code ,msg} = response.rawData;
         if(code===0){
             this.list = data.list.map(v => {
               v.isEdit = false;
