@@ -147,8 +147,8 @@ module.exports = function (router, mockjs) {
         case 'FIRST_LEDGER':
           res.reply({
           	ledger: {
-          		SHOW_HEAD: false,
-          		TITLE: 'a'
+          		SHOW_HEAD: true,
+          		TITLE: '测试数据标题'
           	},
           	menus:[
               {
