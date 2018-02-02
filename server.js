@@ -142,6 +142,7 @@ module.exports = function (router, mockjs) {
     // 动态台账
     router.get('/api/ledger/menus', function (req, res, next) {
       const { CODE } = req.query
+      return next()
       switch ( CODE ) {
         case 'FIRST_LEDGER':
           res.reply(
