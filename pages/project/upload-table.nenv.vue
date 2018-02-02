@@ -11,7 +11,7 @@
             <el-button @click="downloadChooseRows">
                 下载
             </el-button>
-            <el-upload  class="upload-table__upload--btn" :action="uploadURL" :on-success="success"  :before-upload="beforeUpload" :headers="uploadHeaders" :show-file-list="false" accept=".jpg, .jpeg, .png, .gif, .rar, .zip, .doc, .docx, .xls, .xlsx, .ppt, .pptx, .pdf, .txt">
+            <el-upload  class="upload-table__upload--btn" :action="uploadURL" :on-success="success"  :before-upload="beforeUpload" :headers="uploadHeaders" :show-file-list="false" accept=".jpg, .jpeg, .png, .gif, .rar, .zip, .doc, .docx, .xls, .xlsx, .ppt, .pptx, .pdf, .txt, .wps, .et, .dps">
                 <el-button  type="primary" v-show="levelList.length > 1 && showUpload">上传</el-button>
             </el-upload>
             <el-input style="float: right; margin-right: 50px; width:300px" icon="search"
