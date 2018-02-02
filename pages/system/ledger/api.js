@@ -6,63 +6,79 @@ export function getLedgerDatas(params){
 		params
 	});
 }
-export function validTab(params) {
+export function validLedger(params) {
 	return unfetch({
-	  url: '/tab/valid',
+	  url: '/ledger/valid',
 	  method: 'get',
 	  params
 	})
   }
 
-export function saveTab(params){
+export function saveLedger(params){
 	return unfetch({
-		url:'/tab',
+		url:'/ledger',
 		method: 'post',
 		data: params
 	});
 }
-export function updateTab(params){
+export function updateLedger(params){
 	return unfetch({
-		url:'/tab',
+		url:'/ledger',
 		method: 'put',
 		params
 	});
 }
-export function deleteTab(params){
+export function deleteLedger(params){
 	return unfetch({
-		url:'/tab',
+		url:'/ledger',
 		params: params,
 		method: 'delete'
 	});
 }
 
 
-// 选项卡菜单
-export function getTabMenuDatas(params){
+// 动态台账菜单
+export function getLedgerMenuDatas(params){
 	return unfetch({
-		url:'/tab/menus',
+		url:'/ledger/menus',
 		method: 'get',
 		params
 	});
 }
-export function saveTabMenu(params){
+export function saveLedgerMenu(params){
 	return unfetch({
-		url:'/tab/menu',
+		url:'/ledger/menu',
 		method: 'post',
 		data: params
 	});
 }
-export function updateTabMenu(params){
+export function updateLedgerMenu(params){
 	return unfetch({
-		url:'/tab/menu',
+		url:'/ledger/menu',
 		method: 'put',
 		params
 	});
 }
-export function deleteTabMenu(params){
+export function deleteLedgerMenu(params){
 	return unfetch({
-		url:'/tab/menu',
+		url:'/ledger/menu',
 		params: params,
 		method: 'delete'
+	});
+}
+export function deleteParentMenu(params){
+	return unfetch({
+		url:'/ledger/parentMenu',
+		params: params,
+		method: 'delete'
+	});
+}
+
+//查询父级菜单下拉列表
+export function getParentsMenu(params){
+	return unfetch({
+		url:'/ledger/parent/menus',
+		method: 'get',
+		params
 	});
 }

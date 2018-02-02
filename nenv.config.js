@@ -6,7 +6,7 @@ module.exports = {
   proxy: {
     '/api/*': {
       //target: 'http://192.168.37.6:8089', // 平台
-      target: 'http://192.168.31.22:8089', // 刑光辉
+      target: 'http://localhost:8089', // 刑光辉
       filter(pathname, req) {
         if (pathname.match(/\/api/)) {
           return true
@@ -14,16 +14,16 @@ module.exports = {
       }
     }
   },
-  webpack(config, { dev }) {
-    // if (dev) { // 开发环境配置
-    //   config.plugins.push(
-    //     new webpack.DefinePlugin({
-    //       'process.env.BASE_URL': "'http://192.168.37.6:8089/api'"
-    //     }),
-    //   )
-    // } else { // 生产环境配置
-    //   
-    //  }
+  /* webpack(config, { dev }) {
+    if (dev) { // 开发环境配置
+      config.plugins.push(
+        new webpack.DefinePlugin({
+          'process.env.BASE_URL': "'http://192.168.37.6:8089/api'"
+        }),
+      )
+    } else { // 生产环境配置
+      
+     }
     return config
-  }
+  } */
 }
