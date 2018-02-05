@@ -1,34 +1,31 @@
 <template>
   <div class="login-container">
-    <div class="login-wrapper">
-      <el-form autoComplete="on" :model="loginForm" :rules="loginRules" ref="loginForm" label-position="left" label-width="0px" class="card-box login-form">
-        <h3 class="title">
-          <span class="logo"></span>
-          盈峰集团基础应用平台
-        </h3>
-        <el-form-item prop="loginName">
-          <el-input  type="text" v-model="loginForm.loginName" :class="{'has-content':loginForm.loginName.length>0}" autoComplete="off" placeholder="请输入用户名或infore邮箱" :maxlength="maxlength" ></el-input>
-        </el-form-item>
-        <el-form-item prop="pwd">
-          <el-input type="password" :class="{'has-content':loginForm.pwd.length>0}"  @keyup.enter.native="handleLogin" v-model="loginForm.pwd" autoComplete="off" placeholder="请输入密码" :maxlength="maxlength" ></el-input>
-        </el-form-item>
+    <el-form autoComplete="on" :model="loginForm" :rules="loginRules" ref="loginForm" label-position="left" label-width="0px" class="card-box login-form">
+      <h3 class="title">
+        <span class="logo"></span>
+        盈峰集团基础应用平台
+      </h3>
+      <el-form-item prop="loginName">
+        <el-input  type="text" v-model="loginForm.loginName" :class="{'has-content':loginForm.loginName.length>0}" autoComplete="off" placeholder="请输入用户名或infore邮箱" :maxlength="maxlength" ></el-input>
+      </el-form-item>
+      <el-form-item prop="pwd">
+        <el-input type="password" :class="{'has-content':loginForm.pwd.length>0}"  @keyup.enter.native="handleLogin" v-model="loginForm.pwd" autoComplete="off" placeholder="请输入密码" :maxlength="maxlength" ></el-input>
+      </el-form-item>
 
-        <div class="login-password">
-          <el-checkbox v-model="loginForm.isRememberPassword">
-            <span class="login-remember-pass-text">记住密码</span>
-          </el-checkbox>
-          <span class="login-forgot-password" @click="onTapForgotPass">忘记密码？</span>
-        </div>
+      <div class="login-password">
+        <el-checkbox v-model="loginForm.isRememberPassword">
+          <span class="login-remember-pass-text">记住密码</span>
+        </el-checkbox>
+        <span class="login-forgot-password" @click="onTapForgotPass">忘记密码？</span>
+      </div>
 
-        <el-form-item>
-          <el-button type="primary" class="login-btn" :loading="loading" @click.native.prevent="handleLogin">
-            登录
-          </el-button>
-        </el-form-item>
-        <div class="login-down-tip" @click="downloadChrome">下载使用chorme浏览器， 用户体验更佳</div>
-      </el-form>
-      <div class="login-pic" />
-    </div>
+      <el-form-item>
+        <el-button type="primary" class="login-btn" :loading="loading" @click.native.prevent="handleLogin">
+          登录
+        </el-button>
+      </el-form-item>
+      <div class="login-down-tip" @click="downloadChrome">下载使用chorme浏览器， 用户体验更佳</div>
+    </el-form>
 
     <el-dialog title="忘记密码" :visible.sync="isShowDialog">
       <el-form ref="modifyForm" :model="modifyForm" :rules="modifyFormRules" >
@@ -344,15 +341,13 @@ export default {
   bottom: 0;
   height: 100%;
   width: 100%;
-  background: url(./assets/imgs/login-bg.png);
+  background: url(./assets/imgs/login_bg.png);
   background-size:cover; 
   overflow: hidden;
-
-  .login-pic {
-    background-image: url(./assets/imgs/login-pic.png);
-    background-repeat: no-repeat;
-  }
-
+  // input:-webkit-autofill {
+  //   -webkit-box-shadow: 0 0 0px 1000px #293444 inset !important;
+  //   -webkit-text-fill-color: #fff !important;
+  // }
   input {
     background: transparent;
     border: 0px;
@@ -387,34 +382,18 @@ export default {
       vertical-align: top;
     }
   }
-  .login-wrapper {
-    position: absolute;
-    width: 1200px;
-    height: 800px;
-    margin: auto;
-
-    .login-pic {
-      position: absolute;
-      top: 0;
-      right: 0;
-      height: 100%;
-      width: 66.6%;
-      // background-image: url(./assets/imgs/login-pic.png)
-      background-size: contain;
-    }
-  }
   .login-form {
-    // position: fixed; // position: absolute;
-    // left: 0;
-    // right: 0;
-    width: 33.3%;
-    height: 100%;
-    // padding: 4px 30px 30px 30px; // margin: 323px auto auto auto;
+    position: fixed; // position: absolute;
+    left: 0;
+    right: 0;
+    width: 396px;
+    height: 376px;
+    padding: 4px 30px 30px 30px; // margin: 323px auto auto auto;
     // margin:20% auto auto auto;
-    //left: 50%;
-    //top: 50%;
-    //margin-left: -198px;
-    //margin-top: -188px;
+    left: 50%;
+    top: 50%;
+    margin-left: -198px;
+    margin-top: -188px;
     border-radius: 4px;
     background-color: #ffffff;
     .login-password {
