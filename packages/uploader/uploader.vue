@@ -179,7 +179,6 @@
     },
     created() {
       this.fetchData();
-<<<<<<< Updated upstream
     },  
     // 过滤器，用于处理文件管理模块根据不同类型的文件格式显示不同的图标
     filters: {
@@ -205,8 +204,6 @@
         }
       return fileClass
       }
-=======
->>>>>>> Stashed changes
     },
     methods: {
       // 获取列表数据
