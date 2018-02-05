@@ -36,7 +36,6 @@ export default {
                     CODE: nvCode
                 }
             }).then(({ data }) => {
-            	debugger;
             	self.$emit('slider', data.ledger);
             	data = data.menus;
             	self.loopMenus(data);
