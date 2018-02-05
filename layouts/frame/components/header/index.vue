@@ -10,9 +10,12 @@
                     :is="navComponent(item)"
                     :to="item.linkUrl"
                     tag="div"
-                    v-for = "(item, index) in navs"
+                    v-for = "(item, index) in menus"
                     :key="index"
-                    class="e-header__nav--item">
+                    class="e-header__nav--item"
+                    :class="{active: activeTopMenu.menuId === item.menuId }"
+                    @click="handlerClick(item)"
+                    >
                     {{ item.menuName }}
                 </component>
             </nv-scroll-pane>
@@ -33,12 +36,13 @@
 </template>
 
 <script>
-import OuterLink from '../nav-link/outer-link'  
+import OuterLink from '../nav-link/outer-link' 
+import InnerLink from '../nav-link/inner-link' 
 import vuex, { mapGetters, mapActions } from 'vuex';
 
 export default {
     name: 'FrameHeader',
-    components: { OuterLink },
+    components: { OuterLink, InnerLink },
     props: {
         header: {
             type: Object,
@@ -49,34 +53,40 @@ export default {
                 }
             }
         },
+        menus: {
+            type: Array,
+            required: true,
+        },
+        activeTopMenu: {
+            type: Object,
+            required: true
+        }
     },
     computed: {
+        // activeTopMenu () {
+        //     const { menus, $route } = this
+        //     const fullPath = $route.fullPath
+        //     function find (menus, callback) {
+        //         for (const menu of menus) {
+        //             if (menu.linkUrl === fullPath) {
+        //                 return menu
+        //             } else if (menu.childrens && find(menu.childrens)) {
+        //                 return menu
+        //             }       
+        //         }
+        //     }
+        //     return find(menus)
+        // },
         ...vuex.mapState('user', {
             nickName: state => state.profile.nickName
-        }),
-        // 平台导航
-        ...vuex.mapState('platform', {
-            menus: state => state.menus
-        }),
-        // 首页导航
-        navs () {
-          const self = this
-          const { menus } =self
-          return [{
-            menuName: '首页',
-            linkType: '1',
-            linkUrl: '/home'
-          }].concat(menus.filter((menu) => {
-              return !menu.parentId
-          }))
-        }
+        })
     },
     methods: {
         // 用于计算导航的组件是什么类型的
         navComponent (item) {
             switch (item.linkType) {
                 case "1":
-                    return 'router-link'
+                    return 'inner-link'
                 case "2":
                     return 'outer-link'
             }
@@ -95,6 +105,9 @@ export default {
         },
         handlerMaxWidth () {
             this.changeLimitWidth()
+        },
+        handlerClick (item) {
+            this.$emit('menu-change', item)
         },
         changeSkin(){
             if(this.theme==''){

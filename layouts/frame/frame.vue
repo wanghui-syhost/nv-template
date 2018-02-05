@@ -1,10 +1,10 @@
 <template>
     <div class="frame-wrapper" :class="{'width-limited': isWithLimited}">
         <div class="frame__header-wrapper">
-                <frame-header />
+                <frame-header :menus = "menus" @menu-change="handlerMenuChange" :active-top-menu="activeTopMenu || {}"/>
         </div>
         <div class="frame__sidebar-wrapper" v-if="hasSidebar">
-            <frame-sidebar class="sidebar-container" :routes="childRoutes"/>
+            <frame-sidebar class="sidebar-container" :routes="activeTopMenu.childrens || []"/>
         </div>
         <div class="frame__body">
             <div class="frame-wrapper">
@@ -31,35 +31,48 @@ export default {
         frameSidebar,
     },
     computed: {
-        childRoutes () {
-            const self = this
-            const { menus, $route } = self
-            const rules = /\/[^/]*/
-            const parentPath = rules.exec($route.path)[0]
-            const parentRoute = menus.find(m => {
-               return  rules.exec(m.linkUrl)[0] === parentPath
-            })
-            return parentRoute ? parentRoute.childrens || [] : []
+        activeTopMenu () {
+            const { menus, $route } = this
+            const fullPath = $route.fullPath
+            function find (menus, callback) {
+                for (const menu of menus) {
+                    if (menu.linkUrl === fullPath) {
+                        return menu
+                    } else if (menu.childrens && find(menu.childrens)) {
+                        return menu
+                    }
+                }
+            }
+            return find(menus)
         },
         ...vuex.mapState('platform', {
-            menus: state => state.menus
+            menus: state => 
+                [{
+                    menuName: '首页',
+                    linkType: '1',
+                    linkUrl: '/home'
+                }].concat(state.menus)
         }),
         ...mapState(['isWithLimited']),
         hasSidebar () {
-            return this.childRoutes.length > 0
+            const { childrens } = this.activeTopMenu
+            return childrens && childrens.length > 0
         }
     },
     data () {
         return {
-            current_routers: [],
+            currentMenu: {},
             routers: [],
-            isHome: true,
         }
     },
     methods: {
-      ...vuex.mapActions('platform', [
-        'changeTitle'
-      ])
+        handlerMenuChange (item) {
+            const self = this
+            self.currentMenu = self.menus.find(menu => item.ID === menu.ID)
+        },
+        ...vuex.mapActions('platform', [
+            'changeTitle'
+        ])
     },
     watch: {
       $route (val) {
