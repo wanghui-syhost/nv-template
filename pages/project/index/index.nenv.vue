@@ -1,5 +1,5 @@
 <template>
-    <div class="page-demo">
+    <nv-layout class="page-demo">
     <!-- 表单  -->
     <section class="search-form">
     <el-form ref="form" :model="form">
@@ -97,7 +97,7 @@
       </div>
     </section>
 
-    </div>
+    </nv-layout>
 </template>
 
 <script>
@@ -195,7 +195,6 @@
   padding:16px 20px;
   .search-form{
     padding: 20px 20px;
-    width: 100%;
     border-radius: 4px;
     background-color: #ffffff;
     box-shadow: 0 0 4px 0 #b0c5df;
