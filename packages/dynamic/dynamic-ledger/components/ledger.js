@@ -36,8 +36,7 @@ export default {
                     CODE: nvCode
                 }
             }).then(({ data }) => {
-            	debugger;
-            	self.$emit('slider', data.ledger);
+            	self.$emit('slider', data);
             	data = data.menus;
             	self.loopMenus(data);
                 /*data = data.map(tab => {
@@ -90,6 +89,7 @@ export default {
         handleTabClick (tab) {
         	if (tab.children) {
         		tab.isChildExpansion = !tab.isChildExpansion;
+        		this.$foreUpdate();
         	} else {
         		this.currentTab = tab
             	this.$router.push({ path: this.$route.fullPath, query: tab.query || {} })

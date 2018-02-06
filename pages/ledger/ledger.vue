@@ -5,26 +5,23 @@
 		</header>
 		<section class="ledger-body">
 			<section class="ledger-slider">
-				<el-menu default-active="2" >
-			      <el-submenu index="1">
-			        <template slot="title">
-			          <i class="el-icon-location"></i>
-			          <span>导航一</span>
-			        </template>
-		          	<el-menu-item index="1-1">选项1</el-menu-item>
-		          	<el-menu-item index="1-2">选项2</el-menu-item>
-			      </el-submenu>
-			      <el-menu-item index="2">
-			        <i class="el-icon-menu"></i>
-			        <span slot="title">导航二</span>
-			      </el-menu-item>
-			      <el-menu-item index="3">
-			        <i class="el-icon-setting"></i>
-			        <span slot="title">导航三</span>
-			      </el-menu-item>
-			    </el-menu>
+				<el-menu mode="vertical" :default-active="defaultMenu">
+					<template v-for="item in routes">
+						<el-submenu :index="item.ID" v-if="item.children" :collapse="false" :key="item.ID">
+							<template slot="title">
+								<i class="el-icon-menu" v-if="item.icon" :class="item.icon"></i> {{item.NAME}}
+							</template>
+							<template v-for="child in item.children">
+								<el-menu-item :index="child.ID" @click="menuClick(child)">{{child.NAME}}</el-menu-item>
+							</template>
+						</el-submenu>
+						<el-menu-item v-else :index="item.ID" :collapse="false" @click="menuClick(item)">
+							<i class="el-icon-menu" v-if="item.icon" :class="item.icon"></i> {{item.NAME}}
+						</el-menu-item>
+					</template>
+				</el-menu>
 			</section>
-			<nv-dynamic-ledger :nv-code="nvCode" :nv-embed="true" @slider="slider"></nv-dynamic-ledger>
+			<nv-dynamic-ledger ref="dynamicLedger" :nv-code="nvCode" :nv-embed="true" @slider="slider"></nv-dynamic-ledger>
 		</section>
 	</div>
 </template>
@@ -34,9 +31,10 @@
 		data() {
 			const self = this
 			return {
+				defaultMenu: '',
 				SHOW_HEAD: true,
-				TITLE: ''
-				
+				TITLE: '',
+				routes: []
 			}
 		},
 		created() {
@@ -49,8 +47,12 @@
 		},
 		methods: {
 			slider(sliderMenus) {
-				this.SHOW_HEAD = sliderMenus.SHOW_HEAD;
-				this.TITLE = sliderMenus.TITLE;
+				this.SHOW_HEAD = sliderMenus.ledger.SHOW_HEAD;
+				this.TITLE = sliderMenus.ledger.TITLE;
+				this.routes = sliderMenus.menus;
+			},
+			menuClick(item) {
+				//this.$refs.dynamicLedger.handleTabClick(item);
 			}
 		}
 	}
@@ -81,13 +83,16 @@
 			.ledger-slider {
 				width: 180px;
 				height: 100%;
+				overflow: hidden;
 				margin-right: 20px;
 				background-color: #FFFFFF;
-				box-shadow: 0 0 4px #e2e2e2;
+				box-shadow: 0 0 4px #BFC4B6;
 			}
 			.nv-ledger {
 				flex: 1;
 				border: 1px solid #CCCCCC;
+				background-color: #FFFFFF;
+				box-shadow: 0 0 4px #AFC5DE;
 			}
 		}
 		
