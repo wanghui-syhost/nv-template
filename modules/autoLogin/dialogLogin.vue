@@ -1,5 +1,5 @@
 <template>
-    <el-dialog :visible.sync="dialogVisible" :style = "{'z-index': 100000}" width="400px">
+    <el-dialog :visible.sync="dialogVisible" :style = "{'z-index': 100000}" width="400px" class="nenv-auto-login-dialog">
         <div class="login_backdrop">
             <el-form ref="form" :model="form" :rules="rules" class="login_form"> 
                 <el-form-item align = "left" prop="username">
@@ -64,9 +64,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.el-dialog__body, .el-dialog__header{
-    padding: 0!important;
-}
 .login_backdrop{
     height: 480px;
     width: 100%;
@@ -90,4 +87,13 @@ button.login_btn {
     display: block;
 }
 </style>
+
+<style lang="scss">
+.nenv-auto-login-dialog {
+    .el-dialog__body, .el-dialog__header{
+        padding: 0!important;
+    }
+}
+</style>
+
 
