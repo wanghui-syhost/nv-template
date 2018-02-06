@@ -114,7 +114,7 @@ export default {
     
     position: absolute;
     width: 100%;
-    top: 70px;
+    top: 72px;
     bottom: 0px;
     overflow: hidden;
 
@@ -151,6 +151,8 @@ export default {
 
         &.has-sidebar {
             margin-left: 260px;
+            padding: 20px;
+    		background-color: #ffffff;
         }
     }
 }
