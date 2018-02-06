@@ -89,7 +89,7 @@ export default {
         handleTabClick (tab) {
         	if (tab.children) {
         		tab.isChildExpansion = !tab.isChildExpansion;
-        		this.$foreUpdate();
+        		this.$forceUpdate();
         	} else {
         		this.currentTab = tab
             	this.$router.push({ path: this.$route.fullPath, query: tab.query || {} })

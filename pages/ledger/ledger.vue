@@ -52,7 +52,7 @@
 				this.routes = sliderMenus.menus;
 			},
 			menuClick(item) {
-				//this.$refs.dynamicLedger.handleTabClick(item);
+				this.$refs.dynamicLedger.handleTabClick(item);
 			}
 		}
 	}
