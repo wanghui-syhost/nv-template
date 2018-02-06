@@ -37,7 +37,7 @@
             <el-table-column type="selection" width="55" align="center"></el-table-column>
             <el-table-column align="center" label="" width="40">
               <template slot-scope="scope" @click="setParentCode(scope.row.ID, scope.row.NAME,scope.row.IS_DIRECTORY)">
-                <i v-if="scope.row.IS_DIRECTORY == '1'" class="png-icon file-folder"/>
+                <i v-if="scope.row.IS_DIRECTORY == 'YES'" class="png-icon file-folder"/> 
                 <i v-else class="png-icon" :class="scope.row.FILE_TYPE | FileIconFilter"/>
               </template>
             </el-table-column>
@@ -68,7 +68,7 @@
             </el-table-column> -->
             <el-table-column label="文件大小"  align="center" width="100">
                 <template slot-scope="scope">
-                    <span v-if=" scope.row.IS_DIRECTORY === 1">-</span>
+                    <span v-if=" scope.row.IS_DIRECTORY === 'YES'">-</span>
                     <span v-else>{{ scope.row.FILE_SIZE | FileSizeFormat }}</span>
                 </template>
             </el-table-column>
@@ -158,24 +158,29 @@
       // 项目ID
       projectId: {
         type: String,
+        required: false,
+        default: null
       },
       // 项目名称
       projectName: {
         type: String,
+        required: false
       },
       // 文件类型
       type: {
         type: String,
+        required: false
       },
     },
     mounted(){
       this.uploadHeaders ={
         'Authorization' : localStorage.getItem('user.token'),
       },
+      
       this.fileData = {
 				projectId: this.projectId,
 				type: this.type
-			};
+      };
     },
     created() {
       this.fetchData();
@@ -209,26 +214,46 @@
       // 获取列表数据
       fetchData(treeId='') {
         this.listLoading = true;
+        var tid = '';
+        if(treeId == ''){
+          if (this.projectId == ''){
+            tid = 'ROOT';
+          } else {
+            tid = this.projectId;
+          }
+        } else {
+          tid = treeId;
+        }
         const pagePrams = {
           pageIndex: this.pageIndex,
           pageSize : this.pageSize,
           PROJECT_ID : this.projectId,
           TYPE : this.type,
-          TREE_ID: treeId == '' ? 'ROOT' : treeId
+          TREE_ID: tid
         }
         getTreeDocuments(pagePrams).then(response => {
           this.listLoading = false;
           const  {data, code ,msg} = response.rawData;
           if(code===0){
+            if(data != null && data.list != null){
+              const arr = Object.keys(data.list);
               this.list = data.list.map(v => {
                 v.isEdit = false;
                 return v
               });
-              this.totalCount = data.totalCount;
+
+               this.totalCount = data.totalCount;
+            }else {
+                this.list = [];
+                this.totalCount = 0;
+              }
+            
+        
           }else{
             this.$message.error(msg);
           }
         }).catch(err=>{
+          this.listLoading = false;
           console.log(err);
         })
       },
@@ -281,7 +306,7 @@
         let one = rows[i];
         let str='';
         console.log(one);
-        if(one.IS_DIRECTORY==1){
+        if(one.IS_DIRECTORY=='YES'){
           str = `DIR-${one.TREE_ID}` ;
         }else{
           str = `FILE-${one.TREE_ID}-${one.ID}`;
@@ -311,8 +336,18 @@
         console.log(resp);
         if(code==0){
             // 开始添加到文件列表中
+            var tid = '';
+             if(me.currentId  == ''){
+              if (this.projectId == ''){
+                tid = 'ROOT';
+              } else {
+                tid = this.projectId;
+              }
+            } else {
+              tid = me.currentId ;
+            }
             let item = Object.assign({}, data, {
-              TREE_ID : me.currentId == '' ? 'ROOT' : me.currentId ,
+              TREE_ID : tid ,
               PROJECT_ID: this.projectId
             });
             let arr = [];
@@ -334,7 +369,7 @@
     },
     removeItem(row){
       	let me = this;
-      	if(row.IS_DIRECTORY === 1){
+      	if(row.IS_DIRECTORY === 'YES'){
             me.$confirm('此操作将永久删除该文件夹以及所有子文件, 是否继续?', '提示', {
               confirmButtonText:'确定',
               concelButtonText:'取消',
@@ -380,7 +415,7 @@
     // 修改父节点的值
     setParentCode(parentCode, name, type, item){
         //节点是文件不进入下一级
-       if(type == 0){
+       if(type == 'NO'){
           //文件预览
           let req = {
             FILE_ID: parentCode
@@ -399,11 +434,13 @@
                 me.$message.error('预览失败！');
               }
           }).catch(err=>{
+            this.listLoading = false
             this.$message.error('预览失败！');
             console.error(err);
           });
           return;
         } 
+        
         // 处理左上角的导航功能
         if('delete' === type){
             let index = this.levelList.indexOf(item) + 1;
@@ -437,8 +474,18 @@
          me.$message.error('文件名长度不能大于15');
          return;
       }
+      var cid = '';
+      if(this.currentId == ''){
+        if (this.projectId == ''){
+          cid = 'ROOT';
+        } else {
+          cid = this.projectId;
+        }
+      } else {
+        cid = this.currentId;
+      }
       let req = {
-          PARENT_ID: this.currentId == '' ? 'ROOT' : this.currentId ,
+          PARENT_ID: cid ,
           NAME: this.newFolderName,
           PROJECT_ID: this.projectId,
           TYPE: this.type
@@ -462,7 +509,7 @@
     },
     download(row){
       let queryParam;
-      if(row.IS_DIRECTORY == "1"){
+      if(row.IS_DIRECTORY == "YES"){
         //queryParam = `DIR-${row.TREE_ID}`;
         queryParam = "ID=DIR-"+row.TREE_ID;
       }else{
@@ -472,7 +519,7 @@
     },
     // 触发重命名
     reName(row){
-      if(row.IS_DIRECTORY == "1"){
+      if(row.IS_DIRECTORY == "YES"){
         this.rename = row.NAME;
       }else{
         this.rename = row.NAME.substring(0,row.NAME.lastIndexOf("."));
@@ -481,7 +528,7 @@
     },
     modifyComplete(row){
       let me = this;
-      if(row.IS_DIRECTORY === 1){
+      if(row.IS_DIRECTORY === 'YES'){
           //文件夹重命名
           let data = {
             ID: row.ID,
@@ -536,7 +583,7 @@
       for(let i=0;i<rows.length;i++){
         let one = rows[i];
         let str='';
-        if(one.IS_DIRECTORY==1){
+        if(one.IS_DIRECTORY=='YES'){
           str = `DIR-${one.TREE_ID}`;
         }else{
           str = `FILE-${one.ID}`;
@@ -591,11 +638,23 @@
         this.listLoading = false;
         const  {data, code ,msg} = response.rawData;
         if(code===0){
-            this.list = data.list.map(v => {
-              v.isEdit = false;
-              return v
-            });
-            this.totalCount = data.totalCount;
+            // this.list = data.list.map(v => {
+            //   v.isEdit = false;
+            //   return v
+            // });
+            // this.totalCount = data.totalCount;
+            if(data != null && data.list != null){
+              const arr = Object.keys(data.list);
+              this.list = data.list.map(v => {
+                v.isEdit = false;
+                return v
+              });
+
+               this.totalCount = data.totalCount;
+            }else {
+                this.list = [];
+                this.totalCount = 0;
+              }
         }else{
           this.$message.error(msg);
         }
