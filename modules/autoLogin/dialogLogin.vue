@@ -1,16 +1,18 @@
 <template>
-    <el-dialog :visible.sync="dialogVisible" :style = "{'z-index': 100000}">
-        <el-form label-width = "80px"  label-position="left" ref="form" :model="form" :rules="rules"> 
-            <el-form-item label="用户名" align = "left" prop="username">
-                <el-input v-model="form.username"/>
-            </el-form-item>
-            <el-form-item label="密码" align = "left" prop="password">
-                <el-input type="password" v-model="form.password" />
-            </el-form-item>
-            <el-form-item>
-                <el-button @click="handlerLogin"> 登陆 </el-button>
-            </el-form-item>
-        </el-form>
+    <el-dialog :visible.sync="dialogVisible" :style = "{'z-index': 100000}" width="400px">
+        <div class="login_backdrop">
+            <el-form ref="form" :model="form" :rules="rules" class="login_form"> 
+                <el-form-item align = "left" prop="username">
+                    <el-input v-model="form.username" placeholder="请输入账号"/>
+                </el-form-item>
+                <el-form-item align = "left" prop="password">
+                    <el-input type="password" v-model="form.password" placeholder="请输入密码"/>
+                </el-form-item>
+                <el-form-item>
+                    <el-button @click="handlerLogin" class="login_btn"> 登陆 </el-button>
+                </el-form-item>
+            </el-form>
+        </div>
     </el-dialog>
 </template>
 <script>
@@ -62,6 +64,30 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.el-dialog__body, .el-dialog__header{
+    padding: 0!important;
+}
+.login_backdrop{
+    height: 480px;
+    width: 100%;
+    background: url(./assets/imgs/Bitmap.png) top left no-repeat;
+}
+form.login_form {
+    display: block;
+    position: absolute;
+    width: 320px;
+    bottom: 0;
+    left: 40px;
+}
+button.login_btn {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 36px;
+    line-height: 36px;
+    background-image: url(./assets/imgs/Rectangle.png);
+    color: #fff;
+    display: block;
+}
 </style>
 
