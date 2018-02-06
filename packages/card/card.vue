@@ -28,6 +28,9 @@ export default {
         padding: 20px;
         margin: 0;
     }
+    > .el-dialog__wrapper {
+        background-color: transparent;
+    }
     &.is-card-layout {
         background-color: transparent;
         > * {

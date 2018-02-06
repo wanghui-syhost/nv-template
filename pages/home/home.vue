@@ -1,21 +1,25 @@
 <template>
     <div id="home" class="home">
-        <div class="home-top"> 
-            <label>
-                {{  projectTitle }} 
-            </label>
-            <div class="home-top--right">
-                <el-button @click="triggerEditMode">自定配置</el-button>
+        <aside class="home-aside">
+        </aside>
+        <div class="home-main">
+            <div class="home-top"> 
+                <label class="home-top__title">
+                    {{  projectTitle }} 
+                </label>
+                <div class="home-top--right">
+                    <el-button @click="triggerEditMode">自定配置</el-button>
+                </div>
+                </div>
+            <div class="home-block__wrapper">
+                <component
+                    v-for="component in components" 
+                    :is="component.name" 
+                    :key="component.id" 
+                    :is-edit-mode="isEditMode"
+                    @close = "closeBlock(component.id)"
+                />
             </div>
-            </div>
-        <div class="home-block__wrapper">
-            <component
-                v-for="component in components" 
-                :is="component.name" 
-                :key="component.id" 
-                :is-edit-mode="isEditMode"
-                @close = "closeBlock(component.id)"
-            />
         </div>
         <el-dialog title="请选择">
         </el-dialog>
@@ -96,8 +100,28 @@ export default {
 </script>
 <style  lang ="scss" scoped>
     .home {
+
+        &-aside {
+            position: fixed;
+            background-color: #fff;
+            height: 100%;
+            width: 220px;
+        }
+
+        &-main {
+            margin-left: 240px;
+        }
+
         &-top {
-            min-height: 80px;
+            line-height: 80px;
+            margin: 10px;
+
+            &__title {
+                font-size: 20px;
+                color: #9a9a9a;
+
+            }
+
             &--right {
                 float: right;
             }
@@ -106,7 +130,7 @@ export default {
             position: relative;
             display: flex;
             flex-direction: row;
-            justify-content: center;
+            // justify-content: center;
             flex-wrap: wrap;
         }
     }
