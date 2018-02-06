@@ -132,7 +132,7 @@ export default {
 	                                        		class: menu.isChildExpansion ? 'el-icon-arrow-down' : 'el-icon-arrow-right',
 	                                        	},
 	                                        	''
-                                       		) : ''
+                                       		) : null
                                         ]
                                         
                                     ),
@@ -151,7 +151,7 @@ export default {
 							                    childMenu.NAME,
 							                )
                                     	]
-                                    }) : ''
+                                    }) : null
                                 ]
                             })
                         ) : null,
