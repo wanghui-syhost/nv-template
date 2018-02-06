@@ -36,7 +36,7 @@ export default {
                     CODE: nvCode
                 }
             }).then(({ data }) => {
-            	self.$emit('slider', data);
+            	self.$emit('nv-slider', data);
             	data = data.menus;
             	self.loopMenus(data);
                 /*data = data.map(tab => {
