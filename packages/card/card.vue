@@ -23,10 +23,11 @@ export default {
 .nv-layout {
     min-height: 100%;
     background-color: #fff;
-    > * {
+    >.search-form {
         background-color: #fff;
         padding: 20px;
         margin: 0;
+        height: 40px;;
     }
     &.is-card-layout {
         background-color: transparent;

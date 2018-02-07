@@ -34,7 +34,7 @@
               <el-input v-show="scope.row.isEdit" size="small" v-model="scope.row.VALUE"></el-input>
             </template>
           </el-table-column>
-           <el-table-column label="操作">
+           <el-table-column label="操作" align="center">
             <template slot-scope="scope">
               <el-button v-show='!scope.row.isEdit' type="primary" @click='scope.row.isEdit = true' size="small" icon="edit">编辑</el-button>
               <el-button v-show='scope.row.isEdit' type="success" @click='modifyConfig(scope.row)' size="small" icon="check">完成</el-button>

@@ -12,3 +12,6 @@ import '@layouts/frame'
 import './packages'
 
 import './modules'
+
+
+import './styles/index.scss'

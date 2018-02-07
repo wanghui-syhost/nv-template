@@ -11,17 +11,17 @@
 
     <section class="search-table">
       <el-table :data="list" v-loading.body="listLoading" element-loading-text="拼命加载中" @sort-change="sortChange" border fit highlight-current-row  style="width: 100%">
-        <el-table-column label="任务分组" prop = "JOB_GROUP" width="150" />
-        <el-table-column label="任务名称" prop = "JOB_NAME" sortable  width="150" />
-        <el-table-column label="运行时间" prop = "CRON_EXPRESSION" width="150" />
-        <el-table-column label="状态" width="150">
+        <el-table-column label="任务分组" prop = "JOB_GROUP" width="100px" />
+        <el-table-column label="任务名称" prop = "JOB_NAME" sortable  width="105px" />
+        <el-table-column label="运行时间" prop = "CRON_EXPRESSION" width="100px" />
+        <el-table-column label="状态" width="70px">
           <template slot-scope="scope">
             {{ scope.row.STATUS | statusFilter }}
           </template>
         </el-table-column>
-        <el-table-column label="任务描述" prop = "DESCRIPTION" width="300" />
-        <el-table-column label="完整的类名" prop = "CLASS_NAME" width="400" />
-        <el-table-column label="操作">
+        <el-table-column label="任务描述" prop = "DESCRIPTION" width="100px" />
+        <el-table-column label="完整的类名" prop = "CLASS_NAME" width="170px" />
+        <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button size="small" type="primary" @click="showEdit(scope.row)">编辑</el-button>
             <el-button size="small" type="primary" v-if="scope.row.STATUS == 'OPENED'" @click="pauseScheduler(scope.row)" >暂停</el-button>

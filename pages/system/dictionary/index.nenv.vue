@@ -20,25 +20,25 @@
 
       <section>
         <el-table :data="list" v-loading.body="listLoading" element-loading-text="拼命加载中" border fit highlight-current-row>
-         <el-table-column label="类别名称">
+         <el-table-column label="类别名称" width="150px">
             <template slot-scope="scope">
               <span> {{scope.row.NAME}}</span>
             </template>
           </el-table-column>
          
-          <el-table-column label="类别-代码（类别区分唯一标识）">
+          <el-table-column label="类别-代码（类别区分唯一标识）" width="250px">
             <template slot-scope="scope">
               <span> {{scope.row.CODE}}</span>
             </template>
           </el-table-column>
 
-          <el-table-column label="状态">
+          <el-table-column label="状态" align="center" width="100px">
             <template slot-scope="scope">
                <el-tag :type="scope.row.STATUS | statusFilter">{{scope.row.STATUS == 'VALID' ? '有效': '无效'}}</el-tag>
             </template>
           </el-table-column>
           
-           <el-table-column label="操作">
+           <el-table-column label="操作" align="center">
             <template slot-scope="scope">
                <el-button size="small" type="infor" @click="goDictionaryData(scope.row)" icon="information">小类</el-button>
                <el-button size="small" type="infor" @click="setDictionaryStatus(scope.row, scope.row.STATUS == 'VALID' ? 'INVALID': 'VALID')">{{scope.row.STATUS == 'INVALID' ? '设为有效': '设为无效'}}</el-button>
