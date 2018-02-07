@@ -95,14 +95,18 @@ export default {
     &.width-limited {
         max-width: 1200px;
         margin: 0 auto;
+
+        .frame__sidebar-wrapper {
+            top: 82px;
+        }
     }
 }
 
 
 .frame__sidebar-wrapper {
-    width: 240px;
+    width: 180px;
     position: fixed;
-    top: 72px;
+    top: 62px;
     bottom: 0;
     z-index: 1001;
     background-color: #fff;
@@ -111,10 +115,9 @@ export default {
 }
 
 .frame__body {
-    
     position: absolute;
     width: 100%;
-    top: 72px;
+    top: 82px;
     bottom: 0px;
     overflow: hidden;
 
@@ -139,7 +142,6 @@ export default {
 
     .frame-main-container {
         transition: all .28s ease-out;
-
         position: absolute;
         top: 0;
         bottom: 0;
@@ -150,7 +152,7 @@ export default {
         overflow-y: auto;
 
         &.has-sidebar {
-            margin-left: 260px;
+            margin-left: 200px;
     		background-color: #ffffff;
         }
     }

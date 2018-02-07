@@ -12,33 +12,33 @@
 
     <section class="search-table">
       <el-table :data="list" v-loading.body="listLoading" element-loading-text="拼命加载中" border fit highlight-current-row>
-        <el-table-column label="标题">
+        <el-table-column label="标题" width="100px">
           <template slot-scope="scope">
             <span> {{ scope.row.TITLE }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="编号">
+        <el-table-column label="编号" width="100px">
           <template slot-scope="scope">
             <span> {{ scope.row.CODE }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="选项卡类型 ">
+        <el-table-column label="选项卡类型" width="150px">
           <template slot-scope="scope">
             <span> {{ scope.row.TYPE == 'SIMPLE' ? '普通' : '卡片' }}</span>
           </template>
         </el-table-column>
       
-        <el-table-column label="描述">
+        <el-table-column label="描述" width="200px">
           <template slot-scope="scope">
             <span> {{ scope.row.DESCRIPTION }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="是否删除">
+        <el-table-column label="是否删除" width="100px">
           <template slot-scope="scope">
             <span> {{ scope.row.IS_DELETED == 'YES' ? '是' : '否' }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="操作">
+        <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button size="small" type="infor" @click="goTabMenus(scope.row)" icon="information">菜单</el-button>
             <el-button size="small" type="primary" @click="modifyInfo(scope.row)">编辑</el-button>

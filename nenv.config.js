@@ -1,7 +1,7 @@
 module.exports = {
   project: {
     // 定义项目的标题
-    title: "盈峰环境业务管理系统",
+    title: "盈峰环境智慧水务平台",
   },
   proxy: {
     '/api/*': {
