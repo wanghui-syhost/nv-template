@@ -33,12 +33,21 @@
             <span> {{ scope.row.DESCRIPTION }}</span>
           </template>
         </el-table-column>
+<<<<<<< HEAD
         <el-table-column label="是否删除" width="100px">
           <template slot-scope="scope">
             <span> {{ scope.row.IS_DELETED == 'YES' ? '是' : '否' }}</span>
           </template>
         </el-table-column>
         <el-table-column label="操作" align="center">
+=======
+        <!-- <el-table-column label="是否删除">
+          <template slot-scope="scope">
+            <span> {{ scope.row.IS_DELETED == 'YES' ? '是' : '否' }}</span>
+          </template>
+        </el-table-column> -->
+        <el-table-column label="操作">
+>>>>>>> Fix: 动态台账优化
           <template slot-scope="scope">
             <el-button size="small" type="infor" @click="goTabMenus(scope.row)" icon="information">菜单</el-button>
             <el-button size="small" type="primary" @click="modifyInfo(scope.row)">编辑</el-button>
