@@ -3,7 +3,7 @@
     position: relative;
     height: 100%;
     
-    .hide { visibility: hidden; height: 0px; }
+    .hide { height: 0px; }
     
     &__nav {
         overflow: hidden;
@@ -45,6 +45,7 @@
         //transition: height .3s;
         transition: all .2s linear;
         padding-left: 25px;
+        overflow: hidden;
     }
 
     &.nv-left {
