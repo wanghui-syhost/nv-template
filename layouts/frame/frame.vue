@@ -95,6 +95,10 @@ export default {
     &.width-limited {
         max-width: 1200px;
         margin: 0 auto;
+
+        .frame__sidebar-wrapper {
+            top: 82px;
+        }
     }
 }
 

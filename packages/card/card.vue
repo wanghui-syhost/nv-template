@@ -1,10 +1,8 @@
 <template>
     <div class="nv-layout" :class="{'is-card-layout': isCardLayout}">
-        <div>
-            <div class="nv-layout__top">
-                <label class="nv-layout__top-label" v-if="isShowTitle">{{ acitveMenu.menuName }}</label>
-                <slot name = "top"/>
-            </div>
+        <div class="nv-layout__top" v-if="isShowTitle || $slots.top" >
+            <label class="nv-layout__top-label" v-if="isShowTitle">{{ acitveMenu.menuName }}</label>
+            <slot name = "top"/>
         </div>
         <div class="nv-layout__main">
             <slot name="default" />
