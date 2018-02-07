@@ -15,14 +15,11 @@
     .main{
     	height: 100%;
     }
-
     .fade-enter-active, .fade-leave-active {
-        // margin-top: 0px;
-        // transition: opacity .5s;
+        transition: opacity .5s ease-in-out;
     }
     .fade-enter, .fade-leave-to {
-        //margin-top: 500px;
-        //opacity: 0;
+        opacity: 0;
     }
 </style>
 

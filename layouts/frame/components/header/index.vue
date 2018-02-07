@@ -27,6 +27,7 @@
             <a @click="changeSkin">
                 <i class="png-icon skin middle" />
             </a>
+            <span @click = "handlerShowTitle"> 切换title显示 </span>
             <span @click = "handlerMaxWidth"> 全屏/限宽 </span>
             <span @click = "handerLayout"> 切换布局 </span>
             <span class="e-header__loginuser" >{{ nickName }}</span>
@@ -63,20 +64,6 @@ export default {
         }
     },
     computed: {
-        // activeTopMenu () {
-        //     const { menus, $route } = this
-        //     const fullPath = $route.fullPath
-        //     function find (menus, callback) {
-        //         for (const menu of menus) {
-        //             if (menu.linkUrl === fullPath) {
-        //                 return menu
-        //             } else if (menu.childrens && find(menu.childrens)) {
-        //                 return menu
-        //             }       
-        //         }
-        //     }
-        //     return find(menus)
-        // },
         ...vuex.mapState('user', {
             nickName: state => state.profile.nickName
         })
@@ -99,6 +86,9 @@ export default {
               .then(() => {
                 this.$router.push({ path: process.env.LOGIN_PATH || '/login' })
               })
+        },
+        handlerShowTitle () {
+            this.changeShowTitle()
         },
         handerLayout () {
             this.changeLayout()
@@ -123,7 +113,7 @@ export default {
             ['changeLimitWidth']
         ),
         ...mapActions('nv-layout',
-            ['changeLayout']
+            ['changeLayout', 'changeShowTitle']
         )
     }
 
