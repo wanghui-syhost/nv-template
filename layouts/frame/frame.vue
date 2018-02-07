@@ -151,7 +151,6 @@ export default {
 
         &.has-sidebar {
             margin-left: 260px;
-            padding: 20px;
     		background-color: #ffffff;
         }
     }
