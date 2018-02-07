@@ -8,7 +8,7 @@
         </div>
         <div class="frame__body">
             <div class="frame-wrapper">
-                <div class="e-main-container" :class= "{'has-sidebar': hasSidebar } ">
+                <div class="frame-main-container" :class= "{'has-sidebar': hasSidebar } ">
                     <frame-main />
                 </div>
             </div>
@@ -136,7 +136,7 @@ export default {
         }
     }
 
-    .e-main-container {
+    .frame-main-container {
         transition: all .28s ease-out;
         position: absolute;
         top: 0;
@@ -149,6 +149,8 @@ export default {
 
         &.has-sidebar {
             margin-left: 200px;
+            padding: 20px;
+    		background-color: #ffffff;
         }
     }
 }
