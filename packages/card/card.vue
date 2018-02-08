@@ -47,7 +47,7 @@ export default {
         margin: 0;
         height: 40px;;
     }
-    > .el-dialog__wrapper {
+    .el-dialog__wrapper {
         background-color: transparent;
     }
 

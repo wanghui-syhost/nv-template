@@ -1,4 +1,6 @@
-import Frame from './frame'
+const x = './frame.vue'
+import _import from './_import'
+const Frame = _import(x)
 import store from './store'
 
 const { loader } = window.nenv

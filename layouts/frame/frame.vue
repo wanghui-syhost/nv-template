@@ -111,6 +111,7 @@ export default {
     z-index: 1001;
     background-color: #fff;
     overflow: hidden;
+    box-shadow: 0 0 4px 0 #BFC4B6;
     transition: all .28s ease-out;
 }
 
@@ -120,25 +121,6 @@ export default {
     top: 82px;
     bottom: 0px;
     overflow: hidden;
-
-
-    &.auto-sidebar {
-        .e-sidebar-wrapper {
-            transform: translate(-140px, 0);
-            .e-sidebar-container {
-                transform: translate(132px, 0);
-            }
-            &:hover {
-                transform: translate(0, 0);
-                .e-sidebar-container {
-                    transform: translate(0, 0);
-                }
-            }
-        }
-        .e-main-container {
-            margin-left: 40px;
-        }
-    }
 
     .frame-main-container {
         transition: all .28s ease-out;
@@ -150,10 +132,10 @@ export default {
         left: 0;
         overflow-x: hidden;
         overflow-y: auto;
+        box-shadow: 0 0 4px 0 #bfc4b6;
 
         &.has-sidebar {
             margin-left: 200px;
-    		background-color: #ffffff;
         }
     }
 }

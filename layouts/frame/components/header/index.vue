@@ -146,7 +146,7 @@ export default {
         vertical-align: middle;
     }
     &__title {
-        font-size: 20px;
+        font-size: 18px;
         font-weight: 600;
         color: #fff;
         text-overflow: ellipsis;

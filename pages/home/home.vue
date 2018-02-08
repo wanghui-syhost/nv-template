@@ -73,9 +73,6 @@ export default {
             ]
         }
     },
-    created () {
-        console.log(this)
-    },
     computed:  {
         projectTitle () {
             return nenv.project.title
