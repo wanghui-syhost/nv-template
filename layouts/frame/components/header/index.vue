@@ -24,9 +24,9 @@
             <a>
                 <i class="png-icon alarm middle" />
             </a>
-            <a @click="changeSkin">
+            <!-- <a @click="changeSkin">
                 <i class="png-icon skin middle" />
-            </a>
+            </a> -->
             <span @click = "handlerShowTitle"> 切换title显示 </span>
             <span @click = "handlerMaxWidth"> 全屏/限宽 </span>
             <span @click = "handerLayout"> 切换布局 </span>

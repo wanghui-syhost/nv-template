@@ -96,7 +96,9 @@ export default {
         max-width: 1200px;
         margin: 0 auto;
 
+        padding-top: 20px;
         .frame__sidebar-wrapper {
+            padding-top: 0;
             top: 82px;
         }
     }
@@ -107,6 +109,7 @@ export default {
     width: 180px;
     position: fixed;
     top: 62px;
+    padding-top: 20px;
     bottom: 0;
     z-index: 1001;
     background-color: #fff;
@@ -132,6 +135,7 @@ export default {
         left: 0;
         overflow-x: hidden;
         overflow-y: auto;
+        border-radius: 4px;
         box-shadow: 0 0 4px 0 #bfc4b6;
 
         &.has-sidebar {
