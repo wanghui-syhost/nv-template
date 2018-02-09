@@ -39,6 +39,8 @@ export default {
         padding: 20px 20px 0px 20px;
         &-label {
             position: relative;
+            display: inline-block;
+            margin-bottom: 20px;
             &:before {
                 content: "";
                 position: absolute;

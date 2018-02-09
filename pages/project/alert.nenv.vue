@@ -1,5 +1,5 @@
 <template>
-    <div class="demo2">
+    <nv-layout class="demo2">
         <el-button @click="dialogVisible=true">普通弹出</el-button>
         <el-button @click="dialogVisible1=true">手动流转</el-button>
         <el-button @click="dialogVisible2=true">审批文档</el-button>
@@ -335,7 +335,7 @@
             <h3>组织人员选择器</h3>
             <nv-organize-user-selector url="/user/organize/all" title="从组织架构选择" label="text" :callback="userSelectBack" />
         </div> -->
-    </div>
+    </nv-layout>
 </template>
 
 <script>
