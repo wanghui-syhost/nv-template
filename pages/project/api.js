@@ -16,21 +16,21 @@ export function getUserPermission(params) {
 // 计划详情api
 export function getInfo(pageParams) {
   return unfetch({
-    url: '/info/infos',
+    url: '/demo/info/infos',
     params: pageParams
   });
 }
 
 export function modifyInfo(modifyData) {
   return unfetch.put(
-    '/info/todo',
+    '/demo/info/todo',
     modifyData
   );
 }
 
 export function deleteInfo(id) {
   return unfetch.delete(
-    '/info/infos', {
+    '/demo/info/infos', {
       params: {
         ID: id
       }

@@ -12,13 +12,13 @@
     <section class="search-table">
         <el-table :data="list" v-loading.body="listLoading" element-loading-text="拼命加载中" border fit highlight-current-row>
           
-          <el-table-column label="首页名称" width="100px">
+          <el-table-column label="首页名称" min-width="15%">
             <template slot-scope="scope">
               <span> {{scope.row.NAME}}</span>
             </template>
           </el-table-column>
       
-          <el-table-column label="首页地址" width="100px">
+          <el-table-column label="首页地址" min-width="25%">
             <template slot-scope="scope">
               <span> {{scope.row.VALUE}}</span>
             </template>
@@ -28,18 +28,18 @@
               <span> {{scope.row.ROLE_IDS}}</span>
             </template>
           </el-table-column> -->
-          <el-table-column label="描述信息" width="150px">
+          <el-table-column label="描述信息" min-width="25%">
             <template slot-scope="scope">
               <span> {{scope.row.DESCRIPTION}}</span>
             </template>
           </el-table-column>
-          <el-table-column label="排序" width="100px">
+          <el-table-column label="排序" min-width="7%">
             <template slot-scope="scope">
               <span> {{scope.row.SORT}}</span>
             </template>
           </el-table-column>
 
-          <el-table-column label="操作" align="center">
+          <el-table-column label="操作" align="center" min-width="28">
             <template slot-scope="scope">
               <el-button size="small" type="primary" @click="roleListDialogInfo(scope.row)">分配角色</el-button>
                <el-button size="small" type="primary" @click="modifyInfo(scope.row)">编辑</el-button>
