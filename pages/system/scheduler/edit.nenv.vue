@@ -1,6 +1,6 @@
 <template>
   <nv-layout>
-      <el-form :model="addForm" ref="addForm" label-width="120px">
+      <el-form :model="addForm" ref="addForm" label-width="120px" slot="top">
         <el-row type="flex" class="row-bg" justify="space-between">
           <el-col :span="12">
             <el-form-item label="任务分组" :rules="[{ required: true, message: '任务分组不能为空', trigger: 'blur'}]">
