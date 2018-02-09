@@ -141,8 +141,8 @@ export default {
         margin-right: 20px;
     }                   
     &__logo {
-        height: 40px;
-        width: 40px;
+        height: 33px;
+        width: 33px;
         border-radius: 4px;
         vertical-align: middle;
     }
