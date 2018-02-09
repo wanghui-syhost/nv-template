@@ -148,7 +148,6 @@
       </el-row>
     </el-form>
   </el-dialog>
-  <p ref="xxx"></p>
   </nv-layout>
 </template>
 <script>
