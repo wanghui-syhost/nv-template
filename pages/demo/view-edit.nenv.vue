@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <nv-layout>
         <nv-checkbox nv-code="HOBBY" v-model="nvCheckBoxResult"/>
         <nv-checkbox nv-code="HOBBY" v-model="nvCheckBoxResult" :disabled = "false"/>
         <p>
@@ -27,7 +27,7 @@
             
             <nv-textarea v-model="nvTextareaResult2" :disabled = "false"/>
         </div>
-    </div>
+    </nv-layout>
 </template>
 <script>
 export default {
