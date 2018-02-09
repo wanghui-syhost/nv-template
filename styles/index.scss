@@ -19,3 +19,9 @@
 .el-dialog__header {
     background-color: #F6F7FB;
 }
+
+.el-form-item__label {
+    &:after {
+        content: ' :'
+    }
+}
