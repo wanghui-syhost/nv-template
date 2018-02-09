@@ -5,10 +5,10 @@
           <!-- 搜索框  -->
           <div class="search-form-one">
              <el-form-item label="字典名称">
-               <el-input v-model="NAME" placeholder="请输入字典名称" size="middle" style="width:332px;"></el-input>
+               <el-input v-model="NAME" placeholder="请输入字典名称" ></el-input>
              </el-form-item>
               <el-form-item label="字典状态">
-                 <el-select v-model="STATUS" placeholder="">
+                <el-select v-model="STATUS" placeholder="">
                   <el-option v-for="item in searchStatus" :key="item.value" :label="item.label" :value="item.value"></el-option>
                 </el-select>
               </el-form-item>

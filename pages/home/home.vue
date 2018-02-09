@@ -106,7 +106,9 @@ export default {
         }
 
         &-main {
-            margin-left: 240px;
+            background-color: rgba(248,249,250,1); 
+            padding-left: 20px;
+            margin-left: 220px;
         }
 
         &-top {

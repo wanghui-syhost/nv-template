@@ -5,7 +5,7 @@
             <!-- 搜索框  -->
   			<div class="search-form-one">
           <el-form-item label="关键字">
-            <el-input v-model="KEYWORD" placeholder="请输入关键字" size="middle" style="width:332px;"></el-input>
+            <el-input v-model="KEYWORD" placeholder="请输入关键字" ></el-input>
           </el-form-item>
           <el-button type="infor" @click="getList();">搜索</el-button>
   				<el-button type="primary" @click="dialogVisible = true">新增</el-button>

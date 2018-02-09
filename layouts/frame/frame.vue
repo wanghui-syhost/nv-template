@@ -104,7 +104,6 @@ export default {
     }
 }
 
-
 .frame__sidebar-wrapper {
     width: 180px;
     position: fixed;
@@ -123,20 +122,20 @@ export default {
     width: 100%;
     top: 82px;
     bottom: 0px;
-    overflow: hidden;
+    // overflow: hidden;
 
     .frame-main-container {
         transition: all .28s ease-out;
         position: absolute;
         top: 0;
-        bottom: 0;
+        // bottom: 0;
         width: auto;
         right: 0;
         left: 0;
         overflow-x: hidden;
         overflow-y: auto;
-        border-radius: 4px;
-        box-shadow: 0 0 4px 0 #bfc4b6;
+        //border-radius: 4px;
+        //box-shadow: 0 0 4px 0 #bfc4b6;
 
         &.has-sidebar {
             margin-left: 200px;

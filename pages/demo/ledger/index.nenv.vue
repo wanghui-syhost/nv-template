@@ -15,9 +15,11 @@ export default {
   watch: {
     ledgerCode (val) {
       if (val) {
-        this.$router.push({ path: '/ledger', query: {
-          'nv-code': val
-        } })
+        unfetch.open('/#/ledger', {
+          params: {
+            'nv-code': val
+          }
+        })
       }
     }
   }

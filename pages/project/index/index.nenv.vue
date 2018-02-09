@@ -2,36 +2,45 @@
     <nv-layout class="page-demo">
     <!-- 表单  -->
     <section class="search-form">
-    <el-form ref="form" :model="form">
+    <el-form ref="form" :model="form" :inline="true">
       <div class="search-form-one">
-            <span class="search-form-label">关键字搜索: </span>
-            <el-input v-model="form.keyword" placeholder="请输入关键字" size="large" style="width:332px;"></el-input>
-            <el-radio-group v-model="form.resource">
-                <el-radio label="申请日期"></el-radio>
-                <el-radio label="办结时间"></el-radio>
-            </el-radio-group>
-
-            <el-date-picker type="date" placeholder="选择日期" v-model="form.startDate" style="width:194px;"></el-date-picker>
-              <span>至</span>
+            <el-form-item label="关键字">
+              <el-input v-model="form.keyword" placeholder="请输入关键字"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-radio-group v-model="form.resource">
+                  <el-radio label="申请日期"></el-radio>
+                  <el-radio label="办结时间"></el-radio>
+              </el-radio-group>
+            </el-form-item>
+            <el-form-item>
+              <el-date-picker type="date" placeholder="选择日期" v-model="form.startDate" style="width:194px;"></el-date-picker>
+                <span>至</span>  
               <el-date-picker type="date" placeholder="选择日期" v-model="form.endDate"  style="width: 194px;"></el-date-picker>
+            </el-form-item>
             <el-button type="primary" style="float:right;">搜索</el-button>
       </div>
 
       <div class="search-form-one">
-          <span  class="search-form-label">抽查情况1:</span>
-           <el-select v-model="form.region0" placeholder="全部类型">
-              <el-option label="抽查情况1" value="type1"></el-option>
-              <el-option label="抽查情况2" value="type2"></el-option>
-          </el-select>
+            <el-form-item label="抽查情况1:">
+              <el-select v-model="form.region0" placeholder="全部类型">
+                <el-option label="抽查情况1" value="type1"></el-option>
+                <el-option label="抽查情况2" value="type2"></el-option>
+              </el-select>
+            </el-form-item>
 
-            <span  class="search-form-label">抽查情况2:</span> <el-select v-model="form.region1" placeholder="全部类型">
-              <el-option label="抽查情况1" value="type1"></el-option>
-              <el-option label="抽查情况2" value="type2"></el-option>
-          </el-select>
-            <span  class="search-form-label">抽查情况3:</span> <el-select v-model="form.region2" placeholder="全部类型">
-              <el-option label="抽查情况1" value="type1"></el-option>
-              <el-option label="抽查情况2" value="type2"></el-option>
-          </el-select>
+            <el-form-item label="抽查情况2:">
+              <el-select v-model="form.region1" placeholder="全部类型">
+                <el-option label="抽查情况1" value="type1"></el-option>
+                <el-option label="抽查情况2" value="type2"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="抽查情况3:">
+              <el-select v-model="form.region2" placeholder="全部类型">
+                <el-option label="抽查情况1" value="type1"></el-option>
+                <el-option label="抽查情况2" value="type2"></el-option>
+              </el-select>
+            </el-form-item>
       </div>
     </el-form>
     </section>

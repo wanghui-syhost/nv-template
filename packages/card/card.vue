@@ -36,7 +36,7 @@ export default {
     border-radius: 4px;
 
     &__top {
-        padding: 20px;
+        padding: 20px 20px 0px 20px;
         &-lable {
             
         }
@@ -45,7 +45,7 @@ export default {
     > * {
         background-color: #fff;
         margin: 0;
-        height: 40px;;
+        // height: 40px;;
     }
     .el-dialog__wrapper {
         background-color: transparent;

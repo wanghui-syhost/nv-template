@@ -1,5 +1,7 @@
 <template>
-    <nv-dynamic-tab nvCode="PROJECT_TAB" />
+    <nv-layout>
+        <nv-dynamic-tab nvCode="PROJECT_TAB" />
+    </nv-layout>
 </template>
 
 <script>
