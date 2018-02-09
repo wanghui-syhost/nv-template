@@ -1,6 +1,6 @@
 <template>
   <nv-layout>
-      <section class="search-form" style="padding:20px;">
+      <section class="search-form" style="padding:20px;" slot="top">
         <el-form>
             <!-- 搜索框  -->
   			<div class="search-form-one">

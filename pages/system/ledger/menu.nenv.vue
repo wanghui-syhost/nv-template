@@ -1,6 +1,6 @@
 <template>
   <div>
-    <section class="search-form" style="padding:10px 0">
+    <section class="search-form" style="padding:10px 0" slot="top">
       <el-form>
         <!-- 搜索框  -->
         <div class="search-form-one">
