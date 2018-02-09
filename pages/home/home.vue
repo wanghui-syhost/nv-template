@@ -100,14 +100,12 @@ export default {
 </script>
 <style  lang ="scss" scoped>
     .home {
-
         &-aside {
             position: fixed;
             background-color: #fff;
             height: 100%;
             width: 220px;
         }
-
         &-main {
             margin-left: 240px;
         }

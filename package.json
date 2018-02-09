@@ -15,6 +15,7 @@
     "js-cookie": "^2.1.4",
     "md5": "^2.2.1",
     "nenv": "git+http://192.168.37.5/nenv/nenv.git",
+    "node-sass": "^4.7.2",
     "screenfull": "^3.3.1"
   },
   "devDependencies": {

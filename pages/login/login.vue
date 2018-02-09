@@ -1,61 +1,29 @@
 <template>
-  <div class="login-container">
-    <el-form autoComplete="on" :model="loginForm" :rules="loginRules" ref="loginForm" label-position="left" label-width="0px" class="card-box login-form">
-      <h3 class="title">
-        <span class="logo"></span>
-        盈峰集团基础应用平台
-      </h3>
-      <el-form-item prop="loginName">
-        <el-input  type="text" v-model="loginForm.loginName" :class="{'has-content':loginForm.loginName.length>0}" autoComplete="off" placeholder="请输入用户名或infore邮箱" :maxlength="maxlength" ></el-input>
-      </el-form-item>
-      <el-form-item prop="pwd">
-        <el-input type="password" :class="{'has-content':loginForm.pwd.length>0}"  @keyup.enter.native="handleLogin" v-model="loginForm.pwd" autoComplete="off" placeholder="请输入密码" :maxlength="maxlength" ></el-input>
-      </el-form-item>
+  <div class="login">
+    <div class="login__main">
+        <div class="login__left">
+            <div class="login__form">
+                <div class="login__info">
+                    <span class="login__logo"></span>
+                    <span class="login__title">盈峰环境智慧水务平台
+                        <span class="login__title-desc">infore environmental intelligent water service platform</span>
+                    </span>
+                </div>
+                <div>
+                    <span class="login__username--icon" :class="{'on':focus.isUsernameFocus}"></span>
+                    <input type="text" v-model="loginForm.loginName" placeholder="用户名" autocomplete focus="onFocus('username')" class="login__username" maxlength="20">   
+                </div>
+                <div>
+                    <span class="login__pass--icon" :class="{'on':focus.isPassFocus}"></span>
+                    <input type="password" v-model="loginForm.pwd" placeholder="密码" autocomplete="off" @focus="onFocus('pass')"  class="login__pass" @keyup.enter="handleLogin"  maxlength="20">
+                </div>
+                <button class="login__login-btn" @click="handleLogin">登录</button>
+            </div>
+        </div>
+        <div class="login__right">
 
-      <div class="login-password">
-        <el-checkbox v-model="loginForm.isRememberPassword">
-          <span class="login-remember-pass-text">记住密码</span>
-        </el-checkbox>
-        <span class="login-forgot-password" @click="onTapForgotPass">忘记密码？</span>
-      </div>
-
-      <el-form-item>
-        <el-button type="primary" class="login-btn" :loading="loading" @click.native.prevent="handleLogin">
-          登录
-        </el-button>
-      </el-form-item>
-      <div class="login-down-tip" @click="downloadChrome">下载使用chorme浏览器， 用户体验更佳</div>
-    </el-form>
-
-    <el-dialog title="忘记密码" :visible.sync="isShowDialog">
-      <el-form ref="modifyForm" :model="modifyForm" :rules="modifyFormRules" >
-        <el-form-item prop="name">
-          <el-input v-model="modifyForm.name" placeholder="请输入用户名"></el-input>
-        </el-form-item>
-        <el-form-item  prop="mobile">
-          <el-col :span="18">
-             <el-input v-model="modifyForm.mobile" placeholder="请输入手机号" type="tel"></el-input>
-          </el-col>
-          <el-col class="line" :span="2">&nbsp;</el-col>
-          <el-col :span="4">
-            <el-button type="primary" @click="onGetValCode" :disabled="isCanGetCode">{{getCodeMsg}}</el-button>
-          </el-col>
-        </el-form-item>
-        <el-form-item prop="regCode">
-          <el-input v-model="modifyForm.regCode" placeholder="请输入验证码" type="number"></el-input>
-        </el-form-item>
-        <el-form-item prop="pass">
-          <el-input v-model="modifyForm.pass" type="password" placeholder="请输入新密码" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item prop="confirmPass">
-          <el-input v-model="modifyForm.confirmPass"  type="password" placeholder="请再次输入新密码" auto-complete="off"></el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="isShowDialog = false">取 消</el-button>
-        <el-button type="primary" @click="confirmToMofifyPass">确 定</el-button>
-      </div>
-    </el-dialog>
+        </div>
+    </div>
   </div>
 </template>
 
@@ -70,362 +38,192 @@ import vuex, { mapActions } from 'vuex'
 // import {checkType} from '@core/utils/validate'
 import utils from 'nenv/utils'
 export default {
-  name: 'login',
-  data() {
-    const validatePass = (rule, value, callback) => {
-      if (value.length < 6) {
-        callback(new Error('密码不能小于6位'));
-      } else if(!utils.rules.password.test(value)){
-        callback(new Error('有效密码:6-20位字母，数字，减号，下划线'));
-      }else{
-        callback();
+  name: "login",
+  data(){
+      return {
+        focus:{
+        isUsernameFocus:false,
+        isPassFocus: false,
+        
+        },
+        loginForm: {
+            loginName: 'super',
+            pwd: '123456'
+        },
       }
-    };
-    const validateUsername = (rule, value, callback) => {
-      if (value.length < 5) {
-        callback(new Error('用户名不能小于5位'));
-      } else if(value.length >20){
-        callback(new Error('用户名不能超过20位'));
-      }else if(!isValidateUsername(value)){
-        callback(new Error('有效的用户名:5-20位以字母开头，字母，数字，减号，下划线'));
-      }else{
-        callback();
-      }
-    };
-
-    // 是否是有效用户名
-    const isValidateUsername = (value) => {
-      return utils.rules.username.test(value) || utils.rules.phone.test(value) || utils.rules.email.test(value);
-    };
-
-    // 计算密码强度-1 0  1 2 3 4
-    // <=1 弱密码 
-    // 2 中密码
-    // 3 中强密码
-    // 4 强密码
-    const calcPassLever = (value) => {
-      let lever = -1;
-      if(!value){
-        lever = 0;
-      }else{
-        let len = value.length;
-        if(len <= 6){
-          len = 1;
+  },
+  methods:{
+    onFocus(type){
+        let me = this
+        me.focus={
+            isUsernameFocus:type=='username',
+            isPassFocus: type=='pass'
         }
-        let contains_lovercase = /[a-z]/.test(value);
-        let contains_number = /\d/.test(value);
-        let contains_uppercase = /[A-Z]/.test(value);
-        let contains_line =/[-|_]/.test(value);
-        let arr = [contains_lovercase, contains_number,  contains_uppercase, contains_line];
-        lever = arr.filter(x=>x==true).length;
-      }
-      return lever;
-    };
-
-    const validateMobile = (rule, value, callback)=>{
-      if (value.length < 11) {
-        callback(new Error('手机号码不能小于11位'));
-      } else if(!IG.PHONE.test(value)){
-        callback(new Error("请输入有效的11位手机号码"));
-      }else{
-        callback();
-      }
-    };
-
-    const validateInputPass = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('请再次输入密码'));
-      } else if (value !== this.modifyForm.pass) {
-        callback(new Error('两次输入密码不一致!'));
-      } else if(calcPassLever(value) <= 1) {
-        callback(new Error('密码不安全,请采用6-20位字母，数字，减号，下划线'));
-      } else{
-        callback();
-      }
-    };
-
-
-    const validatePass2 = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('请再次输入密码'));
-      } else if (value !== this.modifyForm.pass) {
-        callback(new Error('两次输入密码不一致!'));
-      } else{
-        callback();
-      }
-    };
-    const validateRegCode =  (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('请输入验证码'));
-      } else if (IG.REG.VALCODE.test(value)) {
-        callback(new Error('验证码为6位数字!'));
-      } else {
-        callback();
-      }
-    };
-    return {
-      loginForm: {
-        loginName: 'super',
-        pwd: '123456',
-        isRememberPassword: true,
-      },
-      getCodeMsg:'获取验证码',
-      maxlength: 20,
-      downloadChromeUrl:'http://sw.bos.baidu.com/sw-search-sp/software/89c331de74e21/ChromeStandalone_61.0.3163.100_Setup.exe',
-      isCanGetCode:false,
-      modifyForm: {
-        name: '',
-        mobile: '',
-        pass: '',
-        confirmPass: '',
-        regCode: '',
-      },
-      modifyFormRules: {
-        name: [
-          { required: true, trigger: 'blur',  validator: validateUsername  }
-        ],
-        mobile: [
-          { required: true, message:'请输入手机号'},
-          { type: 'tel',trigger: 'blur',validator: validateMobile }
-        ],
-        regCode:[
-          { required: true, message: '请输入6位数字的验证码', trigger: 'blur'},
-          { type:'number', trigger:'blue', validator: validateRegCode}
-        ],
-        pass: [
-          { required: true, trigger: 'change', validator: validateInputPass }
-        ],  
-        confirmPass: [
-          { required: true, trigger: 'blur', validator: validatePass2 }
-        ]
-      },
-      loginRules: {
-        loginName: [
-          { required: true, trigger: 'blur', validator: validateUsername }
-        ],
-        pwd: [
-          { required: true, trigger: 'blur', validator: validatePass }
-        ]
-      },
-      loading: false,
-      isShowDialog: false,
-    }
-  },
-  computed: {
-    'isChorme': () => {
-      return /chrome/.test(navigator.userAgent.toLowerCase());
     },
-    isEnabled(){
-      let flag = false;
-      flag = this.modifyForm.name.length>0 && this.modifyForm.name.phone.length == 11;
-      return flag;
-    }
-  },
-  methods: {
-    downloadChrome(){
-      window.location = this.downloadChromeUrl;
-    },
-
-    handleLogin() {
-      const self = this;
-      self.$refs.loginForm.validate(valid => {
-        if (valid) {
-          //debugger
-          self.loading = true;
-          //console.log(md5(self.loginForm.pwd))
-          let reqParams = {
-            'loginName': self.loginForm.loginName,
-            'pwd': '14e1b600b1fd579f47433b88e8d85291'//md5(md5(self.loginForm.pwd))
-          }
-          this
-          .login(reqParams)
+    handleLogin(){
+        let me = this
+        let reqParams = {
+            'loginName': me.loginForm.loginName,
+            'pwd': md5(md5(me.loginForm.pwd))
+        }
+        me.login(reqParams)
           .then(() => {
-            self.$router.push('/home')
-            self.loading = false
+            me.$router.push('/home')
+            me.loading = false
 
           }).catch((error) => {
-            self.loading = false
+            me.loading = false
             console.log(error)
           })
-          return
-        } else {
-          console.log('错误的信息提交');
-          return false;
-        }
-      });
-    },
-    // 忘记密码
-    onTapForgotPass() {
-      console.log("忘记密码");
-      this.isShowDialog = true;
-    },
-
-    //忘记密码 获取验证码
-    onGetValCode(){
-        let me = this;
-        let mobile = me.modifyForm.mobile;
-        let loginName = me.modifyForm.name;
-
-        if(loginName=='' ||loginName.length<=3){
-          me.$message("用户名长度不能小于4位");
-          return;
-        }
-        if(mobile=='' ||mobile.length<=10){
-          me.$message("手机号码长度为11位");
-          return;
-        }
-        GetValCode(loginName, mobile).then(resp=>{
-            console.log(resp);
-            let {code,msg} = resp.data;
-            if(code==0){
-              me.$message("验证码发送成功");
-              me.isCanGetCode = true;
-              setTimeout(function(){
-                  me.isCanGetCode = false;
-              },1000*60);
-            }else{
-              me.$message.error(msg);
-            }
-        });
-    },
-    // 提交修改密码
-    confirmToMofifyPass(){
-      let me = this;
-      me.$refs.modifyForm.validate(valid => {
-          if(valid){
-            let reqParams = {
-              loginName: me.modifyForm.name,
-              mobile: me.modifyForm.mobile,
-              code: me.modifyForm.regCode,
-              newPassword: md5(md5(me.modifyForm.pass))
-            }
-            ModifyPass(reqParams).then(resp=>{
-              console.log(resp);
-              let {code,msg} = resp.data;
-              if(code==0){
-                me.$message("修改密码成功");
-                me.isShowDialog = false;
-              }else{
-                me.$message.error("修改密码失败");
-              }
-            })
-          }else{
-            console.log("提交修改密码表单错误");
-            return false;
-          }
-        });
     },
     ...mapActions(['login']),
     ...mapActions('user', [
       'userLogin'
     ])
-
-  },
-
+  }
 }
 </script>
-
-<style rel="stylesheet/scss" lang="scss">
-// @import "src/styles/mixin.scss";
-.tips {
-  font-size: 14px;
-  color: #fff;
-  margin-bottom: 5px;
+<style scoped lang ="scss">
+html,body, #nenv_root{
+    height: 100%;
+    width: 100%;
 }
-.login-container {
-  position: relative;
-  position: fixed;
-  left: 0;
-  right: 0;
-  top:0;
-  bottom: 0;
-  height: 100%;
-  width: 100%;
-  background: url(./assets/imgs/login_bg.png);
-  background-size:cover; 
-  overflow: hidden;
-  // input:-webkit-autofill {
-  //   -webkit-box-shadow: 0 0 0px 1000px #293444 inset !important;
-  //   -webkit-text-fill-color: #fff !important;
-  // }
-  input {
-    background: transparent;
-    border: 0px;
-    -webkit-appearance: none;
-    padding: 16px 20px;
-   
-  }
-  .el-input {
-    display: inline-block;
-    height: 42px;
-    line-height: 42px;
-    border-radius: 4px;
-    border: solid 1px #e5e5e5;
-    font-size: 14px;
-    color: #333;
-    &.has-content{
-       background: #faffbd;
-    }
-  }
-  .title {
-    height: 40px;
-    font-size: 26px;
-    letter-spacing: -0.4px;
-    color: #333333;
-    text-align: center;
-    .logo {
-      display: inline-block;
-      width: 40px;
-      height: 40px;
-      //background: url(../../assets/img/ic_logo.png);
-      background-size: cover;
-      vertical-align: top;
-    }
-  }
-  .login-form {
-    position: fixed; // position: absolute;
-    left: 0;
+.login{
+    position: absolute;
+    top:0;
+    margin:0 auto;
     right: 0;
-    width: 396px;
-    height: 376px;
-    padding: 4px 30px 30px 30px; // margin: 323px auto auto auto;
-    // margin:20% auto auto auto;
-    left: 50%;
-    top: 50%;
-    margin-left: -198px;
-    margin-top: -188px;
-    border-radius: 4px;
-    background-color: #ffffff;
-    .login-password {
-      height: 16px;
-      margin-top: 20px;
-      margin-bottom: 20px;
-      .login-remember-pass-text {
-        color: #696969;
-      }
-      .login-forgot-password {
-        float: right;
-        color: #3b8cff;
-      }
+    left:0;
+    bottom: 0;
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    background-image: url(./assets/login/ic_login_bg.png);
+    background-size: cover;
+    &__main{
+        height:auto;
+        min-height: 800px;
+        margin-top:80px;
+        display: flex;
+        justify-content: center;
     }
-    .login-btn {
-      display: block;
-      width: 100%;
-      height: 42px;
-      font-size: 20px;
+    &__left{
+        width: 550px;
+        height: 800px;
+        min-width:550px ;
+        flex: 0 1;
+        max-width: 550px;
+        text-align: center;
+        padding-left:100px;
+        padding-right:100px;
+        background: #FFF;
+    }
+    &__info{
+        margin-top: 260px;
+        display: flex;
+        overflow: hidden;
+    }
+    &__logo{
+        width:60px;
+        height:60px; 
+        display: inline-block;
+        background:  url(./assets/login/ic_login_logo_60x60.png);
+        border-radius: 4px ; 
+    }
+    &__title{
+        font-size: 28px;
+        color:#666;
+        line-height: 28px;
+        height: 28px;
+        flex:1;
+        display: inline-block;
+        vertical-align: top;
+        text-align: left;
+        padding-left: 13px;
+        &-desc{
+          position: relative;
+          width: 100%;
+          margin-top: 9px;
+          display: inline-block;
+          font-size: 11px;
+          text-align: left;
+
+        }
     }
 
-    .login-down-tip {
-      text-align: left;
-      font-size: 16px;
-      height: 16px;
-      margin-top: 20px;
-      color: #398dee;
+    &__username--icon{
+        display: inline-block;
+        width: 18px;
+        height: 18px;
+        background: url(./assets/login/ic_login_username.png);
+        position: relative;
+        left: -265px;
+        top: 40px;
+        &.on{
+            background: url(./assets/login/ic_login_username_on.png);
+        }
     }
-  }
- 
-  .forget-pwd {
-    color: #fff;
-  }
+    &__username{
+        display: block;
+        width:349px;
+        height: 50px;
+        text-align:left;
+        border:none;
+        color:#333;
+        font-size: 16px;
+        padding-left: 33px;
+        outline: none;
+        border-bottom:1px solid #ccc;
+    }
+    &__pass--icon{
+        width: 18px;
+        height: 18px;
+        display: inline-block;
+        position: relative;
+        left: -265px;
+        top: 40px;
+        background: url(./assets/login/ic_login_pass.png);
+        &.on{
+            background: url(./assets/login/ic_login_pass_on.png);
+        }
+    }
+    &__pass{
+        width:349px;
+        height: 50px;
+        border:none;
+        color:#333;
+        font-size: 16px;
+        padding-left: 33px;
+        outline: none;
+        border-bottom:1px solid #ccc;
+        display: block;
+        text-align:left;
+    }
+    input[type=text]:focus, input[type=password]:focus {
+        border-bottom:1px solid #3C8CFF;
+        color:#333;
+    }
+    &__login-btn{
+        margin-top:50px;
+        display: block;
+        width:361px;
+        height:60px; 
+        /* background:url(./assets/login/ic_login_btn-bg.png); */
+        background:linear-gradient(rgba(98,104,254,1),rgba(89,157,255,1));
+        border-radius: 24px ; 
+        box-shadow: 0 2px 4px 0px #CCD0E6;
+        outline: none;
+        color:#fff;
+    }
+    &__right{
+        flex:auto;
+        max-width: 890px;
+        background:url(./assets/login/ic_login_right.png);
+
+    }
+
 }
+
 </style>
+
+
