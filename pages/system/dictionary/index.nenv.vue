@@ -1,14 +1,14 @@
 <template>
   <nv-layout class="page-demo">
-      <section class="search-form">
+      <section class="search-form" slot="top">
         <el-form :inline="true">
           <!-- 搜索框  -->
           <div class="search-form-one">
              <el-form-item label="字典名称">
-               <el-input v-model="NAME" placeholder="请输入字典名称" size="middle" style="width:332px;"></el-input>
+               <el-input v-model="NAME" placeholder="请输入字典名称" ></el-input>
              </el-form-item>
               <el-form-item label="字典状态">
-                 <el-select v-model="STATUS" placeholder="">
+                <el-select v-model="STATUS" placeholder="">
                   <el-option v-for="item in searchStatus" :key="item.value" :label="item.label" :value="item.value"></el-option>
                 </el-select>
               </el-form-item>
@@ -20,25 +20,25 @@
 
       <section>
         <el-table :data="list" v-loading.body="listLoading" element-loading-text="拼命加载中" border fit highlight-current-row>
-         <el-table-column label="类别名称" width="150px">
+         <el-table-column label="类别名称" min-width="25%">
             <template slot-scope="scope">
               <span> {{scope.row.NAME}}</span>
             </template>
           </el-table-column>
          
-          <el-table-column label="类别-代码（类别区分唯一标识）" width="250px">
+          <el-table-column label="类别-代码" min-width="25%">
             <template slot-scope="scope">
               <span> {{scope.row.CODE}}</span>
             </template>
           </el-table-column>
 
-          <el-table-column label="状态" align="center" width="100px">
+          <el-table-column label="状态" align="center" min-width="10%">
             <template slot-scope="scope">
                <el-tag :type="scope.row.STATUS | statusFilter">{{scope.row.STATUS == 'VALID' ? '有效': '无效'}}</el-tag>
             </template>
           </el-table-column>
           
-           <el-table-column label="操作" align="center">
+           <el-table-column label="操作" align="center" min-width="40%">
             <template slot-scope="scope">
                <el-button size="small" type="infor" @click="goDictionaryData(scope.row)" icon="information">小类</el-button>
                <el-button size="small" type="infor" @click="setDictionaryStatus(scope.row, scope.row.STATUS == 'VALID' ? 'INVALID': 'VALID')">{{scope.row.STATUS == 'INVALID' ? '设为有效': '设为无效'}}</el-button>

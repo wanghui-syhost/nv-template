@@ -1,84 +1,129 @@
 <template>
-  <div class="home-detail">
-    <el-table :data="list" v-loading.body="listLoading" element-loading-text="拼命加载中" border fit highlight-current-row>
-      <el-table-column align="left" label='序号'>
-        <template slot-scope="scope">
-          {{scope.row.ROW_ID}}
-        </template>
-      </el-table-column>
-      <el-table-column label="名称"  align="center">
-        <template slot-scope="scope">
-          <span  v-show="!scope.row.isEdit">{{scope.row.INFO_NAME}}</span>
-          <el-input v-show="scope.row.isEdit" size="small" v-model="scope.row.INFO_NAME"></el-input>
-        </template>
-      </el-table-column>
-      <el-table-column label="类型"  align="center">
-        <template slot-scope="scope">
-          {{scope.row.INFO_TYPE}}
-        </template>
-      </el-table-column>
-      <el-table-column label="状态"  align="center">
-        <template slot-scope="scope">
-          <!-- {{scope.row.STATUS}} -->
-          <span v-show="!scope.row.isEdit">{{scope.row.STATUS | stateFilter}}</span>
-           <el-select v-model="scope.row.STATUS" placeholder="请选择" v-show="scope.row.isEdit">
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
-              </el-option>
-            </el-select>
-
-        </template>
-      </el-table-column>
-      <el-table-column align="center" prop="创建时间" label="创建时间">
-        <template slot-scope="scope">
-          <i class="el-icon-time"></i>
-          <span>{{scope.row.CREATE_TIME  | DateTimeFilter(0)}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" prop="截止时间" label="截止时间">
-        <template slot-scope="scope">
-          <i class="el-icon-time"></i>
-          <span>{{scope.row.END_TIME | DateTimeFilter(0)}}</span>
-        </template>
-      </el-table-column>
-
-      <!-- 编辑 -->
-      <el-table-column  label="操作">
-        <template slot-scope="scope">
-        <div class="opt-cell">
-          <el-button v-show='!scope.row.isEdit' type="primary" @click='scope.row.isEdit = true' size="small" icon="edit">编辑</el-button>
-          <el-button v-show='scope.row.isEdit' type="success" @click='modifyComplete(scope.row)' size="small" icon="check">完成</el-button>
-          <el-button type="danger" @click='removeRow(scope.row)' size="small" icon="delete">删除</el-button>
+<nv-layout>
+  <section class="search-form">
+      <el-form ref="form" :model="form" :inline="true">
+        <div class="search-form-one">
+              <el-form-item label="关键字">
+                <el-input v-model="form.keyword" placeholder="请输入关键字"></el-input>
+              </el-form-item>
+              <!-- <el-form-item>
+                <el-radio-group v-model="form.resource">
+                    <el-radio label="申请日期"></el-radio>
+                    <el-radio label="办结时间"></el-radio>
+                </el-radio-group>
+              </el-form-item> -->
+              <el-form-item label="创建时间">
+                <el-date-picker type="date" placeholder="选择日期" v-model="form.startDate" style="width:194px;"></el-date-picker>
+                  <span>至</span>  
+                <el-date-picker type="date" placeholder="选择日期" v-model="form.endDate"  style="width: 194px;"></el-date-picker>
+              </el-form-item>
+              <el-button type="primary" style="float:right;">搜索</el-button>
         </div>
-        </template>
-      </el-table-column>
-    </el-table>
 
-    <div class="home-detail__page">
-        <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="pageIndex"
-        :page-sizes="[10, 20, 30, 40]"
-        :page-size="pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="totalCount">
-      </el-pagination>
-    </div>
-    
+        <div class="search-form-one">
+              <el-form-item label="抽查情况">
+                <el-select v-model="form.region0" placeholder="全部类型">
+                  <el-option label="抽查情况1" value="type1"></el-option>
+                  <el-option label="抽查情况2" value="type2"></el-option>
+                </el-select>
+              </el-form-item>
+
+              <el-form-item label="抽查情况">
+                <el-select v-model="form.region1" placeholder="全部类型">
+                  <el-option label="抽查情况1" value="type1"></el-option>
+                  <el-option label="抽查情况2" value="type2"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="抽查情况">
+                <el-select v-model="form.region2" placeholder="全部类型">
+                  <el-option label="抽查情况1" value="type1"></el-option>
+                  <el-option label="抽查情况2" value="type2"></el-option>
+                </el-select>
+              </el-form-item>
+        </div>
+      </el-form>
+      </section>
+      <section class="search-table">
+        <el-table :data="list" v-loading.body="listLoading" element-loading-text="拼命加载中" border fit highlight-current-row>
+          <el-table-column align="left" label='序号' min-width="5%">
+            <template slot-scope="scope">
+              {{scope.row.ROW_ID}}
+            </template>
+          </el-table-column>
+          <el-table-column label="名称"  align="center" min-width="10%">
+            <template slot-scope="scope">
+              <span  v-show="!scope.row.isEdit">{{scope.row.INFO_NAME}}</span>
+              <el-input v-show="scope.row.isEdit" size="small" v-model="scope.row.INFO_NAME"></el-input>
+            </template>
+          </el-table-column>
+          <el-table-column label="类型"  align="center" min-width="10%">
+            <template slot-scope="scope">
+              {{scope.row.INFO_TYPE}}
+            </template>
+          </el-table-column>
+          <el-table-column label="状态"  align="center" min-width="10%">
+            <template slot-scope="scope">
+              <!-- {{scope.row.STATUS}} -->
+              <span v-show="!scope.row.isEdit">{{scope.row.STATUS | stateFilter}}</span>
+              <el-select v-model="scope.row.STATUS" placeholder="请选择" v-show="scope.row.isEdit">
+                  <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
+
+            </template>
+          </el-table-column>
+          <el-table-column align="center" prop="创建时间" label="创建时间" min-width="12%">
+            <template slot-scope="scope">
+              <i class="el-icon-time"></i>
+              <span>{{scope.row.CREATE_TIME  | DateTimeFilter(0)}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" prop="截止时间" label="截止时间" min-width="12%">
+            <template slot-scope="scope">
+              <i class="el-icon-time"></i>
+              <span>{{scope.row.END_TIME | DateTimeFilter(0)}}</span>
+            </template>
+          </el-table-column>
+
+          <!-- 编辑 -->
+          <el-table-column  label="操作" min-width="15%">
+            <template slot-scope="scope">
+            <div class="opt-cell">
+              <el-button v-show='!scope.row.isEdit' type="primary" @click='scope.row.isEdit = true' size="small" icon="edit">编辑</el-button>
+              <el-button v-show='scope.row.isEdit' type="success" @click='modifyComplete(scope.row)' size="small" icon="check">完成</el-button>
+              <el-button type="danger" @click='removeRow(scope.row)' size="small" icon="delete">删除</el-button>
+            </div>
+            </template>
+          </el-table-column>
+        </el-table>
+
+        <div class="home-detail__page">
+            <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="pageIndex"
+            :page-sizes="[10, 20, 30, 40]"
+            :page-size="pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="totalCount">
+          </el-pagination>
+        
 
 
-    <el-dialog title="提示" :visible.sync="isShowDeleteDialog" size="tiny">
-      <span>确认要删除这条记录吗</span>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="cancelDelete">取 消</el-button>
-        <el-button type="primary" @click="confirmDelete">确 定</el-button>
-      </span>
-    </el-dialog>
-  </div>
+        <el-dialog title="提示" :visible.sync="isShowDeleteDialog" size="tiny">
+          <span>确认要删除这条记录吗</span>
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="cancelDelete">取 消</el-button>
+            <el-button type="primary" @click="confirmDelete">确 定</el-button>
+          </span>
+        </el-dialog>
+      </div>
+  </section>
+  </nv-layout>
 </template>
 
 <script>
@@ -87,6 +132,20 @@
     name: 'homeDetailList',
     data() {
       return {
+        form: {
+          name: '盈峰环境',
+          region: '',
+          startDate: '',
+          endDate: '',
+          delivery: false,
+          type: [],
+          resource: '',
+          desc: '',
+          region0:'',
+          region1:'',
+          region2:'',
+          region3:'',
+        },
         type:0,
         list: null,
         listLoading: true,
@@ -165,18 +224,14 @@
         STATUS : row.STATUS
       }
       modifyInfo(data).then( response=>{
-        let {code, msg, data} = response.data;
-        if(code==0){
           row.isEdit = false;
           me.$message({
             showClose: true,
             message: '修改成功'
           });
-        }else{
-          me.$message.error('修改失败');
-        }
       }).catch(err=>{
         console.error(err);
+        me.$message.error('修改失败');
       })
     },
     cancelDelete(){

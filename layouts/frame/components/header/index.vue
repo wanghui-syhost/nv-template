@@ -24,9 +24,9 @@
             <a>
                 <i class="png-icon alarm middle" />
             </a>
-            <a @click="changeSkin">
+            <!-- <a @click="changeSkin">
                 <i class="png-icon skin middle" />
-            </a>
+            </a> -->
             <span @click = "handlerShowTitle"> 切换title显示 </span>
             <span @click = "handlerMaxWidth"> 全屏/限宽 </span>
             <span @click = "handerLayout"> 切换布局 </span>
@@ -126,6 +126,7 @@ export default {
     left: 0;
     right: 0;
     display: flex;
+    z-index: 1000;
 
     height: 62px;
     background-color: #3b8cff;
@@ -140,13 +141,13 @@ export default {
         margin-right: 20px;
     }                   
     &__logo {
-        height: 40px;
-        width: 40px;
+        height: 33px;
+        width: 33px;
         border-radius: 4px;
         vertical-align: middle;
     }
     &__title {
-        font-size: 20px;
+        font-size: 18px;
         font-weight: 600;
         color: #fff;
         text-overflow: ellipsis;

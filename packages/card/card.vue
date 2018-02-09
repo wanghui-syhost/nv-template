@@ -1,6 +1,6 @@
 <template>
     <div class="nv-layout" :class="{'is-card-layout': isCardLayout}">
-        <div class="nv-layout__top" v-if="isShowTitle || $slots.top" >
+        <div class="nv-layout__top" :class="{'is-title-show': isShowTitle}" v-if="isShowTitle || $slots.top" >
             <label class="nv-layout__top-label" v-if="isShowTitle">{{ acitveMenu.menuName }}</label>
             <slot name = "top"/>
         </div>
@@ -36,18 +36,29 @@ export default {
     border-radius: 4px;
 
     &__top {
-        padding: 20px;
-        &-lable {
-            
+        padding: 20px 20px 0px 20px;
+        &-label {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 20px;
+            &:before {
+                content: "";
+                position: absolute;
+                left: -10px;
+                width: 6px;
+                border-radius: 6px;
+                height: 100%;
+                background-color: #3b8cff;
+            }
         }
     }
 
     > * {
         background-color: #fff;
         margin: 0;
-        height: 40px;;
+        // height: 40px;;
     }
-    > .el-dialog__wrapper {
+    .el-dialog__wrapper {
         background-color: transparent;
     }
 
@@ -59,6 +70,10 @@ export default {
         background-color: transparent;
         > * {
             margin-bottom: 10px;
+        }
+
+        .nv-layout__top {
+            padding-bottom: 20px;
         }
 
         .nv-layout__main {

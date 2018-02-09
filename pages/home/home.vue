@@ -73,9 +73,6 @@ export default {
             ]
         }
     },
-    created () {
-        console.log(this)
-    },
     computed:  {
         projectTitle () {
             return nenv.project.title
@@ -107,7 +104,9 @@ export default {
             width: 220px;
         }
         &-main {
-            margin-left: 240px;
+            background-color: rgba(248,249,250,1); 
+            padding-left: 20px;
+            margin-left: 220px;
         }
 
         &-top {

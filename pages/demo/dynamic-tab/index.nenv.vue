@@ -1,11 +1,7 @@
 <template>
-    <div>
-        <h2>动态台账参数</h2>
-        <div>
-            
-        </div>
+    <nv-layout>
         <nv-dynamic-tab nvCode="PROJECT_TAB" />
-    </div>
+    </nv-layout>
 </template>
 
 <script>

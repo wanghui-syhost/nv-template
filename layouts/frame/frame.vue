@@ -96,21 +96,24 @@ export default {
         max-width: 1200px;
         margin: 0 auto;
 
+        padding-top: 20px;
         .frame__sidebar-wrapper {
+            padding-top: 0;
             top: 82px;
         }
     }
 }
 
-
 .frame__sidebar-wrapper {
     width: 180px;
     position: fixed;
     top: 62px;
+    padding-top: 20px;
     bottom: 0;
     z-index: 1001;
     background-color: #fff;
     overflow: hidden;
+    box-shadow: 0 0 4px 0 #BFC4B6;
     transition: all .28s ease-out;
 }
 
@@ -119,42 +122,23 @@ export default {
     width: 100%;
     top: 82px;
     bottom: 0px;
-    overflow: hidden;
-
-
-    &.auto-sidebar {
-        .e-sidebar-wrapper {
-            transform: translate(-140px, 0);
-            .e-sidebar-container {
-                transform: translate(132px, 0);
-            }
-            &:hover {
-                transform: translate(0, 0);
-                .e-sidebar-container {
-                    transform: translate(0, 0);
-                }
-            }
-        }
-        .e-main-container {
-            margin-left: 40px;
-        }
-    }
+    // overflow: hidden;
 
     .frame-main-container {
         transition: all .28s ease-out;
         position: absolute;
         top: 0;
-        bottom: 0;
+        // bottom: 0;
         width: auto;
         right: 0;
         left: 0;
         overflow-x: hidden;
         overflow-y: auto;
+        //border-radius: 4px;
+        //box-shadow: 0 0 4px 0 #bfc4b6;
 
         &.has-sidebar {
             margin-left: 200px;
-            padding: 20px;
-    		background-color: #ffffff;
         }
     }
 }

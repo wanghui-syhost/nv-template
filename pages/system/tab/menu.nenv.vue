@@ -1,6 +1,6 @@
 <template>
   <nv-layout>
-    <section class="search-form" style="padding:10px 0">
+    <section class="search-form" style="padding:10px 0" slot="top">
       <el-form>
         <!-- 搜索框  -->
         <div class="search-form-one">
@@ -81,8 +81,8 @@
         </el-row>
        <el-row type="flex" class="row-bg" justify="space-around">
           <el-col :span="12">
-            <el-form-item label="排序序号">
-              <el-input v-model="addForm.SORT" placeholder="请输入排序序号">排序序号</el-input>
+            <el-form-item label="排序序号" prop="SORT">
+              <el-input v-model="addForm.SORT" placeholder="请输入排序序号" :maxlength="5">排序序号</el-input>
             </el-form-item>
           </el-col>
          
@@ -118,8 +118,8 @@
         </el-row>
         <el-row type="flex" class="row-bg" justify="space-around">
           <el-col :span="12">
-            <el-form-item label="排序序号">
-              <el-input v-model="modifyForm.SORT" placeholder="请输入排序序号">排序序号</el-input>
+            <el-form-item label="排序序号" prop="SORT">
+              <el-input v-model="modifyForm.SORT" placeholder="请输入排序序号" :maxlength="5">排序序号</el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -139,6 +139,13 @@ import { getTabMenuDatas, deleteTabMenu, saveTabMenu,updateTabMenu } from './api
 export default {
   name: 'TabMenu',
   data() {
+    var sortValid = (rule, value, callback) => {
+      var reg = /^[0-9]+$/; 
+      if(!value.match(reg)){
+          callback(new Error('排序序号只能是数字'));
+      } 
+      callback();
+    };
     return {
       isShowAddDialog: false,
       isShowEditDialog: false,
@@ -159,12 +166,14 @@ export default {
       },
       addRules: {
         NAME: [{required: true, message: '菜单名称不能为空', trigger: 'blur'}],
-        URL: [{required: true, message: '菜单url不能为空', trigger: 'blur'}]
+        URL: [{required: true, message: '菜单url不能为空', trigger: 'blur'}],
+        SORT: [{validator:sortValid, trigger: 'blur'}]
       },
       modifyForm: {},
       modifyRules:{
         NAME: [{required: true, message: '菜单名称不能为空', trigger: 'blur'}],
-        URL: [{required: true, message: '菜单url不能为空', trigger: 'blur'}]
+        URL: [{required: true, message: '菜单url不能为空', trigger: 'blur'}],
+        SORT: [{validator:sortValid, trigger: 'blur'}]
         }
     };
   },

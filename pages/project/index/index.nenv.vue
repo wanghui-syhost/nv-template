@@ -1,87 +1,96 @@
 <template>
-    <nv-layout class="page-demo">
+  <nv-layout >
     <!-- 表单  -->
-    <section class="search-form">
-    <el-form ref="form" :model="form">
-      <div class="search-form-one">
-            <span class="search-form-label">关键字搜索: </span>
-            <el-input v-model="form.keyword" placeholder="请输入关键字" size="large" style="width:332px;"></el-input>
-            <el-radio-group v-model="form.resource">
-                <el-radio label="申请日期"></el-radio>
-                <el-radio label="办结时间"></el-radio>
-            </el-radio-group>
+    <section class="search-form" slot = "top">
+      <el-form ref="form" :model="form" :inline="true">
+        <div class="search-form-one">
+              <el-form-item label="关键字">
+                <el-input v-model="form.keyword" placeholder="请输入关键字"></el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-radio-group v-model="form.resource">
+                    <el-radio label="申请日期"></el-radio>
+                    <el-radio label="办结时间"></el-radio>
+                </el-radio-group>
+              </el-form-item>
+              <el-form-item>
+                <el-date-picker type="date" placeholder="选择日期" v-model="form.startDate" style="width:194px;"></el-date-picker>
+                  <span>至</span>  
+                <el-date-picker type="date" placeholder="选择日期" v-model="form.endDate"  style="width: 194px;"></el-date-picker>
+              </el-form-item>
+              <el-button type="primary" style="float:right;">搜索</el-button>
+        </div>
 
-            <el-date-picker type="date" placeholder="选择日期" v-model="form.startDate" style="width:194px;"></el-date-picker>
-              <span>至</span>
-              <el-date-picker type="date" placeholder="选择日期" v-model="form.endDate"  style="width: 194px;"></el-date-picker>
-            <el-button type="primary" style="float:right;">搜索</el-button>
-      </div>
+        <div class="search-form-one">
+              <el-form-item label="抽查情况1:">
+                <el-select v-model="form.region0" placeholder="全部类型">
+                  <el-option label="抽查情况1" value="type1"></el-option>
+                  <el-option label="抽查情况2" value="type2"></el-option>
+                </el-select>
+              </el-form-item>
 
-      <div class="search-form-one">
-          <span  class="search-form-label">抽查情况1:</span>
-           <el-select v-model="form.region0" placeholder="全部类型">
-              <el-option label="抽查情况1" value="type1"></el-option>
-              <el-option label="抽查情况2" value="type2"></el-option>
-          </el-select>
-
-            <span  class="search-form-label">抽查情况2:</span> <el-select v-model="form.region1" placeholder="全部类型">
-              <el-option label="抽查情况1" value="type1"></el-option>
-              <el-option label="抽查情况2" value="type2"></el-option>
-          </el-select>
-            <span  class="search-form-label">抽查情况3:</span> <el-select v-model="form.region2" placeholder="全部类型">
-              <el-option label="抽查情况1" value="type1"></el-option>
-              <el-option label="抽查情况2" value="type2"></el-option>
-          </el-select>
-      </div>
-    </el-form>
+              <el-form-item label="抽查情况2:">
+                <el-select v-model="form.region1" placeholder="全部类型">
+                  <el-option label="抽查情况1" value="type1"></el-option>
+                  <el-option label="抽查情况2" value="type2"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="抽查情况3:">
+                <el-select v-model="form.region2" placeholder="全部类型">
+                  <el-option label="抽查情况1" value="type1"></el-option>
+                  <el-option label="抽查情况2" value="type2"></el-option>
+                </el-select>
+              </el-form-item>
+        </div>
+      </el-form>
     </section>
     <!-- 表格 -->
     <section class="search-table">
-    <el-table :data="list" v-loading.body="listLoading" element-loading-text="拼命加载中" border fit highlight-current-row>
-      <el-table-column align="center" label='序号' width="95">
-        <template slot-scope="scope">
-          {{scope.row.ROW_ID}}
-        </template>
-      </el-table-column>
-      <el-table-column label="名称" align="left">
-        <template slot-scope="scope">
-          {{scope.row.AFFAIR_NAME}}
-        </template>
-      </el-table-column>
-      <el-table-column label="类型" align="left">
-        <template slot-scope="scope">
-          <span>{{scope.row.AFFAIR_TYPE}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="详情" align="left" width="400px" class="page-demo__search-table--row-detail">
-        <template slot-scope="scope">
-          <span>{{scope.row.AFFAIR_DETAILS}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="创建用户" align="center">
-        <template slot-scope="scope">
-          {{scope.row.CREATE_USER}}
-        </template>
-      </el-table-column>
-      <el-table-column label="创建时间" align="center">
-        <template slot-scope="scope">
-          {{scope.row.CREATE_TIME}}
-        </template>
-      </el-table-column>
-      <el-table-column label="更新时间" align="center">
-        <template slot-scope="scope">
-          {{scope.row.UPDATE_TIME}}
-        </template>
-      </el-table-column>
-    
-      <el-table-column align="center" v-show="isShowOpt" label="操作" width="200" v-if="false">
-        <template slot-scope="scope">
-          <el-button v-show = "isAllowAdd" size="mini">添加</el-button>
-          <el-button v-show = "isAllowModify" size="mini">修改</el-button>
-          <el-button v-show = "isAllowRemove" size="mini">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+      <el-table :data="list" v-loading.body="listLoading" element-loading-text="拼命加载中" border fit highlight-current-row>
+        <el-table-column align="center" label='序号' width="95">
+          <template slot-scope="scope">
+            {{scope.row.ROW_ID}}
+          </template>
+        </el-table-column>
+        <el-table-column label="名称" align="left">
+          <template slot-scope="scope">
+            {{scope.row.AFFAIR_NAME}}
+          </template>
+        </el-table-column>
+        <el-table-column label="类型" align="left">
+          <template slot-scope="scope">
+            <span>{{scope.row.AFFAIR_TYPE}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="详情" align="left" width="400px" class="page-demo__search-table--row-detail">
+          <template slot-scope="scope">
+            <span>{{scope.row.AFFAIR_DETAILS}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="创建用户" align="center">
+          <template slot-scope="scope">
+            {{scope.row.CREATE_USER}}
+          </template>
+        </el-table-column>
+        <el-table-column label="创建时间" align="center">
+          <template slot-scope="scope">
+            {{scope.row.CREATE_TIME}}
+          </template>
+        </el-table-column>
+        <el-table-column label="更新时间" align="center">
+          <template slot-scope="scope">
+            {{scope.row.UPDATE_TIME}}
+          </template>
+        </el-table-column>
+      
+        <el-table-column align="center" v-show="isShowOpt" label="操作" width="200" v-if="false">
+          <template slot-scope="scope">
+            <el-button v-show = "isAllowAdd" size="mini">添加</el-button>
+            <el-button v-show = "isAllowModify" size="mini">修改</el-button>
+            <el-button v-show = "isAllowRemove" size="mini">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
 
       <!-- 分页器 -->
       <div class="search-pagination">
@@ -192,7 +201,7 @@
 
 <style scoped lang="scss">
 .page-demo{
-  padding:16px 20px;
+  // padding:16px 20px;
   .search-form{
     padding: 20px 20px;
     border-radius: 4px;

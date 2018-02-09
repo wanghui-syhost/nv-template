@@ -1,6 +1,6 @@
 <template>
   <nv-layout>
-    <section class="search-form">
+    <section class="search-form" slot="top">
       <el-form>
         <!-- 搜索框  -->
         <div class="search-form-one">
@@ -11,22 +11,22 @@
 
     <section class="search-table">
       <el-table :data="list" v-loading.body="listLoading" element-loading-text="拼命加载中" @sort-change="sortChange" border fit highlight-current-row  style="width: 100%">
-        <el-table-column label="任务分组" prop = "JOB_GROUP" width="100px" />
-        <el-table-column label="任务名称" prop = "JOB_NAME" sortable  width="105px" />
-        <el-table-column label="运行时间" prop = "CRON_EXPRESSION" width="100px" />
-        <el-table-column label="状态" width="70px">
+        <el-table-column label="分组" prop = "JOB_GROUP" min-width="8%" />
+        <el-table-column label="名称" prop = "JOB_NAME" sortable  min-width="8%" />
+        <el-table-column label="运行时间" prop = "CRON_EXPRESSION" min-width="10%" />
+        <el-table-column label="状态" min-width="7%">
           <template slot-scope="scope">
             {{ scope.row.STATUS | statusFilter }}
           </template>
         </el-table-column>
-        <el-table-column label="任务描述" prop = "DESCRIPTION" width="100px" />
-        <el-table-column label="完整的类名" prop = "CLASS_NAME" width="170px" />
-        <el-table-column label="操作" align="center">
+        <el-table-column label="任务描述" prop = "DESCRIPTION" min-width="14%" />
+        <el-table-column label="完整的类名" prop = "CLASS_NAME" min-width="15%" />
+        <el-table-column label="操作" align="center" min-width="28%">
           <template slot-scope="scope">
             <el-button size="small" type="primary" @click="showEdit(scope.row)">编辑</el-button>
             <el-button size="small" type="primary" v-if="scope.row.STATUS == 'OPENED'" @click="pauseScheduler(scope.row)" >暂停</el-button>
             <el-button size="small" type="primary" v-if="scope.row.STATUS == 'PAUSED'" @click="resumeScheduler(scope.row)">恢复</el-button>
-            <el-button size="small" type="primary" v-if="scope.row.STATUS == 'OPENED'" @click="runOnce(scope.row.ID)">运行一次</el-button>
+            <el-button size="small" type="primary" v-if="scope.row.STATUS == 'OPENED'" @click="runOnce(scope.row.ID)">运行</el-button>
             <el-button size="small" type="danger" @click="removeInfo(scope.row)">删除</el-button>
           </template>
         </el-table-column>

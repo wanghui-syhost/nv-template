@@ -41,6 +41,14 @@
     }
 </script>
 
+<style lang="scss">
+    .el-menu-item {
+        height: 40px !important;
+        line-height: 40px !important;
+    }
+</style>
+
+
 <style rel="stylesheet/scss" lang="scss" scoped>
     .svg-icon {
         margin-right: 10px;
