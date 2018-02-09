@@ -1,5 +1,5 @@
 <template>
-    <nv-layout class="upload-table">
+    <div class="upload-table">
         <section class="upload-table__from">
             <h3>文件管理</h3>
             <el-button @click="createdNewFolder">
@@ -108,7 +108,7 @@
                 <el-button type="primary" @click="confirmToAddFolder" :disabled="newFolderName.length<1">确 定</el-button>
             </div>
         </el-dialog>
-    </nv-layout>
+    </div>
 </template>
 
 <script>

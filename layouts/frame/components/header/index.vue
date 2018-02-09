@@ -175,7 +175,7 @@ export default {
         }
         &.active {
             opacity: 1;
-            font-weight: 700;
+            // font-weight: 700;
             &::before {
                 content: "";
                 display: block;
@@ -183,7 +183,7 @@ export default {
                 bottom: 10px;
                 left: 0;
                 width: 100%;
-                height: 4px;
+                height: 3px;
                 border-radius: 2px;
                 background: #fff;
             }
