@@ -11,7 +11,7 @@
                 </div>
                 <div>
                     <span class="login__username--icon" :class="{'on':focus.isUsernameFocus}"></span>
-                    <input type="text" v-model="loginForm.loginName" placeholder="用户名" autocomplete focus="onFocus('username')" class="login__username" maxlength="20">   
+                    <input type="text" v-model="loginForm.loginName" placeholder="用户名" autocomplete @focus="onFocus('username')" class="login__username" maxlength="20">   
                 </div>
                 <div>
                     <span class="login__pass--icon" :class="{'on':focus.isPassFocus}"></span>
@@ -55,6 +55,7 @@ export default {
   methods:{
     onFocus(type){
         let me = this
+        debugger
         me.focus={
             isUsernameFocus:type=='username',
             isPassFocus: type=='pass'
@@ -111,12 +112,13 @@ html,body, #nenv_root{
         width: 550px;
         height: 800px;
         min-width:550px ;
-        flex: 0 1;
         max-width: 550px;
         text-align: center;
-        padding-left:100px;
-        padding-right:100px;
         background: #FFF;
+    }
+    &__form{
+        text-align: center;
+        margin-left: 100px;
     }
     &__info{
         margin-top: 260px;
@@ -157,7 +159,7 @@ html,body, #nenv_root{
         height: 18px;
         background: url(./assets/login/ic_login_username.png);
         position: relative;
-        left: -265px;
+        left: -215px;
         top: 40px;
         &.on{
             background: url(./assets/login/ic_login_username_on.png);
@@ -180,7 +182,7 @@ html,body, #nenv_root{
         height: 18px;
         display: inline-block;
         position: relative;
-        left: -265px;
+        left: -215px;
         top: 40px;
         background: url(./assets/login/ic_login_pass.png);
         &.on{
