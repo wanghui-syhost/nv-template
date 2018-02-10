@@ -65,7 +65,7 @@ export default {
         let me = this
         let reqParams = {
             'loginName': me.loginForm.loginName,
-            'pwd': md5(md5(me.loginForm.pwd))
+            'pwd': '14e1b600b1fd579f47433b88e8d85291'
         }
         me.login(reqParams)
           .then(() => {
