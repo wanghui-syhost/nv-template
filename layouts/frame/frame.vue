@@ -1,7 +1,7 @@
 <template>
     <div class="frame-wrapper" :class="{'width-limited': isWithLimited}">
         <div class="frame__header-wrapper">
-                <frame-header :menus = "menus" @menu-change="handlerMenuChange" :active-top-menu="activeTopMenu || {}"/>
+            <frame-header :menus = "menus" @menu-change="handlerMenuChange" :active-top-menu="activeTopMenu || {}"/>
         </div>
         <div class="frame__sidebar-wrapper" v-if="hasSidebar">
             <frame-sidebar class="sidebar-container" :routes="activeTopMenu.childrens || []"/>
@@ -45,14 +45,7 @@ export default {
             }
             return find(menus)
         },
-        ...vuex.mapState('platform', {
-            menus: state => 
-                [{
-                    menuName: '首页',
-                    linkType: '1',
-                    linkUrl: '/home'
-                }].concat(state.menus)
-        }),
+        ...vuex.mapGetters('platform', ['menus']),
         ...mapState(['isWithLimited']),
         hasSidebar () {
             const { childrens } = this.activeTopMenu

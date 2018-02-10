@@ -20,6 +20,13 @@
     background-color: #F6F7FB;
 }
 
+.el-form-item__content {
+    .el-input--nenv  {
+        width: 194px;  
+    }
+    //width: 200px;
+}
+
 .el-form-item__label {
     &:after {
         content: ' :'
