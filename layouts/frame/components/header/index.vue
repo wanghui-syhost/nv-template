@@ -28,21 +28,22 @@
                 <i class="png-icon skin middle" />
             </a> -->
             <el-popover
+                class="__setting-pane"
                 ref="setting"
                 trigger="click">
-                <div>
+                <div class="header__setting-item">
                     <el-switch
                         inactive-text="不显示标题"
                         active-text="显示标题"
                         v-model="titleShow"/>
                 </div>
-                <div>
+                <div class="header__setting-item">
                     <el-switch 
                         active-text="大屏模式"
                         inactive-text="小屏模式"
                         v-model="limitWidth"/>
                 </div>
-                <div>
+                <div class="header__setting-item">
                     <el-switch
                         active-text="卡片布局"
                         inactive-text="传统布局"
@@ -163,6 +164,12 @@ export default {
         background: transparent;
         border: none;
         color: #fff;   
+    }
+
+    &__setting-item {
+        // &:nth-last-child {
+            padding-bottom: 10px;
+        // }
     }
 }
 .e-header {
