@@ -19,7 +19,7 @@ import HolaHeader from './components/header'
 import HolaMenu from './components/menu'
 import layoutMixin from '../layoutMixin'
 export default {
-    name: 'Halo',
+    name: 'Hola',
     mixins:[layoutMixin],
     components: {
         HolaHeader,
