@@ -49,6 +49,17 @@
                 </div>
             </el-popover>
             <el-button class="header__setting-btn" v-popover:setting>设置</el-button>
+            <el-dropdown>
+                <span class="el-dropdown-link">
+                    选择布局
+                    <i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item>
+                        经典布局
+                    </el-dropdown-item>
+                </el-dropdown-menu>
+            </el-dropdown>
             <span class="e-header__loginuser" >{{ nickName }}</span>
             <span class="e-header__btn-loginout" @click="handlerLogout"> 退出 </span>
         </div>
@@ -59,6 +70,7 @@
 import OuterLink from '../nav-link/outer-link' 
 import InnerLink from '../nav-link/inner-link' 
 import vuex, { mapGetters, mapActions } from 'vuex';
+import { name } from '../../store'
 
 export default {
     name: 'FrameHeader',
@@ -98,7 +110,7 @@ export default {
                 return this.isCardLayout
             }
         },
-        ...vuex.mapState('layout', ['isWithLimited']),
+        ...vuex.mapState(name, ['isWithLimited']),
         ...vuex.mapState('nv-layout', ['isShowTitle', 'isCardLayout']),
         ...vuex.mapState('user', {
             nickName: state => state.profile.nickName

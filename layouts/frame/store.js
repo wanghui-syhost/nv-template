@@ -1,4 +1,4 @@
-const name = 'layout'
+export const name = 'frame'
 
 export const types = {
   CHANGE_LIMIT_WIDTH: 'LIMIT_WIDTH'
