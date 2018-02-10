@@ -27,17 +27,30 @@
             <!-- <a @click="changeSkin">
                 <i class="png-icon skin middle" />
             </a> -->
-            <el-button v-popover:setting>设置</el-button>
             <el-popover
                 ref="setting"
                 trigger="click">
-                <el-switch/>
-                <el-switch/>
-                <el-switch/>
+                <div>
+                    <el-switch
+                        inactive-text="不显示标题"
+                        active-text="显示标题"
+                        v-model="titleShow"/>
+                </div>
+                <div>
+                    <el-switch 
+                        active-text="大屏模式"
+                        inactive-text="小屏模式"
+                        v-model="limitWidth"/>
+                </div>
+                <div>
+                    <el-switch
+                        active-text="卡片布局"
+                        inactive-text="传统布局"
+                        v-model="cardLayout"
+                    />
+                </div>
             </el-popover>
-            <span @click = "handlerShowTitle"> 切换title显示 </span>
-            <span @click = "handlerMaxWidth"> 全屏/限宽 </span>
-            <span @click = "handerLayout"> 切换布局 </span>
+            <el-button class="header__setting-btn" v-popover:setting>设置</el-button>
             <span class="e-header__loginuser" >{{ nickName }}</span>
             <span class="e-header__btn-loginout" @click="handlerLogout">{{ header.loginoutText }}</span>
         </div>
@@ -72,6 +85,32 @@ export default {
         }
     },
     computed: {
+        titleShow: {
+            set () {
+                this.changeShowTitle()
+            },
+            get () {
+                return this.isShowTitle
+            }
+        },
+        limitWidth: {
+            set () {
+                this.changeLimitWidth()
+            },
+            get () {
+                return this.isWithLimited
+            }
+        },
+        cardLayout: {
+            set () {
+                this.changeLayout()
+            },
+            get () {
+                return this.isCardLayout
+            }
+        },
+        ...vuex.mapState('layout', ['isWithLimited']),
+        ...vuex.mapState('nv-layout', ['isShowTitle', 'isCardLayout']),
         ...vuex.mapState('user', {
             nickName: state => state.profile.nickName
         })
@@ -94,15 +133,6 @@ export default {
               .then(() => {
                 this.$router.push({ path: process.env.LOGIN_PATH || '/login' })
               })
-        },
-        handlerShowTitle () {
-            this.changeShowTitle()
-        },
-        handerLayout () {
-            this.changeLayout()
-        },
-        handlerMaxWidth () {
-            this.changeLimitWidth()
         },
         handlerClick (item) {
             this.$emit('menu-change', item)
@@ -128,6 +158,13 @@ export default {
 }
 </script>
 <style  lang="scss" scoped>
+.header {
+    &__setting-btn {
+        background: transparent;
+        border: none;
+        color: #fff;   
+    }
+}
 .e-header {
     position: fixed;
     top: 0;
