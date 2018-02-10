@@ -27,6 +27,14 @@
             <!-- <a @click="changeSkin">
                 <i class="png-icon skin middle" />
             </a> -->
+            <el-button v-popover:setting>设置</el-button>
+            <el-popover
+                ref="setting"
+                trigger="click">
+                <el-switch/>
+                <el-switch/>
+                <el-switch/>
+            </el-popover>
             <span @click = "handlerShowTitle"> 切换title显示 </span>
             <span @click = "handlerMaxWidth"> 全屏/限宽 </span>
             <span @click = "handerLayout"> 切换布局 </span>
@@ -130,7 +138,9 @@ export default {
 
     height: 62px;
     background-color: #3b8cff;
-    color: #fff;
+    a, & {
+        color: #fff;
+    }
     line-height: 62px;
     padding: 0 20px;
     overflow: hidden;
