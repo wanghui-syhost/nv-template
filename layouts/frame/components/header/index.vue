@@ -2,7 +2,7 @@
     <header class="e-header">
         <div class="e-header__left">
             <i class="e-header__logo png-icon logo-theme" />
-            <a class="e-header__title" href="/" :title="header.title">{{ header.title }}</a>
+            <a class="e-header__title" href="/" :title="project.title">{{ project.title }}</a>
         </div>
         <div class="e-header__nav">
             <nv-scroll-pane class="header-menu-wrapper">
@@ -24,9 +24,6 @@
             <a>
                 <i class="png-icon alarm middle" />
             </a>
-            <!-- <a @click="changeSkin">
-                <i class="png-icon skin middle" />
-            </a> -->
             <el-popover
                 class="__setting-pane"
                 ref="setting"
@@ -53,7 +50,7 @@
             </el-popover>
             <el-button class="header__setting-btn" v-popover:setting>设置</el-button>
             <span class="e-header__loginuser" >{{ nickName }}</span>
-            <span class="e-header__btn-loginout" @click="handlerLogout">{{ header.loginoutText }}</span>
+            <span class="e-header__btn-loginout" @click="handlerLogout"> 退出 </span>
         </div>
     </header>
 </template>
@@ -67,15 +64,6 @@ export default {
     name: 'FrameHeader',
     components: { OuterLink, InnerLink },
     props: {
-        header: {
-            type: Object,
-            default() {
-                return {
-                    title: nenv.project.title,
-                    loginoutText: '退出',
-                }
-            }
-        },
         menus: {
             type: Array,
             required: true,
