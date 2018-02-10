@@ -31,20 +31,7 @@ export default {
         frameSidebar,
     },
     computed: {
-        activeTopMenu () {
-            const { menus, $route } = this
-            const fullPath = $route.fullPath
-            function find (menus, callback) {
-                for (const menu of menus) {
-                    if (menu.linkUrl === fullPath) {
-                        return menu
-                    } else if (menu.childrens && find(menu.childrens)) {
-                        return menu
-                    }
-                }
-            }
-            return find(menus)
-        },
+        ...vuex.mapState('platform', ['activeTopMenu']),
         ...vuex.mapGetters('platform', ['menus']),
         ...mapState(['isWithLimited']),
         hasSidebar () {
@@ -66,13 +53,7 @@ export default {
         ...vuex.mapActions('platform', [
             'changeTitle'
         ])
-    },
-    watch: {
-      $route (val) {
-        // this.changeTitle("这就是平台厉害的地方")
-      }
     }
-
 }
 </script>
 
