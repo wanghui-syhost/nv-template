@@ -1,5 +1,5 @@
 <template>
-    <el-dropdown @command="handleLayout">
+    <el-dropdown @command="handleLayout" class="layout-selector">
         <span class="el-dropdown-link">
             选择布局
             <i class="el-icon-arrow-down el-icon--right"></i>
@@ -31,7 +31,11 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-
+    .layout-selector {
+        .el-dropdown-link {
+            color: #fff
+        }
+    }
 </style>
 
 
