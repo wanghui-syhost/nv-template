@@ -148,7 +148,7 @@ export default {
         ...mapActions(
             ['logout']
         ),
-        ...mapActions('layout', 
+        ...mapActions(name, 
             ['changeLimitWidth']
         ),
         ...mapActions('nv-layout',
