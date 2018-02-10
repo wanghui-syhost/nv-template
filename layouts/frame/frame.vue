@@ -1,7 +1,7 @@
 <template>
     <div class="frame-wrapper" :class="{'width-limited': isWithLimited}">
         <div class="frame__header-wrapper">
-            <frame-header :menus = "menus" @menu-change="handlerMenuChange" :active-top-menu="activeTopMenu || {}"/>
+            <frame-header :menus = "menus" :active-top-menu="activeTopMenu || {}"/>
         </div>
         <div class="frame__sidebar-wrapper" v-if="hasSidebar">
             <frame-sidebar class="sidebar-container" :routes="activeTopMenu.childrens || []"/>
@@ -39,17 +39,7 @@ export default {
             return childrens && childrens.length > 0
         }
     },
-    data () {
-        return {
-            currentMenu: {},
-            routers: [],
-        }
-    },
     methods: {
-        handlerMenuChange (item) {
-            const self = this
-            self.currentMenu = self.menus.find(menu => item.ID === menu.ID)
-        },
         ...vuex.mapActions('platform', [
             'changeTitle'
         ])
