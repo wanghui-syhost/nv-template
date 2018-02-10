@@ -49,17 +49,7 @@
                 </div>
             </el-popover>
             <el-button class="header__setting-btn" v-popover:setting>设置</el-button>
-            <el-dropdown>
-                <span class="el-dropdown-link">
-                    选择布局
-                    <i class="el-icon-arrow-down el-icon--right"></i>
-                </span>
-                <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item>
-                        经典布局
-                    </el-dropdown-item>
-                </el-dropdown-menu>
-            </el-dropdown>
+            <layout-select />
             <span class="e-header__loginuser" >{{ nickName }}</span>
             <span class="e-header__btn-loginout" @click="handlerLogout"> 退出 </span>
         </div>
@@ -67,6 +57,7 @@
 </template>
 
 <script>
+import layoutSelect from '@layouts/components/layout-selector'
 import OuterLink from '../nav-link/outer-link' 
 import InnerLink from '../nav-link/inner-link' 
 import vuex, { mapGetters, mapActions } from 'vuex';
@@ -74,7 +65,7 @@ import { name } from '../../store'
 
 export default {
     name: 'FrameHeader',
-    components: { OuterLink, InnerLink },
+    components: { layoutSelect, OuterLink, InnerLink },
     props: {
         menus: {
             type: Array,

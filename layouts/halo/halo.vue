@@ -1,5 +1,5 @@
 <template>
-    <div id="layout-halo" class="layout-halo">
+    <div id="halo" class="layout halo">
         <div class="halo__header-wrapper">
             <halo-header :menus = "navs"/>
         </div>
@@ -23,8 +23,18 @@ export default {
 }
 </script>
 
-<style scoped>
+<style  lang = "scss" scoped>
+    .halo {
+        margin-top:  74px;
 
+        &__header-wrapper {
+            top: 0;
+            position: fixed;
+            z-index: 1000;
+            width: 100%;
+            color: #fff;
+        }
+    }
 </style>
 
 

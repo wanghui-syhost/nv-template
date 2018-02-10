@@ -1,5 +1,5 @@
 <template>
-    <aside>
+    <aside class="sidebar">
         <el-menu class="halo-header-menu" router>
             <template v-for="menu in menus" >
                 <template v-if = "menu.linkType === '1'">
@@ -46,11 +46,18 @@ export default {
         ...vuex.mapState('user', {
             nickName: state => state.profile.nickName
         }),
-        // 平台导航
-        // ...vuex.mapState('platform', {
-        //     menus: state => state.menus
-        // }),
     }
 }
 </script>
+
+<style lang="scss" scoped>
+    .sidebar {
+        position: fixed;
+        top: 72px;
+        bottom: 0;
+        width: 220px;
+        background-color: #fff;
+    }
+</style>
+
 

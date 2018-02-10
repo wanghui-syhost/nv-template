@@ -6,6 +6,9 @@ import store from './store'
 const { loader } = window.nenv
 
 export const layout = Frame
+Object.assign(layout, {
+    label: "经典布局"
+})
 
 loader({ layout, store })
 

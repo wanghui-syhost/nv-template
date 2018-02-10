@@ -26,14 +26,19 @@
                 </template>
             </el-menu>
         </div>
+        <div>
+            <layout-select/>
+        </div>
     </header>
 </template>
 <script>
 import vuex, { mapGetters, mapActions } from 'vuex';
+import LayoutSelect from '@layouts/components/layout-selector'
 import  OuterLink from '../../components/nav-link/outer-link'
 export default {
     name: 'HaloHeader',
     components: {
+        LayoutSelect,
         OuterLink
     },
     props: {
@@ -63,6 +68,16 @@ export default {
 <style lang="scss" scoped>
     header {
         display: flex;
+        height: 64px;
+        background-color: #3b8cff;
+    }
+
+    .halo-header {
+        &__navs {
+            .el-menu {
+                background-color: transparent;
+            }
+        }
     }
 
     .halo-header {

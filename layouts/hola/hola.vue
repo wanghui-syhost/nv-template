@@ -32,7 +32,8 @@ export default {
 #layout-hola {
     .hola {
         &__header-wrapper {
-            min-height: 64px;
+            position: relative;
+            min-height: 72px;
         }
 
         &__app-wrapper {
