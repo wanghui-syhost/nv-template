@@ -35,7 +35,7 @@ export default {
 
       data.on = on
 
-      return h(this.tag, data, this.$slots.default)
+      return h('a', data, this.$slots.default)
   }
 }
 </script>

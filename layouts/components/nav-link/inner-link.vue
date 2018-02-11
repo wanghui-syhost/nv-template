@@ -1,6 +1,7 @@
 <template>
-  <!--router-link :to="to" :tag="tag"/-->
-  <a><a>
+    <div @click = "navTo" class="inner-link" :class="{active: isActive}"> 
+        <slot name="default"/>
+    </div>
 </template>
 
 <script>
@@ -14,12 +15,28 @@ export default {
             type: String,
             default: 'a'
         }
+    },
+    computed: {
+        isActive () {
+            const self = this
+            const path = self.to
+            return path.indexOf(self.$route.fullPath) > -1
+        }
+    },
+    methods: {
+        navTo () {
+            const self = this
+            self.$router.push(self.to)
+            self.$emit('click')
+        }
     }
 }
 </script>
 
 <style lang="scss" scoped>
-
+    .inner-link {
+        cursor: pointer;
+    }
 </style>
 
 
