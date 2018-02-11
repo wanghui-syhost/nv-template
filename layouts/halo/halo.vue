@@ -1,7 +1,7 @@
 <template>
     <div id="halo" class="layout halo">
         <div class="halo__header-wrapper">
-            <halo-header :menus = "navs"/>
+            <halo-header :menus = "menus"/>
         </div>
         <div class="halo-app-wrapper">
             <div class="halo-main-container">

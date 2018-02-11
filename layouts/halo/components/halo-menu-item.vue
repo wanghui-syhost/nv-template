@@ -4,6 +4,7 @@
             :is="navComponent(menu)" 
             :to="menu.linkUrl"
             tag="div"
+            class="nav-item"
             >
             {{ menu[label] }}
         </component>
@@ -47,6 +48,9 @@ export default {
         }
 
         &:hover {
+            > .nav-item {
+                color: red
+            }
             > .halo-menu__pane {
                 display: flex;
             }   
