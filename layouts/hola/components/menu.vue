@@ -57,6 +57,7 @@ export default {
         bottom: 0;
         width: 220px;
         background-color: #fff;
+        overflow-y: auto;
     }
 </style>
 
