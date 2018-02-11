@@ -3,14 +3,16 @@
         <div class="hola__left"> {{ header.title }} </div>
         <div class="hola__right">
             <layout-select />
+            <layout-setting />
         </div>
     </header>
 </template>
 <script>
 import LayoutSelect from '@layouts/components/layout-selector'
+import LayoutSetting from '@layouts/components/layout-setting'
 export default {
     name: 'HolaHeader',
-    components: { LayoutSelect },
+    components: { LayoutSelect, LayoutSetting },
     props: {
         header: {
             type: Object,

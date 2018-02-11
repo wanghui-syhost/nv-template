@@ -28,6 +28,7 @@
             </el-menu> -->
         </div>
         <div class="halo-header__right">
+            <layout-setting />
             <layout-select/>
         </div>
     </header>
@@ -36,6 +37,7 @@
 import vuex, { mapGetters, mapActions } from 'vuex';
 import navComponentMixin from '@layouts/mixins/navComponentMixin'
 import LayoutSelect from '@layouts/components/layout-selector'
+import LayoutSetting from '@layouts/components/layout-setting'
 import menu from './menu'
 // import 
 import  OuterLink from '../../components/nav-link/outer-link'
@@ -45,6 +47,7 @@ export default {
     components: {
         NvMenu: menu,
         LayoutSelect,
+        LayoutSetting,
         OuterLink
     },
     props: {

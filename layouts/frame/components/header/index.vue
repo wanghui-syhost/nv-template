@@ -24,31 +24,14 @@
             <a>
                 <i class="png-icon alarm middle" />
             </a>
-            <el-popover
-                class="__setting-pane"
-                ref="setting"
-                trigger="click">
-                <div class="header__setting-item">
-                    <el-switch
-                        inactive-text="不显示标题"
-                        active-text="显示标题"
-                        v-model="titleShow"/>
-                </div>
+            <layout-setting>
                 <div class="header__setting-item">
                     <el-switch 
                         active-text="大屏模式"
                         inactive-text="小屏模式"
                         v-model="limitWidth"/>
                 </div>
-                <div class="header__setting-item">
-                    <el-switch
-                        active-text="卡片布局"
-                        inactive-text="传统布局"
-                        v-model="cardLayout"
-                    />
-                </div>
-            </el-popover>
-            <el-button class="header__setting-btn" v-popover:setting>设置</el-button>
+            </layout-setting>
             <layout-select />
             <span class="e-header__loginuser" >{{ nickName }}</span>
             <span class="e-header__btn-loginout" @click="handlerLogout"> 退出 </span>
@@ -58,6 +41,7 @@
 
 <script>
 import layoutSelect from '@layouts/components/layout-selector'
+import LayoutSetting from '@layouts/components/layout-setting'
 import OuterLink from '../nav-link/outer-link' 
 import InnerLink from '../nav-link/inner-link' 
 import vuex, { mapGetters, mapActions } from 'vuex';
@@ -65,7 +49,7 @@ import { name } from '../../store'
 
 export default {
     name: 'FrameHeader',
-    components: { layoutSelect, OuterLink, InnerLink },
+    components: { layoutSelect, OuterLink, InnerLink, LayoutSetting },
     props: {
         menus: {
             type: Array,
@@ -77,14 +61,6 @@ export default {
         }
     },
     computed: {
-        titleShow: {
-            set () {
-                this.changeShowTitle()
-            },
-            get () {
-                return this.isShowTitle
-            }
-        },
         limitWidth: {
             set () {
                 this.changeLimitWidth()
@@ -93,16 +69,7 @@ export default {
                 return this.isWithLimited
             }
         },
-        cardLayout: {
-            set () {
-                this.changeLayout()
-            },
-            get () {
-                return this.isCardLayout
-            }
-        },
         ...vuex.mapState(name, ['isWithLimited']),
-        ...vuex.mapState('nv-layout', ['isShowTitle', 'isCardLayout']),
         ...vuex.mapState('user', {
             nickName: state => state.profile.nickName
         })
@@ -151,6 +118,7 @@ export default {
 </script>
 <style  lang="scss" scoped>
 .header {
+    
     &__setting-btn {
         background: transparent;
         border: none;
