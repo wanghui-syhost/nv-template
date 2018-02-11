@@ -39,7 +39,11 @@ export default {
             &.active {
                 &:after {
                     content: "";
-                    border-bottom: 1px solid #fff;
+                    position: absolute;
+                    width: 100%;
+                    left: -2px;
+                    bottom: -3px;
+                    border-bottom: 2px solid #fff;
                 }
             }
         }
