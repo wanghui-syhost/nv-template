@@ -2,6 +2,7 @@
 module.exports = {
   // 项目nginx部署地址
   assetPublicPath: '/platform/',
+  // 项目相关的配置
   project: {
     // 定义项目的标题
     title: "盈峰环境智慧水务平台",
