@@ -1,5 +1,6 @@
 <template>
-    <home-block title="统计">
+    <home-block title="统计" width="723px" height="400px">
+        <img src="../assets/img/statistics.png">
     </home-block>
 </template>
 <script>

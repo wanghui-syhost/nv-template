@@ -2,10 +2,11 @@
     <div class="home-block" :class="{'is-edit-mode': isEditMode}" :style="style" v-block>
         <label class="home-block__handler" v-if="isEditMode" @click="close"> x </label>
         <div class="home-block__top" :class="{ line: line }">
-            <label class="home-block__label"> {{ title }}
+            <label class="home-block__label" v-if="title"> {{ title }}
                 <slot name="title" />
             </label>
         </div>
+        <slot name="default"/>
     </div>
 </template>
 <script>
@@ -43,10 +44,10 @@ export default {
             const self = this
             const style = {}
             if (self.width) {
-                style.width = width
+                style.width = self.width
             }
             if (self.height) {
-                style.height = height
+                style.height = self.height
             }
 
             return style
@@ -146,15 +147,15 @@ export default {
 <style lang="scss" scoped>
     .home-block {
         position: relative;
-        min-height: 300px;
+        min-height: 198px;
         // border: 1px solid;
         border-radius: 6px;
         padding: 20px;
         margin: 10px;
         width: 25%;
-        min-width: 400px;
-
+        min-width: 350px;
         background-color: #fff;
+        box-shadow: 0px 2px 4px 0px rgba(226,226,226,0.5);
 
         &__top {
             &.line {
