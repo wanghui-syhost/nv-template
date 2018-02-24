@@ -15,7 +15,7 @@ export default {
   watch: {
     ledgerCode (val) {
       if (val) {
-        unfetch.open('/#/ledger', {
+        unfetch.open('./#/ledger', {
           params: {
             'nv-code': val
           }
