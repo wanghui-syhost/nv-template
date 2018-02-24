@@ -1,5 +1,6 @@
 const webpack = require('webpack')
 module.exports = {
+  // 项目nginx部署地址
   assetPublicPath: '/platform/',
   project: {
     // 定义项目的标题
