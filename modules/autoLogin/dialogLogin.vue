@@ -94,6 +94,15 @@ button.login_btn {
         padding: 0!important;
     }
 }
+.el-form-item__content .el-input--nenv {
+    width: 100%!important;
+}
+.el-form-item__content{
+    margin-left:0!important;
+}
+.el-dialog__headerbtn .el-dialog__close {
+    color: #fff!important;
+}
 </style>
 
 
