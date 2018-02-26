@@ -1,7 +1,9 @@
 <template>
   <!-- <nv-dynamic-ledger nv-code="FIRST_LEDGER"></nv-dynamic-ledger> -->
   <nv-layout>
-    <nv-select nv-code="LEDGER_DEMO_SELECT" v-model="ledgerCode"/>
+    <div>
+      <nv-select nv-code="LEDGER_DEMO_SELECT" v-model="ledgerCode"/>
+    </div>
   </nv-layout>
 </template>
 <script>
