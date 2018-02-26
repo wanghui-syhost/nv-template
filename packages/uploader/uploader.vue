@@ -1,20 +1,20 @@
 <template>
     <div class="upload-table">
         <section class="upload-table__from">
-            <h3>文件管理</h3>
-            <el-button @click="createdNewFolder">
+            <!-- <h3>文件管理</h3> -->
+            <el-button @click="createdNewFolder" type="primary">
                 新建文件夹
             </el-button>
-            <el-button @click="deleteSelectedAndChildren">
+            <el-button @click="deleteSelectedAndChildren" type="primary">
                 删除
             </el-button>
-            <el-button @click="downloadChooseRows">
+            <el-button @click="downloadChooseRows" type="primary">
                 下载
             </el-button>
             <el-upload  class="upload-table__upload--btn" :action="uploadURL" :on-success="success" :before-upload="beforeUpload" :headers="uploadHeaders" :data="fileData" :show-file-list="false" accept=".jpg, .jpeg, .png, .gif, .rar, .zip, .doc, .docx, .xls, .xlsx,  .ppt, .pptx, .pdf, .txt, .wps">
                 <el-button  type="primary" v-show="levelList.length > 1 && showUpload">上传</el-button>
             </el-upload>
-            <el-input style="float: right; margin-right: 50px; width:300px" icon="search"
+            <el-input style="float: right; width:300px" icon="search"
                 placeholder="请输入文件名称" 
                 v-model="fileName" 
                 @keyup.enter.native="search" >
@@ -31,72 +31,96 @@
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
-
-        <!-- 文件列表 -->
-        <el-table :data="list" ref="multipleTable" v-loading="listLoading" @selection-change="handleSelectionChange" fit highlight-current-row>
-            <el-table-column type="selection" width="55" align="center"></el-table-column>
-            <el-table-column align="center" label="" width="40">
-              <template slot-scope="scope" @click="setParentCode(scope.row.ID, scope.row.NAME,scope.row.IS_DIRECTORY)">
-                <i v-if="scope.row.IS_DIRECTORY == 'YES'" class="png-icon file-folder"/> 
-                <i v-else class="png-icon" :class="scope.row.FILE_TYPE | FileIconFilter"/>
-              </template>
-            </el-table-column>
-            <el-table-column align="left" label='文件名' show-overflow-tooltip>
-                <template slot-scope="scope">
-                    <span class="file-name">
-                        <span class="file-label" v-show="!scope.row.isEdit" @click="setParentCode(scope.row.ID, scope.row.NAME,scope.row.IS_DIRECTORY)">{{scope.row.NAME}}</span>
-                        <span class="file-input" v-if="scope.row.isEdit">
-                          <span style="float: left"><el-input id="" size="small" style="width: 310px" v-model="rename" :minlength="1" :maxlength="50" @keyup.enter.native="modifyComplete(scope.row)"></el-input></span>
-                          <span style="float: left; margin-left: 10px"><el-button type="primary" size="mini" @click="modifyComplete(scope.row)" :disabled="rename.length<1">确认</el-button></span>
-                          <span style="float: left; margin-left: 5px"><el-button type="primary" size="mini" @click="scope.row.isEdit = false">取消</el-button></span>
+        <el-tabs type="border-card">
+          <el-tab-pane>
+            <span slot="label" name="first" ><i class="el-icon-tickets"></i></span> 
+            <!-- 文件列表 -->
+            <el-table :data="list" ref="multipleTable" v-loading="listLoading" @selection-change="handleSelectionChange" fit highlight-current-row>
+                <el-table-column type="selection" width="55" align="center"></el-table-column>
+                <el-table-column align="center" label="" width="40">
+                  <template slot-scope="scope" @click="setParentCode(scope.row.ID, scope.row.NAME,scope.row.IS_DIRECTORY)">
+                    <i v-if="scope.row.IS_DIRECTORY == 'YES'" class="png-icon file-folder"/> 
+                    <i v-else class="png-icon" :class="scope.row.FILE_TYPE | FileIconFilter"/>
+                  </template>
+                </el-table-column>
+                <el-table-column align="left" label='文件名' show-overflow-tooltip>
+                    <template slot-scope="scope">
+                        <span class="file-name">
+                            <span class="file-label" v-show="!scope.row.isEdit" @click="setParentCode(scope.row.ID, scope.row.NAME,scope.row.IS_DIRECTORY)">{{scope.row.NAME}}</span>
+                            <span class="file-input" v-if="scope.row.isEdit">
+                              <span style="float: left"><el-input id="" size="small" style="width: 310px" v-model="rename" :minlength="1" :maxlength="50" @keyup.enter.native="modifyComplete(scope.row)"></el-input></span>
+                              <span style="float: left; margin-left: 10px"><el-button type="primary" size="mini" @click="modifyComplete(scope.row)" :disabled="rename.length<1">确认</el-button></span>
+                              <span style="float: left; margin-left: 5px"><el-button type="primary" size="mini" @click="scope.row.isEdit = false">取消</el-button></span>
+                            </span>
                         </span>
-                    </span>
-                </template>
-            </el-table-column>
-            <el-table-column label="" width="180">
-                <template slot-scope="scope">
-                    <i title="重命名" class="png-icon file-rename small" @click="reName(scope.row)"></i>
-                    <i title="下载" class="png-icon file-upload  small" @click="download(scope.row)"></i>
-                    <i title="删除" class="png-icon file-delete small" @click="removeItem(scope.row)"></i>
-                </template>
-            </el-table-column>
-            <!-- <el-table-column label="文件类型"  align="center">
-                <template slot-scope="scope">
-                <span v-if=" scope.row.IS_DIRECTORY === 1">-</span>
-                <span v-else>{{ scope.row.FILE_TYPE }}</span>
-                </template>
-            </el-table-column> -->
-            <el-table-column label="文件大小"  align="center" width="100">
-                <template slot-scope="scope">
-                    <span v-if=" scope.row.IS_DIRECTORY === 'YES'">-</span>
-                    <span v-else>{{ scope.row.FILE_SIZE | FileSizeFormat }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="上传人" align="center" width="150">
-                <template slot-scope="scope">
-                    <span>{{ scope.row.USER_NAME }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column align="center" label="上传时间" width="180">
-                <template slot-scope="scope">
-                    <!-- <i class="el-icon-time"></i> -->
-                    <span>{{scope.row.CREATE_TIME | DateTimeFilter(5)}}</span>
-                </template>
-            </el-table-column>
-        
-        </el-table>
+                    </template>
+                </el-table-column>
+                <el-table-column label="" width="180">
+                    <template slot-scope="scope">
+                        <i title="重命名" class="png-icon file-rename small" @click="reName(scope.row)"></i>
+                        <i title="下载" class="png-icon file-upload  small" @click="download(scope.row)"></i>
+                        <i title="删除" class="png-icon file-delete small" @click="removeItem(scope.row)"></i>
+                    </template>
+                </el-table-column>
+                <!-- <el-table-column label="文件类型"  align="center">
+                    <template slot-scope="scope">
+                    <span v-if=" scope.row.IS_DIRECTORY === 1">-</span>
+                    <span v-else>{{ scope.row.FILE_TYPE }}</span>
+                    </template>
+                </el-table-column> -->
+                <el-table-column label="文件大小"  align="center" width="100">
+                    <template slot-scope="scope">
+                        <span v-if=" scope.row.IS_DIRECTORY === 'YES'">-</span>
+                        <span v-else>{{ scope.row.FILE_SIZE | FileSizeFormat }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="上传人" align="center" width="150">
+                    <template slot-scope="scope">
+                        <span>{{ scope.row.USER_NAME }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column align="center" label="上传时间" width="180">
+                    <template slot-scope="scope">
+                        <!-- <i class="el-icon-time"></i> -->
+                        <span>{{scope.row.CREATE_TIME | DateTimeFilter(5)}}</span>
+                    </template>
+                </el-table-column>
+            </el-table>
 
-        <div class="home-detail__page">
-            <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page="pageIndex"
-                :page-sizes="[10, 20, 30, 40]"
-                :page-size="pageSize"
-                layout="total, sizes, prev, pager, next, jumper"
-                :total="totalCount">
-            </el-pagination>
-        </div>
+            <div class="home-detail__page">
+                <el-pagination
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="pageIndex"
+                    :page-sizes="[10, 20, 30, 40]"
+                    :page-size="pageSize"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="totalCount">
+                </el-pagination>
+            </div>
+          </el-tab-pane>
+          <el-tab-pane>
+            <span slot="label" name="second" ><i class="el-icon-menu"></i></span>
+            <el-checkbox v-model="checkAll">全选</el-checkbox>
+              <div  class="paper_file">
+                <ul>
+                  <li v-for="item in list"  :key="item.ID">
+                    <a class="file_item">
+                       <div>
+                        <img src="img/word.png" class="file_format"/>
+                      </div>
+                     <!--  <el-checkbox v-model="item.isChecked" :class ="{isChecked:item.isChecked}"></el-checkbox> -->
+                      <!-- <el-button-group>
+                        <el-button type="primary" icon="el-icon-download"></el-button>
+                        <el-button type="primary" icon="el-icon-close"></el-button>
+                      </el-button-group> -->
+                    </a>
+                  </li>
+                </ul>
+              </div>
+          </el-tab-pane>
+        </el-tabs>
+        
         <el-dialog title="新建文件夹" :visible.sync="dialogFormVisible">
             <el-form>
                 <el-form-item label="文件夹名称">
@@ -117,6 +141,7 @@
   const Config = {}
   export default {
     name: 'NvUploader',
+    
     data () {
       return {
         list: null,
@@ -149,9 +174,11 @@
         levelList: [
             {
                 id: 'ROOT',
-                name: '文件管理'
+                name: ''
             }
         ],
+        list: null,
+        checkAll: false,//总全选
       }
     },
     props: {
@@ -661,6 +688,15 @@
       }).catch(err=>{
         console.log(err);
       });
+    },
+    watch: {  //监听全选方法
+      checkAll (val) {
+        const self = this
+        const { list } = self
+        Object.keys(list).forEach(key => {
+          list[key].isChecked =val;
+        })
+      }
     }
   }
 }
@@ -669,7 +705,7 @@
 <style lang="scss" scoped>
   .upload-table{
       &__from{
-          padding:20px;
+          //padding:20px;
       }
       &__gap{
         margin-bottom: 10px; 
@@ -700,5 +736,45 @@
     margin-top: 20px;
     margin-right: 30px;
     text-align: right;
+  }
+  .paper_file {
+    float: left;
+    width: 100%;
+    li{
+      list-style: none;
+      float: left; 
+      padding: 0 20px;
+      margin-bottom: 20px;
+      a.file_item{
+        border:1px solid #ccc;
+        width: 218px;
+        height:218px;
+        display: block;
+        margin-bottom: 15px;
+        position: relative;
+        img.file_format{
+          width: 64px;
+          height: 72px;
+          overflow: hidden;
+          margin: 73px auto;
+          display: block;
+        }
+        .el-checkbox{
+          position: absolute;
+          left: 0;
+          top: -1px;
+          display: none;
+          &.isChecked {
+            display: block;
+          }
+        }
+        .el-button-group{
+          position: absolute;
+          bottom: 10px;
+          left: 54px;
+          display: none;
+        }
+      }
+    }
   }
 </style>
