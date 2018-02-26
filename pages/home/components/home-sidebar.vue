@@ -1,5 +1,5 @@
 <template>
-    <home-sidebar class="home-aside">
+    <div class="home-aside">
         <img src="../assets/img/buddha.png" class="head_portrait"> 
         <div class="personal_info">
             <p class="name">{{ user.nickName }}</p>
@@ -33,7 +33,7 @@
                 </li>
             </ul>
         </div>     
-    </home-sidebar>
+    </div>
 </template>
 <script>
 import { mapState } from 'vuex'
