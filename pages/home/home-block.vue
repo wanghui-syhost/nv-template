@@ -1,7 +1,7 @@
 <template>
     <div class="home-block" :class="{'is-edit-mode': isEditMode}" :style="style" v-block>
         <label class="home-block__handler" v-if="isEditMode" @click="close"> x </label>
-        <div class="home-block__top" :class="{ line: line }">
+        <div class="home-block__top"  v-if="title || $slots.title" :class="{ line: line }">
             <label class="home-block__label" v-if="title"> {{ title }}
                 <slot name="title" />
             </label>
