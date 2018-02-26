@@ -4,15 +4,17 @@
         <div class="hola__right">
             <layout-select />
             <layout-setting />
+            <logout />
         </div>
     </header>
 </template>
 <script>
 import LayoutSelect from '@layouts/components/layout-selector'
 import LayoutSetting from '@layouts/components/layout-setting'
+import Logout from '@layouts/components/logout.vue'
 export default {
     name: 'HolaHeader',
-    components: { LayoutSelect, LayoutSetting },
+    components: { LayoutSelect, LayoutSetting, Logout },
     props: {
         header: {
             type: Object,

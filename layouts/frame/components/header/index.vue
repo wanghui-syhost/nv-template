@@ -34,7 +34,7 @@
             </layout-setting>
             <layout-select />
             <span class="e-header__loginuser" >{{ nickName }}</span>
-            <span class="e-header__btn-loginout" @click="handlerLogout"> 退出 </span>
+            <logout />
         </div>
     </header>
 </template>
@@ -42,6 +42,7 @@
 <script>
 import layoutSelect from '@layouts/components/layout-selector'
 import LayoutSetting from '@layouts/components/layout-setting'
+import Logout from '@layouts/components/logout.vue'
 import OuterLink from '../nav-link/outer-link' 
 import InnerLink from '../nav-link/inner-link' 
 import vuex, { mapGetters, mapActions } from 'vuex';
@@ -49,7 +50,7 @@ import { name } from '../../store'
 
 export default {
     name: 'FrameHeader',
-    components: { layoutSelect, OuterLink, InnerLink, LayoutSetting },
+    components: { layoutSelect, OuterLink, InnerLink, LayoutSetting, Logout },
     props: {
         menus: {
             type: Array,

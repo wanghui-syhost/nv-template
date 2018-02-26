@@ -1,13 +1,15 @@
 <template>
     <nv-layout class="demo2">
-        <el-button @click="dialogVisible=true">普通弹出</el-button>
-        <el-button @click="dialogVisible1=true">手动流转</el-button>
-        <el-button @click="dialogVisible2=true">审批文档</el-button>
-        <el-button @click="dialogVisible3=true">审批前公示</el-button>
-        <el-button @click="dialogVisible4=true">审批文档2</el-button>
-        <el-button @click="dialogVisible5=true">抄送</el-button>
-        <el-button @click="dialogVisible6=true">结束</el-button>
-        <el-button @click="dialogVisible5=true">退回</el-button>
+        <div>
+            <el-button @click="dialogVisible=true">普通弹出</el-button>
+            <el-button @click="dialogVisible1=true">手动流转</el-button>
+            <el-button @click="dialogVisible2=true">审批文档</el-button>
+            <el-button @click="dialogVisible3=true">审批前公示</el-button>
+            <el-button @click="dialogVisible4=true">审批文档2</el-button>
+            <el-button @click="dialogVisible5=true">抄送</el-button>
+            <el-button @click="dialogVisible6=true">结束</el-button>
+            <el-button @click="dialogVisible5=true">退回</el-button>
+        </div>
 
         <el-dialog title="提示" :visible.sync="dialogVisible" size="tiny">
             <span>这是一段信息</span>
