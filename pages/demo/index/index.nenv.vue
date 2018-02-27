@@ -30,7 +30,18 @@
 
         <div>
           <h3>省市区级联</h3>
-          <nv-region-select v-model="nvRegionSelectedResult"></nv-region-select >
+          <div>
+            <p>标准使用</p>
+            <nv-region-select v-model="nvRegionSelectedResult"></nv-region-select >
+          </div>
+          <div>
+            <p>限制区域</p>
+            <nv-region-select v-model="nvRegionSelectedResult2" area="44"></nv-region-select >
+          </div>
+          <div>
+            <p>限制可选层级</p>
+            <nv-region-select v-model="nvRegionSelectedResult2" area = "44" :depth="1"></nv-region-select >
+          </div>
         </div>
 
         <nv-organize-user-selector :multi="true"  v-model="nvOrganizeUserSelectResult" />
@@ -73,6 +84,7 @@ export default {
       nvCheckboxResult: [],
       nvSelectResult: '',
       nvRegionSelectedResult:["44","4406","440606"],
+      nvRegionSelectedResult2: [],
       nvOrganizeSelectResult: [],
       nvOrganizeUserSelectResult: [],
        keyRules:[ 
