@@ -43,6 +43,8 @@ export default {
 
     .title {
         position: relative;
+        font-size: 20px;
+        font-weight: 800;
         color: #333;
         padding: 0 10px 0 0;
         background-color: #fff;
