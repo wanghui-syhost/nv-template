@@ -521,17 +521,20 @@
         console.log(resp);
         me.dialogFormVisible= false;
         let {code, msg, data} = resp.rawData;
-        if(code==0){
-          me.$message({
-            showClose: true,
-            message: '创建成功'
-          });
-          me.fetchData(me.currentId);
-        }else{
-          me.$message.error('创建失败');
-        }
+        debugger
+        me.$message({
+          showClose: true,
+          message: '创建成功'
+        });
+        me.fetchData(me.currentId);
+       
       }).catch(err=>{
-        console.log(err);
+          let {code, msg, data} = err;
+          if (code == 3){
+             me.$message.error(msg);
+          } else {
+             me.$message.error("创建失败");
+          }
       })
     },
     download(row){
@@ -562,19 +565,20 @@
             NAME: this.rename.trim()
           };
           FileRenameFolder(data).then(resp=>{
-            let {code, msg, data} = resp.rawData;
-            if(code==0){
-              me.fetchData(me.currentId);
-              row.isEdit = false;
-              me.$message({
-                showClose: true,
-                message: '修改成功'
-              });
-            }else{
-              me.$message.error('修改失败');
-            }
+            me.fetchData(me.currentId);
+            row.isEdit = false;
+            me.$message({
+              showClose: true,
+              message: '修改成功'
+            });
           }).catch(err=>{
             console.error(err);
+            let {code, msg, data} = err;
+            if (code == 3){
+              me.$message.error(msg);
+            } else {
+              me.$message.error("创建失败");
+            }
           })
       }else{
         //文件重命名
