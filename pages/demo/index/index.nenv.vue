@@ -1,6 +1,6 @@
 <template>
   <nv-layout>
-    <h1>nenv 平台标准demo</h1>
+    <!-- <h1>nenv 平台标准demo</h1> -->
     <section>
         <h2>1.切换标题</h2>
         <el-button type="primary" @click="changeTitle('切换后的新标题')">点击改变title</el-button>
@@ -8,7 +8,7 @@
     <section>
         <h2>2.输入控件</h2>
         <div>
-          <h3>2.1多选框</h3>
+          <h4>2.1多选框</h4>
           <nv-checkbox nv-code="HOBBY" v-model="nvCheckboxResult"/>
           <blockquote>
             <p>
@@ -18,7 +18,7 @@
           </blockquote>
         </div>
         <div>
-          <h3>2.1下拉框</h3>
+          <h4>2.2下拉框</h4>
           <nv-select nv-code="PROCESS" v-model="nvSelectResult"></nv-select>
           <blockquote>
             <p>
@@ -27,16 +27,17 @@
             <p>{{ nvSelectResult }}</p>
           </blockquote>
         </div>
-
         <div>
-          <h3>省市区级联</h3>
+          <h4>2.3省市区级联</h4>
           <nv-region-select v-model="nvRegionSelectedResult"></nv-region-select >
         </div>
-
-        <nv-organize-user-selector :multi="true"  v-model="nvOrganizeUserSelectResult" />
-        <nv-organize-user-selector :only-organize="true" :multi="true"  v-model="nvOrganizeSelectResult" />
+        <div class="choose_part">
+          <h4>2.4组织选择人</h4>
+          <nv-organize-user-selector :multi="true"  v-model="nvOrganizeUserSelectResult" /><!--选择到人-->
+          <nv-organize-user-selector :only-organize="true" :multi="true"  v-model="nvOrganizeSelectResult" /><!--选择到部门-->
+        </div>
     </section>
-    <section style="width:1200px">
+    <section>
         <h2>3.子表配置</h2>
         <el-form :model="dynamicValidateForm" ref="dynamicValidateForm"  label-width="120px">
         <el-row type="flex" class="row-bg" justify="space-around" 
@@ -48,7 +49,7 @@
           <el-form-item label="性别"  :prop="'domains.' + index + '.KEY'" :rules="keyRules" >
            <nv-select nv-code="SEX" v-model="domain.KEY"></nv-select>
           </el-form-item>
-          <el-form-item label="爱好"  :prop="'domains.' + index + '.VALUE'" :rules="[{required:true, message:'爱好不能为空', trigger: 'blur'}]">
+          <el-form-item label="爱好"  :prop="'domains.' + index + '.VALUE'" :rules="[{required:true, message:'爱好不能为空', trigger: 'blur'}]" class="hobby">
             <nv-checkbox nv-code="HOBBY" v-model="domain.VALUE"/>
           </el-form-item>
            <el-button @click.prevent="removeDomain(domain)" style="margin-left:20px; height: 40px;">删除</el-button>
@@ -129,7 +130,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.choose_part div {
+    float: left;
+    margin-bottom: 5px;
+    width: 100%;
+}
+.hobby .el-form-item__content {
+    width: 550px;
+}
+.el-form-item{
+  display: flex;
+}
 </style>
 
 

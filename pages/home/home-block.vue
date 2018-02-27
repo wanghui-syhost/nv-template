@@ -147,7 +147,7 @@ export default {
 <style lang="scss" scoped>
     .home-block {
         position: relative;
-        min-height: 198px;
+        min-height: 185px;
         // border: 1px solid;
         border-radius: 6px;
         padding: 20px;

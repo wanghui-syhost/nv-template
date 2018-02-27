@@ -48,7 +48,7 @@
                         <span class="file-name">
                             <span class="file-label" v-show="!scope.row.isEdit" @click="setParentCode(scope.row.ID, scope.row.NAME,scope.row.IS_DIRECTORY)">{{scope.row.NAME}}</span>
                             <span class="file-input" v-if="scope.row.isEdit">
-                              <span style="float: left"><el-input id="" size="small" style="width: 310px" v-model="rename" :minlength="1" :maxlength="50" @keyup.enter.native="modifyComplete(scope.row)"></el-input></span>
+                              <span style="float: left; margin-bottom: 5px"><el-input id="" size="small" style="width: 310px" v-model="rename" :minlength="1" :maxlength="50" @keyup.enter.native="modifyComplete(scope.row)"></el-input></span>
                               <span style="float: left; margin-left: 10px"><el-button type="primary" size="mini" @click="modifyComplete(scope.row)" :disabled="rename.length<1">确认</el-button></span>
                               <span style="float: left; margin-left: 5px"><el-button type="primary" size="mini" @click="scope.row.isEdit = false">取消</el-button></span>
                             </span>
@@ -546,11 +546,15 @@
     },
     // 触发重命名
     reName(row){
+      const { list } = this
       if(row.IS_DIRECTORY == "YES"){
         this.rename = row.NAME;
       }else{
         this.rename = row.NAME.substring(0,row.NAME.lastIndexOf("."));
       }
+      list.forEach(item => {
+        item.isEdit = false
+      })
       row.isEdit = true;
     },
     modifyComplete(row){
@@ -776,5 +780,9 @@
         }
       }
     }
+  }
+  .cell i{
+    margin-right:5px;
+    cursor: pointer;
   }
 </style>

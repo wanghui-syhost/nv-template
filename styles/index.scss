@@ -17,9 +17,11 @@
 }
 /**弹出框**/
 .el-dialog__header {
-    background-color: #F6F7FB;
+    background-color: #409EFF;
 }
-
+.el-dialog__title{
+    color: #fff;
+}
 .el-form-item__content {
     .el-input--nenv  {
         width: 194px;  
