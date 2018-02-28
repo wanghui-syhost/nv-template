@@ -56,19 +56,18 @@ export default {
         }
     },
     handleLogin(){
-        let me = this
+        let self = this
         let reqParams = {
-            'loginName': me.loginForm.loginName,
-            'pwd': md5(md5(me.loginForm.pwd))
+            'loginName': self.loginForm.loginName,
+            'pwd': md5(md5(self.loginForm.pwd))
         }
-        me.login(reqParams)
+        self.login(reqParams)
           .then(() => {
-            me.$router.push('/home')
-            me.loading = false
+            self.$router.push('/home')
+            self.loading = false
 
           }).catch((error) => {
-            me.loading = false
-            console.log(error)
+            self.loading = false
           })
     },
     ...mapActions(['login']),
