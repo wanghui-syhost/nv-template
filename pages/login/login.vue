@@ -41,8 +41,8 @@ export default {
         
         },
         loginForm: {
-            loginName: 'super',
-            pwd: '123456'
+            loginName: '',
+            pwd: ''
         },
       }
   },
@@ -57,18 +57,20 @@ export default {
     },
     handleLogin(){
         let self = this
-        let reqParams = {
-            'loginName': self.loginForm.loginName,
-            'pwd': md5(md5(self.loginForm.pwd))
-        }
-        self.login(reqParams)
-          .then(() => {
-            self.$router.push('/home')
-            self.loading = false
+        if (!self.loading) {
+            self.loading = true
+            self.login({
+                'loginName': self.loginForm.loginName,
+                'pwd': md5(md5(self.loginForm.pwd))
+            })
+            .then(() => {
+                self.$router.push('/home')
+                self.loading = false
 
-          }).catch((error) => {
-            self.loading = false
-          })
+            }).catch((error) => {
+                self.loading = false
+            })
+        }
     },
     ...mapActions(['login']),
     ...mapActions('user', [
