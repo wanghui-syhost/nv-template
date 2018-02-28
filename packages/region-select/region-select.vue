@@ -69,7 +69,6 @@
       },
 
       recursivelyLoadData (loaded, value, depth) {
-          console.log(depth)
             const self = this
             if (value && value.length > 0) {
                 for (let i = 0; i < loaded.length; i++) {
