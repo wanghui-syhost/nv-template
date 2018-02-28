@@ -57,7 +57,15 @@ export default {
                 })*/
                 self.isLoading = false
                 self.menus = data
-                self.handleTabClick(data[0])
+                function findRealTab (data) {
+                    const ledger = data[0]
+                    if (ledger.children) {
+                        ledger.isChildExpansion = true
+                        return findRealTab(ledger.children)
+                    }
+                    return ledger
+                }
+                self.handleTabClick(findRealTab(data))
             }).catch(() => {
                 self.$emit('error')
             })
