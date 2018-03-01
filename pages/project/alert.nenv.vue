@@ -1,7 +1,7 @@
 <template>
     <nv-layout class="demo2">
         <div>
-            <el-button @click="dialogVisible=true">普通弹出</el-button>
+            <el-button @click="dialogVisible=true">浅色标题</el-button>
             <el-button @click="dialogVisible1=true">手动流转</el-button>
             <el-button @click="dialogVisible2=true">审批文档</el-button>
             <el-button @click="dialogVisible3=true">审批前公示</el-button>
@@ -11,7 +11,7 @@
             <el-button @click="dialogVisible5=true">退回</el-button>
         </div>
 
-        <el-dialog title="提示" :visible.sync="dialogVisible" size="tiny">
+        <el-dialog title="提示" class="light-dialog" :visible.sync="dialogVisible" size="tiny">
             <span>这是一段信息</span>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
@@ -65,8 +65,8 @@
         </el-dialog>
 
         <el-dialog title="审批文稿" :visible.sync="dialogVisible2" size="small">
-            <el-form ref="form" label-width="80px">
-                <el-row type="flex" class="row-bg" justify="space-around">
+            <el-form ref="form" >
+                <el-row class="row-bg" justify="space-around">
                     <el-col :span="10">
                         <el-form-item label="项目名称">
                             <el-input placeholder="请输入项目名称">温州水厂项目</el-input>
@@ -79,7 +79,7 @@
                     </el-col>
                 </el-row>
 
-                <el-row type="flex" justify="space-around">
+                <el-row justify="space-around">
                     <el-col :span="10">
                         <el-form-item label="建设单位">
                             <el-input>盈峰环境</el-input>
@@ -96,7 +96,7 @@
                     </el-col>
                 </el-row>
 
-                <el-row type="flex" justify="space-around">
+                <el-row justify="space-around">
                     <el-col :span="10">
                         <el-form-item label="审批部门">
                             <el-select placeholder="审批部门" v-model="value">
@@ -117,7 +117,7 @@
                     </el-col>
                 </el-row>
 
-                <el-row type="flex" justify="space-around">
+                <el-row justify="space-around">
                     <el-col :span="22">
                         <el-form-item label="选择是否">
                             <el-radio-group v-model="isChoose">
@@ -313,26 +313,7 @@
                 </el-row>
             </el-form>
         </el-dialog>
-        <div style="padding:20px">
-            <div>
-           <h5> 爱好：</h5>
-                <el-checkbox-group v-model="checkHobbies">
-                    <el-checkbox v-for="hibby in hobbies" :label="hibby.VALUE" :key="hibby.VALUE">{{hibby.NAME}}</el-checkbox>
-                </el-checkbox-group>
-            </div>
-            <div>
-                <h5> 流程：</h5>
-                <el-select v-model="value" placeholder="请选择">
-                    <el-option
-                    v-for="item in processes"
-                    :key="item.VALUE"
-                    :label="item.NAME"
-                    :value="item.VALUE">
-                    </el-option>
-                </el-select>
-            </div>
-        </div>
-
+        
         <!-- <div>
             <h3>组织人员选择器</h3>
             <nv-organize-user-selector url="/user/organize/all" title="从组织架构选择" label="text" :callback="userSelectBack" />
@@ -341,6 +322,7 @@
 </template>
 
 <script>
+//import '../../styles/dialog.scss'
 // import EPersonChoose from '@/components/e-person-choose';
 function getDictionaryDataByCode(params) {
   return unfetch({
