@@ -1,14 +1,14 @@
 <template>
   <nv-layout>
-    <h1>nenv 平台标准demo</h1>
+    <h2>nenv 平台组件</h2>
     <section>
-        <h2>1.切换标题</h2>
-        <el-button type="primary" @click="changeTitle('切换后的新标题')">点击改变title</el-button>
+        <h3>1.切换标签页标题</h3>
+        <el-button type="primary" size="small" @click="changeTitle('切换后的新标题')">点击改变title</el-button>
     </section>
     <section>
-        <h2>2.输入控件</h2>
+        <h3>2.输入控件</h3>
         <div>
-          <h3>2.1多选框</h3>
+          <h4>2.1多选框</h4>
           <nv-checkbox nv-code="HOBBY" v-model="nvCheckboxResult"/>
           <blockquote>
             <p>
@@ -18,7 +18,7 @@
           </blockquote>
         </div>
         <div>
-          <h3>2.1下拉框</h3>
+          <h4>2.1下拉框</h4>
           <nv-select nv-code="PROCESS" v-model="nvSelectResult"></nv-select>
           <blockquote>
             <p>
@@ -27,28 +27,43 @@
             <p>{{ nvSelectResult }}</p>
           </blockquote>
         </div>
-
         <div>
-          <h3>省市区级联</h3>
+          <h4>2.3单选按钮</h4>
+          <nv-radio nv-code="HOBBY" v-model="nvRadioResult"/>
+          <blockquote>
+            <p>
+              选择结果:
+            </p>
+            <p v-for="item in nvRadioResult" :key="item"> {{ item }} </p>
+          </blockquote>
+        </div>
+        <div>
+          <h3>3.省市区级联</h3>
           <div>
-            <p>标准使用</p>
+            <h4>3.1 标准使用</h4>
             <nv-region-select v-model="nvRegionSelectedResult"></nv-region-select >
           </div>
           <div>
-            <p>限制区域</p>
+            <h4>3.2 限制区域</h4>
             <nv-region-select v-model="nvRegionSelectedResult2" area="44"></nv-region-select >
           </div>
           <div>
-            <p>限制可选层级</p>
+            <h4>3.3 限制可选层级</h4>
             <nv-region-select v-model="nvRegionSelectedResult2" area = "44" :depth="1"></nv-region-select >
           </div>
         </div>
 
-        <nv-organize-user-selector :multi="true"  v-model="nvOrganizeUserSelectResult" />
-        <nv-organize-user-selector :only-organize="true" :multi="true"  v-model="nvOrganizeSelectResult" />
+        <div>
+            <h3>4.组织人员选择器</h3>
+            <h4>4.1 人员选择器</h4>
+            <nv-organize-user-selector :multi="true"  v-model="nvOrganizeUserSelectResult" />
+            <h4>4.2 组织选择器</h4>
+            <nv-organize-user-selector :only-organize="true" :multi="true"  v-model="nvOrganizeSelectResult" />
+        </div>
+
     </section>
     <section style="width:1200px">
-        <h2>3.子表配置</h2>
+        <h3>4.子表配置</h3>
         <el-form :model="dynamicValidateForm" ref="dynamicValidateForm"  label-width="120px">
         <el-row type="flex" class="row-bg" justify="space-around" 
         v-for="(domain, index) in dynamicValidateForm.domains"
@@ -82,6 +97,7 @@ export default {
   data () {
     return {
       nvCheckboxResult: [],
+      nvRadioResult: [],
       nvSelectResult: '',
       nvRegionSelectedResult:["44","4406","440606"],
       nvRegionSelectedResult2: [],
