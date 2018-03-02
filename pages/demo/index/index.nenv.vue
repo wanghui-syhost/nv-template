@@ -113,7 +113,7 @@ export default {
   data () {
     return {
       nvCheckboxResult: [],
-      nvRadioResult: [],
+      nvRadioResult: '',
       nvSelectResult: '',
       nvRegionSelectedResult:["44","4406","440606"],
       nvRegionSelectedResult2: [],
