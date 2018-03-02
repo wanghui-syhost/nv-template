@@ -16,7 +16,7 @@
     </el-dialog>
 </template>
 <script>
-import md5 from 'md5'
+import md5 from '../../node_modules/md5'
 export default {
     props: {
         ishow: {
@@ -50,7 +50,7 @@ export default {
                 if (valid) {
                     store.dispatch('login', {
                         loginName: form.username,
-                        pwd: '14e1b600b1fd579f47433b88e8d85291'//md5(md5(form.password))
+                        pwd: md5(md5(form.password))
                     }).then(() => {
                         self.dialogVisible = false
                     })

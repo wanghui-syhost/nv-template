@@ -106,15 +106,16 @@
                 <ul>
                   <li v-for="item in list"  :key="item.ID">
                     <a class="file_item">
-                       <div>
-                        <img src="img/word.png" class="file_format"/>
+                      <div>
+                        <img :src='item.imgURL' class="file_format"/>
                       </div>
-                     <!--  <el-checkbox v-model="item.isChecked" :class ="{isChecked:item.isChecked}"></el-checkbox> -->
-                      <!-- <el-button-group>
-                        <el-button type="primary" icon="el-icon-download"></el-button>
-                        <el-button type="primary" icon="el-icon-close"></el-button>
-                      </el-button-group> -->
+                      <el-checkbox v-model="item.isChecked" :class ="{isChecked:item.isChecked}"></el-checkbox>
+                      <el-button-group>
+                        <el-button type="primary" icon="el-icon-download" @click="downloadFile(item)" ></el-button>
+                        <el-button type="primary" icon="el-icon-close"  @click="removeInfo(item)" ></el-button>
+                      </el-button-group>
                     </a>
+                    <input :value="item.FILE_TITLE" placeholder="文件标题" class="file_name" @change="updateFileNameByName(item,$event);"/>
                   </li>
                 </ul>
               </div>
@@ -239,6 +240,13 @@
     },
     methods: {
       // 获取列表数据
+      calcFileImg (ext) {
+        switch (ext) {
+          case '.doc':
+          case '.docx':
+            return 'word'
+        }
+      },
       fetchData(treeId='') {
         this.listLoading = true;
         var tid = '';
@@ -251,37 +259,34 @@
         } else {
           tid = treeId;
         }
-        const pagePrams = {
+
+        getTreeDocuments({
           pageIndex: this.pageIndex,
           pageSize : this.pageSize,
           PROJECT_ID : this.projectId,
           TYPE : this.type,
           TREE_ID: tid
-        }
-        getTreeDocuments(pagePrams).then(response => {
+        }).then(({ data }) => {
           this.listLoading = false;
-          const  {data, code ,msg} = response.rawData;
-          if(code===0){
-            if(data != null && data.list != null){
-              const arr = Object.keys(data.list);
-              this.list = data.list.map(v => {
-                v.isEdit = false;
-                return v
-              });
-
-               this.totalCount = data.totalCount;
-            }else {
-                this.list = [];
-                this.totalCount = 0;
+            function calcFileImg(ext) {
+                switch (ext) {
+                    case '.doc':
+                    case '.docx':
+                      return 'word'
+                    default:
+                      return 'excel'
               }
-            
-        
-          }else{
-            this.$message.error(msg);
-          }
+            }
+            const arr = Object.keys((data || {}).list || []);
+            this.list = data.list.map(v => {
+              v.isEdit = false;
+              v.isChecked = false;
+              v.imgURL = require(`./img/${calcFileImg(v.FILE_TYPE)}.png`)
+              return v
+            });
+            this.totalCount = data.totalCount || 0;
         }).catch(err=>{
           this.listLoading = false;
-          console.log(err);
         })
       },
 
@@ -308,11 +313,7 @@
       console.log(section);
       //当前选择的条目
       this.currentChooseRows = section;
-      if(this.currentChooseRows.length>=1){
-        this.isDownload = false;
-      }else{
-        this.isDownload = true;
-      }
+      this.isDownload = !(this.currentChooseRows.length >= 1)
     },
     // 下载文件
     downloadChooseRows(){
@@ -359,7 +360,7 @@
       this.listLoading = false;
       debugger;
         let me = this;
-        let {code , data,msg} = resp;
+        let {code , data, msg} = resp;
         console.log(resp);
         if(code==0){
             // 开始添加到文件列表中
@@ -394,6 +395,35 @@
             this.$message.info(msg);
         }
     },
+    downloadFile(row){
+      //window.open(this.downloadFileUrl+'&ID='+row.ID);
+      unfetch.download(this.downloadFileUrl, {
+        ID: row.ID
+       })
+    },
+    removeInfo(row) {
+      let me = this;
+      const params = {
+          ID: row.ID
+        }
+      this.$confirm('此操作将永久删除记录, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        callback:(action,instance)=>{
+          if(action=='confirm'){
+            me.reqData(params);
+          }
+        }
+      });
+    },
+    updateFileNameByName(row,event){
+      row.FILE_TITLE = event.target.value;
+      let backdata = JSON.parse(JSON.stringify(row));
+      this.modifyForm = backdata;
+      //this.updateTitle();
+    },
+    
     removeItem(row){
       	let me = this;
       	if(row.IS_DIRECTORY === 'YES'){
@@ -521,17 +551,20 @@
         console.log(resp);
         me.dialogFormVisible= false;
         let {code, msg, data} = resp.rawData;
-        if(code==0){
-          me.$message({
-            showClose: true,
-            message: '创建成功'
-          });
-          me.fetchData(me.currentId);
-        }else{
-          me.$message.error('创建失败');
-        }
+        debugger
+        me.$message({
+          showClose: true,
+          message: '创建成功'
+        });
+        me.fetchData(me.currentId);
+       
       }).catch(err=>{
-        console.log(err);
+          let {code, msg, data} = err;
+          if (code == 3){
+             me.$message.error(msg);
+          } else {
+             me.$message.error("创建失败");
+          }
       })
     },
     download(row){
@@ -566,19 +599,20 @@
             NAME: this.rename.trim()
           };
           FileRenameFolder(data).then(resp=>{
-            let {code, msg, data} = resp.rawData;
-            if(code==0){
-              me.fetchData(me.currentId);
-              row.isEdit = false;
-              me.$message({
-                showClose: true,
-                message: '修改成功'
-              });
-            }else{
-              me.$message.error('修改失败');
-            }
+            me.fetchData(me.currentId);
+            row.isEdit = false;
+            me.$message({
+              showClose: true,
+              message: '修改成功'
+            });
           }).catch(err=>{
             console.error(err);
+            let {code, msg, data} = err;
+            if (code == 3){
+              me.$message.error(msg);
+            } else {
+              me.$message.error("创建失败");
+            }
           })
       }else{
         //文件重命名
@@ -692,17 +726,17 @@
       }).catch(err=>{
         console.log(err);
       });
-    },
-    watch: {  //监听全选方法
-      checkAll (val) {
-        const self = this
-        const { list } = self
-        Object.keys(list).forEach(key => {
-          list[key].isChecked =val;
-        })
-      }
     }
+  },
+  watch: {  //监听全选方法
+    checkAll (val) {
+      const self = this
+      const { list } = self
+      list.forEach(item => {
+        item.isChecked = val;
+      })
   }
+}
 }
 </script>
 
@@ -778,6 +812,24 @@
           left: 54px;
           display: none;
         }
+      }
+      a.file_item:hover{
+        border:1px solid #9DC851;
+        .el-checkbox{
+          display: block;
+        }
+        .el-button-group{
+          display: block; 
+        }
+      }
+      .file_name {
+        text-align: center!important;
+        height: 40px;
+        width: 218px;
+        border:none;
+      }
+      .file_name:hover {
+        background-color: #F5F5F5;
       }
     }
   }
