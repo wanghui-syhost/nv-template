@@ -5,17 +5,17 @@
 		</header>
 		<section class="ledger-body">
 			<section class="ledger-slider">
-				<el-menu mode="vertical" :default-active="defaultMenu">
+				<el-menu mode="vertical" :default-active="defaultMenu" :default-openeds="defaultOpend">
 					<template v-for="item in routes">
-						<el-submenu :index="item.ID" v-if="item.children" :collapse="false" :key="item.ID">
+						<el-submenu :index="item.ID" v-if="item.children" :collapse="true" :key="item.ID">
 							<template slot="title">
 								<i class="el-icon-menu" v-if="item.icon" :class="item.icon"></i> {{item.NAME}}
 							</template>
 							<template v-for="child in item.children">
-								<el-menu-item :index="child.ID" @click="menuClick(child)">{{child.NAME}}</el-menu-item>
+								<el-menu-item :index="child.ID" @click="menuClick(child)" :key="child.ID">{{child.NAME}}</el-menu-item>
 							</template>
 						</el-submenu>
-						<el-menu-item v-else :index="item.ID" :collapse="false" @click="menuClick(item)">
+						<el-menu-item v-else :index="item.ID" :collapse="true"  :key="item.ID" @click="menuClick(item)">
 							<i class="el-icon-menu" v-if="item.icon" :class="item.icon"></i> {{item.NAME}}
 						</el-menu-item>
 					</template>
@@ -31,7 +31,9 @@
 		data() {
 			const self = this
 			return {
-				defaultMenu: '',
+				collapse: true,
+				defaultMenu: [],
+				defaultOpend: [],
 				SHOW_HEAD: true,
 				TITLE: '',
 				routes: []
@@ -50,10 +52,14 @@
 				this.SHOW_HEAD = sliderMenus.ledger.SHOW_HEAD;
 				this.TITLE = sliderMenus.ledger.TITLE;
 				this.routes = sliderMenus.menus;
+				console.log(sliderMenus)
+				this.defaultMenu = [sliderMenus.menus[0].children[0].ID]
+				this.defaultOpend = [sliderMenus.menus[0].ID]
 			},
 			menuClick(item) {
 				this.$refs.dynamicLedger.handleTabClick(item);
-			}
+			},
+			
 		}
 	}
 </script>

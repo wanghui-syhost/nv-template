@@ -114,7 +114,7 @@ export default {
                         class: `nv-${self.nvPosition}`
                     },
                     [
-                        self.nvEmbed ? h(
+                        !self.nvEmbed ? h(
                             'div',
                             {
                                 staticClass: 'nv-ledger__nav'
