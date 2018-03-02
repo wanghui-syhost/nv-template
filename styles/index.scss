@@ -16,11 +16,51 @@
     text-align: center;
 }
 /**弹出框**/
-.el-dialog__header {
-    background-color: #409EFF;
+
+.light-dialog {
+    .el-dialog__header {
+        background-color: #F7FAFF;
+        height: 16px;
+        padding: 16px 19px;
+    }
+    .el-dialog__title {
+        font-size: 16px;
+        color: #434F68;
+        line-height: 16px;
+    }
+    
+    .el-dialog__body {
+        padding: 25px 40px;
+    }
+    
+    .el-dialog__headerbtn .el-dialog__close {
+        color: #5F7094 !important;
+    }
 }
-.el-dialog__title{
-    color: #fff;
+
+.el-dialog__header {
+    background-color: #3B84F2;
+    height: 16px;
+    padding: 16px 18px;
+}
+
+.el-dialog__title {
+    font-size: 16px;
+    color: #FFFFFF;
+    line-height: 16px;
+}
+
+.el-dialog__body {
+    padding: 25px 49px;
+}
+
+.el-dialog__headerbtn .el-dialog__close {
+    color: #FFFFFF !important;
+}
+
+.el-dialog__headerbtn {
+    font-size: 23px;
+    top: 12px;
 }
 .el-form-item__content {
     .el-input--nenv  {

@@ -1,78 +1,108 @@
 <template>
   <nv-layout>
-    <!-- <h1>nenv 平台标准demo</h1> -->
-    <section>
-        <h2>1.切换标题</h2>
-        <el-button type="primary" @click="changeTitle('切换后的新标题')">点击改变title</el-button>
-    </section>
-    <section>
-        <h2>2.输入控件</h2>
-        <div>
-          <h4>2.1多选框</h4>
-          <nv-checkbox nv-code="HOBBY" v-model="nvCheckboxResult"/>
-          <blockquote>
-            <p>
-              选择结果:
-            </p>
-            <p v-for="item in nvCheckboxResult" :key="item"> {{ item }} </p>
-          </blockquote>
-        </div>
-        <div>
-          <h4>2.2下拉框</h4>
-          <nv-select nv-code="PROCESS" v-model="nvSelectResult"></nv-select>
-          <blockquote>
-            <p>
-              选择结果:
-            </p>
-            <p>{{ nvSelectResult }}</p>
-          </blockquote>
-        </div>
-        <div>
-          <h4>2.3省市区级联</h4>
-          <div>
-            <p>标准使用</p>
-            <nv-region-select v-model="nvRegionSelectedResult"></nv-region-select >
-          </div>
-          <div>
-            <p>限制区域</p>
-            <nv-region-select v-model="nvRegionSelectedResult2" area="44"></nv-region-select >
-          </div>
-          <div>
-            <p>限制可选层级</p>
-            <nv-region-select v-model="nvRegionSelectedResult2" area = "44" :depth="1"></nv-region-select >
-          </div>
-        </div>
-        <div class="choose_part">
-          <h4>2.4组织选择人</h4>
-          <nv-organize-user-selector :multi="true"  v-model="nvOrganizeUserSelectResult" /><!--选择到人-->
-          <nv-organize-user-selector :only-organize="true" :multi="true"  v-model="nvOrganizeSelectResult" /><!--选择到部门-->
-        </div>
-    </section>
-    <section>
-        <h2>3.子表配置</h2>
-        <el-form :model="dynamicValidateForm" ref="dynamicValidateForm"  label-width="120px">
-        <el-row type="flex" class="row-bg" justify="space-around" 
-        v-for="(domain, index) in dynamicValidateForm.domains"
-         :key="domain.key">
-          <el-form-item label="姓名"  :prop="'domains.' + index + '.NAME'" :rules="[{ required: true, message: '配置名称不能为空', trigger: 'blur'}]">
-            <el-input v-model="domain.NAME" placeholder="请输入配置名称"></el-input>
-          </el-form-item>
-          <el-form-item label="性别"  :prop="'domains.' + index + '.KEY'" :rules="keyRules" >
-           <nv-select nv-code="SEX" v-model="domain.KEY"></nv-select>
-          </el-form-item>
-          <el-form-item label="爱好"  :prop="'domains.' + index + '.VALUE'" :rules="[{required:true, message:'爱好不能为空', trigger: 'blur'}]" class="hobby">
-            <nv-checkbox nv-code="HOBBY" v-model="domain.VALUE"/>
-          </el-form-item>
-           <el-button @click.prevent="removeDomain(domain)" style="margin-left:20px; height: 40px;">删除</el-button>
-	    </el-row>
-        <el-row type="flex" justify="space-around">
-            <el-col :span="8" :offset="4">
-               <el-button @click="addDomain">添加行</el-button>
-              <el-button type="primary" @click="batchSave"  :disabled="dynamicValidateForm.domains.length >= 1 ? false : true">保存</el-button>
+    <!-- <h2>平台组件</h2> -->
+    <nv-layout-section title="1.输入控件">
+      <div>
+        <h4>1.1多选框</h4>
+        <nv-checkbox nv-code="HOBBY" v-model="nvCheckboxResult"/>
+        <blockquote>
+          <p>
+            选择结果:
+          </p>
+          <p v-for="item in nvCheckboxResult" :key="item"> {{ item }} </p>
+        </blockquote>
+      </div>
+      <div>
+        <h4>1.2下拉框</h4>
+        <nv-select nv-code="PROCESS" v-model="nvSelectResult"></nv-select>
+        <blockquote>
+          <p>
+            选择结果:
+          </p>
+          <p>{{ nvSelectResult }}</p>
+        </blockquote>
+      </div>
+      <div>
+        <h4>1.3单选按钮</h4>
+        <nv-radio nv-code="HOBBY" v-model="nvRadioResult"/>
+        <blockquote>
+          <p>
+            选择结果:
+          </p>
+          <p v-for="item in nvRadioResult" :key="item"> {{ item }} </p>
+        </blockquote>
+      </div>
+    </nv-layout-section>
+    
+    <nv-layout-section title="2.省市区级联">
+      <div>
+        <h4>2.1 标准使用</h4>
+        <nv-region-select v-model="nvRegionSelectedResult"></nv-region-select >
+      </div>
+      <div>
+        <h4>2.2 限制区域</h4>
+        <nv-region-select v-model="nvRegionSelectedResult2" area="44"></nv-region-select >
+      </div>
+      <div>
+        <h4>2.3 限制可选层级</h4>
+        <nv-region-select v-model="nvRegionSelectedResult2" area = "44" :depth="1"></nv-region-select >
+      </div>
+    </nv-layout-section>
+
+    <nv-layout-section title="3.组织人员选择器">
+      <h4>3.1 人员选择器</h4>
+      <nv-organize-user-selector :multi="true"  v-model="nvOrganizeUserSelectResult" />
+      <h4>3.2 组织选择器</h4>
+      <nv-organize-user-selector :only-organize="true" :multi="true"  v-model="nvOrganizeSelectResult" />
+    </nv-layout-section>
+
+    <nv-layout-section title="子表配置">
+      <div style="width:1400px">
+        <el-form :model="dynamicValidateForm" ref="dynamicValidateForm" >
+          <el-row type="flex"  class="row-bg" justify="space-around">
+            <el-col :span="4">
+              <el-form-item label="配置名称"></el-form-item>
             </el-col>
-        </el-row>
-      </el-form>
-    </section>
+            <el-col :span="4">
+              <el-form-item label="性别"></el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="爱好"></el-form-item>
+            </el-col>
+            <el-col :span="2">
+            </el-col>
+          </el-row>
+          <el-row type="flex" class="row-bg" justify="space-around" 
+            v-for="(domain, index) in dynamicValidateForm.domains"
+            :key="domain.key">
+            <el-col :span="4">
+              <el-form-item label=""  :prop="'domains.' + index + '.NAME'" :rules="[{ required: true, message: '配置名称不能为空', trigger: 'blur'}]">
+                <el-input v-model="domain.NAME" placeholder="请输入配置名称"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="4">
+              <el-form-item label=""  :prop="'domains.' + index + '.KEY'" :rules="keyRules" >
+              <nv-select nv-code="SEX" v-model="domain.KEY"></nv-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label=""  :prop="'domains.' + index + '.VALUE'" :rules="[{required:true, message:'爱好不能为空', trigger: 'blur'}]">
+                <nv-checkbox nv-code="HOBBY" v-model="domain.VALUE"/>
+              </el-form-item>
+            </el-col>
+            <el-col :span="2">
+            <el-button @click.prevent="removeDomain(domain)" style="margin-left:20px; height: 40px;">删除</el-button>
+            </el-col>
+          </el-row>
+          <el-row type="flex" justify="space-around">
+              <el-col :span="8" :offset="4">
+                <el-button @click="addDomain">添加行</el-button>
+                <el-button type="primary" @click="batchSave"  :disabled="dynamicValidateForm.domains.length >= 1 ? false : true">保存</el-button>
+              </el-col>
+          </el-row>
+        </el-form>
+      </div>
+    </nv-layout-section>
   </nv-layout>
 </template>
 
@@ -83,6 +113,7 @@ export default {
   data () {
     return {
       nvCheckboxResult: [],
+      nvRadioResult: [],
       nvSelectResult: '',
       nvRegionSelectedResult:["44","4406","440606"],
       nvRegionSelectedResult2: [],
@@ -102,9 +133,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('platform', [
-        'changeTitle'
-    ]),
+    
 
     // 
       removeDomain(item) {
@@ -142,17 +171,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.choose_part div {
-    float: left;
-    margin-bottom: 5px;
-    width: 100%;
-}
-.hobby .el-form-item__content {
-    width: 550px;
-}
-.el-form-item{
-  display: flex;
-}
+  .div_border{
+    border-top: solid 1px #bec5d4;
+  }
 </style>
 
 

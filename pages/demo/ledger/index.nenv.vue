@@ -2,24 +2,19 @@
   <!-- <nv-dynamic-ledger nv-code="FIRST_LEDGER"></nv-dynamic-ledger> -->
   <nv-layout>
     <div>
-      <nv-select nv-code="LEDGER_DEMO_SELECT" v-model="ledgerCode"/>
+      <el-button type="primary" @click="openLedger">打开台账页面</el-button>
     </div>
   </nv-layout>
 </template>
 <script>
 export default {
   name: 'LedgerDemo',
-  data () {
-    return {
-      ledgerCode: ''
-    }
-  },
-  watch: {
-    ledgerCode (val) {
+  methods: {
+    openLedger (val) {
       if (val) {
         unfetch.open('./#/ledger', {
           params: {
-            'nv-code': val
+            'nv-code': 'FIRST_LEDGER'
           }
         })
       }

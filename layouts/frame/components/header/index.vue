@@ -27,8 +27,8 @@
             <layout-setting>
                 <div class="header__setting-item">
                     <el-switch 
-                        active-text="大屏模式"
-                        inactive-text="小屏模式"
+                        active-text="小屏模式"
+                        inactive-text="大屏模式"
                         v-model="limitWidth"/>
                 </div>
             </layout-setting>

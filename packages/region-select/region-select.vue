@@ -83,6 +83,12 @@
                                         CODE: loaded[i].CODE
                                     }
                                 }).then(({ data }) => {
+                                    
+                                    if (data.length === 0) {
+                                        delete loaded[i].children
+                                        return this.$forceUpdate()
+                                    }
+
                                     if (depth < 3) {
                                         data.forEach(item => {
                                             delete item.children
