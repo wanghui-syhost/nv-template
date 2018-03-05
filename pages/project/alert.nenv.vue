@@ -1,23 +1,11 @@
 <template>
     <nv-layout class="demo2">
         <div>
-            <el-button @click="dialogVisible=true">浅色标题</el-button>
-            <el-button @click="dialogVisible1=true">手动流转</el-button>
+            <!-- <el-button @click="dialogVisible1=true">手动流转</el-button> -->
             <el-button @click="dialogVisible2=true">审批文档</el-button>
             <el-button @click="dialogVisible3=true">审批前公示</el-button>
-            <el-button @click="dialogVisible4=true">审批文档2</el-button>
-            <el-button @click="dialogVisible5=true">抄送</el-button>
-            <el-button @click="dialogVisible6=true">结束</el-button>
-            <el-button @click="dialogVisible5=true">退回</el-button>
         </div>
 
-        <el-dialog title="提示" class="light-dialog" :visible.sync="dialogVisible" size="tiny">
-            <span>这是一段信息</span>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-            </span>
-        </el-dialog>
 
         <el-dialog title="手动流转" :visible.sync="dialogVisible1" size="large">
             <el-steps :space="100" :active="1" finish-status="success">
@@ -64,15 +52,15 @@
             </span>
         </el-dialog>
 
-        <el-dialog title="审批文稿" :visible.sync="dialogVisible2" size="small">
-            <el-form ref="form" >
+        <el-dialog title="审批文档" :visible.sync="dialogVisible2" size="small">
+            <el-form ref="form" label-width="90px">
                 <el-row class="row-bg" justify="space-around">
-                    <el-col :span="10">
+                    <el-col :span="12">
                         <el-form-item label="项目名称">
                             <el-input placeholder="请输入项目名称">温州水厂项目</el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="10">
+                    <el-col :span="12">
                         <el-form-item label="审批类型">
                             <el-input v-model="input2">温州水厂项目</el-input>
                         </el-form-item>
@@ -80,12 +68,12 @@
                 </el-row>
 
                 <el-row justify="space-around">
-                    <el-col :span="10">
+                    <el-col :span="12">
                         <el-form-item label="建设单位">
                             <el-input>盈峰环境</el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="10">
+                    <el-col :span="12">
                         <el-form-item label="项目类型">
                             <el-select placeholder="选择项目类型" v-model="value">
                                 <el-option label="项目类型1" value="type1"></el-option>
@@ -97,7 +85,7 @@
                 </el-row>
 
                 <el-row justify="space-around">
-                    <el-col :span="10">
+                    <el-col :span="12">
                         <el-form-item label="审批部门">
                             <el-select placeholder="审批部门" v-model="value">
                                 <el-option label="审批部门1" value="type1"></el-option>
@@ -106,7 +94,7 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="10">
+                    <el-col :span="12">
                         <el-form-item label="审批员">
                             <el-select placeholder="选择审批员" v-model="value">
                                 <el-option label="审批员1" value="type1"></el-option>
@@ -118,7 +106,7 @@
                 </el-row>
 
                 <el-row justify="space-around">
-                    <el-col :span="22">
+                    <el-col :span="24">
                         <el-form-item label="选择是否">
                             <el-radio-group v-model="isChoose">
                                 <el-radio label="0">是</el-radio>
@@ -137,38 +125,48 @@
             </el-form>
         </el-dialog>
 
-        <el-dialog title="审批前文稿" :visible.sync="dialogVisible3" size="small">
+        <el-dialog title="审批前公示" :visible.sync="dialogVisible3" size="small">
             <el-form ref="form" label-width="90px">
-                <el-form-item label="公示标题">
-                    <el-input>盈峰环境</el-input>
-                </el-form-item>
-                <el-form-item label="公示说明">
-                    <el-input type="textarea" :rows="2" placeholder="请输入内容">盈峰环境</el-input>
-                </el-form-item>
-                <el-form-item label="听证告知">
-                    <el-input type="textarea" :rows="2">盈峰环境</el-input>
-                </el-form-item>
-
+                <el-row type="flex" class="row-bg" justify="space-between">
+                    <el-col :span="24">
+                        <el-form-item label="公示标题">
+                            <el-input>盈峰环境</el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row type="flex" class="row-bg" justify="space-between">
+                    <el-col>
+                        <el-form-item label="公示说明">
+                            <el-input type="textarea" :rows="2" placeholder="请输入内容">盈峰环境</el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row type="flex" class="row-bg" justify="space-between">
+                    <el-col>
+                        <el-form-item label="听证告知">
+                            <el-input type="textarea" :rows="2">盈峰环境</el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
                 <el-row type="flex" class="row-bg" justify="space-between">
                     <el-col :span="12">
                         <el-form-item label="联系电话">
                             <el-input placeholder="请输入联系电话">联系电话</el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="10">
+                    <el-col :span="12">
                         <el-form-item label="联系地址">
                             <el-input v-model="input2" placeholder="请输入联系地址">联系地址</el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
-
-                <el-row type="flex" justify="space-between">
-                    <el-col :span="10">
+                <el-row type="flex"  class="row-bg" justify="space-between">
+                    <el-col :span="12">
                         <el-form-item label="建设单位">
                             <el-input>盈峰环境</el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="10">
+                    <el-col :span="12">
                         <el-form-item label="项目类型">
                             <el-select placeholder="选择项目类型" v-model="value">
                                 <el-option label="项目类型1" value="type1"></el-option>
@@ -178,9 +176,8 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-
-                <el-row type="flex" justify="space-between">
-                    <el-col :span="10">
+                <el-row type="flex"  class="row-bg" justify="space-between">
+                    <el-col :span="12">
                         <el-form-item label="审批部门">
                             <el-select placeholder="审批部门" v-model="value">
                                 <el-option label="审批部门1" value="type1"></el-option>
@@ -189,7 +186,7 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="10">
+                    <el-col :span="12">
                         <el-form-item label="审批员">
                             <el-select placeholder="选择审批员" v-model="value">
                                 <el-option label="审批员1" value="type1"></el-option>
@@ -200,8 +197,8 @@
                     </el-col>
                 </el-row>
 
-                <el-row type="flex" justify="space-between">
-                    <el-col :span="22">
+                <el-row type="flex"  class="row-bg" justify="space-between">
+                    <el-col>
                         <el-form-item label="选择是否">
                             <el-radio-group v-model="isChoose">
                                 <el-radio label="0">是</el-radio>
@@ -210,21 +207,31 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-
-
-                <el-form-item label="项目概况">
-                    <el-input type="textarea" :rows="2" placeholder="项目概况">项目概况</el-input>
-                </el-form-item>
-                <el-form-item label="主要影响">
-                    <el-input type="textarea" :rows="2">主要影响</el-input>
-                </el-form-item>
-                <el-form-item label="参与情况">
-                    <span class="" style="color:#fff;border-radius: 1px; background-color: #398dee;height:14px;width:24px;">
-                        <i class="el-icon-more"></i>
-                    </span>
-                    <el-input type="textarea" :rows="2">
-                        参与情况</el-input>
-                </el-form-item>
+                <el-row type="flex" class="row-bg" justify="space-between">
+                    <el-col >
+                        <el-form-item label="项目概况">
+                            <el-input type="textarea" :rows="2" placeholder="项目概况">项目概况</el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row type="flex" class="row-bg" justify="space-between">
+                    <el-col >
+                        <el-form-item label="主要影响">
+                            <el-input type="textarea" :rows="2">主要影响</el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row type="flex" class="row-bg" justify="space-between">
+                    <el-col >
+                        <el-form-item label="参与情况">
+                            <span class="" style="color:#fff;border-radius: 1px; background-color: #398dee;height:14px;width:24px;">
+                                <i class="el-icon-more"></i>
+                            </span>
+                            <el-input type="textarea" :rows="2">
+                                参与情况</el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
 
                 <el-row type="flex" justify="space-around">
                     <el-col :span="8" :offset="4">
@@ -234,90 +241,7 @@
                 </el-row>
             </el-form>
         </el-dialog>
-
-
-        <el-dialog title="审批文稿2" :visible.sync="dialogVisible4" size="small">
-                <el-form ref="form" label-width="80px">
-                <el-form-item label="环境影响简述">
-                    <el-input  type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="环境影响简述"></el-input>
-                </el-form-item>
-                
-                <el-row type="flex" justify="space-around">
-                    <el-col :span="12">
-                        <el-form-item label="记录人">
-                            <el-input>盈峰环境</el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="记录时间">
-                               <el-date-picker
-                                v-model="value1"
-                                type="date"
-                                placeholder="选择日期">
-                                </el-date-picker>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-
-                <el-row type="flex" justify="space-around">
-                    <el-col :span="8" :offset="4">
-                        <el-button @click="dialogVisible4==false">取消</el-button>
-                        <el-button type="primary">保存</el-button>
-                    </el-col>
-                </el-row>
-            </el-form>
-
-
-
-        </el-dialog>
-
-
-        <el-dialog title="抄送" :visible.sync="dialogVisible5" size="small">
-                <el-form ref="form" label-width="120px">
-                <el-form-item label="抄送用户">
-                    <el-input  type="textarea"  placeholder="抄送用户"></el-input>
-                </el-form-item>
-                <el-form-item label="消息类型">
-                    <el-input  type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="消息类型"></el-input>
-                </el-form-item>
-                <el-form-item label="公司">
-                    <el-input  type="textarea" :autosize="{ minRows: 1, maxRows: 2}" placeholder="公司"></el-input>
-                </el-form-item>
-                <el-form-item label="是否提醒">
-                    <el-checkbox v-model="checked"></el-checkbox>
-                </el-form-item>
-
-                <el-row type="flex" justify="space-around">
-                    <el-col :span="8" :offset="4">
-                        <el-button @click="dialogVisible5==false">取消</el-button>
-                        <el-button type="primary">保存</el-button>
-                    </el-col>
-                </el-row>
-            </el-form>
-        </el-dialog>
-
-
-        <el-dialog title="结束流程" :visible.sync="dialogVisible6" size="small">
-                <el-form ref="form" label-width="90px">
-                <el-form-item label="处理意见">
-                    <el-input  type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="消息类型"></el-input>
-                </el-form-item>
-                <el-form-item label="">
-                    <div class="demo2-red-font">本环节结束视为"办结作废"!</div>
-                </el-form-item>
-                <el-row type="flex" justify="space-around">
-                    <el-col :span="8" :offset="4">
-                        <el-button @click="dialogVisible6==false">取消</el-button>
-                        <el-button type="primary">保存</el-button>
-                    </el-col>
-                </el-row>
-            </el-form>
-        </el-dialog>
-        
-        <!-- <div>
-            <h3>组织人员选择器</h3>
-            <nv-organize-user-selector url="/user/organize/all" title="从组织架构选择" label="text" :callback="userSelectBack" />
-        </div> -->
+       
     </nv-layout>
 </template>
 
@@ -443,6 +367,12 @@ export default {
     }
 }
 </script>
+<style lang="scss" scoped>
+.el-form-item__content{
+    margin-left:90px!important;
+}
+</style>
+
 <style lang="scss">
 .demo2 {
     padding: 16px 20px;
@@ -454,5 +384,9 @@ export default {
         color: #fb4b46;
     }
 }
+.el-form-item__label{
+    text-align: right!important;
+}
 </style>
+
 
