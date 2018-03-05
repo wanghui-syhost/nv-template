@@ -273,18 +273,26 @@
                     case '.doc':
                     case '.docx':
                       return 'word'
+                    case '.pdf':
+                      return 'pdf' 
                     default:
                       return 'excel'
               }
             }
             const arr = Object.keys((data || {}).list || []);
-            this.list = data.list.map(v => {
-              v.isEdit = false;
-              v.isChecked = false;
-              v.imgURL = require(`./img/${calcFileImg(v.FILE_TYPE)}.png`)
-              return v
-            });
-            this.totalCount = data.totalCount || 0;
+            if (data.list){
+              this.list = data.list.map(v => {
+                v.isEdit = false;
+                v.isChecked = false;
+                v.imgURL = require(`./img/${calcFileImg(v.FILE_TYPE)}.png`)
+                return v
+              });
+              this.totalCount = data.totalCount || 0;
+            } else {
+              this.list  = [];
+              this.totalCount =  0;
+            }
+            
         }).catch(err=>{
           this.listLoading = false;
         })
