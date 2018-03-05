@@ -27,8 +27,7 @@
             <layout-setting>
                 <div class="header__setting-item">
                     <el-switch 
-                        active-text="小屏模式"
-                        inactive-text="大屏模式"
+                        active-text="全屏"
                         v-model="limitWidth"/>
                 </div>
             </layout-setting>
@@ -67,7 +66,7 @@ export default {
                 this.changeLimitWidth()
             },
             get () {
-                return this.isWithLimited
+                return !this.isWithLimited
             }
         },
         ...vuex.mapState(name, ['isWithLimited']),

@@ -1,7 +1,7 @@
 <template>
     <el-dropdown @command="handleLayout" class="layout-selector">
         <span class="el-dropdown-link">
-            选择布局
+            导航显示
             <i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <el-dropdown-menu slot="dropdown">

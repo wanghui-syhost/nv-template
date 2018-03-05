@@ -7,7 +7,7 @@ const { loader } = window.nenv
 
 export const layout = Frame
 Object.assign(layout, {
-    label: "经典布局"
+    label: "顶部侧边导航"
 })
 
 loader({ layout, store })

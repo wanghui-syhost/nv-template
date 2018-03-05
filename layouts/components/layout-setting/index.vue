@@ -6,15 +6,13 @@
             trigger="click">
             <div class="header__setting-item">
                 <el-switch
-                    inactive-text="不显示标题"
-                    active-text="显示标题"
+                    active-text="面包屑"
                     v-model="titleShow"/>
             </div>
             <slot name="default" />
             <div class="header__setting-item">
                 <el-switch
-                    active-text="卡片布局"
-                    inactive-text="传统布局"
+                    active-text="卡片"
                     v-model="cardLayout"
                 />
             </div>
