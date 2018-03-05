@@ -57,7 +57,7 @@
     </nv-layout-section>
 
     <nv-layout-section title="子表配置">
-      <div style="width:1400px">
+      <div>
         <el-form :model="dynamicValidateForm" ref="dynamicValidateForm" >
           <el-row type="flex"  class="row-bg" justify="space-around">
             <el-col :span="4">
