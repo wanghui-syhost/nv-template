@@ -4,14 +4,19 @@
         @active-item-change="handleItemChange"
         v-model="currentValue"
         :props="props"
-        ></el-cascader>
+        />
 </template>
 <script>
-//import nvInpterMixins from 'nenv/mixins/inputerMixins'
   export default {
     name: 'NvRegionSelect',
-    //mixins: [nvInpterMixins],
     props: {
+        area: {
+            type: String,
+        },
+        depth: {
+            type: Number,
+            default: 3
+        },
         value: {
             type: Array,
             required: true
@@ -25,76 +30,85 @@
           label: 'NAME',
           children: 'children'
         },
-        //currentValue:["44","4406","440606"]
       };
     },
     computed: {
         currentValue: {
-        get () {
-            return this.value
-        },
-        set (val) {
-            this.$emit('input', val)
-        }
+            get () {
+                return this.value
+            },
+            set (val) {
+                this.$emit('input', val)
+            }
         }
     },
     created() {
-      this.init();
+      this.fetchData();
     }, 
 
     methods: {
 
-      init(){
+      fetchData () {
             const self = this;
             //获取省份列表
-			unfetch("region/getAllProvince", {}).then(({ data }) => {
-                self.nvOptions = data;
-                if(self.currentValue && self.currentValue.length>1){
-                    self.nvOptions.forEach((item,prince_index) => {
-                        if(item.CODE == self.currentValue[0]){
-                            //根据Pcode获取城市列表
-                            unfetch("region/getChildernsByCode?CODE="+item.CODE, {}).then(({ data }) => {
-                                self.nvOptions[prince_index].children = data;
-                                if(self.currentValue.length>2){
-                                   self.nvOptions[prince_index].children.forEach((item2,city_index) =>{
-                                       if(item2.CODE == self.currentValue[1]){
-                                         //根据Pcode获取区域列表
-                                         unfetch("region/getChildernsByCode?CODE="+item2.CODE+"&LEVEL=3", {}).then(({ data }) => {
-                                            self.nvOptions[prince_index].children[city_index].children = data;
-                                         });
-                                       }
-                                   });
-                                }
-                            });
-                        }
-                    });
+            unfetch("region/children", {
+                params: {
+                    CODE: self.area
                 }
-		    });
+            })
+            .then(({ data }) => {
+                if (self.depth === 1) {
+                    data.forEach(item => {
+                        delete item.children
+                    })
+                } else {
+                    self.recursivelyLoadData(data, self.value.slice(), self.depth)
+                }
+                self.nvOptions = data
+		    })
       },
 
-      handleItemChange(val) {
-          
-              this.nvOptions.forEach((element,index) => {
-                  if(val.length == 1){
-                        if(element.CODE == val[0]){
-                            unfetch("region/getChildernsByCode?CODE="+element.CODE, {}).then(({ data }) => {
-                                this.nvOptions[index].children = data;
-                            });
-                        }
-                  }else if(val.length == 2) {
-                        if(element.CODE == val[0]){
-                            element.children.forEach((city,city_index) => {
-                               if(city.CODE == val[1]){
-                                    unfetch("region/getChildernsByCode?CODE="+city.CODE+"&LEVEL=3", {}).then(({ data }) => {
-                                       this.nvOptions[index].children[city_index].children = data;
-                                    });
-                               }
+      recursivelyLoadData (loaded, value, depth) {
+            const self = this
+            if (value && value.length > 0) {
+                for (let i = 0; i < loaded.length; i++) {
+                    if (loaded[i].CODE === value[0]) {
+                        // 如果已经加载 则直接加载子节点
+                        if (loaded[i].children && loaded[i].children.length > 0) {
+                            return self.recursivelyLoadData(loaded[i].children, value.slice(1), depth - 1)
+                        } else {
+                            if (depth > 1) {
+                                return unfetch("region/children", {
+                                    params: {
+                                        CODE: loaded[i].CODE
+                                    }
+                                }).then(({ data }) => {
+                                    
+                                    if (data.length === 0) {
+                                        delete loaded[i].children
+                                        return this.$forceUpdate()
+                                    }
 
-                            })
+                                    if (depth < 3) {
+                                        data.forEach(item => {
+                                            delete item.children
+                                        })
+                                    } else {
+                                        self.recursivelyLoadData(data, value.slice(1), depth - 1)
+                                    }
+                                    loaded[i].children = data
+                                })
+                            }
                         }
-                  }
-              });
+                    }
+                }
+            }
+      },
 
+      handleItemChange (val) {
+            const self = this
+            console.log('x')
+            return self.recursivelyLoadData(self.nvOptions, val.slice(), self.depth)
       },
 
     }

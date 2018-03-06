@@ -179,7 +179,11 @@ export default {
 
       modifyForm: {},
       modifyRules:{
-        NAME: [{required: true, message: '类别名称不能为空', trigger: 'blur'}]
+        NAME: [{required: true, message: '类别名称不能为空', trigger: 'blur'}],
+        CODE: [
+          {required: true, message: '类别代码不能为空', trigger: 'blur'},
+          { validator: codeValid, trigger: 'blur'}
+        ]
       }
     };
 

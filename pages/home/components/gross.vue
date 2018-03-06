@@ -1,6 +1,6 @@
 <template>
-    <home-block title="工作日历" height="400px">
-        <img src="../assets/img/calendar.png">
+    <home-block width="372px" height="227px" style="padding:0;">
+        <img src="../assets/img/gross.png">
     </home-block>
 </template>
 <script>
@@ -12,5 +12,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-
+.home-block__top.line {
+    display: none;
+}
 </style>

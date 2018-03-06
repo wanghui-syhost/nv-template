@@ -1,5 +1,6 @@
 <template>
-    <home-block title="天气">
+    <home-block width="372px" height="227px" style="padding:0;">
+        <img src="../assets/img/weather.png">
     </home-block>
 </template>
 <script>
@@ -11,5 +12,8 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-
+.home-block__top.line {
+    margin-top: 0px!important;
+    border-bottom: none!important;
+}
 </style>

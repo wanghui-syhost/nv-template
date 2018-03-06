@@ -1,15 +1,16 @@
 <template>
     <div id="home" class="home">
-        <aside class="home-aside">
-        </aside>
+        <home-sidebar class="home-aside">
+            
+        </home-sidebar>
         <div class="home-main">
             <div class="home-top"> 
                 <label class="home-top__title">
-                    {{  projectTitle }} 
+                    {{  project.title }} 
                 </label>
-                <div class="home-top--right">
+                <!-- <div class="home-top--right">
                     <el-button @click="triggerEditMode">自定配置</el-button>
-                </div>
+                </div> -->
                 </div>
             <div class="home-block__wrapper">
                 <component
@@ -29,12 +30,13 @@
 <script>
 
 import { getInfo, getTrail, getHomeInfoCnt } from './api';
-
+import HomeSidebar from './components/home-sidebar'
 import Todo from './components/todo'
 import Calendar from './components/calendar'
 import Weather from './components/weather'
 import Statistics from './components/statistics'
 import Board from './components/board'
+import Gross from './components/gross'
 import { types } from '../../packages/card/store';
 
 export default {
@@ -44,7 +46,10 @@ export default {
         Calendar,
         Weather,
         Statistics,
-        Board
+        Board,
+        Gross,
+        HomeSidebar
+
     },
     data () {
         return {
@@ -52,15 +57,15 @@ export default {
             components: [
                 {
                     id: 1,
-                    name: 'calendar'
+                    name: 'weather'
                 },
                 {   
                     id: 2,
-                    name: 'todo'
+                    name: 'gross'
                 },
                 {
                     id: 3,
-                    name: 'weather'
+                    name: 'board'
                 },
                 {
                     id: 4,
@@ -68,7 +73,7 @@ export default {
                 },
                 {
                     id: 5,
-                    name: 'board'
+                    name: 'calendar'
                 }
             ]
         }
@@ -101,12 +106,12 @@ export default {
             position: fixed;
             background-color: #fff;
             height: 100%;
-            width: 220px;
+            width: 280px;
         }
         &-main {
             background-color: rgba(248,249,250,1); 
             padding-left: 20px;
-            margin-left: 220px;
+            margin-left: 280px;
         }
 
         &-top {

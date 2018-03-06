@@ -28,18 +28,12 @@
 </template>
 
 <script>
-import md5 from 'md5';
+import md5 from '../../node_modules/md5';
 import vuex, { mapActions } from 'vuex'
-// import { getUserMenu, GetValCode, ModifyPass } from '@core/api/'
-// import store from '@core/store/'
-// // 获取全局的路由配置信息
-// import { AllRoutes } from '@core/router/index';
-// import Config from '@core/config';
-// import {checkType} from '@core/utils/validate'
 import utils from 'nenv/utils'
 export default {
   name: "login",
-  data(){
+  data () {
       return {
         focus:{
         isUsernameFocus:false,
@@ -47,8 +41,8 @@ export default {
         
         },
         loginForm: {
-            loginName: 'super',
-            pwd: '123456'
+            loginName: '',
+            pwd: ''
         },
       }
   },
@@ -62,20 +56,21 @@ export default {
         }
     },
     handleLogin(){
-        let me = this
-        let reqParams = {
-            'loginName': me.loginForm.loginName,
-            'pwd': '14e1b600b1fd579f47433b88e8d85291'
-        }
-        me.login(reqParams)
-          .then(() => {
-            me.$router.push('/home')
-            me.loading = false
+        let self = this
+        if (!self.loading) {
+            self.loading = true
+            self.login({
+                'loginName': self.loginForm.loginName,
+                'pwd': md5(md5(self.loginForm.pwd))
+            })
+            .then(() => {
+                self.$router.push('/home')
+                self.loading = false
 
-          }).catch((error) => {
-            me.loading = false
-            console.log(error)
-          })
+            }).catch((error) => {
+                self.loading = false
+            })
+        }
     },
     ...mapActions(['login']),
     ...mapActions('user', [

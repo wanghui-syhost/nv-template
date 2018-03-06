@@ -1,7 +1,7 @@
 <template>
     <div class="nv-layout" :class="{'is-card-layout': isCardLayout}">
-        <div class="nv-layout__top" :class="{'is-title-show': isShowTitle}" v-if="isShowTitle || $slots.top" >
-            <label class="nv-layout__top-label" v-if="isShowTitle">{{ acitveMenu.menuName }}</label>
+        <div class="nv-layout__top" :class="{'is-title-show': isShowTitle, 'only-title': !$slots.top}" v-if="isShowTitle || $slots.top" >
+            <label class="nv-layout__top-label" v-if="isShowTitle">{{ acitveMenu.crumbName }}</label>
             <slot name = "top"/>
         </div>
         <div class="nv-layout__main">
@@ -74,6 +74,12 @@ export default {
 
         .nv-layout__top {
             padding-bottom: 20px;
+            // 当仅有title 的时候
+            &.only-title {
+                .nv-layout__top-label {
+                    margin: 0;
+                }
+            }
         }
 
         .nv-layout__main {

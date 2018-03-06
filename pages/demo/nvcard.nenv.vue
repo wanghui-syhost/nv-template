@@ -1,67 +1,50 @@
 <template>
     <nv-layout>
-        <div>
-            1
-        </div>
-        <div>
-            2
-        </div>
-        <div>
-            3
-        </div>
-        <div>
-            4
-        </div>
-        <div>
-            5
-        </div>
-        <div>
-            6
-        </div>
-        <div>
-            7
-        </div>
-        <div>
-            8
-        </div>
-        <div>
-            9
-        </div>
-        <div>
-            10
-        </div>
-        <div>
-            11
-        </div>
-        <div>
-            12
-        </div>
-        <div>
-            13
-        </div>
-        <div>
-            14
-        </div>
-        <div>
-            15
-        </div>
-        <div>
-            16
-        </div>
-        <div>
-            17
-        </div>
-        <div>
-            18
-        </div>
-        <div>
-            19
-        </div>
+        <nv-layout-section title="标题一">
+            {{ content }}
+        </nv-layout-section>
+        <nv-layout-section title="标题二">
+            {{ content }}
+        </nv-layout-section> 
+        <nv-layout-section title="标题三">
+            {{ content }}
+        </nv-layout-section> 
+        <nv-layout-section title="标题四">
+            {{ content }}
+        </nv-layout-section> 
+        <nv-layout-section title="标题五">
+            {{ content }}
+        </nv-layout-section> 
+        <nv-layout-section title="标题六">
+            {{ content }}
+        </nv-layout-section> 
+        <nv-layout-section title="标题七">
+            {{ content }}
+        </nv-layout-section>
+        <nv-layout-section title="标题八">
+            {{ content }}
+        </nv-layout-section> 
+        <nv-layout-section title="标题九">
+            {{ content }}
+        </nv-layout-section> 
+        <nv-layout-section title="标题十">
+            {{ content }}
+        </nv-layout-section> 
     </nv-layout>
 </template>
 <script>
 export default {
-    name: 'DEMO-CARD'
+    name: 'DEMO-CARD',
+    data () {
+        return {
+            content: "    "
+        }
+    },
+    created () {
+        for (let i = 0; i < 100; i++) {
+            this.content += "内容"
+        }
+    }
 }
 </script>
 <style lang="scss" scoped>

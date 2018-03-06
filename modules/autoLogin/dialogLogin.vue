@@ -1,11 +1,11 @@
 <template>
     <el-dialog :visible.sync="dialogVisible" :style = "{'z-index': 100000}" width="400px" class="nenv-auto-login-dialog">
         <div class="login_backdrop">
-            <el-form ref="form" :model="form" :rules="rules" class="login_form"> 
-                <el-form-item align = "left" prop="username">
+            <el-form ref="form" :model="form" :rules="rules" class="login_form" label-width="0px"> 
+                <el-form-item prop="username">
                     <el-input v-model="form.username" placeholder="请输入账号"/>
                 </el-form-item>
-                <el-form-item align = "left" prop="password">
+                <el-form-item prop="password">
                     <el-input type="password" v-model="form.password" placeholder="请输入密码"/>
                 </el-form-item>
                 <el-form-item>
@@ -16,7 +16,7 @@
     </el-dialog>
 </template>
 <script>
-import md5 from 'md5'
+import md5 from '../../node_modules/md5'
 export default {
     props: {
         ishow: {
@@ -50,7 +50,7 @@ export default {
                 if (valid) {
                     store.dispatch('login', {
                         loginName: form.username,
-                        pwd: '14e1b600b1fd579f47433b88e8d85291'//md5(md5(form.password))
+                        pwd: md5(md5(form.password))
                     }).then(() => {
                         self.dialogVisible = false
                     })
@@ -86,6 +86,9 @@ button.login_btn {
     color: #fff;
     display: block;
 }
+.el-form-item__content .el-input--nenv {
+    width: 100%!important;
+}
 </style>
 
 <style lang="scss">
@@ -93,6 +96,10 @@ button.login_btn {
     .el-dialog__body, .el-dialog__header{
         padding: 0!important;
     }
+}
+
+.el-dialog__headerbtn .el-dialog__close {
+    color: #fff!important;
 }
 </style>
 
