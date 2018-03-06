@@ -384,9 +384,6 @@ export default {
         color: #fb4b46;
     }
 }
-.el-form-item__label{
-    text-align: right!important;
-}
 </style>
 
 
