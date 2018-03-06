@@ -175,7 +175,7 @@
         levelList: [
             {
                 id: 'ROOT',
-                name: ''
+                name: '文档中心'
             }
         ],
         list: null,
