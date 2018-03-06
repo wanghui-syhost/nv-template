@@ -203,8 +203,7 @@ export default {
   name: 'TabMenu',
   data() {
     var sortValid = (rule, value, callback) => {
-      var reg = /^[0-9]+$/; 
-      if(!value.match(reg)){
+      if(!/^[0-9]+$/.test(value)){
           callback(new Error('排序序号只能是数字'));
       } 
       callback();
@@ -232,13 +231,15 @@ export default {
       addRules: {
         NAME: [{required: true, message: '菜单名称不能为空', trigger: 'blur'}],
         URL: [{required: true, message: '菜单url不能为空', trigger: 'blur'}],
-        SORT: [{validator:sortValid, trigger: 'blur'}]
+        SORT: [{required: true, message: '排序序号不能为空', trigger: 'blur'},
+              {validator:sortValid, trigger: 'blur'}]
       },
       modifyForm: {},
       modifyRules:{
         NAME: [{required: true, message: '菜单名称不能为空', trigger: 'blur'}],
         URL: [{required: true, message: '菜单url不能为空', trigger: 'blur'}],
-        SORT: [{validator:sortValid, trigger: 'blur'}]
+        SORT: [{required: true, message: '排序序号不能为空', trigger: 'blur'},
+              {validator:sortValid, trigger: 'blur'}]
         }
     };
   },
@@ -392,9 +393,7 @@ export default {
           SORT: this.modifyForm.SORT,
           PARENT_ID:this.modifyForm.PARENT_ID
         }
-        debugger;
         updateLedgerMenu(params).then(response => {
-         debugger;
            this.$message({
              message: response.rawData.msg,
              type: "success"
