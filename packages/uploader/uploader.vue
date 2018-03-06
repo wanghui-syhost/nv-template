@@ -123,8 +123,8 @@
         </el-tabs>
         
         <el-dialog title="新建文件夹" :visible.sync="dialogFormVisible">
-            <el-form>
-                <el-form-item label="文件夹名称">
+            <el-form label-width="120px">
+                <el-form-item label="文件夹名称" >
                 <el-input v-model="newFolderName" auto-complete="off" placeholder="请输入文件夹名称" :minlength="1" :maxlength="15" @keyup.enter.native="confirmToAddFolder"></el-input>
                 </el-form-item>
             </el-form>
