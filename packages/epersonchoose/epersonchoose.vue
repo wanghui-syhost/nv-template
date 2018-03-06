@@ -2,9 +2,9 @@
   <section class="e-person-choose">
     <div class="e-person-choose__row">
       <div class="e-person-choose__left">
-        <el-input placeholder="输入关键字进行过滤" v-model="filterText" class="e-person-choose__left-input">
+        <el-input placeholder="请输入组织机构名称" v-model="filterText" class="e-person-choose__left-input">
         </el-input>
-        <el-tree class="filter-tree" :data="treeDataArr"  @node-click="nodeClick" highlight-current :props="defaultProps" :default-expand-all="control.isShowAll" :accordion="control.isAccordion" :filter-node-method="filterNode" ref="organizeTree"  >
+        <el-tree class="filter-tree" :data="treeDataArr"  :expand-on-click-node="false" @node-click="nodeClick" highlight-current :props="defaultProps" :default-expand-all="control.isShowAll" :accordion="control.isAccordion" :filter-node-method="filterNode" ref="organizeTree"  >
         </el-tree>
       </div>
       <div class="e-person-choose__middle"></div>
@@ -20,10 +20,9 @@
     </div>
 
     <div class="e-person-choose__result">
-      <e-tag v-for="item in resultList" :key="item.id" :title="item.userName" closable  @close="removeItemFromResult(item)">
-        <span class="e-person-choose__user-icon"></span><br>
+      <el-tag v-for="item in resultList" :key="item.id" :title="item.userName" closable  @close="removeItemFromResult(item)" class="tag-gap">
         {{item.nickName}}
-      </e-tag>
+      </el-tag>
     </div>
 
     <div class="e-person-choose__footer">
@@ -35,19 +34,19 @@
 
 </template>
 <script>
-  const  TOKEN = localStorage.token
+  const  TOKEN = localStorage.getItem('user.token')
 
-  import axios from 'axios'
+  //import unfetch from 'unfetch'
   export default {
-    name: 'epersonchoose',
+    name: 'NvPersonChoose',
     props: {
       // 请求参数
       reqOpt: {
         type: Object,
         default () {
           return {
-            url: 'http://192.168.37.6:8089/api/user/organize',
-            getUsersByOrganizeIdUrl: 'http://192.168.37.6:8089/api/user/by/organize'
+            url: '/user/organize',
+            getUsersByOrganizeIdUrl: '/user/by/organize'
           }
         }
       },
@@ -102,6 +101,7 @@
     },
     watch: {
       filterText(val) {
+        console.log(val)
         this.$refs.organizeTree.filter(val);
       }
     },
@@ -111,49 +111,33 @@
     methods: {
       getOrganizes(){
         let me = this
-        axios.get(me.reqOpt.url, {
+        unfetch.get(me.reqOpt.url, {
         headers: {
           'Authorization': TOKEN
         },
         params: {
           ORGANIZE_ID: me.reqOpt.organizeId
         }
-      }).then(function (resp) {
+      }).then(function ({data}) {
         //  debugger
-        let respJSON = resp.data;
-        let {
-          code,
-          msg,
-          data
-        } = respJSON;
-        if (code == 0) {
           me.treeDataArr = data
-        } else {
-          console.log("获取数据失败")
-        }
       })
 
 
       },
     getUsersByOrganizeId() {
       let me = this
-      axios.get(me.reqOpt.getUsersByOrganizeIdUrl, {
+      unfetch.get(me.reqOpt.getUsersByOrganizeIdUrl, {
         headers: {
           'Authorization': TOKEN
         },
         params: {
           ORGANIZE_ID: me.currentChooseGroupId
         }
-      }).then(function (resp) {
-        let {code,msg, data} = resp.data;
-        if (code == 0) {
+      }).then(function ({data}) {
           me.currentPersonList = data;
           // 处理当前选择的情况
           me.handleChoose(me.currentPersonList)
-
-        } else {
-          console.log("获取数据失败")
-        }
       })
     },
 
@@ -186,7 +170,7 @@
       },
       filterNode(value, data) {
         if (!value) return true;
-        return data.label.indexOf(value) !== -1;
+        return data.text.indexOf(value) !== -1;
       },
 
       handleCheckAllChange(isAll) {
@@ -382,6 +366,9 @@
   margin-right: 10px;
 }
 
+.tag-gap{
+  margin-right: 10px;
+}
 
 </style>
 
