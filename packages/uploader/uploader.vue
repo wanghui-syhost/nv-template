@@ -43,7 +43,7 @@
                     <i v-else class="png-icon" :class="scope.row.FILE_TYPE | FileIconFilter"/>
                   </template>
                 </el-table-column>
-                <el-table-column align="left" label='文件名' show-overflow-tooltip>
+                <el-table-column align="left" label='名称' show-overflow-tooltip>
                     <template slot-scope="scope">
                         <span class="file-name">
                             <span class="file-label" v-show="!scope.row.isEdit" @click="setParentCode(scope.row.ID, scope.row.NAME,scope.row.IS_DIRECTORY)">{{scope.row.NAME}}</span>
@@ -68,18 +68,18 @@
                     <span v-else>{{ scope.row.FILE_TYPE }}</span>
                     </template>
                 </el-table-column> -->
-                <el-table-column label="文件大小"  align="center" width="100">
+                <el-table-column label="大小"  align="center" width="100">
                     <template slot-scope="scope">
                         <span v-if=" scope.row.IS_DIRECTORY === 'YES'">-</span>
                         <span v-else>{{ scope.row.FILE_SIZE | FileSizeFormat }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="上传人" align="center" width="150">
+                <el-table-column label="创建者" align="center" width="150">
                     <template slot-scope="scope">
                         <span>{{ scope.row.USER_NAME }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column align="center" label="上传时间" width="180">
+                <el-table-column align="center" label="更新时间" width="180">
                     <template slot-scope="scope">
                         <!-- <i class="el-icon-time"></i> -->
                         <span>{{scope.row.CREATE_TIME | DateTimeFilter(5)}}</span>
@@ -125,10 +125,10 @@
         <el-dialog title="新建文件夹" :visible.sync="dialogFormVisible">
             <el-form label-width="120px">
                 <el-form-item label="文件夹名称" >
-                <el-input v-model="newFolderName" auto-complete="off" placeholder="请输入文件夹名称" :minlength="1" :maxlength="15" @keyup.enter.native="confirmToAddFolder"></el-input>
+                <el-input v-model="newFolderName" auto-complete="off" placeholder="请输入文件夹名称" @keyup.enter.native="confirmToAddFolder"></el-input>
                 </el-form-item>
             </el-form>
-            <div slot="footer" class="dialog-footer">
+            <div slot="footer" style="text-align:center">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
                 <el-button type="primary" @click="confirmToAddFolder" :disabled="newFolderName.length<1">确 定</el-button>
             </div>
@@ -536,7 +536,7 @@
     confirmToAddFolder(){
       let me = this;
       if(this.newFolderName.length >15){
-         me.$message.error('文件名长度不能大于15');
+         me.$message.error('文件夹名称长度不能大于15');
          return;
       }
       var cid = '';
@@ -781,7 +781,7 @@
   .home-detail__page {
     margin-top: 20px;
     margin-right: 30px;
-    text-align: right;
+    text-align: center;
   }
   .paper_file {
     float: left;

@@ -26,7 +26,7 @@
             <el-button size="small" type="primary" @click="showEdit(scope.row)">编辑</el-button>
             <el-button size="small" type="primary" v-if="scope.row.STATUS == 'OPENED'" @click="pauseScheduler(scope.row)" >暂停</el-button>
             <el-button size="small" type="primary" v-if="scope.row.STATUS == 'PAUSED'" @click="resumeScheduler(scope.row)">恢复</el-button>
-            <el-button size="small" type="primary" v-if="scope.row.STATUS == 'OPENED'" @click="runOnce(scope.row.ID)">运行</el-button>
+            <el-button size="small" type="primary" v-if="scope.row.STATUS == 'OPENED'" @click="runOnce(scope.row.ID)">执行</el-button>
             <el-button size="small" type="danger" @click="removeInfo(scope.row)">删除</el-button>
           </template>
         </el-table-column>
@@ -171,7 +171,7 @@ export default {
       const params = {
         ID: id
       };
-      this.$confirm("立即运行一次该任务?", "提示", {
+      this.$confirm("立即执行一次该任务?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
@@ -218,7 +218,7 @@ export default {
       const params = {
         ID: row.ID
       };
-      this.$confirm("确定暂停该任务?", "提示", {
+      this.$confirm("确定恢复该任务?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
