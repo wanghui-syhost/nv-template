@@ -49,18 +49,17 @@
       </div>
     </nv-layout-section>
 
-    <nv-layout-section title="3.组织人员选择器" v-if="false">
+    <nv-layout-section title="3.组织人员选择器">
       <h4>3.1 人员选择器</h4>
       <nv-organize-user-selector :multi="true"  v-model="nvOrganizeUserSelectResult" />
       <h4>3.2 组织选择器</h4>
       <nv-organize-user-selector :only-organize="true" :multi="true"  v-model="nvOrganizeSelectResult" />
     </nv-layout-section>
 
-
-     <nv-layout-section title="新人员选择器">
-      <h4>人员选择器</h4>
-      <nv-person-choose></nv-person-choose>
+    <nv-layout-section title="新人员选择器1">
+      <nv-person-chooser></nv-person-chooser>
     </nv-layout-section>
+
 
     <nv-layout-section title="子表配置">
       <div>

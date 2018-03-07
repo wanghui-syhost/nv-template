@@ -1,6 +1,6 @@
-import NvPersonchoose from './epersonchoose'
-NvPersonchoose.install = function (Vue) {
-    Vue.component(NvPersonchoose.name, NvPersonchoose)
+import NvPersonChooser from './personchooser'
+NvPersonChooser.install = function (Vue) {
+    Vue.component(NvPersonChooser.name, NvPersonChooser)
 }
 
-export default NvPersonchoose
+export default NvPersonChooser

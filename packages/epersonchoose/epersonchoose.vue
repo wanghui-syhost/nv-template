@@ -14,14 +14,15 @@
         <el-checkbox-group v-model="checkedPersonIds" @change="handleCheckedPersonChange"  class="e-person-choose__checkbox-group">
           <el-checkbox v-for="person in currentPersonList"    :label="person.userId" :title="person.userName" :key="person.userId" class="e-person-choose__checkbox">{{person.nickName}}</el-checkbox>
         </el-checkbox-group>
-
-
       </div>
     </div>
 
     <div class="e-person-choose__result">
       <el-tag v-for="item in resultList" :key="item.id" :title="item.userName" closable  @close="removeItemFromResult(item)" class="tag-gap">
         {{item.nickName}}
+      </el-tag>
+      <el-tag  type="danger"  @click.native = "clearResult" v-show="resultList.length > 0" >
+          清空选择
       </el-tag>
     </div>
 
@@ -38,7 +39,7 @@
 
   //import unfetch from 'unfetch'
   export default {
-    name: 'NvPersonChoose',
+    name: 'epersonchoose',
     props: {
       // 请求参数
       reqOpt: {
@@ -119,7 +120,7 @@
           ORGANIZE_ID: me.reqOpt.organizeId
         }
       }).then(function ({data}) {
-        //  debugger
+        //  
           me.treeDataArr = data
       })
 
@@ -143,7 +144,7 @@
 
       handleChoose(allPersonListArr){
         let me = this
-        debugger
+        
         let personListLength = allPersonListArr.length || 0
         if(me.resultList.length <= 0){
           me.checkAll = false;
@@ -234,7 +235,6 @@
       removeItem2Result(arr){
         let me = this
         if(arr && arr.length >0 ){
-          debugger
           let arrIds = arr.map(x=>x.userId);
           let arrLength = arrIds.length;
           let resultLen = me.resultList.length;
@@ -270,6 +270,13 @@
 
       cancel(){
         this.$emit('cancel-choose-person')
+      },
+
+      clearResult(){
+        this.resultList = [];
+        this.checkAll = false;
+        this.checkedPersonIds = [];
+        this.checkedPerson = [];
       }
 
     }
@@ -353,6 +360,7 @@
 
 .e-person-choose__footer{
   margin-top:10px;
+  text-align: center;
 }
 .e-person-choose__left-input{
   margin-left: 10px;
