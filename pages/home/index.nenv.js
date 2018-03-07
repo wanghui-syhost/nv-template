@@ -1,5 +1,5 @@
 import { mapState } from 'vuex'
-export default {
+const component = {
     name: 'HomeContainer',
     computed: {
         homeComponent () {
@@ -19,5 +19,14 @@ export default {
 
 const store = {
     
+}
+
+export const router = {
+    path: '/',
+    redirect: '/home',
+    children: [{
+        path: '/home',
+        component
+    }]
 }
 
