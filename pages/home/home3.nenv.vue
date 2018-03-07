@@ -5,7 +5,7 @@
 </template>
 <script>
 export default {
-  
+    name: "thirdHome"
 }
 </script>
 <style lang="sass" scoped>
