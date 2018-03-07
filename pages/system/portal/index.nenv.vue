@@ -121,7 +121,7 @@
       <el-row type="flex" class="row-bg" justify="space-around">
         <el-col :span="12">
           <el-form-item label="首页地址" prop="VALUE">
-            <el-input v-model="modifyForm.VALUE" placeholder="请输入首页地址" :disabled="true" :maxlength="20">类别值</el-input>
+            <el-input v-model="modifyForm.VALUE" placeholder="请输入首页地址" :maxlength="20">类别值</el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -167,32 +167,28 @@ export default {
   name: "PortalData",
   data() {
     var codeValid = (rule, value, callback) => {
-      var reg = /^[A-Za-z_]+$/; 
-      // if(!value.match(reg)){
-      //     callback(new Error('首页地址只能是字母和下划线'));
-      // } else {
-        const params = {
-          CODE: this.CODE,
-          VALUE: value
-        };
-        validDictionaryData(params).then(response => {
-           var e = response.data; 
-            if(e == true){
-              callback(new Error('该地址已存在'));
-              return;
-            }
-            callback();
-        }).catch(err =>{
-          console.log(err);
-        });
-      
-      //}
+      const params = {
+        CODE: this.CODE,
+        VALUE: value,
+        ID: this.ID
+      };
+      console.log(params)
+      validDictionaryData(params).then(response => {
+          var e = response.data; 
+          if(e == true){
+            callback(new Error('该地址已存在'));
+            return;
+          }
+          callback();
+      }).catch(err =>{
+        console.log(err);
+      });
     };
     var sortValid = (rule, value, callback) => {
       if (!value){
         return
       }
-       if(!/^[0-9]+$/.test(value)){
+      if(!/^[0-9]+$/.test(value)){
           callback(new Error('排序号只能是数字'));
           return
       } 
@@ -249,6 +245,10 @@ export default {
       modifyForm:{},
       modifyRules: {
         NAME: [{required: true, message: '首页名称不能为空', trigger: 'blur'}],
+         VALUE:[
+          {required: true, message: '首页地址不能为空', trigger: 'blur'},
+          {validator: codeValid, trigger: 'blur'}
+         ],
         SORT: [{ validator: sortValid, trigger: 'blur'}]
       }
     };
@@ -308,7 +308,6 @@ export default {
     handerCurrentChoose(){
       let me = this;
       me.roleList.forEach(x=>{
-        debugger;
           me.$refs.multipleTable.toggleRowSelection(x, x.checked);
       })
     },
@@ -412,7 +411,6 @@ export default {
     },
     update(){
       this.$refs['modifyForm'].validate((valid) => {
-        debugger
           if (valid) {
             const params = {
               ID: this.modifyForm.ID,
