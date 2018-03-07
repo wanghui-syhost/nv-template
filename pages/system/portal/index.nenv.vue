@@ -4,7 +4,7 @@
         <el-form :inline="true">
             <!-- 搜索框  -->
   			<div class="search-form-one">
-  				<el-button type="primary" @click="isShowAddDialog = true">新增</el-button>
+  				<el-button type="primary" @click="isShowAddDialog = true, ID = null">新增</el-button>
   			</div>
         </el-form>
       </section>
@@ -33,7 +33,7 @@
               <span> {{scope.row.DESCRIPTION}}</span>
             </template>
           </el-table-column>
-          <el-table-column label="排序" min-width="7%">
+          <el-table-column label="优先级" min-width="7%">
             <template slot-scope="scope">
               <span> {{scope.row.SORT}}</span>
             </template>
@@ -92,21 +92,21 @@
   </el-dialog>
 
 
-<el-dialog title="选择角色" :visible.sync="isShowRoleListDialog" size="small">
-        <el-table ref="multipleTable" :data="roleList" v-loading.body="listLoading" element-loading-text="拼命加载中" @selection-change="handleSelectionChange" border fit highlight-current-row>
-          <el-table-column  type="selection" width="55">
-          </el-table-column>
-          <el-table-column label="角色名称">
-            <template slot-scope="scope">
-              <span> {{scope.row.ROLE_NAME}}</span>
-            </template>
-          </el-table-column>    
-        </el-table>
-         <div style="margin-top: 20px">
-            <el-button @click="isShowRoleListDialog = false">取消</el-button>
-            <el-button type="primary" @click="savePortalRole">保存</el-button>
-          </div>
-</el-dialog>
+  <el-dialog title="选择角色" :visible.sync="isShowRoleListDialog" size="small">
+          <el-table ref="multipleTable" :data="roleList" v-loading.body="listLoading" element-loading-text="拼命加载中" @selection-change="handleSelectionChange" border fit highlight-current-row>
+            <el-table-column  type="selection" width="55">
+            </el-table-column>
+            <el-table-column label="角色名称">
+              <template slot-scope="scope">
+                <span> {{scope.row.ROLE_NAME}}</span>
+              </template>
+            </el-table-column>    
+          </el-table>
+          <div style="margin-top: 20px">
+              <el-button @click="isShowRoleListDialog = false">取消</el-button>
+              <el-button type="primary" @click="savePortalRole">保存</el-button>
+            </div>
+  </el-dialog>
 
    <!-- 修改 -->
     <el-dialog title="修改门户信息" :visible.sync="isShowEditDialog" size="small">
@@ -159,7 +159,8 @@ import {
   deleteDictionaryData,
   saveDictionaryData,
   validDictionaryData,
-  updateDictionaryData
+  updateDictionaryData,
+  validDictionaryDataSort
 } from "./api";
 
 export default {
@@ -187,12 +188,36 @@ export default {
       
       //}
     };
-
+    var sortValid = (rule, value, callback) => {
+      if (!value){
+        return
+      }
+       if(!/^[0-9]+$/.test(value)){
+          callback(new Error('排序号只能是数字'));
+          return
+      } 
+      const params = {
+        CODE: 'HOME_PAGE',
+        SORT: value,
+        ID: this.ID
+      };
+      validDictionaryDataSort(params).then(response => {
+          var e = response.data; 
+          if(e == true){
+            callback(new Error('该优先级已存在'));
+            return;
+          }
+          callback();
+      }).catch(err =>{
+        console.log(err);
+      });
+    };
     return {
       isShowAddDialog: false,
       isShowEditDialog: false,
       isShowAddDialog:false,
       isShowRoleListDialog:false,
+      ID: null,
       CODE: null,
       PNAME:'',
       checked:false,
@@ -215,14 +240,17 @@ export default {
       addRules: {
         NAME: [{required: true, message: '首页名称不能为空', trigger: 'blur'}],
         VALUE:[
-          {required: true, message: '类别地址不能为空', trigger: 'blur'},
+          {required: true, message: '首页地址不能为空', trigger: 'blur'},
           {validator: codeValid, trigger: 'blur'}
          ],
-        SORT: [{ type: 'number', message: '优先级必须为数字值', trigger: 'blur'}],
+        SORT: [{ validator: sortValid, trigger: 'blur'}]
       },
 
       modifyForm:{},
-      modifyRules: {}
+      modifyRules: {
+        NAME: [{required: true, message: '首页名称不能为空', trigger: 'blur'}],
+        SORT: [{ validator: sortValid, trigger: 'blur'}]
+      }
     };
   },
   mounted() {
@@ -321,7 +349,6 @@ export default {
 
     // 保存项目信息
     handleSelectionChange(val) {
-      debugger;
       this.multipleSelection = val;
     },
     savePortalRole(){
@@ -349,7 +376,9 @@ export default {
        },
        saveDictionary() {
        this.$refs['addForm'].validate((valid) => {
-         debugger;
+         if (!valid) {
+           return
+         }
           saveDictionaryData(this.addForm).then(response => {
                 this.$message({
                   message:response.rawData.msg,
@@ -373,9 +402,11 @@ export default {
       let backdata = JSON.parse(JSON.stringify(row));
       this.modifyForm = backdata;
       this.isShowEditDialog = true;
+      this.ID = row.ID;
     },
     update(){
       this.$refs['modifyForm'].validate((valid) => {
+        debugger
           if (valid) {
             const params = {
               ID: this.modifyForm.ID,

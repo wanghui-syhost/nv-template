@@ -6,7 +6,7 @@
   			<div class="search-form-one">
   			    
 
-  				<el-button type="primary" @click="isShowAddDialog = true">新增</el-button>
+  				<el-button type="primary" @click="isShowAddDialog = true, ID = null">新增</el-button>
   			</div>
         </el-form>
       </section>
@@ -144,7 +144,8 @@ import {
   deleteDictionaryData,
   saveDictionaryData,
   validDictionaryData,
-  updateDictionaryData
+  updateDictionaryData,
+  validDictionaryDataSort
 } from "./api";
 export default {
   name: "DictionaryData",
@@ -171,14 +172,39 @@ export default {
       
       }
     };
+    var sortValid = (rule, value, callback) => {
+      if (!value){
+        return
+      }
+      if(!/^[0-9]+$/.test(value)){
+          callback(new Error('排序号只能是数字'));
+          return
+      } 
+      const params = {
+        CODE: this.CODE,
+        SORT: value,
+        ID: this.ID
+      };
+      validDictionaryDataSort(params).then(response => {
+          var e = response.data; 
+          if(e == true){
+            callback(new Error('该排序号已存在'));
+            return;
+          }
+          callback();
+      }).catch(err =>{
+        console.log(err);
+      });
+    };
     return {
       isShowAddDialog: false,
       isShowEditDialog: false,
+      ID: null,
       CODE: '',
       PNAME:'',
       list: null,
       listLoading: true,
-
+    
       addForm: {
         CODE: this.CODE, // 类别-代码（类别区分唯一标识）
         NAME: null, // 类别名称
@@ -191,12 +217,21 @@ export default {
         VALUE:[
           {required: true, message: '编码不能为空', trigger: 'blur'},
           {validator: codeValid, trigger: 'blur'}
-         ],
-        SORT: [{ type: 'number', message: '序号必须为数字值', trigger: 'blur'}],
+        ],
+        SORT: [
+          //{ type: 'number', message: '序号必须为数字值', trigger: 'blur'},
+          {validator: sortValid, trigger: 'blur'}
+        ]
       },
 
       modifyForm:{},
-      modifyRules: {}
+      modifyRules: {
+        NAME: [{required: true, message: '类别名称不能为空', trigger: 'blur'}],
+        SORT: [
+          //{ type: 'number', message: '序号必须为数字值', trigger: 'blur'},
+          {validator: sortValid, trigger: 'blur'}
+        ],
+      }
     };
   },
   mounted() {
@@ -282,6 +317,7 @@ export default {
       let backdata = JSON.parse(JSON.stringify(row));
       this.modifyForm = backdata;
       this.isShowEditDialog = true;
+      this.ID = row.ID;
     },
     update(){
       this.$refs['modifyForm'].validate((valid) => {

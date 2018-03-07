@@ -74,6 +74,15 @@ export function deleteParentMenu(params){
 	});
 }
 
+export function validLedgerMenuSort(params) {
+	return unfetch({
+	  url: '/ledger/menu/valid/sort',
+	  method: 'get',
+	  params
+	})
+}
+
+
 //查询父级菜单下拉列表
 export function getParentsMenu(params){
 	return unfetch({

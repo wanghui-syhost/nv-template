@@ -66,3 +66,11 @@ export function deleteTabMenu(params){
 		method: 'delete'
 	});
 }
+
+export function validTabMenuSort(params) {
+	return unfetch({
+	  url: '/tab/menu/valid/sort',
+	  method: 'get',
+	  params
+	})
+}

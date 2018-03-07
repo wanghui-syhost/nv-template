@@ -77,6 +77,14 @@ export function validDictionaryData(params) {
   })
 }
 
+export function validDictionaryDataSort(params) {
+  return unfetch({
+    url: '/dictionary/data/valid/sort',
+    method: 'get',
+    params
+  })
+}
+
 export function getDictionaryDataByCode(params) {
   return unfetch({
     url: '/dictionary/code',
