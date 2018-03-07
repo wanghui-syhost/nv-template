@@ -26,7 +26,7 @@
             </template>
           </el-table-column>
          
-          <el-table-column label="类别-代码" min-width="25%">
+          <el-table-column label="类别代码" min-width="25%">
             <template slot-scope="scope">
               <span> {{scope.row.CODE}}</span>
             </template>

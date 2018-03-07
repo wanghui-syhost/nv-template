@@ -15,7 +15,7 @@
                 <el-button  type="primary" v-show="levelList.length > 1 && showUpload">上传</el-button>
             </el-upload>
             <el-input style="float: right; width:300px" icon="search"
-                placeholder="请输入文件名称" 
+                placeholder="请输入关键字" 
                 v-model="fileName" 
                 @keyup.enter.native="search" >
                 <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
@@ -23,7 +23,7 @@
         </section>
 
         <!-- 面包屑导航 -->
-        <div style="margin-top: 10px; margin-bottom: 10px; font-size: 14px">
+        <div style="margin-top: 20px; margin-bottom: 20px; font-size: 14px">
             <el-breadcrumb class="app-levelbar" separator=" > ">
                 <el-breadcrumb-item v-for="(item,index)  in levelList" :key="item.id">
                     <span v-if='index==levelList.length-1'>{{item.name}}</span>
@@ -765,9 +765,12 @@
     cursor: pointer;
   }
 
-  .file-label {
+   .file-label {
     float: left;
-    //margin-left: 20px;
+    width: 520px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
 
   .file-input {
