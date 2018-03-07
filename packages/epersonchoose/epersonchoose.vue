@@ -69,6 +69,14 @@
             isAccordion: true
           }
         }
+      },
+
+      // 编辑模式 一开始有数据
+      result:{
+        type: Array,
+        default(){
+          return []
+        }
       }
 
 
@@ -107,7 +115,19 @@
       }
     },
     created() {
-      this.getOrganizes()
+      let me = this
+      me.getOrganizes()
+      let len = me.resultList.length;
+      if(me.result.length > 0){
+        me.resultList = me.result;
+      }
+    },
+    updated(){
+      let me = this
+      let len = me.resultList.length;
+      if(me.result.length >= 0){
+        me.resultList = me.result;
+      }
     },
     methods: {
       getOrganizes(){
@@ -211,7 +231,6 @@
         let checkedCount = value.length;
         let total = this.currentPersonList.length;
         this.checkAll = checkedCount === total;
-        // TODO添加到数组中
 
         this.checkedPerson = this.currentPersonList.filter(x=>this.checkedPersonIds.includes(x.userId));
 
@@ -277,6 +296,7 @@
         this.checkAll = false;
         this.checkedPersonIds = [];
         this.checkedPerson = [];
+        this.$emit('sync-result',[]);
       }
 
     }

@@ -17,7 +17,7 @@
         </el-tag>
 		</div>
         <el-dialog :title="title" :visible.sync="isShowDialog" width="800px">
-            <epersonchoose @get-choose-person="getChoosePerson" @cancel-choose-person="cancelChoose" ></epersonchoose>
+            <epersonchoose :result="currentChooseList" @sync-result="syncResult"  @get-choose-person="getChoosePerson" @cancel-choose-person="cancelChoose" ></epersonchoose>
         </el-dialog>
     </section>
 </template>
@@ -31,36 +31,46 @@ export default {
             isShowDialog:false,
             placeholder: '请选择人员',
             title: '请选择人员',
+
             personList:[],
+            // 当前选择的人
+            currentChooseList:[]
+        }
+    },
+    props:{
+        currentPersonList:{
+            type:Array,
+            default(){
+                return []
+            }
         }
     },
     components:{
         epersonchoose
     },
-    computed: {
-    currectValue: {
-      set(val) {
-        this.$emit("input", val);
-      },
-      get() {
-        return this.value;
-      }
-    }
-  },
-  methods:{
-    showDialog(){
-        this.isShowDialog = true
+    created(){
+        this.currentChooseList = this.currentPersonList;
     },
+    methods:{
+        showDialog(){
+            this.isShowDialog = true
+        },
     getChoosePerson(choosePerson){
+        debugger
         this.isShowDialog = false
         if(choosePerson && choosePerson.length>0){
             this.personList = choosePerson;
+            this.currentChooseList =  choosePerson;
         }else{
             this.personList = [];
+            this.currentChooseList = [];
         }
     },
     cancelChoose(){
         this.isShowDialog = false;
+    },
+    syncResult(result){
+        this.currentChooseList = result;
     }
   }
 };
