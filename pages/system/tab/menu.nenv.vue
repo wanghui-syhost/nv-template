@@ -279,16 +279,17 @@ export default {
     })
   },
   addInfo(){
-    this.resetForm('addForm')
     this.isShowAddDialog = true
     this.ID= null
+    this.resetForm('addForm')
   },
   modifyInfo(row){
-    this.resetForm('addForm')
     let backdata = JSON.parse(JSON.stringify(row));
     this.modifyForm = backdata;
     this.isShowEditDialog = true;
     this.ID = row.ID
+    this.resetForm('modifyForm')
+    
   },
 
   update(){

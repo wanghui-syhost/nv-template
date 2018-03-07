@@ -4,7 +4,7 @@
         <el-form :inline="true">
             <!-- 搜索框  -->
   			<div class="search-form-one">
-  				<el-button type="primary" @click="isShowAddDialog = true, ID = null">新增</el-button>
+  				<el-button type="primary" @click="addInfo">新增</el-button>
   			</div>
         </el-form>
       </section>
@@ -373,6 +373,12 @@ export default {
             type: "error"
           });
         });
+       },
+
+       addInfo(){
+         this.isShowAddDialog = true
+         this.ID = null
+         this.resetForm('addForm')
        },
        saveDictionary() {
        this.$refs['addForm'].validate((valid) => {

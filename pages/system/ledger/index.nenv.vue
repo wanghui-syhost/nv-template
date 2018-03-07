@@ -4,7 +4,7 @@
       <el-form :inline="true">
         <!-- 搜索框  -->
         <div class="search-form-one">
-          <el-button type="primary" @click="isShowAddDialog = true">新增</el-button>
+          <el-button type="primary" @click="addInfo">新增</el-button>
         </div>
       </el-form>
     </section>
@@ -265,6 +265,11 @@ export default {
     }).catch(e => {
       this.$message.err("删除失败");
     });
+  },
+
+  addInfo() {
+    this.isShowAddDialog = true
+    this.resetForm('addForm')
   },
    // 保存
   save() {

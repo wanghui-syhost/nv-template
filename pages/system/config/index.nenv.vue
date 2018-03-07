@@ -8,8 +8,8 @@
             <el-input v-model="KEYWORD" placeholder="请输入关键字" ></el-input>
           </el-form-item>
           <el-button type="infor" @click="getList();">搜索</el-button>
-  				<el-button type="primary" @click="dialogVisible = true">新增</el-button>
-          <el-button type="primary" @click="batchDialogVisible = true">批量添加</el-button>
+  				<el-button type="primary" @click="addInfo">新增</el-button>
+          <el-button type="primary" @click="batchAddInfo">批量添加</el-button>
   			</div>
         </el-form>
       </section>
@@ -105,7 +105,7 @@
       
 	
         <el-row type="flex" justify="space-around">
-            <el-col :span="8" :offset="4">
+            <el-col :span="8">
               <el-button @click="batchDialogVisible = false">取消</el-button>
                <el-button @click="addDomain">添加行</el-button>
               <el-button type="primary" @click="batchSave"  :disabled="dynamicValidateForm.domains.length >= 1 ? false : true">保存</el-button>
@@ -125,7 +125,7 @@ export default {
     var keyValid = (rule, value, callback) => {
       var reg = /^[A-Za-z0-9_\.]+$/; 
       if(!value.match(reg)){
-          callback(new Error('配置key只能是数字字母下划线和小数点'));
+          callback(new Error('配置key只能是数字、字母、下划线和小数点'));
       } else {
         const params = {
           CODE: value
@@ -252,6 +252,7 @@ export default {
         });
       }).catch(err=>{
         console.error(err);
+        this.$message.err("修改失败");
       })
     },
   reqData(params){
@@ -261,6 +262,11 @@ export default {
     }).catch(e => {
       this.$message.err("删除失败");
     });
+  },
+
+  addInfo(){
+    this.dialogVisible = true
+    this.resetForm('form')
   },
    // 保存项目信息
   save() {
@@ -287,6 +293,11 @@ export default {
         return false;
       }
     });
+  },
+
+  batchAddInfo(){
+    this.batchDialogVisible = true
+    this.resetForm('dynamicValidateForm')
   },
  // 批量保存项目信息
   batchSave() {

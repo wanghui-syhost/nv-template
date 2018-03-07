@@ -6,7 +6,7 @@
   			<div class="search-form-one">
   			    
 
-  				<el-button type="primary" @click="isShowAddDialog = true, ID = null">新增</el-button>
+  				<el-button type="primary" @click="addInfo">新增</el-button>
   			</div>
         </el-form>
       </section>
@@ -153,7 +153,7 @@ export default {
     var codeValid = (rule, value, callback) => {
       var reg = /^[A-Za-z0-9_]+$/; 
       if(!value.match(reg)){
-          callback(new Error('类别代码只能是数字字母和下划线'));
+          callback(new Error('类别代码只能是数字、字母和下划线'));
       } else {
         const params = {
           CODE: this.CODE,
@@ -286,6 +286,12 @@ export default {
             type: "error"
           });
       });
+    },
+
+    addInfo(){
+      this.isShowAddDialog = true
+      this.ID = null
+      this.resetForm('addForm')
     },
     // 保存项目信息
     save() {
