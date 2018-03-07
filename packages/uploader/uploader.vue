@@ -490,11 +490,9 @@
               this.listLoading = false;
               let {code, msg, data} = resp.rawData;
               let me = this;
-              debugger;
               if(code==0){
                 let url = data.fileUrl + data.filePath;
-                //let url = data.filePath;
-                window.location.href = url;
+                unfetch.open(url);
               }else{
                 me.$message.error('预览失败！');
               }
