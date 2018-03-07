@@ -769,7 +769,7 @@
 
   .file-label {
     float: left;
-    margin-left: 20px;
+    //margin-left: 20px;
   }
 
   .file-input {

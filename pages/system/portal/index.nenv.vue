@@ -76,8 +76,8 @@
       </el-row>
       <el-row type="flex" class="row-bg" justify="space-around">
         <el-col :span="12">
-          <el-form-item label="排序序号" prop="SORT">
-            <el-input v-model.number="addForm.SORT" placeholder="请输入排序序号" :maxlength="3">排序顺序</el-input>
+          <el-form-item label="优先级" prop="SORT">
+            <el-input v-model.number="addForm.SORT" placeholder="请输入优先级" :maxlength="3">优先级</el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -134,8 +134,8 @@
       </el-row>
       <el-row type="flex" class="row-bg" justify="space-around">
         <el-col :span="12">
-          <el-form-item label="排序" prop="SORT">
-            <el-input v-model.number="modifyForm.SORT" placeholder="请输入排序序号" :maxlength="3">排序顺序</el-input>
+          <el-form-item label="优先级" prop="SORT">
+            <el-input v-model.number="modifyForm.SORT" placeholder="请输入优先级" :maxlength="3">优先级</el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -218,7 +218,7 @@ export default {
           {required: true, message: '类别地址不能为空', trigger: 'blur'},
           {validator: codeValid, trigger: 'blur'}
          ],
-        SORT: [{ type: 'number', message: '序号必须为数字值', trigger: 'blur'}],
+        SORT: [{ type: 'number', message: '优先级必须为数字值', trigger: 'blur'}],
       },
 
       modifyForm:{},
