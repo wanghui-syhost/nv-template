@@ -24,7 +24,7 @@
           
           <el-table-column label="类别名称">
             <template slot-scope="scope">
-              <span> {{scope.row.NAME}}</span>
+              <a :title="scope.row.NAME"> {{scope.row.NAME}}</a>
             </template>
           </el-table-column>
       
@@ -35,7 +35,7 @@
           </el-table-column>
           <el-table-column label="描述信息">
             <template slot-scope="scope">
-              <span> {{scope.row.DESCRIPTION}}</span>
+              <a :title="scope.row.DESCRIPTION"> {{scope.row.DESCRIPTION}}</a>
             </template>
           </el-table-column>
           <el-table-column label="排序">

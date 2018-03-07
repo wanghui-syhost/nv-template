@@ -22,7 +22,7 @@
         <el-table :data="list" v-loading.body="listLoading" element-loading-text="拼命加载中" border fit highlight-current-row>
          <el-table-column label="类别名称" min-width="25%">
             <template slot-scope="scope">
-              <span> {{scope.row.NAME}}</span>
+              <a :title="scope.row.NAME"> {{scope.row.NAME}}</a>
             </template>
           </el-table-column>
          
@@ -62,7 +62,7 @@
         <el-row type="flex" class="row-bg" justify="space-around">
           <el-col :span="12">
             <el-form-item label="类别名称" prop="NAME">
-              <el-input v-model="addForm.NAME" placeholder="请输入类别名称" :maxlength="20"></el-input>
+              <el-input v-model="addForm.NAME" placeholder="请输入类别名称"></el-input>
             </el-form-item>
           </el-col>
 
@@ -119,6 +119,21 @@ import { getDictionaries, deleteDictionary, saveDictionary , validDictionary, up
 export default {
   name: "Dictionary",
   data() {
+    //类别名称
+     const nameValid = (rule, value, callback) => {
+      if (value != null && value != "") {
+        setTimeout(() => {
+          if (value.length > 20) {
+            callback(new Error("类别名称不能超过20长度"));
+          }else{
+            callback();
+          }
+        }, 1000);
+      } else {
+        callback();
+      }
+    };
+
     var codeValid = (rule, value, callback) => {
       var reg = /^[A-Za-z0-9_]+$/; 
       if(!value.match(reg)){
@@ -146,7 +161,7 @@ export default {
       list: null,
       listLoading: true,
       NAME:null,
-      STATUS: 'VALID',
+      STATUS: null,
       pageIndex: 1,
       pageSize: 10,
       totalCount: 0,
@@ -169,8 +184,11 @@ export default {
         STATUS: null // 类别状态（0：无效，1：有效）
       },
 
-      addRules: {
-        NAME: [{required: true, message: '类别名称不能为空', trigger: 'blur'}],
+     addRules: {
+        NAME: [
+          {required: true, message: '类别名称不能为空', trigger: 'blur'},
+          {validator: nameValid, trigger: 'blur'}
+          ],
         CODE: [
           {required: true, message: '类别代码不能为空', trigger: 'blur'},
           { validator: codeValid, trigger: 'blur'}
@@ -179,11 +197,14 @@ export default {
 
       modifyForm: {},
       modifyRules:{
-        NAME: [{required: true, message: '类别名称不能为空', trigger: 'blur'}],
-        CODE: [
+        NAME: [
+          {required: true, message: '类别名称不能为空', trigger: 'blur'},
+          {validator: nameValid, trigger: 'blur'}
+        ],
+        /* CODE: [
           {required: true, message: '类别代码不能为空', trigger: 'blur'},
           { validator: codeValid, trigger: 'blur'}
-        ]
+        ] */
       }
     };
 
@@ -195,8 +216,8 @@ export default {
   filters: {
     statusFilter(status) {
       const map = {
-        0: 'warning',
-        1: 'success'
+        INVALID: 'danger',
+        VALID: 'success'
       }
       return map[status];
     }

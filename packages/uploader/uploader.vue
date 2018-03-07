@@ -2,7 +2,7 @@
     <div class="upload-table">
         <section class="upload-table__from">
             <!-- <h3>文件管理</h3> -->
-            <el-button @click="createdNewFolder" type="primary">
+            <el-button @click="createdNewFolder" type="primary" :disabled ="isSearch">
                 新建文件夹
             </el-button>
             <el-button @click="deleteSelectedAndChildren" type="primary">
@@ -11,7 +11,13 @@
             <el-button @click="downloadChooseRows" type="primary">
                 下载
             </el-button>
-            <el-upload  class="upload-table__upload--btn" :action="uploadURL" :on-success="success" :before-upload="beforeUpload" :headers="uploadHeaders" :data="fileData" :show-file-list="false" accept=".jpg, .jpeg, .png, .gif, .rar, .zip, .doc, .docx, .xls, .xlsx,  .ppt, .pptx, .pdf, .txt, .wps">
+            <el-upload  class="upload-table__upload--btn" :action="uploadURL" v-loading.body="isUploading" element-loading-text="正在上传中，请稍等......" 
+              :on-success="success" 
+              :before-upload="beforeUpload"
+              :on-error = "errorUpload" 
+              :headers="uploadHeaders" :data="fileData" 
+              :show-file-list="false" 
+              accept=".jpg, .jpeg, .png, .gif, .rar, .zip, .doc, .docx, .xls, .xlsx,  .ppt, .pptx, .pdf, .txt, .wps">
                 <el-button  type="primary" v-show="levelList.length > 1 && showUpload">上传</el-button>
             </el-upload>
             <el-input style="float: right; width:300px" icon="search"
@@ -43,7 +49,7 @@
                     <i v-else class="png-icon" :class="scope.row.FILE_TYPE | FileIconFilter"/>
                   </template>
                 </el-table-column>
-                <el-table-column align="left" label='名称' show-overflow-tooltip>
+                <el-table-column align="left" label='名称'>
                     <template slot-scope="scope">
                         <span class="file-name">
                             <span class="file-label" v-show="!scope.row.isEdit" @click="setParentCode(scope.row.ID, scope.row.NAME,scope.row.IS_DIRECTORY)">{{scope.row.NAME}}</span>
@@ -153,7 +159,7 @@
         value:'',
         uploadURL: '/api/file/upload/project/type',
         fileData: {},
-
+        isUploading:false,//上传中...图片
         uploadHeaders:{},
         // 当前选择的rows;
         currentChooseRows:[],
@@ -180,6 +186,7 @@
         ],
         list: null,
         checkAll: false,//总全选
+        isSearch: false,//新建文件夹时是否正在搜寻绑定
       }
     },
     props: {
@@ -300,7 +307,7 @@
 
       // 创建文件夹
       createdNewFolder(){
-        // 先清空之前填写的信息
+         // 先清空之前填写的信息
         this.newFolderName = "";
         this.dialogFormVisible = true;
       },
@@ -352,6 +359,7 @@
       return arr.join(',');
     },
     beforeUpload(file){
+      this.isUploading = true;
       if(this.currentId == "" || this.currentId == "ROOT") return false;
       if(file && file.size){
         let size = file.size / 1024;
@@ -360,6 +368,9 @@
           return false;
         }
       }
+    },
+    errorUpload (){
+        this.isUploading = false;  
     },
     onUpload(e){
         this.$message.error("上传文件中");
@@ -392,6 +403,7 @@
              console.log(resp);
              let {code, data,msg} = resp.rawData;
               if(code==0){
+                this.isUploading = false;
                 me.$message.success('上传成功');
                 me.fetchData(me.currentId);
               }else{  
@@ -515,6 +527,8 @@
             }else{
                 // 点击导航时清除搜索框中的内容
                 this.fileName = "";
+                // 点击导航时新建文件夹按钮可以使用
+                this.isSearch = false;
             }
         } else {
           let temp = [{'id': parentCode, 'name': name}];
@@ -691,13 +705,15 @@
         PROJECT_ID : this.projectId,
         TYPE : this.type
       }
-      if(this.fileName == ""){;
+      if(this.fileName == ""){
+        this.isSearch = false;
         pagePrams.TREE_ID = 'ROOT';
         // 搜索时直接把导航清掉
         if(this.levelList.length > 1){
             this.levelList.splice(1);
         }
       }else{
+        this.isSearch = true;
         pagePrams.FILE_NAME = this.fileName;
         // 搜索时先把导航清掉再显示搜索的内容
         if(this.levelList.length > 1){
@@ -725,6 +741,7 @@
             }else {
                 this.list = [];
                 this.totalCount = 0;
+                
               }
         }else{
           this.$message.error(msg);

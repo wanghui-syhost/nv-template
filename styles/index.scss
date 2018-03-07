@@ -5,6 +5,9 @@
 .el-table th, .el-table tr {
     background-color: transparent;
 }
+.el-table .cell{
+    white-space: nowrap;
+}
 /**左边菜单栏**/
 .el-menu-item.is-active {
     background-color: #F6F7FB;
