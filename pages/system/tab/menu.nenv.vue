@@ -45,7 +45,7 @@
              <span> {{ scope.row.IS_DELETED == 'YES' ? '是' : '否' }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="操作">
+        <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button size="small" type="primary" @click="modifyInfo(scope.row)">编辑</el-button>
             <el-button size="small" type="danger" @click="removeInfo(scope.row)">删除</el-button>
@@ -61,7 +61,7 @@
     </section>
 
     <!-- 新增 -->
-    <el-dialog title="添加动态选项卡" :visible.sync="isShowAddDialog" size="small">
+    <el-dialog title="添加动态选项卡菜单" :visible.sync="isShowAddDialog" size="small">
       <el-form :model="addForm" :rules="addRules" ref="addForm" label-width="120px">
         
         <el-row type="flex" class="row-bg" justify="space-around">

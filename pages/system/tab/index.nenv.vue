@@ -14,7 +14,7 @@
       <el-table :data="list" v-loading.body="listLoading" element-loading-text="拼命加载中" border fit highlight-current-row>
         <el-table-column label="标题" min-width="20%">
           <template slot-scope="scope">
-            <span> {{ scope.row.TITLE }}</span>
+            <a :title=" scope.row.TITLE"> {{ scope.row.TITLE }}</a>
           </template>
         </el-table-column>
         <el-table-column label="编号" min-width="10%">
@@ -22,7 +22,7 @@
             <span> {{ scope.row.CODE }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="选项卡类型" min-width="10%">
+        <el-table-column label="选项卡类型" min-width="10%" align="center">
           <template slot-scope="scope">
             <span> {{ scope.row.TYPE == 'SIMPLE' ? '普通' : '卡片' }}</span>
           </template>
@@ -38,7 +38,7 @@
             <span> {{ scope.row.IS_DELETED == 'YES' ? '是' : '否' }}</span>
           </template>
         </el-table-column> -->
-        <el-table-column label="操作"  min-width="25%">
+        <el-table-column label="操作"  min-width="25%" align="center">
           <template slot-scope="scope">
             <el-button size="small" type="infor" @click="goTabMenus(scope.row)" icon="information">菜单</el-button>
             <el-button size="small" type="primary" @click="modifyInfo(scope.row)">编辑</el-button>
@@ -186,10 +186,10 @@ export default {
         IS_DELETED: null // 是否删除 YES:是 NO:否 
       },
       addRules: {
-        TITLE: [{required: true, message: '选项卡名称不能为空', trigger: 'blur'}],
+        TITLE: [{required: true, message: '标题不能为空', trigger: 'blur'}],
         TYPE: [{required: true, message: '选项卡类型不能为空', trigger: 'blur'}],
         CODE: [
-          {required: true, message: '选项卡代码不能为空', trigger: 'blur'},
+          {required: true, message: '编号不能为空', trigger: 'blur'},
           { validator: codeValid, trigger: 'blur'}
         ]
       },

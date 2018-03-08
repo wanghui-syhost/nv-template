@@ -92,7 +92,7 @@
           </el-table-column>
 
           <!-- 编辑 -->
-          <el-table-column  label="操作" min-width="15%">
+          <el-table-column  label="操作" min-width="15%" align="center">
             <template slot-scope="scope">
             <div class="opt-cell">
               <el-button v-show='!scope.row.isEdit' type="primary" @click='scope.row.isEdit = true' size="small" icon="edit">编辑</el-button>

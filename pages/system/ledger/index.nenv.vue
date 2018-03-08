@@ -32,7 +32,7 @@
             <span> {{ scope.row.DESCRIPTION }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="显示头部" min-width="7%">
+        <el-table-column label="显示头部" min-width="7%" align="center">
           <template slot-scope="scope">
             <span> {{ scope.row.SHOW_HEAD == 'YES' ? '是' : '否' }}</span>
           </template>
