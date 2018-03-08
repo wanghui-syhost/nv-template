@@ -33,7 +33,8 @@
           
         </el-row>
         
-        <el-row type="flex" justify="space-around">
+        <el-row type="flex" justify="center">
+          <el-button @click="close">取消</el-button>
           <el-button type="primary" @click="saveOrEdit();">保存</el-button>
         </el-row>
       </el-form >
@@ -70,6 +71,9 @@ export default {
     }
   },
   methods: {
+      close () {
+        this.$emit('close')
+      },
       getData() {
         const self = this
         const { ID } = this
