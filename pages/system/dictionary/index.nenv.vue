@@ -138,22 +138,25 @@ export default {
       var reg = /^[A-Za-z0-9_]+$/; 
       if(!value.match(reg)){
           callback(new Error('类别代码只能是数字、字母和下划线'));
-      } else {
-        const params = {
-          CODE: value
-        };
-        validDictionary(params).then(response => {
-            var e = response.data; 
-            if(e == true){
-              callback(new Error('该类别已存在'));
-              return;
-            }
-            callback();
-        }).catch(err =>{
-          console.log(err);
-        });
-      
+          return
       }
+      if (/^[_]+$/.test(value)){
+        callback(new Error('类别代码不能只是下划线'));
+        return
+      }  
+      const params = {
+        CODE: value
+      };
+      validDictionary(params).then(response => {
+          var e = response.data; 
+          if(e == true){
+            callback(new Error('该类别已存在'));
+            return;
+          }
+          callback();
+      }).catch(err =>{
+        console.log(err);
+      });
     };
     return {
       isShowAddDialog: false,

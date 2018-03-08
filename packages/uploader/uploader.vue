@@ -144,11 +144,8 @@
 
 <script>
   import { getTreeDocuments, FileRename, FileDelete, FileAdd, FileDownload, FileCreatedNewFolder,FileRenameFolder,FileDeleteFolder,deleteDirAndFiles,FileView} from './api';
-  //import Config from '@core/config';
-  const Config = {}
   export default {
     name: 'NvUploader',
-    
     data () {
       return {
         list: null,
@@ -588,14 +585,12 @@
       })
     },
     download(row){
-      let queryParam;
-      if(row.IS_DIRECTORY == "YES"){
-        //queryParam = `DIR-${row.TREE_ID}`;
-        queryParam = "ID=DIR-"+row.TREE_ID;
-      }else{
-        queryParam = `ID=FILE-${row.TREE_ID}-${row.ID}`;
-      }
-      window.location = Config.BASE_API+'file/download/compress?' + queryParam;
+      unfetch.download('file/download/compress', {
+        params: {
+          ID: row.IS_DIRECTORY == "YES" ? "DIR-"+row.TREE_ID : `FILE-${row.TREE_ID}-${row.ID}`
+        }
+      })
+      //window.location = Config.BASE_API+'file/download/compress?' + queryParam;
     },
     // 触发重命名
     reName(row){

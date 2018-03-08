@@ -153,24 +153,27 @@ export default {
     var codeValid = (rule, value, callback) => {
       var reg = /^[A-Za-z0-9_]+$/; 
       if(!value.match(reg)){
-          callback(new Error('类别代码只能是数字、字母和下划线'));
-      } else {
-        const params = {
-          CODE: this.CODE,
-          VALUE: value
-        };
-        validDictionaryData(params).then(response => {
-           var e = response.data; 
-            if(e == true){
-              callback(new Error('该类别已存在'));
-              return;
-            }
-            callback();
-        }).catch(err =>{
-          console.log(err);
-        });
-      
-      }
+          callback(new Error('类别值只能是数字、字母和下划线'));
+          return
+      } 
+      if (/^[_]+$/.test(value)){
+        callback(new Error('类别值不能只是下划线'));
+        return
+      }  
+      const params = {
+        CODE: this.CODE,
+        VALUE: value
+      };
+      validDictionaryData(params).then(response => {
+          var e = response.data; 
+          if(e == true){
+            callback(new Error('该类别已存在'));
+            return;
+          }
+          callback();
+      }).catch(err =>{
+        console.log(err);
+      });
     };
     var sortValid = (rule, value, callback) => {
       if (!value){

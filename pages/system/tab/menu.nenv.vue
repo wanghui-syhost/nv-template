@@ -40,11 +40,11 @@
             <span> {{ scope.row.SORT }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="是否删除 YES:是 NO:否 ">
+        <!-- <el-table-column label="是否删除 YES:是 NO:否 ">
           <template slot-scope="scope">
              <span> {{ scope.row.IS_DELETED == 'YES' ? '是' : '否' }}</span>
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button size="small" type="primary" @click="modifyInfo(scope.row)">编辑</el-button>
