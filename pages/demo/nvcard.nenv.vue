@@ -1,5 +1,18 @@
 <template>
-    <nv-layout>
+    <nv-layout :prefixType="prefixType">
+        <div slot="top">
+            <el-form>
+                <el-form-item label="选择前缀">
+                    <el-select v-model="prefixType">
+                        <el-option
+                            v-for = "item in [{value: '一', label:'中文数字'}, {value: 'Ⅰ', label: '罗马数字'}, {value: '1', label: '阿拉伯数字数字'}, {value: null, label: '无'}]"
+                            :value = "item.value"
+                            :label = "item.label"
+                            :key="item.value"/>
+                    </el-select>
+                </el-form-item>
+            </el-form>
+        </div>
         <nv-layout-section title="标题一">
             {{ content }}
         </nv-layout-section>
@@ -37,7 +50,8 @@ export default {
     name: 'DEMO-CARD',
     data () {
         return {
-            content: "    "
+            content: "    ",
+            prefixType: '一'
         }
     },
     created () {

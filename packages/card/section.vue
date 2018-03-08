@@ -1,6 +1,7 @@
 <template>
     <div class="nv-layout-section">
         <div class="top">
+            <span class="prefix">{{ prefix }}</span>
             <span class="title">{{ title }}</span>
             <span class="title-line"></span>
         </div>
@@ -11,12 +12,20 @@
 </template>
 <script>
 export default {
+    name: 'NvLayoutSection',
     props: {
         title: {
             
         }
     },
-    name: 'NvLayoutSection'
+    data () {
+        return {
+            prefix: ''
+        }
+    },
+    created () {
+        this.$parent.addSection(this)
+    }
 }
 </script>
 <style lang="scss" scoped>
@@ -41,6 +50,18 @@ export default {
         }
     }
 
+    .prefix {
+        position: relative;
+        background-color: #fff;
+        font-size: 20px;
+        font-weight: 800;
+        z-index: 1;
+        &:after {
+            content: '·';
+            padding-right: 4px;
+        }
+    }
+
     .title {
         position: relative;
         font-size: 20px;
@@ -50,7 +71,7 @@ export default {
         background-color: #fff;
         z-index: 1;
         &:before {
-            content: '·';
+            //content: '·';
             padding-right: 4px;
         }
 

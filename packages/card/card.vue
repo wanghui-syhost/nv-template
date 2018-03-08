@@ -15,9 +15,17 @@ import vuex, { createNamespacedHelpers } from 'vuex'
 const { mapState ,mapGetters, mapActions } = createNamespacedHelpers(store.name)
 export default {
     name: 'NvLayout',
+    props: {
+        isDynamic: false,
+        prefixType: {
+            type: String,
+            default: '一'
+        }
+    },
     data () {
         return {
-            
+            childCounter: 0,
+            sectionChildrens: []
         }
     },
     computed: {
@@ -25,6 +33,36 @@ export default {
             acitveMenu: state => state.acitveMenu,
         }),
         ...mapState(['isCardLayout', 'isShowTitle'])
+    },
+    methods: {
+        addSection (child) {
+            const self = this
+            self.sectionChildrens.push(child)
+            child.$data.prefix = self.resolveChildPrefix(self.childCounter++)
+        },
+        resolveChildPrefix (num) {
+            const { prefixType } = this
+            if (!prefixType) {
+                return null
+            }
+            switch (prefixType) {
+                case '一':
+                    return ['一','二','三','四','五','六','七','八','九','十',][num]
+                case 'Ⅰ':
+                    return ['Ⅰ','Ⅱ','Ⅲ','Ⅳ','Ⅴ','Ⅵ','Ⅶ','Ⅷ','Ⅸ','Ⅹ','Ⅺ','Ⅻ'][num]
+                case '1':
+                    return num + 1
+            }
+        }
+    },
+    watch: {
+        prefixType (val) {
+            const self = this
+            self.childCounter = 0
+            self.sectionChildrens.map(child => {
+                child.$data.prefix = self.resolveChildPrefix(self.childCounter++)
+            })
+        }
     }
 }
 </script>
