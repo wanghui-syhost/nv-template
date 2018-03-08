@@ -1,7 +1,7 @@
 <template>
     <div class="nv-layout" :class="{'is-card-layout': isCardLayout}">
-        <div class="nv-layout__top" :class="{'is-title-show': isShowTitle, 'only-title': !$slots.top}" v-if="isShowTitle || $slots.top" >
-            <label class="nv-layout__top-label" v-if="isShowTitle">{{ acitveMenu.crumbName }}</label>
+        <div class="nv-layout__top" :class="{'is-title-show': isTitleShow, 'only-title': !$slots.top}" v-if="isTitleShow || $slots.top" >
+            <label class="nv-layout__top-label" v-if="isTitleShow">{{ acitveMenu.crumbName }}</label>
             <slot name = "top"/>
         </div>
         <div class="nv-layout__main">
@@ -24,11 +24,19 @@ export default {
     },
     data () {
         return {
+            isDynamicView: false,
             childCounter: 0,
             sectionChildrens: []
         }
     },
+    created () {
+        this.$parent.$emit('configNvlayout', this)
+    },
     computed: {
+        isTitleShow () {
+            const self = this
+            return self.isShowTitle && !self.isDynamicView
+        },
         ...vuex.mapState('platform', {
             acitveMenu: state => state.acitveMenu,
         }),

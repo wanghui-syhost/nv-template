@@ -84,6 +84,9 @@ export default {
         handleTabClick (tab) {
             this.currentTab = tab
             this.$router.push({ path: this.$route.fullPath, query: tab.query || {} })
+        },
+        handleNvLayout (nvLayout) {
+            nvLayout.isDynamicView = true
         }
     },
     render (h) {
@@ -130,6 +133,9 @@ export default {
                                     {
                                         props: {
                                             ...self.realComponentProps
+                                        },
+                                        on: {
+                                            configNvlayout: self.handleNvLayout
                                         }
                                     }
                                 )
