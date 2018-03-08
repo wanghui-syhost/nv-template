@@ -204,17 +204,17 @@ export default {
         SHOW_HEAD:'NO' //是否显示头部 YES:是 NO:否 
       },
       addRules: {
-        TITLE: [{required: true, message: '台账名称不能为空', trigger: 'blur'}],
-        TYPE: [{required: true, message: '台账类型不能为空', trigger: 'blur'}],
+        TITLE: [{required: true, message: '标题不能为空', trigger: 'blur'}],
+        TYPE: [{required: true, message: '台账排版类型不能为空', trigger: 'blur'}],
         CODE: [
-          {required: true, message: '台账代码不能为空', trigger: 'blur'},
+          {required: true, message: '编号不能为空', trigger: 'blur'},
           { validator: codeValid, trigger: 'blur'}
         ]
       },
       modifyForm: {},
       modifyRules:{ 
-          TITLE: [{required: true, message: '台账名称不能为空', trigger: 'blur'}],
-          TYPE: [{required: true, message: '台账类型不能为空', trigger: 'blur'}]
+          TITLE: [{required: true, message: '标题不能为空', trigger: 'blur'}],
+          TYPE: [{required: true, message: '台账排版类型不能为空', trigger: 'blur'}]
         }
     };
   },

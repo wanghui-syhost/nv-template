@@ -30,7 +30,7 @@
             <span> {{ scope.row.URL }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="父级代码">
+        <el-table-column label="父级编号">
           <template slot-scope="scope">
             <span> {{ scope.row.TAB_CODE }}</span>
           </template>
