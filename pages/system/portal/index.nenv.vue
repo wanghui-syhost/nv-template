@@ -180,7 +180,6 @@ export default {
         VALUE: value,
         ID: this.ID
       };
-      console.log(params)
       validDictionaryData(params).then(response => {
           var e = response.data; 
           if(e == true){
@@ -396,26 +395,26 @@ export default {
        },
        saveDictionary() {
        this.$refs['addForm'].validate((valid) => {
-         if (!valid) {
-           return
-         }
-          saveDictionaryData(this.addForm).then(response => {
-                this.$message({
-                  message:response.rawData.msg,
-                  type: "success"
-                });
-                this.resetForm('addForm');
-                // 重新加载数据
-                this.getList();
-                }).catch(err =>{
-                this.$message({
-                  message: '保存失败',
-                  type: "error"
-                });
-              });
-              // 隐藏弹出框
-              this.isShowAddDialog = false;
-            });
+        if (!valid) {
+          return
+        }
+        saveDictionaryData(this.addForm).then(response => {
+          this.$message({
+            message:response.rawData.msg,
+            type: "success"
+          });
+          this.resetForm('addForm');
+          // 重新加载数据
+          this.getList();
+          }).catch(err =>{
+          this.$message({
+            message: '保存失败',
+            type: "error"
+          });
+        });
+        // 隐藏弹出框
+        this.isShowAddDialog = false;
+      });
     },
 
     modifyInfo(row){  
@@ -430,6 +429,7 @@ export default {
             const params = {
               ID: this.modifyForm.ID,
               NAME: this.modifyForm.NAME,
+              VALUE: this.modifyForm.VALUE,
               DESCRIPTION: this.modifyForm.DESCRIPTION,
               SORT: this.modifyForm.SORT
             }

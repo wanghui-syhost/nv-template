@@ -215,7 +215,7 @@ export default {
       addRules: {
         NAME: [{required: true, message: '类别名称不能为空', trigger: 'blur'}],
         VALUE:[
-          {required: true, message: '编码不能为空', trigger: 'blur'},
+          {required: true, message: '类别值不能为空', trigger: 'blur'},
           {validator: codeValid, trigger: 'blur'}
         ],
         SORT: [

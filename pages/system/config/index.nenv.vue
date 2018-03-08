@@ -50,7 +50,7 @@
     </section>
 
      <!-- 新增 -->
-    <el-dialog title="项目信息" :visible.sync="dialogVisible" size="small">
+    <el-dialog title="新增系统配置" :visible.sync="dialogVisible" size="small">
       <el-form :model="form" ref="form" :rules="rules" label-width="120px">
         <el-row type="flex" class="row-bg" justify="space-around">
         <el-col :span="12">
