@@ -121,7 +121,15 @@
       <el-row type="flex" class="row-bg" justify="space-around">
         <el-col :span="12">
           <el-form-item label="首页地址" prop="VALUE">
-            <el-input v-model="modifyForm.VALUE" placeholder="请输入首页地址" :maxlength="20">类别值</el-input>
+            <el-select v-model="modifyForm.VALUE">
+              <el-option
+                v-for ="item in homeSelectOptions"
+                :key="item.path"
+                :label="item.path"
+                :value="item.path"
+              />
+            </el-select>
+            <!-- <el-input v-model="modifyForm.VALUE" placeholder="请输入首页地址" :maxlength="20">类别值</el-input> -->
           </el-form-item>
         </el-col>
       </el-row>
@@ -252,6 +260,13 @@ export default {
         SORT: [{ validator: sortValid, trigger: 'blur'}]
       }
     };
+  },
+  computed: {
+    homeSelectOptions () {
+      const { flatRoutes } = nenv
+      const homes = flatRoutes.filter(x => x.path.indexOf('/home/') === 0).map(x => ({ path: x.path.replace('/home/', ''), title: x.component.title }))
+      return homes
+    },
   },
   mounted() {
     this.CODE = 'HOME_PAGE';
