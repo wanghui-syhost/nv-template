@@ -7,7 +7,7 @@
           <el-form-item label="关键字">
             <el-input v-model="KEYWORD" placeholder="请输入关键字" @keyup.enter.native = "getList" ></el-input>
           </el-form-item>
-          <el-button type="infor" @click="getList();">搜索</el-button>
+          <el-button type="infor" @click="getList">搜索</el-button>
   				<el-button type="primary" @click="addInfo">新增</el-button>
           <el-button type="primary" @click="batchAddInfo">批量添加</el-button>
   			</div>

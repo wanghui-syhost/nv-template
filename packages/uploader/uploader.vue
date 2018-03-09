@@ -1,7 +1,6 @@
 <template>
     <div class="upload-table">
         <section class="upload-table__from">
-            <!-- <h3>文件管理</h3> -->
             <el-button @click="createdNewFolder" type="primary" :disabled ="isSearch">
                 新建文件夹
             </el-button>
@@ -39,7 +38,7 @@
         </div>
         <el-tabs type="border-card">
           <el-tab-pane>
-            <span slot="label" name="first" ><i class="el-icon-tickets"></i></span> 
+            <span slot="label" name="first" ><i class="el-icon-tickets"/></span> 
             <!-- 文件列表 -->
             <el-table :data="list" ref="multipleTable" v-loading="listLoading" @selection-change="handleSelectionChange" fit highlight-current-row>
                 <el-table-column type="selection" width="55" align="center"></el-table-column>
@@ -68,12 +67,6 @@
                         <i title="删除" class="png-icon file-delete small" @click="removeItem(scope.row)"></i>
                     </template>
                 </el-table-column>
-                <!-- <el-table-column label="文件类型"  align="center">
-                    <template slot-scope="scope">
-                    <span v-if=" scope.row.IS_DIRECTORY === 1">-</span>
-                    <span v-else>{{ scope.row.FILE_TYPE }}</span>
-                    </template>
-                </el-table-column> -->
                 <el-table-column label="大小"  align="center" width="100">
                     <template slot-scope="scope">
                         <span v-if=" scope.row.IS_DIRECTORY === 'YES'">-</span>
@@ -334,8 +327,11 @@
         this.$message.info("请勾选要下载的文件");
         return;
       }
-      let queryParam = `?ID=`+this.handlerChooseRowsID();
-      window.location = '/api/file/download/compress' + queryParam;
+      unfetch.download('file/download/compress', {
+        ID: this.handlerChooseRowsID()
+      })
+      // let queryParam = `?ID=`+this.handlerChooseRowsID();
+      // window.location = '/api/file/download/compress' + queryParam;
     },
     // DIR-{dirId},FILE-{dirID}-{fileId}
     // 处理要下载的文件的ID
