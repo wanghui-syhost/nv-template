@@ -1,13 +1,13 @@
 <template>
-      <el-form :model="addForm" ref="addForm" label-width="120px" slot="top">
+      <el-form :model="addForm" :rules="addRules" ref="addForm" label-width="120px" slot="top">
         <el-row type="flex" class="row-bg" justify="space-between">
           <el-col :span="12">
-            <el-form-item label="任务分组" prop="JOB_GROUP" :rules="[{ required: true, message: '任务分组不能为空', trigger: 'blur'}]">
+            <el-form-item label="任务分组" prop="JOB_GROUP">
               <el-input v-model="addForm.JOB_GROUP" placeholder="请输入任务分组">任务分组</el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="任务名称" prop="JOB_NAME" :rules="[{ required: true, message: '任务名称不能为空', trigger: 'blur'}]">
+            <el-form-item label="任务名称" prop="JOB_NAME">
               <el-input v-model="addForm.JOB_NAME" placeholder="请输入任务名称">任务名称</el-input>
             </el-form-item>
           </el-col>
@@ -49,7 +49,35 @@ export default {
       required: false
     }
   },
+  
   data() {
+    const jobGroupValid = (rule, value, callback) => {
+      if (value != null && value != "") {
+        setTimeout(() => {
+          if (value.length > 30) {
+            callback(new Error("任务分组不能超过30长度"));
+          }else{
+            callback();
+          }
+        }, 1000);
+      } else {
+        callback();
+      }
+    };
+    //任务名称
+     const jobNameValid = (rule, value, callback) => {
+      if (value != null && value != "") {
+        setTimeout(() => {
+          if (value.length > 30) {
+            callback(new Error("任务名称不能超过30长度"));
+          }else{
+            callback();
+          }
+        }, 1000);
+      } else {
+        callback();
+      }
+    };
     return {
       addForm: {
         ID: null, // 主键ID
@@ -59,7 +87,14 @@ export default {
         DESCRIPTION: null, // 任务描述
         CLASS_NAME: null //'com.infore.platform.scheduler.demo.BuyingJob', // 完整的类名
       },
-      addRules: {}
+      addRules: {
+        JOB_GROUP: [
+          { required: true, message: '任务分组不能为空', trigger: 'blur'},
+          { validator: jobGroupValid, trigger: 'blur'}],
+        JOB_NAME: [
+          { required: true, message: '任务名称不能为空', trigger: 'blur'},
+          { validator: jobNameValid, trigger: 'blur'}],
+      }
     };
   },
   created() {

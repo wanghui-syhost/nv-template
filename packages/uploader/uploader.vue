@@ -52,7 +52,7 @@
                 <el-table-column align="left" label='名称'>
                     <template slot-scope="scope">
                         <span class="file-name">
-                            <span class="file-label" v-show="!scope.row.isEdit" @click="setParentCode(scope.row.ID, scope.row.NAME,scope.row.IS_DIRECTORY)">{{scope.row.NAME}}</span>
+                            <a class="file-label" v-show="!scope.row.isEdit" @click="setParentCode(scope.row.ID, scope.row.NAME,scope.row.IS_DIRECTORY)" :title="scope.row.NAME">{{scope.row.NAME}}</a>
                             <span class="file-input" v-if="scope.row.isEdit">
                               <span style="float: left; margin-bottom: 5px"><el-input id="" size="small" style="width: 310px" v-model="rename" :minlength="1" :maxlength="50" @keyup.enter.native="modifyComplete(scope.row)"></el-input></span>
                               <span style="float: left; margin-left: 10px"><el-button type="primary" size="mini" @click="modifyComplete(scope.row)" :disabled="rename.length<1">确认</el-button></span>
@@ -858,4 +858,11 @@
     margin-right:5px;
     cursor: pointer;
   }
+</style>
+<style rel="stylesheet/scss" scope>
+@media screen and (max-width: 1400px){
+   .file-label {
+    width: 200px!important;  
+  }
+}
 </style>

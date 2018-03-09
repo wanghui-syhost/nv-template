@@ -165,6 +165,21 @@ import { getLedgerDatas, deleteLedger, saveLedger, updateLedger, validLedger } f
 export default {
   name: 'Tab',
   data() {
+    //台账标题
+     const titleValid = (rule, value, callback) => {
+      if (value != null && value != "") {
+        setTimeout(() => {
+          if (value.length > 30) {
+            callback(new Error("标题不能超过30长度"));
+          }else{
+            callback();
+          }
+        }, 1000);
+      } else {
+        callback();
+      }
+    };
+
     var codeValid = (rule, value, callback) => {
       var reg = /^[A-Za-z_]+$/; 
       if(!value.match(reg)){
@@ -204,7 +219,10 @@ export default {
         SHOW_HEAD:'NO' //是否显示头部 YES:是 NO:否 
       },
       addRules: {
-        TITLE: [{required: true, message: '标题不能为空', trigger: 'blur'}],
+        TITLE: [
+          {required: true, message: '标题不能为空', trigger: 'blur'},
+          { validator: titleValid, trigger: 'blur'}
+          ],
         TYPE: [{required: true, message: '台账排版类型不能为空', trigger: 'blur'}],
         CODE: [
           {required: true, message: '编号不能为空', trigger: 'blur'},
@@ -213,7 +231,8 @@ export default {
       },
       modifyForm: {},
       modifyRules:{ 
-          TITLE: [{required: true, message: '标题不能为空', trigger: 'blur'}],
+          TITLE: [{required: true, message: '标题不能为空', trigger: 'blur'},
+          { validator: titleValid, trigger: 'blur'}],
           TYPE: [{required: true, message: '台账排版类型不能为空', trigger: 'blur'}]
         }
     };
