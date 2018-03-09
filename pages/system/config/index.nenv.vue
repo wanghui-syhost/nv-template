@@ -19,7 +19,7 @@
         <el-table :data="list" v-loading.body="listLoading" element-loading-text="拼命加载中" border fit highlight-current-row>
           <el-table-column label="配置名称">
             <template slot-scope="scope">
-               <span  v-show="!scope.row.isEdit">{{scope.row.NAME}}</span>
+               <a  v-show="!scope.row.isEdit" :title="scope.row.NAME">{{scope.row.NAME}}</a>
                <el-input v-show="scope.row.isEdit" size="small" v-model="scope.row.NAME"></el-input>
             </template>
           </el-table-column>
@@ -30,7 +30,7 @@
           </el-table-column>
           <el-table-column label="配置值">
             <template slot-scope="scope">
-              <span  v-show="!scope.row.isEdit">{{scope.row.VALUE}}</span>
+              <a  v-show="!scope.row.isEdit" :title="scope.row.VALUE">{{scope.row.VALUE}}</a>
               <el-input v-show="scope.row.isEdit" size="small" v-model="scope.row.VALUE"></el-input>
             </template>
           </el-table-column>

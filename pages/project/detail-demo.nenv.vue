@@ -1,47 +1,43 @@
 <template>
 <nv-layout>
   <section class="nv-layout-form search-form" slot="top">
-      <el-form ref="form" :model="form" :inline="true">
+      <el-form class="el-form--inline" ref="form" :model="form" :inline="true">
         <div class="search-form-one">
-              <el-form-item label="关键字">
-                <el-input v-model="form.keyword" placeholder="请输入关键字"></el-input>
-              </el-form-item>
-              <!-- <el-form-item>
-                <el-radio-group v-model="form.resource">
-                    <el-radio label="申请日期"></el-radio>
-                    <el-radio label="办结时间"></el-radio>
-                </el-radio-group>
-              </el-form-item> -->
-              <el-form-item label="抽查情况">
-                <el-select v-model="form.region0" placeholder="全部类型">
-                  <el-option label="抽查情况1" value="type1"></el-option>
-                  <el-option label="抽查情况2" value="type2"></el-option>
-                </el-select>
-              </el-form-item>
-
-              <el-form-item label="抽查情况">
-                <el-select v-model="form.region1" placeholder="全部类型">
-                  <el-option label="抽查情况1" value="type1"></el-option>
-                  <el-option label="抽查情况2" value="type2"></el-option>
-                </el-select>
-              </el-form-item>
-              <el-button type="primary" style="float:right;">搜索</el-button>
-        </div>
-
-        <div class="search-form-one">
-              <el-form-item label="抽查情况">
-                <el-select v-model="form.region2" placeholder="全部类型">
-                  <el-option label="抽查情况1" value="type1"></el-option>
-                  <el-option label="抽查情况2" value="type2"></el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="创建时间">
-                <el-date-picker type="date" placeholder="选择日期" v-model="form.startDate" style="width:194px;"></el-date-picker>
-              </el-form-item>
-              <el-form-item label="至">
-                 <!-- <span>至</span>   -->
-                <el-date-picker type="date" placeholder="选择日期" v-model="form.endDate"  style="width: 194px;"></el-date-picker>
-              </el-form-item>
+          <el-form-item label="关键字">
+            <el-input v-model="form.keyword" placeholder="请输入关键字"></el-input>
+          </el-form-item>
+          <!-- <el-form-item>
+            <el-radio-group v-model="form.resource">
+                <el-radio label="申请日期"></el-radio>
+                <el-radio label="办结时间"></el-radio>
+            </el-radio-group>
+          </el-form-item> -->
+            <el-form-item label="抽查情况">
+              <el-select v-model="form.region0" placeholder="全部类型">
+                <el-option label="抽查情况1" value="type1"></el-option>
+                <el-option label="抽查情况2" value="type2"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="抽查情况">
+              <el-select v-model="form.region1" placeholder="全部类型">
+                <el-option label="抽查情况1" value="type1"></el-option>
+                <el-option label="抽查情况2" value="type2"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="抽查情况">
+              <el-select v-model="form.region2" placeholder="全部类型">
+                <el-option label="抽查情况1" value="type1"></el-option>
+                <el-option label="抽查情况2" value="type2"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="创建时间">
+              <el-date-picker type="date" placeholder="选择日期" v-model="form.startDate" style="width:194px;"></el-date-picker>
+            </el-form-item>
+            <el-form-item label="至">
+              <!-- <span>至</span>   -->
+              <el-date-picker type="date" placeholder="选择日期" v-model="form.endDate"  style="width: 194px;"></el-date-picker>
+            </el-form-item>
+            <el-button type="primary">搜索</el-button>
         </div>
       </el-form>
       </section>

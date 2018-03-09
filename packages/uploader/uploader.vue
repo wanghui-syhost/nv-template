@@ -564,11 +564,9 @@
         console.log(resp);
         me.dialogFormVisible= false;
         let {code, msg, data} = resp.rawData;
-        debugger
-        me.$message({
-          showClose: true,
-          message: '创建成功'
-        });
+       
+       
+        me.$message.success('创建成功');
         me.fetchData(me.currentId);
        
       }).catch(err=>{
