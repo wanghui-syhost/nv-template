@@ -150,11 +150,8 @@ export default {
               self.$refs.addForm.resetFields();
               self.$emit('close')
             })
-            .catch(() => {
-              // self.$message({
-              //   message: ID ? '更新失败' : '保存失败',
-              //   type: 'error'
-              // })
+            .catch((e) => {
+              console.log(e)
             })
           } else {
             return false

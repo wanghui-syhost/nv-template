@@ -14,9 +14,10 @@
         <el-table-column label="分组" prop = "JOB_GROUP" min-width="8%" />
         <el-table-column label="名称" prop = "JOB_NAME" sortable  min-width="8%" />
         <el-table-column label="运行时间" prop = "CRON_EXPRESSION" min-width="10%" />
-        <el-table-column label="状态" min-width="7%">
+        <el-table-column label="状态" min-width="8%">
           <template slot-scope="scope">
-            {{ scope.row.STATUS | statusFilter }}
+            <el-tag :type="scope.row.STATUS | statusFilter">{{scope.row.STATUS == 'OPENED' ? '运行中': '已暂停'}}</el-tag>
+            <!-- {{ scope.row.STATUS | statusFilter }} -->
           </template>
         </el-table-column>
         <el-table-column label="任务描述" prop = "DESCRIPTION" min-width="14%" />
@@ -81,12 +82,12 @@ export default {
     this.getList();
   },
   filters: {
-    statusFilter: function(value) {
+    statusFilter(status) {
       const map = {
-        OPENED: "运行中",
-        PAUSED: "已暂停"
-      };
-      return map[value];
+        PAUSED: 'danger',
+        OPENED: 'success'
+      }
+      return map[status];
     }
   },
   methods: {
@@ -131,7 +132,7 @@ export default {
     reqData(params) {
       deleteScheduler(params)
         .then(response => {
-          this.$message.info("删除成功");
+          this.$message.success("删除成功");
           this.getList();
         })
         .catch(e => {
@@ -179,7 +180,7 @@ export default {
           if (action == "confirm") {
             runOnceScheduler(params)
               .then(response => {
-                this.$message.info("运行成功");
+                this.$message.success("执行成功");
                 this.getList();
               })
               .catch(e => {
@@ -203,7 +204,7 @@ export default {
           if (action == "confirm") {
             pauseScheduler(params)
               .then(response => {
-                this.$message.info("设置成功");
+                this.$message.success("设置成功");
                 this.getList();
               })
               .catch(e => {
@@ -226,7 +227,7 @@ export default {
           if (action == "confirm") {
             resumeScheduler(params)
               .then(response => {
-                this.$message.info("设置成功");
+                this.$message.success("设置成功");
                 this.getList();
               })
               .catch(e => {

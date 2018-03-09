@@ -328,7 +328,9 @@
         return;
       }
       unfetch.download('file/download/compress', {
-        ID: this.handlerChooseRowsID()
+        params: {
+          ID: this.handlerChooseRowsID()
+        }
       })
       // let queryParam = `?ID=`+this.handlerChooseRowsID();
       // window.location = '/api/file/download/compress' + queryParam;
@@ -349,6 +351,7 @@
         }
         arr.push(str);
       }
+      console.log(arr.join(','))
       return arr.join(',');
     },
     beforeUpload(file){
@@ -370,7 +373,6 @@
     },
     success(resp){
       this.listLoading = false;
-      debugger;
         let me = this;
         let {code , data, msg} = resp;
         console.log(resp);
@@ -561,21 +563,13 @@
           TYPE: this.type
       };
       FileCreatedNewFolder(req).then(resp=>{
-        console.log(resp);
         me.dialogFormVisible= false;
         let {code, msg, data} = resp.rawData;
-       
-       
         me.$message.success('创建成功');
         me.fetchData(me.currentId);
        
       }).catch(err=>{
-          let {code, msg, data} = err;
-          if (code == 3){
-             me.$message.error(msg);
-          } else {
-             me.$message.error("创建失败");
-          }
+          console.log(err)
       })
     },
     download(row){
