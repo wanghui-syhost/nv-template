@@ -151,10 +151,10 @@ export default {
               self.$emit('close')
             })
             .catch(() => {
-              self.$message({
-                message: ID ? '更新失败' : '保存失败',
-                type: 'error'
-              })
+              // self.$message({
+              //   message: ID ? '更新失败' : '保存失败',
+              //   type: 'error'
+              // })
             })
           } else {
             return false

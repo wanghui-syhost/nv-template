@@ -27,6 +27,10 @@
             
             <nv-textarea v-model="nvTextareaResult2" :disabled = "false"/>
         </div>
+        <div>
+            <nv-date-picker v-model="nvDatePickResult"/>
+            <nv-date-picker v-model="nvDatePickResult" :disabled = "false"/>                
+        </div>
     </nv-layout>
 </template>
 <script>
@@ -43,6 +47,7 @@ export default {
             nvInputResult2:'',
             nvTextareaResult:'',
             nvTextareaResult2:'',
+            nvDatePickResult: null
         }
     },
     created () {
