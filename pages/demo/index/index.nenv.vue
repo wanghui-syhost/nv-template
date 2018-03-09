@@ -1,7 +1,7 @@
 <template>
-  <nv-layout>
+  <nv-layout prefixType="1">
     <!-- <h2>平台组件</h2> -->
-    <nv-layout-section title="1.输入控件">
+    <nv-layout-section title="输入控件">
       <div>
         <h4>1.1多选框</h4>
         <nv-checkbox nv-code="HOBBY" v-model="nvCheckboxResult"/>
@@ -34,7 +34,7 @@
       </div>
     </nv-layout-section>
     
-    <nv-layout-section title="2.省市区级联">
+    <nv-layout-section title="省市区级联">
       <div>
         <h4>2.1 标准使用</h4>
         <nv-region-select v-model="nvRegionSelectedResult"></nv-region-select >
@@ -49,17 +49,14 @@
       </div>
     </nv-layout-section>
 
-    <nv-layout-section title="3.组织人员选择器">
+    <nv-layout-section title="组织人员选择器">
       <h4>3.1 人员选择器</h4>
       <nv-organize-user-selector :multi="true"  v-model="nvOrganizeUserSelectResult" />
       <h4>3.2 组织选择器</h4>
       <nv-organize-user-selector :only-organize="true" :multi="true"  v-model="nvOrganizeSelectResult" />
-    </nv-layout-section>
-
-    <nv-layout-section title="新人员选择器1">
+      <h4>3.3 人员选择器 (数据量大时使用)</h4>
       <nv-person-chooser></nv-person-chooser>
     </nv-layout-section>
-
 
     <nv-layout-section title="子表配置">
       <div>
