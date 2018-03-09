@@ -5,7 +5,7 @@
         <!-- 搜索框  -->
         <div class="search-form-one">
           
-          <el-button type="primary" @click="isShowAddDialog = true">新增</el-button>
+          <el-button type="primary" @click="addInfo">新增</el-button>
         </div>
       </el-form>
     </section>
@@ -48,7 +48,7 @@
              <span> {{ scope.row.IS_DELETED == 'YES' ? '是' : '否' }}</span>
           </template>
         </el-table-column> -->
-        <el-table-column label="操作">
+        <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button size="small" type="primary" @click="modifyInfo(scope.row)">编辑</el-button>
             <el-button size="small" type="danger" @click="removeInfo(scope.row)">删除</el-button>
@@ -85,12 +85,6 @@
         </el-table-column>
   </el-table>
       
-
-      <!-- 分页  -->
-      <div class="search-pagination">
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageIndex" :page-sizes="[10, 20, 30, 40]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="totalCount">
-        </el-pagination>
-      </div>
     </section>
 
     <!-- 新增 -->
@@ -114,8 +108,8 @@
         </el-row>
         <el-row type="flex" class="row-bg" justify="space-around">
            <el-col :span="12">
-            <el-form-item label="上级菜单" prop="">
-              <el-select v-model="addForm.PARENT_ID" placeholder="请选择">
+            <el-form-item label="上级菜单" prop="PARENT_ID">
+              <el-select v-model="addForm.PARENT_ID" placeholder="请选择" @change="parentChange">
                   <el-option
                     v-for="item in options"
                     :key="item.ID"
@@ -166,8 +160,8 @@
 
           <el-row type="flex" class="row-bg" justify="space-around">
            <el-col :span="12">
-            <el-form-item label="上级菜单" prop="">
-              <el-select v-model="modifyForm.PARENT_ID" placeholder="请选择">
+            <el-form-item label="上级菜单" prop="PARENT_ID">
+              <el-select v-model="modifyForm.PARENT_ID" @change="parentChange" placeholder="请选择">
                   <el-option
                     v-for="item in options"
                     :key="item.ID"
@@ -198,15 +192,35 @@
 </template>
 <script>
 import axios from 'axios';
-import { getLedgerMenuDatas, deleteLedgerMenu,deleteParentMenu,saveLedgerMenu,updateLedgerMenu,getParentsMenu } from './api'
+import { getLedgerMenuDatas, deleteLedgerMenu,deleteParentMenu,saveLedgerMenu,
+  updateLedgerMenu,getParentsMenu, validLedgerMenuSort } from './api'
 export default {
-  name: 'TabMenu',
+  name: 'LedgerMenu',
   data() {
     var sortValid = (rule, value, callback) => {
       if(!/^[0-9]+$/.test(value)){
           callback(new Error('排序序号只能是数字'));
+          return
       } 
-      callback();
+      const params = {
+        CODE: this.CODE,
+        SORT: value,
+        ID: this.ID,
+        PID: this.PID
+      };
+      validLedgerMenuSort(params).then(response => {
+          var e = response.data; 
+          if(e == true){
+            callback(new Error('该排序号已存在'));
+            return;
+          } else {
+            callback();
+            return
+          }
+          
+      }).catch(err =>{
+        console.log(err);
+      });
     };
     return {
       isShowAddDialog: false,
@@ -216,8 +230,10 @@ export default {
       pageIndex: 1,
       pageSize: 10,
       totalCount: 0,
+      ID: null, 
       CODE: '',
       PNAME:'',
+      PID: null, 
       options:null,
       
       addForm: {
@@ -346,6 +362,13 @@ export default {
       this.$message.err("删除失败");
     });
   },
+  addInfo(){
+   
+    this.isShowAddDialog = true
+    this.ID = null
+    this.PID = null
+    this.resetForm("addForm")
+  },
    // 保存
   save() {
     this.$refs['addForm'].validate((valid) => {
@@ -380,6 +403,9 @@ export default {
     let backdata = JSON.parse(JSON.stringify(row));
     this.modifyForm = backdata;
     this.isShowEditDialog = true;
+    this.ID = row.ID
+    this.PID = null
+    this.resetForm("modifyForm")
   },
 
   update(){
@@ -417,6 +443,9 @@ export default {
   });
   },
 
+  parentChange(val){
+      this.PID = val;
+  },
   
   handleSizeChange(pageIndex) {
     this.queryPrams.pageSize = pageIndex;

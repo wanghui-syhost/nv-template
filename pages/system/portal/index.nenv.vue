@@ -4,7 +4,7 @@
         <el-form :inline="true">
             <!-- 搜索框  -->
   			<div class="search-form-one">
-  				<el-button type="primary" @click="isShowAddDialog = true">新增</el-button>
+  				<el-button type="primary" @click="addInfo">新增</el-button>
   			</div>
         </el-form>
       </section>
@@ -30,10 +30,10 @@
           </el-table-column> -->
           <el-table-column label="描述信息" min-width="25%">
             <template slot-scope="scope">
-              <span> {{scope.row.DESCRIPTION}}</span>
+              <a :title="scope.row.DESCRIPTION"> {{scope.row.DESCRIPTION}}</a>
             </template>
           </el-table-column>
-          <el-table-column label="排序" min-width="7%">
+          <el-table-column label="优先级" min-width="7%">
             <template slot-scope="scope">
               <span> {{scope.row.SORT}}</span>
             </template>
@@ -76,8 +76,8 @@
       </el-row>
       <el-row type="flex" class="row-bg" justify="space-around">
         <el-col :span="12">
-          <el-form-item label="排序序号" prop="SORT">
-            <el-input v-model.number="addForm.SORT" placeholder="请输入排序序号" :maxlength="3">排序顺序</el-input>
+          <el-form-item label="优先级" prop="SORT">
+            <el-input v-model.number="addForm.SORT" placeholder="请输入优先级" :maxlength="3">优先级</el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -92,21 +92,21 @@
   </el-dialog>
 
 
-<el-dialog title="选择角色" :visible.sync="isShowRoleListDialog" size="small">
-        <el-table ref="multipleTable" :data="roleList" v-loading.body="listLoading" element-loading-text="拼命加载中" @selection-change="handleSelectionChange" border fit highlight-current-row>
-          <el-table-column  type="selection" width="55">
-          </el-table-column>
-          <el-table-column label="角色名称">
-            <template slot-scope="scope">
-              <span> {{scope.row.ROLE_NAME}}</span>
-            </template>
-          </el-table-column>    
-        </el-table>
-         <div style="margin-top: 20px">
-            <el-button @click="isShowRoleListDialog = false">取消</el-button>
-            <el-button type="primary" @click="savePortalRole">保存</el-button>
-          </div>
-</el-dialog>
+  <el-dialog title="选择角色" :visible.sync="isShowRoleListDialog" size="small">
+          <el-table ref="multipleTable" :data="roleList" v-loading.body="listLoading" element-loading-text="拼命加载中" @selection-change="handleSelectionChange" border fit highlight-current-row>
+            <el-table-column  type="selection" width="55">
+            </el-table-column>
+            <el-table-column label="角色名称">
+              <template slot-scope="scope">
+                <span> {{scope.row.ROLE_NAME}}</span>
+              </template>
+            </el-table-column>    
+          </el-table>
+          <div style="margin-top: 20px">
+              <el-button @click="isShowRoleListDialog = false">取消</el-button>
+              <el-button type="primary" @click="savePortalRole">保存</el-button>
+            </div>
+  </el-dialog>
 
    <!-- 修改 -->
     <el-dialog title="修改门户信息" :visible.sync="isShowEditDialog" size="small">
@@ -121,7 +121,15 @@
       <el-row type="flex" class="row-bg" justify="space-around">
         <el-col :span="12">
           <el-form-item label="首页地址" prop="VALUE">
-            <el-input v-model="modifyForm.VALUE" placeholder="请输入首页地址" :disabled="true" :maxlength="20">类别值</el-input>
+            <el-select v-model="modifyForm.VALUE">
+              <el-option
+                v-for ="item in homeSelectOptions"
+                :key="item.path"
+                :label="item.path"
+                :value="item.path"
+              />
+            </el-select>
+            <!-- <el-input v-model="modifyForm.VALUE" placeholder="请输入首页地址" :maxlength="20">类别值</el-input> -->
           </el-form-item>
         </el-col>
       </el-row>
@@ -134,8 +142,8 @@
       </el-row>
       <el-row type="flex" class="row-bg" justify="space-around">
         <el-col :span="12">
-          <el-form-item label="排序" prop="SORT">
-            <el-input v-model.number="modifyForm.SORT" placeholder="请输入排序序号" :maxlength="3">排序顺序</el-input>
+          <el-form-item label="优先级" prop="SORT">
+            <el-input v-model.number="modifyForm.SORT" placeholder="请输入优先级" :maxlength="3">优先级</el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -159,40 +167,60 @@ import {
   deleteDictionaryData,
   saveDictionaryData,
   validDictionaryData,
-  updateDictionaryData
+  updateDictionaryData,
+  validDictionaryDataSort
 } from "./api";
 
 export default {
   name: "PortalData",
   data() {
     var codeValid = (rule, value, callback) => {
-      var reg = /^[A-Za-z_]+$/; 
-      // if(!value.match(reg)){
-      //     callback(new Error('首页地址只能是字母和下划线'));
-      // } else {
-        const params = {
-          CODE: this.CODE,
-          VALUE: value
-        };
-        validDictionaryData(params).then(response => {
-           var e = response.data; 
-            if(e == true){
-              callback(new Error('该地址已存在'));
-              return;
-            }
-            callback();
-        }).catch(err =>{
-          console.log(err);
-        });
-      
-      //}
+      const params = {
+        CODE: this.CODE,
+        VALUE: value,
+        ID: this.ID
+      };
+      validDictionaryData(params).then(response => {
+          var e = response.data; 
+          if(e == true){
+            callback(new Error('该地址已存在'));
+            return;
+          }
+          callback();
+      }).catch(err =>{
+        console.log(err);
+      });
     };
-
+    var sortValid = (rule, value, callback) => {
+      if (!value){
+        return
+      }
+      if(!/^[0-9]+$/.test(value)){
+          callback(new Error('排序号只能是数字'));
+          return
+      } 
+      const params = {
+        CODE: 'HOME_PAGE',
+        SORT: value,
+        ID: this.ID
+      };
+      validDictionaryDataSort(params).then(response => {
+          var e = response.data; 
+          if(e == true){
+            callback(new Error('该优先级已存在'));
+            return;
+          }
+          callback();
+      }).catch(err =>{
+        console.log(err);
+      });
+    };
     return {
       isShowAddDialog: false,
       isShowEditDialog: false,
       isShowAddDialog:false,
       isShowRoleListDialog:false,
+      ID: null,
       CODE: null,
       PNAME:'',
       checked:false,
@@ -215,15 +243,29 @@ export default {
       addRules: {
         NAME: [{required: true, message: '首页名称不能为空', trigger: 'blur'}],
         VALUE:[
-          {required: true, message: '类别地址不能为空', trigger: 'blur'},
+          {required: true, message: '首页地址不能为空', trigger: 'blur'},
           {validator: codeValid, trigger: 'blur'}
          ],
-        SORT: [{ type: 'number', message: '序号必须为数字值', trigger: 'blur'}],
+        SORT: [{ validator: sortValid, trigger: 'blur'}]
       },
 
       modifyForm:{},
-      modifyRules: {}
+      modifyRules: {
+        NAME: [{required: true, message: '首页名称不能为空', trigger: 'blur'}],
+         VALUE:[
+          {required: true, message: '首页地址不能为空', trigger: 'blur'},
+          {validator: codeValid, trigger: 'blur'}
+         ],
+        SORT: [{ validator: sortValid, trigger: 'blur'}]
+      }
     };
+  },
+  computed: {
+    homeSelectOptions () {
+      const { flatRoutes } = nenv
+      const homes = flatRoutes.filter(x => x.path.indexOf('/home/') === 0).map(x => ({ path: x.path.replace('/home/', ''), title: x.component.title }))
+      return homes
+    },
   },
   mounted() {
     this.CODE = 'HOME_PAGE';
@@ -280,7 +322,6 @@ export default {
     handerCurrentChoose(){
       let me = this;
       me.roleList.forEach(x=>{
-        debugger;
           me.$refs.multipleTable.toggleRowSelection(x, x.checked);
       })
     },
@@ -321,7 +362,6 @@ export default {
 
     // 保存项目信息
     handleSelectionChange(val) {
-      debugger;
       this.multipleSelection = val;
     },
     savePortalRole(){
@@ -347,32 +387,41 @@ export default {
           });
         });
        },
+
+       addInfo(){
+         this.isShowAddDialog = true
+         this.ID = null
+         this.resetForm('addForm')
+       },
        saveDictionary() {
        this.$refs['addForm'].validate((valid) => {
-         debugger;
-          saveDictionaryData(this.addForm).then(response => {
-                this.$message({
-                  message:response.rawData.msg,
-                  type: "success"
-                });
-                this.resetForm('addForm');
-                // 重新加载数据
-                this.getList();
-                }).catch(err =>{
-                this.$message({
-                  message: '保存失败',
-                  type: "error"
-                });
-              });
-              // 隐藏弹出框
-              this.isShowAddDialog = false;
-            });
+        if (!valid) {
+          return
+        }
+        saveDictionaryData(this.addForm).then(response => {
+          this.$message({
+            message:response.rawData.msg,
+            type: "success"
+          });
+          this.resetForm('addForm');
+          // 重新加载数据
+          this.getList();
+          }).catch(err =>{
+          this.$message({
+            message: '保存失败',
+            type: "error"
+          });
+        });
+        // 隐藏弹出框
+        this.isShowAddDialog = false;
+      });
     },
 
     modifyInfo(row){  
       let backdata = JSON.parse(JSON.stringify(row));
       this.modifyForm = backdata;
       this.isShowEditDialog = true;
+      this.ID = row.ID;
     },
     update(){
       this.$refs['modifyForm'].validate((valid) => {
@@ -380,6 +429,7 @@ export default {
             const params = {
               ID: this.modifyForm.ID,
               NAME: this.modifyForm.NAME,
+              VALUE: this.modifyForm.VALUE,
               DESCRIPTION: this.modifyForm.DESCRIPTION,
               SORT: this.modifyForm.SORT
             }

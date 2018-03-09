@@ -30,6 +30,14 @@ export function getDictionaries(params) {
       params
     })
   }
+
+  export function validDictionaryDataSort(params) {
+    return unfetch({
+      url: '/dictionary/data/valid/sort',
+      method: 'get',
+      params
+    })
+  }
   
   export function saveDictionary(params) {
     return unfetch({

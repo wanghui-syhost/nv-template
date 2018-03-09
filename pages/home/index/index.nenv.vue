@@ -30,14 +30,16 @@
 <script>
 
 import { getInfo, getTrail, getHomeInfoCnt } from './api';
-import HomeSidebar from './components/home-sidebar'
-import Todo from './components/todo'
-import Calendar from './components/calendar'
-import Weather from './components/weather'
-import Statistics from './components/statistics'
-import Board from './components/board'
-import Gross from './components/gross'
-import { types } from '../../packages/card/store';
+import HomeSidebar from '../components/home-sidebar'
+import Todo from '../components/todo'
+import Calendar from '../components/calendar'
+import Weather from '../components/weather'
+import Statistics from '../components/statistics'
+import Board from '../components/board'
+import Gross from '../components/gross'
+import { types } from '../../../packages/card/store';
+
+import '../style.scss'
 
 export default {
     name: 'home',

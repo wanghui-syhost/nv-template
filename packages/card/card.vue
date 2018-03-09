@@ -1,7 +1,7 @@
 <template>
     <div class="nv-layout" :class="{'is-card-layout': isCardLayout}">
-        <div class="nv-layout__top" :class="{'is-title-show': isShowTitle, 'only-title': !$slots.top}" v-if="isShowTitle || $slots.top" >
-            <label class="nv-layout__top-label" v-if="isShowTitle">{{ acitveMenu.crumbName }}</label>
+        <div class="nv-layout__top" :class="{'is-title-show': isTitleShow, 'only-title': !$slots.top}" v-if="isTitleShow || $slots.top" >
+            <label class="nv-layout__top-label" v-if="isTitleShow">{{ acitveMenu.crumbName }}</label>
             <slot name = "top"/>
         </div>
         <div class="nv-layout__main">
@@ -15,16 +15,62 @@ import vuex, { createNamespacedHelpers } from 'vuex'
 const { mapState ,mapGetters, mapActions } = createNamespacedHelpers(store.name)
 export default {
     name: 'NvLayout',
-    data () {
-        return {
-            
+    props: {
+        isDynamic: false,
+        prefixType: {
+            type: String,
+            default: '一'
         }
     },
+    data () {
+        return {
+            isDynamicView: false,
+            childCounter: 0,
+            sectionChildrens: []
+        }
+    },
+    created () {
+        this.$parent.$emit('configNvlayout', this)
+    },
     computed: {
+        isTitleShow () {
+            const self = this
+            return self.isShowTitle && !self.isDynamicView
+        },
         ...vuex.mapState('platform', {
             acitveMenu: state => state.acitveMenu,
         }),
         ...mapState(['isCardLayout', 'isShowTitle'])
+    },
+    methods: {
+        addSection (child) {
+            const self = this
+            self.sectionChildrens.push(child)
+            child.$data.prefix = self.resolveChildPrefix(self.childCounter++)
+        },
+        resolveChildPrefix (num) {
+            const { prefixType } = this
+            if (!prefixType) {
+                return null
+            }
+            switch (prefixType) {
+                case '一':
+                    return ['一','二','三','四','五','六','七','八','九','十',][num]
+                case 'Ⅰ':
+                    return ['Ⅰ','Ⅱ','Ⅲ','Ⅳ','Ⅴ','Ⅵ','Ⅶ','Ⅷ','Ⅸ','Ⅹ','Ⅺ','Ⅻ'][num]
+                case '1':
+                    return num + 1
+            }
+        }
+    },
+    watch: {
+        prefixType (val) {
+            const self = this
+            self.childCounter = 0
+            self.sectionChildrens.map(child => {
+                child.$data.prefix = self.resolveChildPrefix(self.childCounter++)
+            })
+        }
     }
 }
 </script>

@@ -6,7 +6,7 @@
   			<div class="search-form-one">
   			    
 
-  				<el-button type="primary" @click="isShowAddDialog = true">新增</el-button>
+  				<el-button type="primary" @click="addInfo">新增</el-button>
   			</div>
         </el-form>
       </section>
@@ -24,7 +24,7 @@
           
           <el-table-column label="类别名称">
             <template slot-scope="scope">
-              <span> {{scope.row.NAME}}</span>
+              <a :title="scope.row.NAME"> {{scope.row.NAME}}</a>
             </template>
           </el-table-column>
       
@@ -35,7 +35,7 @@
           </el-table-column>
           <el-table-column label="描述信息">
             <template slot-scope="scope">
-              <span> {{scope.row.DESCRIPTION}}</span>
+              <a :title="scope.row.DESCRIPTION"> {{scope.row.DESCRIPTION}}</a>
             </template>
           </el-table-column>
           <el-table-column label="排序">
@@ -44,7 +44,7 @@
             </template>
           </el-table-column>
 
-          <el-table-column label="操作">
+          <el-table-column label="操作" align="center">
             <template slot-scope="scope">
                <el-button size="small" type="primary" @click="modifyInfo(scope.row)">编辑</el-button>
               <el-button size="small" type="danger" @click="removeInfo(scope.row)" icon="delete">删除</el-button>
@@ -144,7 +144,8 @@ import {
   deleteDictionaryData,
   saveDictionaryData,
   validDictionaryData,
-  updateDictionaryData
+  updateDictionaryData,
+  validDictionaryDataSort
 } from "./api";
 export default {
   name: "DictionaryData",
@@ -152,33 +153,61 @@ export default {
     var codeValid = (rule, value, callback) => {
       var reg = /^[A-Za-z0-9_]+$/; 
       if(!value.match(reg)){
-          callback(new Error('类别代码只能是数字字母和下划线'));
-      } else {
-        const params = {
-          CODE: this.CODE,
-          VALUE: value
-        };
-        validDictionaryData(params).then(response => {
-           var e = response.data; 
-            if(e == true){
-              callback(new Error('该类别已存在'));
-              return;
-            }
-            callback();
-        }).catch(err =>{
-          console.log(err);
-        });
-      
+          callback(new Error('类别值只能是数字、字母和下划线'));
+          return
+      } 
+      if (/^[_]+$/.test(value)){
+        callback(new Error('类别值不能只是下划线'));
+        return
+      }  
+      const params = {
+        CODE: this.CODE,
+        VALUE: value
+      };
+      validDictionaryData(params).then(response => {
+          var e = response.data; 
+          if(e == true){
+            callback(new Error('该类别已存在'));
+            return;
+          }
+          callback();
+      }).catch(err =>{
+        console.log(err);
+      });
+    };
+    var sortValid = (rule, value, callback) => {
+      if (!value){
+        return
       }
+      if(!/^[0-9]+$/.test(value)){
+          callback(new Error('排序号只能是数字'));
+          return
+      } 
+      const params = {
+        CODE: this.CODE,
+        SORT: value,
+        ID: this.ID
+      };
+      validDictionaryDataSort(params).then(response => {
+          var e = response.data; 
+          if(e == true){
+            callback(new Error('该排序号已存在'));
+            return;
+          }
+          callback();
+      }).catch(err =>{
+        console.log(err);
+      });
     };
     return {
       isShowAddDialog: false,
       isShowEditDialog: false,
+      ID: null,
       CODE: '',
       PNAME:'',
       list: null,
       listLoading: true,
-
+    
       addForm: {
         CODE: this.CODE, // 类别-代码（类别区分唯一标识）
         NAME: null, // 类别名称
@@ -189,14 +218,23 @@ export default {
       addRules: {
         NAME: [{required: true, message: '类别名称不能为空', trigger: 'blur'}],
         VALUE:[
-          {required: true, message: '编码不能为空', trigger: 'blur'},
+          {required: true, message: '类别值不能为空', trigger: 'blur'},
           {validator: codeValid, trigger: 'blur'}
-         ],
-        SORT: [{ type: 'number', message: '序号必须为数字值', trigger: 'blur'}],
+        ],
+        SORT: [
+          //{ type: 'number', message: '序号必须为数字值', trigger: 'blur'},
+          {validator: sortValid, trigger: 'blur'}
+        ]
       },
 
       modifyForm:{},
-      modifyRules: {}
+      modifyRules: {
+        NAME: [{required: true, message: '类别名称不能为空', trigger: 'blur'}],
+        SORT: [
+          //{ type: 'number', message: '序号必须为数字值', trigger: 'blur'},
+          {validator: sortValid, trigger: 'blur'}
+        ],
+      }
     };
   },
   mounted() {
@@ -252,6 +290,12 @@ export default {
           });
       });
     },
+
+    addInfo(){
+      this.isShowAddDialog = true
+      this.ID = null
+      this.resetForm('addForm')
+    },
     // 保存项目信息
     save() {
        this.$refs['addForm'].validate((valid) => {
@@ -282,6 +326,7 @@ export default {
       let backdata = JSON.parse(JSON.stringify(row));
       this.modifyForm = backdata;
       this.isShowEditDialog = true;
+      this.ID = row.ID;
     },
     update(){
       this.$refs['modifyForm'].validate((valid) => {

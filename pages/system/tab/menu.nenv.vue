@@ -5,7 +5,7 @@
         <!-- 搜索框  -->
         <div class="search-form-one">
           
-          <el-button type="primary" @click="isShowAddDialog = true">新增</el-button>
+          <el-button type="primary" @click="addInfo">新增</el-button>
         </div>
       </el-form>
     </section>
@@ -30,7 +30,7 @@
             <span> {{ scope.row.URL }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="父级代码">
+        <el-table-column label="父级编号">
           <template slot-scope="scope">
             <span> {{ scope.row.TAB_CODE }}</span>
           </template>
@@ -40,12 +40,12 @@
             <span> {{ scope.row.SORT }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="是否删除 YES:是 NO:否 ">
+        <!-- <el-table-column label="是否删除 YES:是 NO:否 ">
           <template slot-scope="scope">
              <span> {{ scope.row.IS_DELETED == 'YES' ? '是' : '否' }}</span>
           </template>
-        </el-table-column>
-        <el-table-column label="操作">
+        </el-table-column> -->
+        <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button size="small" type="primary" @click="modifyInfo(scope.row)">编辑</el-button>
             <el-button size="small" type="danger" @click="removeInfo(scope.row)">删除</el-button>
@@ -54,14 +54,14 @@
       </el-table>
 
       <!-- 分页  -->
-      <div class="search-pagination">
+      <!-- <div class="search-pagination">
         <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageIndex" :page-sizes="[10, 20, 30, 40]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="totalCount">
         </el-pagination>
-      </div>
+      </div> -->
     </section>
 
     <!-- 新增 -->
-    <el-dialog title="添加动态选项卡" :visible.sync="isShowAddDialog" size="small">
+    <el-dialog title="添加动态选项卡菜单" :visible.sync="isShowAddDialog" size="small">
       <el-form :model="addForm" :rules="addRules" ref="addForm" label-width="120px">
         
         <el-row type="flex" class="row-bg" justify="space-around">
@@ -135,16 +135,32 @@
   </nv-layout>
 </template>
 <script>
-import { getTabMenuDatas, deleteTabMenu, saveTabMenu,updateTabMenu } from './api'
+import { getTabMenuDatas, deleteTabMenu, saveTabMenu,updateTabMenu, validTabMenuSort } from './api'
 export default {
   name: 'TabMenu',
   data() {
     var sortValid = (rule, value, callback) => {
-      var reg = /^[0-9]+$/; 
-      if(!value.match(reg)){
+      if(!/^[0-9]+$/.test(value)){
           callback(new Error('排序序号只能是数字'));
+          return
       } 
-      callback();
+      const params = {
+        CODE: this.CODE,
+        SORT: value,
+        ID: this.ID
+      };
+      validTabMenuSort(params).then(response => {
+          var e = response.data; 
+          if(e == true){
+            callback(new Error('该排序号已存在'));
+            return;
+          } else {
+            callback();
+            return
+          }
+      }).catch(err =>{
+        console.log(err);
+      });
     };
     return {
       isShowAddDialog: false,
@@ -154,6 +170,7 @@ export default {
       pageIndex: 1,
       pageSize: 10,
       totalCount: 0,
+      ID: null,
       CODE: '',
       PNAME:'',
       
@@ -261,10 +278,18 @@ export default {
         }
     })
   },
+  addInfo(){
+    this.isShowAddDialog = true
+    this.ID= null
+    this.resetForm('addForm')
+  },
   modifyInfo(row){
     let backdata = JSON.parse(JSON.stringify(row));
     this.modifyForm = backdata;
     this.isShowEditDialog = true;
+    this.ID = row.ID
+    this.resetForm('modifyForm')
+    
   },
 
   update(){

@@ -4,7 +4,7 @@
       <el-form :inline="true">
         <!-- 搜索框  -->
         <div class="search-form-one">
-          <el-button type="primary" @click="isShowAddDialog = true">新增</el-button>
+          <el-button type="primary" @click="addInfo">新增</el-button>
         </div>
       </el-form>
     </section>
@@ -32,7 +32,7 @@
             <span> {{ scope.row.DESCRIPTION }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="显示头部" min-width="7%">
+        <el-table-column label="显示头部" min-width="7%" align="center">
           <template slot-scope="scope">
             <span> {{ scope.row.SHOW_HEAD == 'YES' ? '是' : '否' }}</span>
           </template>
@@ -204,17 +204,17 @@ export default {
         SHOW_HEAD:'NO' //是否显示头部 YES:是 NO:否 
       },
       addRules: {
-        TITLE: [{required: true, message: '台账名称不能为空', trigger: 'blur'}],
-        TYPE: [{required: true, message: '台账类型不能为空', trigger: 'blur'}],
+        TITLE: [{required: true, message: '标题不能为空', trigger: 'blur'}],
+        TYPE: [{required: true, message: '台账排版类型不能为空', trigger: 'blur'}],
         CODE: [
-          {required: true, message: '台账代码不能为空', trigger: 'blur'},
+          {required: true, message: '编号不能为空', trigger: 'blur'},
           { validator: codeValid, trigger: 'blur'}
         ]
       },
       modifyForm: {},
       modifyRules:{ 
-          TITLE: [{required: true, message: '台账名称不能为空', trigger: 'blur'}],
-          TYPE: [{required: true, message: '台账类型不能为空', trigger: 'blur'}]
+          TITLE: [{required: true, message: '标题不能为空', trigger: 'blur'}],
+          TYPE: [{required: true, message: '台账排版类型不能为空', trigger: 'blur'}]
         }
     };
   },
@@ -265,6 +265,11 @@ export default {
     }).catch(e => {
       this.$message.err("删除失败");
     });
+  },
+
+  addInfo() {
+    this.isShowAddDialog = true
+    this.resetForm('addForm')
   },
    // 保存
   save() {

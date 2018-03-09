@@ -8,7 +8,7 @@
             <nv-scroll-pane class="header-menu-wrapper">
                 <component
                     :is="navComponent(item)"
-                    :to="item.linkUrl"
+                    :to="item.childrens ? item.childrens[0].linkUrl : item.linkUrl"
                     tag="div"
                     v-for = "(item, index) in menus"
                     :key="index"
