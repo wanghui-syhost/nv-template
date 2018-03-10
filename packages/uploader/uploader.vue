@@ -1,5 +1,5 @@
 <template>
-    <div class="upload-table">
+    <div class="upload-table" v-loading.body="isUploading" element-loading-text="正在上传中，请稍等......">
         <section class="upload-table__from">
             <el-button @click="createdNewFolder" type="primary" :disabled ="isSearch">
                 新建文件夹
@@ -10,7 +10,7 @@
             <el-button @click="downloadChooseRows" type="primary">
                 下载
             </el-button>
-            <el-upload  class="upload-table__upload--btn" :action="uploadURL" v-loading.body="isUploading" element-loading-text="正在上传中，请稍等......" 
+            <el-upload  class="upload-table__upload--btn" :action="uploadURL" 
               :on-success="success" 
               :before-upload="beforeUpload"
               :on-error = "errorUpload" 
@@ -96,6 +96,7 @@
                     layout="total, sizes, prev, pager, next, jumper"
                     :total="totalCount">
                 </el-pagination>
+                <el-button  size="mini" class="skip_btn">确定</el-button>
             </div>
           </el-tab-pane>
           <el-tab-pane>
@@ -395,19 +396,16 @@
             let arr = [];
             arr.push(item);
            FileAdd(arr).then(resp=>{
-             console.log(resp);
-             let {code, data,msg} = resp.rawData;
-              if(code==0){
                 this.isUploading = false;
                 me.$message.success('上传成功');
                 me.fetchData(me.currentId);
-              }else{  
-                me.$message.error(msg);
-              }
-           });
+           }).catch(e => {
+             this.isUploading = false
+           })
 
         }else{
-            this.$message.info(msg);
+          this.isUploading = false;
+          this.$message.info(msg);
         }
     },
     downloadFile(row){
@@ -845,6 +843,16 @@
   .cell i{
     margin-right:5px;
     cursor: pointer;
+  }
+  .home-detail__page {
+    .el-pagination__jump{
+       position: relative;
+    }
+    .skip_btn{
+      position: absolute;
+      right: 100px;
+      top: 2px;
+    }
   }
 </style>
 <style rel="stylesheet/scss" scope>
