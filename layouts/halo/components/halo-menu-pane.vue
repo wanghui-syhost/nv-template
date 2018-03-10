@@ -25,7 +25,7 @@ export default {
         padding: 0;
         top: 100%;
         
-        background-color: blue;
+        background-color: #fff;
 
         & & {
             top: 0;
