@@ -845,12 +845,12 @@
     cursor: pointer;
   }
   .home-detail__page {
-    .el-pagination__jump{
-       position: relative;
+    position: relative;
+    .el-pagination{
     }
     .skip_btn{
       position: absolute;
-      right: 100px;
+      right: 120px;
       top: 2px;
     }
   }
