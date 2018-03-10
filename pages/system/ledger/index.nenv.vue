@@ -21,7 +21,7 @@
             <span> {{ scope.row.CODE }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="排版类型" min-width="12%">
+        <el-table-column label="排版类型" min-width="10%">
           <template slot-scope="scope">
             <span> {{ scope.row.TYPE == 'LEFT' ? '左侧竖排' : '右侧竖排' }}</span>
           </template>
@@ -32,7 +32,7 @@
             <span> {{ scope.row.DESCRIPTION }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="显示头部" min-width="7%" align="center">
+        <el-table-column label="显示头部" min-width="9%" align="center">
           <template slot-scope="scope">
             <span> {{ scope.row.SHOW_HEAD == 'YES' ? '是' : '否' }}</span>
           </template>

@@ -1,5 +1,5 @@
 <template>
-  <div>
+   <nv-layout>
     <section class="search-form" style="padding:10px 0" slot="top">
       <el-form>
         <!-- 搜索框  -->
@@ -17,7 +17,7 @@
       </div>
 
     <section class="search-table">
-  <el-table
+  <el-table border fit
     :data="list"
     style="width: 100%">
     <el-table-column type="expand">
@@ -77,7 +77,7 @@
       label="是否删除 YES:是 NO:否"
       prop="IS_DELETED">
     </el-table-column> -->
-     <el-table-column label="操作">
+     <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button size="small" type="primary" @click="modifyInfo(scope.row)">编辑</el-button>
             <el-button size="small" type="danger" @click="removeParentInfo(scope.row)">删除</el-button>
@@ -184,7 +184,7 @@
         </el-row>
       </el-form>
     </el-dialog>
-  </div>
+  </nv-layout>
 </template>
 <script>
 import axios from 'axios';
@@ -476,7 +476,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
     .demo-table-expand {
     font-size: 0;
   }

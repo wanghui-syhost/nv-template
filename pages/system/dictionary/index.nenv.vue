@@ -57,7 +57,7 @@
     </section>
 
      <!-- 新增 -->
-    <el-dialog title="数据字典" :visible.sync="isShowAddDialog" size="small">
+    <el-dialog title="新增数据字典" :visible.sync="isShowAddDialog" size="small">
       <el-form :model="addForm" :rules="addRules" ref="addForm" label-width="120px">
         <el-row type="flex" class="row-bg" justify="space-around">
           <el-col :span="12">
@@ -84,7 +84,7 @@
 
 
    <!-- 修改 -->
-    <el-dialog title="数据字典" :visible.sync="isShowEditDialog" size="small">
+    <el-dialog title="修改数据字典" :visible.sync="isShowEditDialog" size="small">
       <el-form :model="modifyForm" ref="modifyForm" :rules="modifyRules" label-width="120px">
         <el-row type="flex" class="row-bg" justify="space-around">
           <el-col :span="12">
