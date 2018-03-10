@@ -100,8 +100,9 @@
             :current-page="queryPrams.pageIndex"
             :page-sizes="[10]"
             :page-size="queryPrams.pageSize"
-            layout="total, sizes, prev, pager, next, jumper"
+            layout="total, sizes, prev, pager, next, jumper, slot"
             :total="total">
+            <el-button>确定</el-button>
           </el-pagination>
       </div>
     </section>
