@@ -86,8 +86,20 @@
             </el-table>
 
             <div class="home-detail__page">
+<<<<<<< HEAD
                 <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageIndex" :page-sizes="[10, 20, 30, 40]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper, slot" :total="totalCount">
                   <el-button>确定</el-button>
+=======
+                <el-pagination
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="pageIndex"
+                    :page-sizes="[10, 20, 30, 40]"
+                    :page-size="pageSize"
+                    layout="total, sizes, prev, pager, next, jumper, slot"
+                    :total="totalCount">
+                    <el-button> 确定 </el-button>
+>>>>>>> 新增 文件格式
                 </el-pagination>
             </div>
           </el-tab-pane>
@@ -209,6 +221,9 @@
         return  currentChooseRows.map(item => {
           return item.IS_DIRECTORY === 'YES' ? `DIR-${item.TREE_ID}` : `FILE-${item.ID}`
         }).join(',')
+      },
+      treeId () {
+        return this.projectId || 'ROOT'
       }
     },
     // 过滤器，用于处理文件管理模块根据不同类型的文件格式显示不同的图标
@@ -224,10 +239,13 @@
           '.ppt':  'file-ppt',
           '.pptx': 'file-ppt',
           '.dps':  'file-ppt',
-          '.rar':  'file-rar',
-          '.zip':  'file-zip',
+          '.rar':  'file-arh',
+          '.zip':  'file-arh',
           '.txt':  'file-txt',
-          '.pdf':  'file-pdf'
+          '.pdf':  'file-pdf',
+          '.png':  'file-pic',
+          '.gif':  'file-pic',
+          '.jpg':  'file-pic',
         }
         return map[value] || 'file-other'
       }
@@ -248,7 +266,7 @@
           pageSize : this.pageSize,
           PROJECT_ID : this.projectId,
           TYPE : this.type,
-          TREE_ID: treeId ? treeId : (this.projectId ? 'ROOT' : this.projectId)
+          TREE_ID: treeId  || this.treeId
         }).then(({ data = {} }) => {
           this.listLoading = false;
             function calcFileImg(ext) {
@@ -308,7 +326,7 @@
         ID: this.selectedIds
       })
     },
-    beforeUpload(file){
+    beforeUpload (file) {
       this.isUploading = true;
       if (this.currentId == "" || this.currentId == "ROOT") return false;
       if (file && file.size) {
