@@ -38,23 +38,39 @@ export default {
 <style lang="scss" scoped>
     .halo-menu__item {
         position: relative;
-        padding: 10px 10px;
+        padding: 6px 15px;
         list-style: none;
-
         width: max-content;
-
         .halo-menu__pane {
+            color: #000;  
             display: none;
+            .halo-menu__item{
+                .inner-link .nav-item{
+                    color: #000;    
+                }
+            }
+            &:hover {
+                > .nav-item {
+                    color: #7CB1FF;
+                }
+            }
         }
-
         &:hover {
             > .nav-item {
-                color: red
+                color: #7CB1FF;
+                //background-color: #ECF5FF;
+                opacity: 1;
             }
             > .halo-menu__pane {
                 display: flex;
             }   
         }
+         a.nav-item {
+            color: #fff;
+        }
+    }
+    .halo-menu__item.active:after{
+        border-bottom: none;
     }
 </style>
 
