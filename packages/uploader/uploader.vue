@@ -224,7 +224,7 @@
           '.pptx': 'file-ppt',
           '.dps': 'file-ppt',
           '.rar': 'file-rar',
-          '.zip': 'file-zip',
+          '.zip': 'file-rar',
           '.txt': 'file-txt',
           '.pdf': 'file-pdf'
         }

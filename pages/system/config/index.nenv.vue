@@ -74,11 +74,9 @@
         </el-col>
 	    </el-row>
 	
-        <el-row type="flex" justify="space-around">
-            <el-col :span="8" :offset="4">
-              <el-button @click="dialogVisible = false">取消</el-button>
-              <el-button type="primary" @click="save();">保存</el-button>
-            </el-col>
+        <el-row type="flex" justify="center">
+          <el-button @click="dialogVisible = false">取消</el-button>
+          <el-button type="primary" @click="save();">保存</el-button>
         </el-row>
       </el-form>
   </el-dialog>
@@ -104,12 +102,10 @@
 	    </el-row>
       
 	
-        <el-row type="flex" justify="space-around">
-            <el-col :span="8">
-              <el-button @click="batchDialogVisible = false">取消</el-button>
-               <el-button @click="addDomain">添加行</el-button>
-              <el-button type="primary" @click="batchSave"  :disabled="dynamicValidateForm.domains.length >= 1 ? false : true">保存</el-button>
-            </el-col>
+        <el-row type="flex" justify="center">
+          <el-button @click="batchDialogVisible = false">取消</el-button>
+          <el-button @click="addDomain">添加行</el-button>
+          <el-button type="primary" @click="batchSave"  :disabled="dynamicValidateForm.domains.length >= 1 ? false : true">保存</el-button>
         </el-row>
       </el-form>
   </el-dialog>

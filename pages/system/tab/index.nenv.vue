@@ -88,11 +88,9 @@
           </el-col>
         </el-row>
         
-        <el-row type="flex" justify="space-around">
-            <el-col :span="8" :offset="4">
-              <el-button @click="isShowAddDialog = false">取消</el-button>
-              <el-button type="primary" @click="save();">保存</el-button>
-            </el-col>
+        <el-row type="flex" justify="center">
+          <el-button @click="isShowAddDialog = false">取消</el-button>
+          <el-button type="primary" @click="save();">保存</el-button>
         </el-row>
       </el-form>
     </el-dialog>
@@ -132,11 +130,9 @@
           </el-col>
         </el-row>
         
-        <el-row type="flex" justify="space-around">
-          <el-col :span="8" :offset="4">
-            <el-button @click="isShowEditDialog = false">取消</el-button>
-            <el-button type="primary" @click="update();">保存</el-button>
-          </el-col>
+        <el-row type="flex" justify="center">
+          <el-button @click="isShowEditDialog = false">取消</el-button>
+          <el-button type="primary" @click="update();">保存</el-button>
         </el-row>
       </el-form>
     </el-dialog>
