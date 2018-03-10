@@ -80,7 +80,6 @@
                 </el-table-column>
                 <el-table-column align="center" label="更新时间" width="180">
                     <template slot-scope="scope">
-                        <!-- <i class="el-icon-time"></i> -->
                         <span>{{scope.row.CREATE_TIME | DateTimeFilter(5)}}</span>
                     </template>
                 </el-table-column>
@@ -124,7 +123,7 @@
             </el-form>
             <div slot="footer" style="text-align:center">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="confirmToAddFolder" :disabled="newFolderName.length<1">确 定</el-button>
+                <el-button type="primary" @click="confirmToAddFolder" :disabled="newFolderName.length < 1">确 定</el-button>
             </div>
         </el-dialog>
     </div>
@@ -136,32 +135,32 @@
     name: 'NvUploader',
     data () {
       return {
-        list: null,
+        list: [],
         listLoading: true,
         pageIndex:1,
         pageSize:10,
         totalCount: 0,
-        value:'',
+        value: '',
         uploadURL: '/api/file/upload/project/type',
         fileData: {},
-        isUploading:false,//上传中...图片
+        isUploading:false, //上传中...图片
         uploadHeaders:{},
         // 当前选择的rows;
         currentChooseRows:[],
         // 当前层次的ID
-        currentId:'',
+        currentId: '',
         // 上一层次的ID,
-        lastId:'',
+        lastId: '',
         // 新建文件夹的dialog
         dialogFormVisible:false,
         // 新建文件夹的名称
-        newFolderName:'',
+        newFolderName: '',
         // projectId:'736',
         // type:'drwing',
-        fileName:'',
+        fileName: '',
         showUpload: false,
         // 重命名文件/文件夹的名称
-        rename:'',
+        rename: '',
         // 层级导航列表层级导航列表
         levelList: [
             {
@@ -169,7 +168,6 @@
                 name: '文档中心'
             }
         ],
-        list: null,
         checkAll: false,//总全选
         isSearch: false,//新建文件夹时是否正在搜寻绑定
       }
@@ -192,7 +190,7 @@
         required: false
       },
     },
-    mounted(){
+    mounted () {
       this.uploadHeaders ={
         'Authorization' : localStorage.getItem('user.token'),
       },
@@ -202,32 +200,36 @@
 				type: this.type
       };
     },
-    created() {
+    created () {
       this.fetchData();
-    },  
+    },
+    computed: {
+      selectedIds () {
+        const { currentChooseRows } = this
+        return  currentChooseRows.map(item => {
+          return item.IS_DIRECTORY === 'YES' ? `DIR-${item.TREE_ID}` : `FILE-${item.ID}`
+        }).join(',')
+      }
+    },
     // 过滤器，用于处理文件管理模块根据不同类型的文件格式显示不同的图标
     filters: {
-      FileIconFilter: function(value){
+      FileIconFilter: function (value) {
         const map = {
-          '.xls': 'file-xls',
+          '.xls':  'file-xls',
           '.xlsx': 'file-xls',
-          '.et': 'file-xls',
-          '.doc': 'file-doc',
+          '.et':   'file-xls',
+          '.doc':  'file-doc',
           '.docx': 'file-doc',
-          '.wps': 'file-doc',
-          '.ppt': 'file-ppt',
+          '.wps':  'file-doc',
+          '.ppt':  'file-ppt',
           '.pptx': 'file-ppt',
-          '.dps': 'file-ppt',
-          '.rar': 'file-rar',
-          '.zip': 'file-rar',
-          '.txt': 'file-txt',
-          '.pdf': 'file-pdf'
+          '.dps':  'file-ppt',
+          '.rar':  'file-rar',
+          '.zip':  'file-zip',
+          '.txt':  'file-txt',
+          '.pdf':  'file-pdf'
         }
-        let fileClass = map[value]
-        if (fileClass == null) {
-          fileClass = 'file-other'
-        }
-      return fileClass
+        return map[value] || 'file-other'
       }
     },
     methods: {
@@ -239,26 +241,15 @@
             return 'word'
         }
       },
-      fetchData(treeId='') {
-        this.listLoading = true;
-        var tid = '';
-        if(treeId == ''){
-          if (this.projectId == ''){
-            tid = 'ROOT';
-          } else {
-            tid = this.projectId;
-          }
-        } else {
-          tid = treeId;
-        }
-
+      fetchData (treeId = '') {
+        this.listLoading = true
         getTreeDocuments({
           pageIndex: this.pageIndex,
           pageSize : this.pageSize,
           PROJECT_ID : this.projectId,
           TYPE : this.type,
-          TREE_ID: tid
-        }).then(({ data }) => {
+          TREE_ID: treeId ? treeId : (this.projectId ? 'ROOT' : this.projectId)
+        }).then(({ data = {} }) => {
           this.listLoading = false;
             function calcFileImg(ext) {
                 switch (ext) {
@@ -271,88 +262,56 @@
                       return 'excel'
               }
             }
-            const arr = Object.keys((data || {}).list || []);
-            if (data.list){
-              this.list = data.list.map(v => {
-                v.isEdit = false;
-                v.isChecked = false;
-                v.imgURL = require(`./img/${calcFileImg(v.FILE_TYPE)}.png`)
-                return v
-              });
-              this.totalCount = data.totalCount || 0;
-            } else {
-              this.list  = [];
-              this.totalCount =  0;
-            }
-            
+            const { list = [] } = data
+            this.list = list.map(v => {
+              v.isEdit = false;
+              v.isChecked = false;
+              v.imgURL = require(`./img/${calcFileImg(v.FILE_TYPE)}.png`)
+              return v
+            });
+            this.totalCount =  data.totalCount || 0
         }).catch(err=>{
           this.listLoading = false;
         })
       },
 
-      // 创建文件夹
-      createdNewFolder(){
-         // 先清空之前填写的信息
-        this.newFolderName = "";
-        this.dialogFormVisible = true;
-      },
-
-    // change select 
-    changeSelect(value){
-      console.log("change", value);
+    // 创建文件夹
+    createdNewFolder () {
+      // 先清空之前填写的信息
+      this.newFolderName = "";
+      this.dialogFormVisible = true;
     },
-    handleSizeChange(pageSize){
+
+    handleSizeChange (pageSize) {
       this.pageSize = pageSize;
       this.fetchData(this.currentId);
     },
-    handleCurrentChange(pageIndex){
+
+    handleCurrentChange (pageIndex) {
       this.pageIndex = pageIndex;
       this.fetchData(this.currentId);
     },
-    handleSelectionChange(section){
+
+    handleSelectionChange (section) {
       console.log(section);
       //当前选择的条目
       this.currentChooseRows = section;
       this.isDownload = !(this.currentChooseRows.length >= 1)
     },
     // 下载文件
-    downloadChooseRows(){
+    downloadChooseRows () {
       let rows = this.currentChooseRows;
       if(rows.length==0){
-        this.$message.info("请勾选要下载的文件");
-        return;
+        return this.$message.info("请勾选要下载的文件")
       }
       unfetch.download('file/download/compress', {
-        params: {
-          ID: this.handlerChooseRowsID()
-        }
+        ID: this.selectedIds
       })
-      // let queryParam = `?ID=`+this.handlerChooseRowsID();
-      // window.location = '/api/file/download/compress' + queryParam;
-    },
-    // DIR-{dirId},FILE-{dirID}-{fileId}
-    // 处理要下载的文件的ID
-    handlerChooseRowsID(){
-      let rows = this.currentChooseRows;
-      let arr=[];
-      for(let i=0;i<rows.length;i++){
-        let one = rows[i];
-        let str='';
-        console.log(one);
-        if(one.IS_DIRECTORY=='YES'){
-          str = `DIR-${one.TREE_ID}` ;
-        }else{
-          str = `FILE-${one.TREE_ID}-${one.ID}`;
-        }
-        arr.push(str);
-      }
-      console.log(arr.join(','))
-      return arr.join(',');
     },
     beforeUpload(file){
       this.isUploading = true;
-      if(this.currentId == "" || this.currentId == "ROOT") return false;
-      if(file && file.size){
+      if (this.currentId == "" || this.currentId == "ROOT") return false;
+      if (file && file.size) {
         let size = file.size / 1024;
         if(size > 20000){  
           this.$message.error("上传文件不能超过20M");
@@ -360,78 +319,78 @@
         }
       }
     },
-    errorUpload (){
+    errorUpload () {
         this.isUploading = false;  
     },
-    onUpload(e){
+    onUpload (e) {
         this.$message.error("上传文件中");
     },
-    success(resp){
+    success (resp) {
       this.listLoading = false;
-        let me = this;
-        let {code , data, msg} = resp;
-        console.log(resp);
-        if(code==0){
-            // 开始添加到文件列表中
-            var tid = '';
-             if(me.currentId  == ''){
-              if (this.projectId == ''){
-                tid = 'ROOT';
-              } else {
-                tid = this.projectId;
-              }
+      let me = this;
+      let {code , data, msg} = resp;
+      if(code==0){
+          // 开始添加到文件列表中
+          var tid = '';
+            if(me.currentId  == ''){
+            if (this.projectId == ''){
+              tid = 'ROOT';
             } else {
-              tid = me.currentId ;
+              tid = this.projectId;
             }
-            let item = Object.assign({}, data, {
-              TREE_ID : tid ,
-              PROJECT_ID: this.projectId
-            });
-            let arr = [];
-            arr.push(item);
-           FileAdd(arr).then(resp=>{
-                this.isUploading = false;
-                me.$message.success('上传成功');
-                me.fetchData(me.currentId);
-           }).catch(e => {
-             this.isUploading = false
-           })
+          } else {
+            tid = me.currentId ;
+          }
+          let item = Object.assign({}, data, {
+            TREE_ID : tid ,
+            PROJECT_ID: this.projectId
+          });
+          let arr = [];
+          arr.push(item);
+          FileAdd(arr).then(resp=>{
+            console.log(resp);
+            let {code, data,msg} = resp.rawData;
+            if(code==0){
+              this.isUploading = false;
+              me.$message.success('上传成功');
+              me.fetchData(me.currentId);
+            }else{  
+              me.$message.error(msg);
+            }
+          });
 
-        }else{
-          this.isUploading = false;
+      }else{
           this.$message.info(msg);
-        }
+      }
     },
     downloadFile(row){
-      //window.open(this.downloadFileUrl+'&ID='+row.ID);
       unfetch.download(this.downloadFileUrl, {
         ID: row.ID
-       })
+      })
     },
     removeInfo(row) {
       let me = this;
       const params = {
-          ID: row.ID
-        }
+        ID: row.ID
+      }
       this.$confirm('此操作将永久删除记录, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
-        callback:(action,instance)=>{
-          if(action=='confirm'){
+        callback: (action ,instance) => {
+          if (action=='confirm') {
             me.reqData(params);
           }
         }
       });
     },
-    updateFileNameByName(row,event){
+    updateFileNameByName (row, event) {
       row.FILE_TITLE = event.target.value;
       let backdata = JSON.parse(JSON.stringify(row));
       this.modifyForm = backdata;
-      //this.updateTitle();
     },
     
-    removeItem(row){
+    removeItem (row) {
       	let me = this;
       	if(row.IS_DIRECTORY === 'YES'){
             me.$confirm('此操作将永久删除该文件夹以及所有子文件, 是否继续?', '提示', {
@@ -440,14 +399,9 @@
               type:'warning'
             }).then(()=>{
               // 当删除的是文件夹时需提示将会同时删除文件夹下的文件，确认后做删除文件夹下文件的操作，此处需完善
-              FileDeleteFolder(row.ID).then(resp=>{
-                let {code, msg, data} = resp.rawData;
-                if(code === 0){
+              FileDeleteFolder(row.ID).then(() =>{
                 me.$message.success("删除成功");
                 me.fetchData(me.currentId);
-                }else{
-                me.$message.error(msg);
-                }
               }).catch(err=>{
                 console.log(err);
               })
@@ -460,14 +414,9 @@
             concelButtonText:'取消',
             type:'warning'
           }).then(()=>{
-            FileDelete(row.ID).then(resp=>{
-                let {code, msg, data} = resp.rawData;
-              if(code ===0){
+            FileDelete(row.ID).then(() =>{
                 me.$message.success("删除成功");
                 me.fetchData(me.currentId);
-              }else{
-                me.$message.error(msg);
-              }
           }).catch(err=>{
               console.log(err);
           })
@@ -477,7 +426,7 @@
       }
     },
     // 修改父节点的值
-    setParentCode(parentCode, name, type, item){
+    setParentCode (parentCode, name, type, item) {
         //节点是文件不进入下一级
        if(type == 'NO'){
           //文件预览
@@ -485,16 +434,11 @@
             FILE_ID: parentCode
           };
           this.listLoading = true;
-          FileView(req).then(resp=>{
+          FileView(req).then(({data})=>{
               this.listLoading = false;
-              let {code, msg, data} = resp.rawData;
               let me = this;
-              if(code==0){
-                let url = data.fileUrl + data.filePath;
-                unfetch.open(url);
-              }else{
-                me.$message.error('预览失败！');
-              }
+              let url = data.fileUrl + data.filePath;
+              unfetch.open(url);
           }).catch(err=>{
             this.listLoading = false
             this.$message.error('预览失败！');
@@ -504,7 +448,7 @@
         } 
         
         // 处理左上角的导航功能
-        if('delete' === type){
+        if ('delete' === type) {
             let index = this.levelList.indexOf(item) + 1;
             let length = this.levelList.length - index;
             this.levelList.splice(index, length);
@@ -519,12 +463,10 @@
             }
         } else {
           let temp = [{'id': parentCode, 'name': name}];
-          this.levelList = this.levelList.concat(temp);
+          this.levelList.push(...temp)
           // 当类型为search时单独处理
-          if("search" !== type){
-              // 控制可以显示上传按钮
-              this.showUpload = true;
-          }
+          // 控制可以显示上传按钮
+          this.showUpload = ("search" !== type)
         }
         this.currentId = parentCode;
         if(parentCode != null && parentCode != "" && "search" !== type && "search" !== parentCode){
@@ -532,7 +474,7 @@
         }
     },
 
-    confirmToAddFolder(){
+    confirmToAddFolder () {
       let me = this;
       if(this.newFolderName.length >15){
          me.$message.error('文件夹名称长度不能大于15');
@@ -548,44 +490,40 @@
       } else {
         cid = this.currentId;
       }
-      let req = {
+      FileCreatedNewFolder({
           PARENT_ID: cid ,
           NAME: this.newFolderName,
           PROJECT_ID: this.projectId,
           TYPE: this.type
-      };
-      FileCreatedNewFolder(req).then(resp=>{
+      }).then(resp=>{
         me.dialogFormVisible= false;
-        let {code, msg, data} = resp.rawData;
-        me.$message.success('创建成功');
+        me.$message({
+          showClose: true,
+          message: '创建成功'
+        });
         me.fetchData(me.currentId);
        
       }).catch(err=>{
-          console.log(err)
+        me.$message.error("创建失败");
       })
     },
-    download(row){
+    download (row) {
       unfetch.download('file/download/compress', {
         params: {
           ID: row.IS_DIRECTORY == "YES" ? "DIR-"+row.TREE_ID : `FILE-${row.TREE_ID}-${row.ID}`
         }
       })
-      //window.location = Config.BASE_API+'file/download/compress?' + queryParam;
     },
     // 触发重命名
-    reName(row){
+    reName (row) {
       const { list } = this
-      if(row.IS_DIRECTORY == "YES"){
-        this.rename = row.NAME;
-      }else{
-        this.rename = row.NAME.substring(0,row.NAME.lastIndexOf("."));
-      }
+      this.rename = row.IS_DIRECTORY == "YES" ? row.NAME : row.NAME.substring(0,row.NAME.lastIndexOf("."));
       list.forEach(item => {
         item.isEdit = false
       })
       row.isEdit = true;
     },
-    modifyComplete(row){
+    modifyComplete (row) {
       let me = this;
       if(this.rename.length >15){
         me.$message.error('修改文件夹名称长度不能大于15');
@@ -593,11 +531,10 @@
       }
       if(row.IS_DIRECTORY === 'YES'){
           //文件夹重命名
-          let data = {
+          FileRenameFolder({
             ID: row.ID,
             NAME: this.rename.trim()
-          };
-          FileRenameFolder(data).then(resp=>{
+          }).then(() => {
             me.fetchData(me.currentId);
             row.isEdit = false;
             me.$message({
@@ -615,60 +552,37 @@
           })
       }else{
         //文件重命名
-        let data = {
+        FileRename({
           ID: row.ID,
           FILE_NAME: this.rename.trim(),
-          FILE_TYPE : row.FILE_TYPE==null?'':row.FILE_TYPE
-        };
-        FileRename(data).then(resp=>{
-          let {code, msg, data} = resp.rawData;
-          if(code==0){
+          FILE_TYPE : row.FILE_TYPE || ''
+        }).then(() => {
             me.fetchData(me.currentId);
             row.isEdit = false;
             me.$message({
               showClose: true,
               message: '修改成功'
             });
-          }else{
-            me.$message.error('修改失败');
-          }
         }).catch(err=>{
           console.error(err);
         })
       }
     },
-    deleteSelectedAndChildren(){
+    deleteSelectedAndChildren () {
       let rows = this.currentChooseRows;
-      if(rows.length==0){
+      if(rows.length === 0){
         this.$message.info("请勾选要删除的文件或文件夹");
         return;
       }
-      let arr=[];
-      for(let i=0;i<rows.length;i++){
-        let one = rows[i];
-        let str='';
-        if(one.IS_DIRECTORY=='YES'){
-          str = `DIR-${one.TREE_ID}`;
-        }else{
-          str = `FILE-${one.ID}`;
-        }
-        arr.push(str);
-      }
-      let ids = arr.join(',');
       let me = this;
       me.$confirm('删除后将不可恢复，是否确定要删除此文件?', '提示', {
           confirmButtonText:'确定',
           concelButtonText:'取消',
           type:'warning'
       }).then(()=>{
-        deleteDirAndFiles(ids).then(resp=>{
-          let {code, msg, data} = resp.rawData;
-          if(code ===0){
+        deleteDirAndFiles(me.selectedIds).then(() => {
             me.$message.success("删除成功");
             me.fetchData(me.currentId);
-          }else{
-            me.$message.error(msg);
-          }
         }).catch(err=>{
             console.log(err);
         });
@@ -676,7 +590,7 @@
         // me.$message.info("已取消删除");
       })
     },
-    search(){
+    search () {
       this.listLoading = true;
       const pagePrams = {
         pageIndex: this.pageIndex,
@@ -684,14 +598,14 @@
         PROJECT_ID : this.projectId,
         TYPE : this.type
       }
-      if(this.fileName == ""){
+      if (this.fileName == "") {
         this.isSearch = false;
         pagePrams.TREE_ID = 'ROOT';
         // 搜索时直接把导航清掉
         if(this.levelList.length > 1){
             this.levelList.splice(1);
         }
-      }else{
+      } else {
         this.isSearch = true;
         pagePrams.FILE_NAME = this.fileName;
         // 搜索时先把导航清掉再显示搜索的内容
@@ -700,31 +614,15 @@
         }
         this.setParentCode("search", '搜索："' + this.fileName +'"', 'search', this.fileName);
       }
-      getTreeDocuments(pagePrams).then(response => {
+      getTreeDocuments(pagePrams)
+      .then(({ data = {} }) => {
         this.listLoading = false;
-        const  {data, code ,msg} = response.rawData;
-        if(code===0){
-            // this.list = data.list.map(v => {
-            //   v.isEdit = false;
-            //   return v
-            // });
-            // this.totalCount = data.totalCount;
-            if(data != null && data.list != null){
-              const arr = Object.keys(data.list);
-              this.list = data.list.map(v => {
-                v.isEdit = false;
-                return v
-              });
-
-               this.totalCount = data.totalCount;
-            }else {
-                this.list = [];
-                this.totalCount = 0;
-                
-              }
-        }else{
-          this.$message.error(msg);
-        }
+        const { list = [] } = data
+        this.list = list.map(v => {
+            v.isEdit = false;
+            return v
+          });
+        this.totalCount = data.totalCount || 0
       }).catch(err=>{
         console.log(err);
       });
@@ -744,13 +642,13 @@
 
 <style lang="scss" scoped>
   .upload-table{
-      &__from{
+      &__from {
           //padding:20px;
       }
-      &__gap{
+      &__gap {
         margin-bottom: 10px; 
       }
-      &__upload--btn{
+      &__upload--btn {
           display: inline-block;
           padding-left: 9px;
       }
