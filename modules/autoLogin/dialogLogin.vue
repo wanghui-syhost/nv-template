@@ -89,6 +89,9 @@ button.login_btn {
 .el-form-item__content .el-input--nenv {
     width: 100%!important;
 }
+.el-dialog__header{
+   height: auto;
+}
 </style>
 
 <style lang="scss">
