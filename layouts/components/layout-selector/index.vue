@@ -33,7 +33,8 @@ export default {
 <style lang="scss" scoped>
     .layout-selector {
         .el-dropdown-link {
-            color: #fff
+            color: #fff;
+            margin-right: 10px;
         }
     }
 </style>

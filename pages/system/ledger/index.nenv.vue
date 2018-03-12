@@ -13,12 +13,12 @@
       <el-table :data="list" v-loading.body="listLoading" element-loading-text="拼命加载中" border fit highlight-current-row>
         <el-table-column label="标题" min-width="15%">
           <template slot-scope="scope">
-            <span> {{ scope.row.TITLE }}</span>
+            <a :title=" scope.row.TITLE"> {{ scope.row.TITLE }}</a>
           </template>
         </el-table-column>
         <el-table-column label="编号" min-width="15%">
           <template slot-scope="scope">
-            <span> {{ scope.row.CODE }}</span>
+            <a :title=" scope.row.CODE"> {{ scope.row.CODE }}</a>
           </template>
         </el-table-column>
         <el-table-column label="排版类型" min-width="10%">
@@ -29,7 +29,7 @@
       
         <el-table-column label="描述" min-width="28%">
           <template slot-scope="scope">
-            <span> {{ scope.row.DESCRIPTION }}</span>
+            <a :title=" scope.row.DESCRIPTION"> {{ scope.row.DESCRIPTION }}</a>
           </template>
         </el-table-column>
         <el-table-column label="显示头部" min-width="9%" align="center">

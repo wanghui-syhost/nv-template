@@ -86,3 +86,10 @@ a.active li {
 .el-message{
     top: 50%;
 }
+/**分页**/
+.el-pager li{
+    font-weight: normal;
+}
+.el-pagination__jump{
+    margin-right:10px;
+}

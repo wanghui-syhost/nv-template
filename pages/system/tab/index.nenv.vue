@@ -19,7 +19,7 @@
         </el-table-column>
         <el-table-column label="编号" min-width="10%">
           <template slot-scope="scope">
-            <span> {{ scope.row.CODE }}</span>
+            <a :title=" scope.row.CODE"> {{ scope.row.CODE }}</a>
           </template>
         </el-table-column>
         <el-table-column label="选项卡类型" min-width="10%" align="center">
@@ -30,7 +30,7 @@
       
         <el-table-column label="描述" min-width="35%">
           <template slot-scope="scope">
-            <span> {{ scope.row.DESCRIPTION }}</span>
+            <a :title=" scope.row.DESCRIPTION"> {{ scope.row.DESCRIPTION }}</a>
           </template>
         </el-table-column>
         <!-- <el-table-column label="是否删除">

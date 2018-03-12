@@ -87,18 +87,12 @@
             </el-table>
 
             <div class="home-detail__page">
-                <el-pagination
-                    @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
-                    :current-page="pageIndex"
-                    :page-sizes="[10, 20, 30, 40]"
-                    :page-size="pageSize"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total="totalCount">
+                <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageIndex" :page-sizes="[10, 20, 30, 40]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper, slot" :total="totalCount">
+                  <el-button>确定</el-button>
                 </el-pagination>
-                <el-button  size="mini" class="skip_btn">确定</el-button>
             </div>
           </el-tab-pane>
+          
           <el-tab-pane>
             <span slot="label" name="second" ><i class="el-icon-menu"></i></span>
             <el-checkbox v-model="checkAll">全选</el-checkbox>
@@ -843,16 +837,6 @@
   .cell i{
     margin-right:5px;
     cursor: pointer;
-  }
-  .home-detail__page {
-    position: relative;
-    .el-pagination{
-    }
-    .skip_btn{
-      position: absolute;
-      right: 120px;
-      top: 2px;
-    }
   }
 </style>
 <style rel="stylesheet/scss" scope>
