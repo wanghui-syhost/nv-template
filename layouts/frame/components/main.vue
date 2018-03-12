@@ -14,8 +14,6 @@
 <style scoped lang="scss">
     .main{
     	height: 100%;
-        min-width: 1280px;
-        overflow: auto;
     }
     .fade-enter-active, .fade-leave-active {
         transition: opacity .5s ease-in-out;
