@@ -86,10 +86,6 @@
             </el-table>
 
             <div class="home-detail__page">
-<<<<<<< HEAD
-                <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageIndex" :page-sizes="[10, 20, 30, 40]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper, slot" :total="totalCount">
-                  <el-button>确定</el-button>
-=======
                 <el-pagination
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
@@ -99,7 +95,6 @@
                     layout="total, sizes, prev, pager, next, jumper, slot"
                     :total="totalCount">
                     <el-button> 确定 </el-button>
->>>>>>> 新增 文件格式
                 </el-pagination>
             </div>
           </el-tab-pane>
