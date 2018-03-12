@@ -8,8 +8,12 @@
             <nv-menu :menus="menus" />
         </div>
         <div class="halo-header__right">
+            <a>
+                <i class="png-icon alarm middle" />
+            </a>
             <layout-setting />
             <layout-select/>
+            <span class="e-header__loginuser" >{{ nickName }}</span>
             <logout />
         </div>
     </header>
@@ -54,7 +58,7 @@ export default {
 <style lang="scss" scoped>
     header {
         display: flex;
-        height: 64px;
+        height: 62px;
         background-color: #3b8cff;
     }
 
@@ -68,10 +72,41 @@ export default {
     }
 
     .halo-header {
-        &__left, &__right {
-            //flex-grow: 1;
+        &__left{
             display: flex;
             align-self: center;
+            i.png-icon {
+                width: 33px;
+                height: 33px;
+                margin-left: 20px;
+                margin-right: 5px;
+                margin-top: 17px;
+            }
+            .e-header__title {
+                font-size: 18px;
+                font-weight: 600;
+                color: #fff;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+                line-height: 62px;
+            }
+        }
+        &__right {
+            //display: flex;
+            align-self: center;
+            .e-header__btn-loginout {
+                display: inline-block;
+                width: 60px;
+                height: 30px;
+                border: 1px solid #fff;
+                border-radius: 4px;
+                font-size: 16px;
+                line-height: 30px;
+                text-align: center;
+                margin-left: 20px;
+                margin-right: 20px;
+            }
         }
         &__navs {
             width: 0%;

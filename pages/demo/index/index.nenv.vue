@@ -29,7 +29,7 @@
           <p>
             选择结果:
           </p>
-          <p v-for="item in nvRadioResult" :key="item"> {{ item }} </p>
+          <p> {{ nvRadioResult }} </p>
         </blockquote>
       </div>
     </nv-layout-section>

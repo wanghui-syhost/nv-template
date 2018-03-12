@@ -1,7 +1,6 @@
 <template>
-    <div class="upload-table">
+    <div class="upload-table" v-loading.body="isUploading" element-loading-text="正在上传中，请稍等......">
         <section class="upload-table__from">
-            <!-- <h3>文件管理</h3> -->
             <el-button @click="createdNewFolder" type="primary" :disabled ="isSearch">
                 新建文件夹
             </el-button>
@@ -11,7 +10,7 @@
             <el-button @click="downloadChooseRows" type="primary">
                 下载
             </el-button>
-            <el-upload  class="upload-table__upload--btn" :action="uploadURL" v-loading.body="isUploading" element-loading-text="正在上传中，请稍等......" 
+            <el-upload  class="upload-table__upload--btn" :action="uploadURL" 
               :on-success="success" 
               :before-upload="beforeUpload"
               :on-error = "errorUpload" 
@@ -39,7 +38,7 @@
         </div>
         <el-tabs type="border-card">
           <el-tab-pane>
-            <span slot="label" name="first" ><i class="el-icon-tickets"></i></span> 
+            <span slot="label" name="first" ><i class="el-icon-tickets"/></span> 
             <!-- 文件列表 -->
             <el-table :data="list" ref="multipleTable" v-loading="listLoading" @selection-change="handleSelectionChange" fit highlight-current-row>
                 <el-table-column type="selection" width="55" align="center"></el-table-column>
@@ -52,7 +51,7 @@
                 <el-table-column align="left" label='名称'>
                     <template slot-scope="scope">
                         <span class="file-name">
-                            <span class="file-label" v-show="!scope.row.isEdit" @click="setParentCode(scope.row.ID, scope.row.NAME,scope.row.IS_DIRECTORY)">{{scope.row.NAME}}</span>
+                            <a class="file-label" v-show="!scope.row.isEdit" @click="setParentCode(scope.row.ID, scope.row.NAME,scope.row.IS_DIRECTORY)" :title="scope.row.NAME">{{scope.row.NAME}}</a>
                             <span class="file-input" v-if="scope.row.isEdit">
                               <span style="float: left; margin-bottom: 5px"><el-input id="" size="small" style="width: 310px" v-model="rename" :minlength="1" :maxlength="50" @keyup.enter.native="modifyComplete(scope.row)"></el-input></span>
                               <span style="float: left; margin-left: 10px"><el-button type="primary" size="mini" @click="modifyComplete(scope.row)" :disabled="rename.length<1">确认</el-button></span>
@@ -68,12 +67,6 @@
                         <i title="删除" class="png-icon file-delete small" @click="removeItem(scope.row)"></i>
                     </template>
                 </el-table-column>
-                <!-- <el-table-column label="文件类型"  align="center">
-                    <template slot-scope="scope">
-                    <span v-if=" scope.row.IS_DIRECTORY === 1">-</span>
-                    <span v-else>{{ scope.row.FILE_TYPE }}</span>
-                    </template>
-                </el-table-column> -->
                 <el-table-column label="大小"  align="center" width="100">
                     <template slot-scope="scope">
                         <span v-if=" scope.row.IS_DIRECTORY === 'YES'">-</span>
@@ -103,6 +96,7 @@
                     layout="total, sizes, prev, pager, next, jumper"
                     :total="totalCount">
                 </el-pagination>
+                <el-button  size="mini" class="skip_btn">确定</el-button>
             </div>
           </el-tab-pane>
           <el-tab-pane>
@@ -231,7 +225,7 @@
           '.pptx': 'file-ppt',
           '.dps': 'file-ppt',
           '.rar': 'file-rar',
-          '.zip': 'file-zip',
+          '.zip': 'file-rar',
           '.txt': 'file-txt',
           '.pdf': 'file-pdf'
         }
@@ -334,8 +328,13 @@
         this.$message.info("请勾选要下载的文件");
         return;
       }
-      let queryParam = `?ID=`+this.handlerChooseRowsID();
-      window.location = '/api/file/download/compress' + queryParam;
+      unfetch.download('file/download/compress', {
+        params: {
+          ID: this.handlerChooseRowsID()
+        }
+      })
+      // let queryParam = `?ID=`+this.handlerChooseRowsID();
+      // window.location = '/api/file/download/compress' + queryParam;
     },
     // DIR-{dirId},FILE-{dirID}-{fileId}
     // 处理要下载的文件的ID
@@ -353,6 +352,7 @@
         }
         arr.push(str);
       }
+      console.log(arr.join(','))
       return arr.join(',');
     },
     beforeUpload(file){
@@ -374,7 +374,6 @@
     },
     success(resp){
       this.listLoading = false;
-      debugger;
         let me = this;
         let {code , data, msg} = resp;
         console.log(resp);
@@ -397,19 +396,16 @@
             let arr = [];
             arr.push(item);
            FileAdd(arr).then(resp=>{
-             console.log(resp);
-             let {code, data,msg} = resp.rawData;
-              if(code==0){
                 this.isUploading = false;
                 me.$message.success('上传成功');
                 me.fetchData(me.currentId);
-              }else{  
-                me.$message.error(msg);
-              }
-           });
+           }).catch(e => {
+             this.isUploading = false
+           })
 
         }else{
-            this.$message.info(msg);
+          this.isUploading = false;
+          this.$message.info(msg);
         }
     },
     downloadFile(row){
@@ -565,23 +561,13 @@
           TYPE: this.type
       };
       FileCreatedNewFolder(req).then(resp=>{
-        console.log(resp);
         me.dialogFormVisible= false;
         let {code, msg, data} = resp.rawData;
-        debugger
-        me.$message({
-          showClose: true,
-          message: '创建成功'
-        });
+        me.$message.success('创建成功');
         me.fetchData(me.currentId);
        
       }).catch(err=>{
-          let {code, msg, data} = err;
-          if (code == 3){
-             me.$message.error(msg);
-          } else {
-             me.$message.error("创建失败");
-          }
+          console.log(err)
       })
     },
     download(row){
@@ -858,4 +844,21 @@
     margin-right:5px;
     cursor: pointer;
   }
+  .home-detail__page {
+    position: relative;
+    .el-pagination{
+    }
+    .skip_btn{
+      position: absolute;
+      right: 120px;
+      top: 2px;
+    }
+  }
+</style>
+<style rel="stylesheet/scss" scope>
+@media screen and (max-width: 1400px){
+   .file-label {
+    width: 200px!important;  
+  }
+}
 </style>

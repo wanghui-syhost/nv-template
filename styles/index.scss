@@ -13,6 +13,11 @@
     background-color: #F6F7FB;
     border-left: 5px solid #409EFF;
 }
+a.active li {
+    color: #409eff;
+    background-color: #f6f7fb;
+    border-left: 5px solid #409eff;
+}
 /**分页**/
 .search-pagination {
     margin-top: 20px;

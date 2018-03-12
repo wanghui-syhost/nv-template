@@ -51,13 +51,14 @@
 
         <!-- 分页  -->
         <div class="search-pagination">
-            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageIndex" :page-sizes="[10, 20, 30, 40]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="totalCount">
+            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageIndex" :page-sizes="[10, 20, 30, 40]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper, slot" :total="totalCount">
+              <el-button>确定</el-button>
             </el-pagination>
         </div>
     </section>
 
      <!-- 新增 -->
-    <el-dialog title="数据字典" :visible.sync="isShowAddDialog" size="small">
+    <el-dialog title="新增数据字典" :visible.sync="isShowAddDialog" size="small">
       <el-form :model="addForm" :rules="addRules" ref="addForm" label-width="120px">
         <el-row type="flex" class="row-bg" justify="space-around">
           <el-col :span="12">
@@ -75,18 +76,16 @@
           </el-col>
       </el-row>
 	
-        <el-row type="flex" justify="space-around">
-            <el-col :span="8" :offset="4">
-              <el-button @click="isShowAddDialog = false">取消</el-button>
-              <el-button type="primary" @click="save();">保存</el-button>
-            </el-col>
+        <el-row type="flex" justify="center">
+          <el-button @click="isShowAddDialog = false">取消</el-button>
+          <el-button type="primary" @click="save();">保存</el-button>
         </el-row>
       </el-form>
   </el-dialog>
 
 
    <!-- 修改 -->
-    <el-dialog title="数据字典" :visible.sync="isShowEditDialog" size="small">
+    <el-dialog title="修改数据字典" :visible.sync="isShowEditDialog" size="small">
       <el-form :model="modifyForm" ref="modifyForm" :rules="modifyRules" label-width="120px">
         <el-row type="flex" class="row-bg" justify="space-around">
           <el-col :span="12">
@@ -104,11 +103,9 @@
           </el-col>
       </el-row>
 	
-        <el-row type="flex" justify="space-around">
-            <el-col :span="8" :offset="4">
-              <el-button @click="isShowEditDialog = false">取消</el-button>
-              <el-button type="primary" @click="update">保存</el-button>
-            </el-col>
+        <el-row type="flex" justify="center">
+          <el-button @click="isShowEditDialog = false">取消</el-button>
+          <el-button type="primary" @click="update">保存</el-button>
         </el-row>
       </el-form>
   </el-dialog>

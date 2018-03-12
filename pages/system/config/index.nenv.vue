@@ -5,9 +5,9 @@
             <!-- 搜索框  -->
   			<div class="search-form-one">
           <el-form-item label="关键字">
-            <el-input v-model="KEYWORD" placeholder="请输入关键字" ></el-input>
+            <el-input v-model="KEYWORD" placeholder="请输入关键字" @keyup.enter.native = "getList" ></el-input>
           </el-form-item>
-          <el-button type="infor" @click="getList();">搜索</el-button>
+          <el-button type="infor" @click="getList">搜索</el-button>
   				<el-button type="primary" @click="addInfo">新增</el-button>
           <el-button type="primary" @click="batchAddInfo">批量添加</el-button>
   			</div>
@@ -19,7 +19,7 @@
         <el-table :data="list" v-loading.body="listLoading" element-loading-text="拼命加载中" border fit highlight-current-row>
           <el-table-column label="配置名称">
             <template slot-scope="scope">
-               <span  v-show="!scope.row.isEdit">{{scope.row.NAME}}</span>
+               <a  v-show="!scope.row.isEdit" :title="scope.row.NAME">{{scope.row.NAME}}</a>
                <el-input v-show="scope.row.isEdit" size="small" v-model="scope.row.NAME"></el-input>
             </template>
           </el-table-column>
@@ -30,7 +30,7 @@
           </el-table-column>
           <el-table-column label="配置值">
             <template slot-scope="scope">
-              <span  v-show="!scope.row.isEdit">{{scope.row.VALUE}}</span>
+              <a  v-show="!scope.row.isEdit" :title="scope.row.VALUE">{{scope.row.VALUE}}</a>
               <el-input v-show="scope.row.isEdit" size="small" v-model="scope.row.VALUE"></el-input>
             </template>
           </el-table-column>
@@ -44,7 +44,8 @@
 
         <!-- 分页  -->
         <div class="search-pagination">
-            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageIndex" :page-sizes="[10, 20, 30, 40]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="totalCount">
+            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageIndex" :page-sizes="[10, 20, 30, 40]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper, slot" :total="totalCount">
+              <el-button>确定</el-button>
             </el-pagination>
         </div>
     </section>
@@ -74,11 +75,9 @@
         </el-col>
 	    </el-row>
 	
-        <el-row type="flex" justify="space-around">
-            <el-col :span="8" :offset="4">
-              <el-button @click="dialogVisible = false">取消</el-button>
-              <el-button type="primary" @click="save();">保存</el-button>
-            </el-col>
+        <el-row type="flex" justify="center">
+          <el-button @click="dialogVisible = false">取消</el-button>
+          <el-button type="primary" @click="save();">保存</el-button>
         </el-row>
       </el-form>
   </el-dialog>
@@ -104,12 +103,10 @@
 	    </el-row>
       
 	
-        <el-row type="flex" justify="space-around">
-            <el-col :span="8">
-              <el-button @click="batchDialogVisible = false">取消</el-button>
-               <el-button @click="addDomain">添加行</el-button>
-              <el-button type="primary" @click="batchSave"  :disabled="dynamicValidateForm.domains.length >= 1 ? false : true">保存</el-button>
-            </el-col>
+        <el-row type="flex" justify="center">
+          <el-button @click="batchDialogVisible = false">取消</el-button>
+          <el-button @click="addDomain">添加行</el-button>
+          <el-button type="primary" @click="batchSave"  :disabled="dynamicValidateForm.domains.length >= 1 ? false : true">保存</el-button>
         </el-row>
       </el-form>
   </el-dialog>

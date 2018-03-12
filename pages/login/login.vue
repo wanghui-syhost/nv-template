@@ -49,7 +49,6 @@ export default {
   methods:{
     onFocus(type){
         let me = this
-        debugger
         me.focus={
             isUsernameFocus:type=='username',
             isPassFocus: type=='pass'

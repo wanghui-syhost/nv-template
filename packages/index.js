@@ -13,6 +13,7 @@ import NvIframe from './iframe'
 import NvDynamic from './dynamic'
 import NvCard from './card'
 import NvPersonchooser from './epersonchoose'
+import NvDatePick from './datepicker'
 //import NvChart from './chart'
 
 const components = [
@@ -31,7 +32,8 @@ const components = [
   NvUploader,
   NvUserSelector,
   NvRegionSelect,
-  NvPersonchooser
+  NvPersonchooser,
+  NvDatePick
 ]
 
 const install = function(Vue, opts = {}) {

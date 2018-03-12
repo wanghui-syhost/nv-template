@@ -49,7 +49,8 @@
 
       <!-- 分页  -->
       <div class="search-pagination">
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageIndex" :page-sizes="[10, 20, 30, 40]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="totalCount">
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageIndex" :page-sizes="[10, 20, 30, 40]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper, slot" :total="totalCount">
+          <el-button>确定</el-button>
         </el-pagination>
       </div>
     </section>
@@ -88,11 +89,9 @@
           </el-col>
         </el-row>
         
-        <el-row type="flex" justify="space-around">
-            <el-col :span="8" :offset="4">
-              <el-button @click="isShowAddDialog = false">取消</el-button>
-              <el-button type="primary" @click="save();">保存</el-button>
-            </el-col>
+        <el-row type="flex" justify="center">
+          <el-button @click="isShowAddDialog = false">取消</el-button>
+          <el-button type="primary" @click="save();">保存</el-button>
         </el-row>
       </el-form>
     </el-dialog>
@@ -132,11 +131,9 @@
           </el-col>
         </el-row>
         
-        <el-row type="flex" justify="space-around">
-          <el-col :span="8" :offset="4">
-            <el-button @click="isShowEditDialog = false">取消</el-button>
-            <el-button type="primary" @click="update();">保存</el-button>
-          </el-col>
+        <el-row type="flex" justify="center">
+          <el-button @click="isShowEditDialog = false">取消</el-button>
+          <el-button type="primary" @click="update();">保存</el-button>
         </el-row>
       </el-form>
     </el-dialog>

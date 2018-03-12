@@ -43,9 +43,7 @@ export default {
         }
     },
     computed: {
-        ...vuex.mapState('user', {
-            nickName: state => state.profile.nickName
-        }),
+       
     }
 }
 </script>
@@ -58,6 +56,9 @@ export default {
         width: 220px;
         background-color: #fff;
         overflow-y: auto;
+    }
+    a.menuitem {
+        color: #303133;
     }
 </style>
 

@@ -55,7 +55,7 @@
     </section>
 
      <!-- 新增 -->
-    <el-dialog title="字典信息" :visible.sync="isShowAddDialog" size="small">
+    <el-dialog title="新增数据字典小类" :visible.sync="isShowAddDialog" size="small">
       <el-form :model="addForm" ref="addForm" :rules="addRules" label-width="120px">
         <el-row type="flex" class="row-bg" justify="space-around">
         <el-col :span="12">
@@ -86,11 +86,9 @@
         </el-col>
       </el-row>
       
-      <el-row type="flex" justify="space-around">
-          <el-col :span="8" :offset="4">
-            <el-button @click="isShowAddDialog = false">取消</el-button>
-            <el-button type="primary" @click="save();">保存</el-button>
-          </el-col>
+      <el-row type="flex" justify="center">
+        <el-button @click="isShowAddDialog = false">取消</el-button>
+        <el-button type="primary" @click="save();">保存</el-button>
       </el-row>
     </el-form>
   </el-dialog>
@@ -128,11 +126,9 @@
         </el-col>
       </el-row>
 	
-      <el-row type="flex" justify="space-around">
-          <el-col :span="8" :offset="4">
-            <el-button @click="isShowEditDialog = false">取消</el-button>
-            <el-button type="primary" @click="update();">保存</el-button>
-          </el-col>
+      <el-row type="flex" justify="center">
+        <el-button @click="isShowEditDialog = false">取消</el-button>
+        <el-button type="primary" @click="update();">保存</el-button>
       </el-row>
     </el-form>
   </el-dialog>
@@ -176,11 +172,15 @@ export default {
       });
     };
     var sortValid = (rule, value, callback) => {
-      if (!value){
+      /* if (!value){
         return
-      }
+      } */
       if(!/^[0-9]+$/.test(value)){
-          callback(new Error('排序号只能是数字'));
+          callback(new Error('排序序号只能是数字'));
+          return
+      }
+      if(value == "0"){
+          callback(new Error('排序序号不能为0'));
           return
       } 
       const params = {
@@ -223,6 +223,7 @@ export default {
         ],
         SORT: [
           //{ type: 'number', message: '序号必须为数字值', trigger: 'blur'},
+          {required: true, message: '排序序号不能为空', trigger: 'blur'},
           {validator: sortValid, trigger: 'blur'}
         ]
       },
@@ -231,7 +232,7 @@ export default {
       modifyRules: {
         NAME: [{required: true, message: '类别名称不能为空', trigger: 'blur'}],
         SORT: [
-          //{ type: 'number', message: '序号必须为数字值', trigger: 'blur'},
+          {required: true, message: '排序序号不能为空', trigger: 'blur'},
           {validator: sortValid, trigger: 'blur'}
         ],
       }
@@ -360,7 +361,7 @@ export default {
     },
 
      resetForm(formName) {
-      this.$refs[formName].resetFields();
+      //this.$refs[formName].resetFields();
     }
   }
 };

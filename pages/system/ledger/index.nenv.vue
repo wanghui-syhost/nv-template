@@ -21,7 +21,7 @@
             <span> {{ scope.row.CODE }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="排版类型" min-width="12%">
+        <el-table-column label="排版类型" min-width="10%">
           <template slot-scope="scope">
             <span> {{ scope.row.TYPE == 'LEFT' ? '左侧竖排' : '右侧竖排' }}</span>
           </template>
@@ -32,7 +32,7 @@
             <span> {{ scope.row.DESCRIPTION }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="显示头部" min-width="7%" align="center">
+        <el-table-column label="显示头部" min-width="9%" align="center">
           <template slot-scope="scope">
             <span> {{ scope.row.SHOW_HEAD == 'YES' ? '是' : '否' }}</span>
           </template>
@@ -48,7 +48,8 @@
 
       <!-- 分页  -->
       <div class="search-pagination">
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageIndex" :page-sizes="[10, 20, 30, 40]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="totalCount">
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageIndex" :page-sizes="[10, 20, 30, 40]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper, slot" :total="totalCount">
+          <el-button>确定</el-button>
         </el-pagination>
       </div>
     </section>
@@ -96,11 +97,9 @@
           </el-col>
         </el-row>
         
-        <el-row type="flex" justify="space-around">
-            <el-col :span="8" :offset="4">
-              <el-button @click="isShowAddDialog = false">取消</el-button>
-              <el-button type="primary" @click="save();">保存</el-button>
-            </el-col>
+        <el-row type="flex" justify="center">
+          <el-button @click="isShowAddDialog = false">取消</el-button>
+          <el-button type="primary" @click="save();">保存</el-button>
         </el-row>
       </el-form>
     </el-dialog>
@@ -150,11 +149,9 @@
           </el-col>
         </el-row>
         
-        <el-row type="flex" justify="space-around">
-          <el-col :span="8" :offset="4">
-            <el-button @click="isShowEditDialog = false">取消</el-button>
-            <el-button type="primary" @click="update();">保存</el-button>
-          </el-col>
+        <el-row type="flex" justify="center">
+          <el-button @click="isShowEditDialog = false">取消</el-button>
+          <el-button type="primary" @click="update();">保存</el-button>
         </el-row>
       </el-form>
     </el-dialog>
@@ -165,6 +162,21 @@ import { getLedgerDatas, deleteLedger, saveLedger, updateLedger, validLedger } f
 export default {
   name: 'Tab',
   data() {
+    //台账标题
+     const titleValid = (rule, value, callback) => {
+      if (value != null && value != "") {
+        setTimeout(() => {
+          if (value.length > 30) {
+            callback(new Error("标题不能超过30长度"));
+          }else{
+            callback();
+          }
+        }, 1000);
+      } else {
+        callback();
+      }
+    };
+
     var codeValid = (rule, value, callback) => {
       var reg = /^[A-Za-z_]+$/; 
       if(!value.match(reg)){
@@ -204,7 +216,10 @@ export default {
         SHOW_HEAD:'NO' //是否显示头部 YES:是 NO:否 
       },
       addRules: {
-        TITLE: [{required: true, message: '标题不能为空', trigger: 'blur'}],
+        TITLE: [
+          {required: true, message: '标题不能为空', trigger: 'blur'},
+          { validator: titleValid, trigger: 'blur'}
+          ],
         TYPE: [{required: true, message: '台账排版类型不能为空', trigger: 'blur'}],
         CODE: [
           {required: true, message: '编号不能为空', trigger: 'blur'},
@@ -213,7 +228,8 @@ export default {
       },
       modifyForm: {},
       modifyRules:{ 
-          TITLE: [{required: true, message: '标题不能为空', trigger: 'blur'}],
+          TITLE: [{required: true, message: '标题不能为空', trigger: 'blur'},
+          { validator: titleValid, trigger: 'blur'}],
           TYPE: [{required: true, message: '台账排版类型不能为空', trigger: 'blur'}]
         }
     };

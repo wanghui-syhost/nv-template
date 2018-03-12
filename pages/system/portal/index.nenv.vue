@@ -82,11 +82,9 @@
         </el-col>
       </el-row>
 	
-      <el-row type="flex" justify="space-around">
-          <el-col :span="8" :offset="4">
-            <el-button @click="isShowAddDialog = false">取消</el-button>
-            <el-button type="primary" @click="saveDictionary">保存</el-button>
-          </el-col>
+      <el-row type="flex" justify="center">
+        <el-button @click="isShowAddDialog = false">取消</el-button>
+        <el-button type="primary" @click="saveDictionary">保存</el-button>
       </el-row>
     </el-form>
   </el-dialog>
@@ -102,10 +100,10 @@
               </template>
             </el-table-column>    
           </el-table>
-          <div style="margin-top: 20px">
+          <el-row type="flex" justify="center" style="padding-top:20px">
               <el-button @click="isShowRoleListDialog = false">取消</el-button>
               <el-button type="primary" @click="savePortalRole">保存</el-button>
-            </div>
+          </el-row>
   </el-dialog>
 
    <!-- 修改 -->
@@ -148,11 +146,9 @@
         </el-col>
       </el-row>
 	
-      <el-row type="flex" justify="space-around">
-          <el-col :span="8" :offset="4">
-            <el-button @click="isShowEditDialog = false">取消</el-button>
-            <el-button type="primary" @click="update();">保存</el-button>
-          </el-col>
+      <el-row type="flex" justify="center">
+        <el-button @click="isShowEditDialog = false">取消</el-button>
+        <el-button type="primary" @click="update();">保存</el-button>
       </el-row>
     </el-form>
   </el-dialog>
