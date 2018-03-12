@@ -21,7 +21,7 @@
         </el-table-column>
         <el-table-column label="任务描述" prop = "DESCRIPTION" min-width="14%" />
         <el-table-column label="完整的类名" prop = "CLASS_NAME" min-width="15%" />
-        <el-table-column label="操作" align="center" min-width="28%">
+        <el-table-column label="操作" align="center"  width="320">
           <template slot-scope="scope">
             <el-button size="small" type="primary" @click="showEdit(scope.row)">编辑</el-button>
             <el-button size="small" type="primary" v-if="scope.row.STATUS == 'OPENED'" @click="pauseScheduler(scope.row)" >暂停</el-button>
@@ -251,3 +251,4 @@ export default {
   }
 };
 </script>
+

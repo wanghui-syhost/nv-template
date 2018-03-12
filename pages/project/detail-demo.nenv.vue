@@ -1,9 +1,11 @@
 <template>
 <nv-layout>
   <section class="nv-layout-form search-form" slot="top">
-      <el-form ref="form" :model="form" :inline="true">
+      <el-form ref="form" :model="form" >
+        <section class="search-flex">
         <div class="search-form-one">
-              <el-form-item label="关键字">
+           <div class="search-form-one search-form-flex">
+              <el-form-item label="关键字" class="search-form-one" >
                 <el-input v-model="form.keyword" placeholder="请输入关键字"></el-input>
               </el-form-item>
               <!-- <el-form-item>
@@ -12,37 +14,41 @@
                     <el-radio label="办结时间"></el-radio>
                 </el-radio-group>
               </el-form-item> -->
-              <el-form-item label="抽查情况">
-                <el-select v-model="form.region0" placeholder="全部类型">
+              <el-form-item label="抽查情况" class="search-form-one">
+                <el-select v-model="form.region0" placeholder="全部类型" class="all-width">
                   <el-option label="抽查情况1" value="type1"></el-option>
                   <el-option label="抽查情况2" value="type2"></el-option>
                 </el-select>
               </el-form-item>
 
-              <el-form-item label="抽查情况">
-                <el-select v-model="form.region1" placeholder="全部类型">
+              <el-form-item label="抽查情况" class="search-form-one">
+                <el-select v-model="form.region1" placeholder="全部类型" class="all-width">
                   <el-option label="抽查情况1" value="type1"></el-option>
                   <el-option label="抽查情况2" value="type2"></el-option>
                 </el-select>
               </el-form-item>
-              <el-button type="primary" style="float:right;">搜索</el-button>
+            </div>
+              
+            <div class="search-form-one search-form-flex">
+                  <el-form-item label="抽查情况"  class="search-form-one all-width">
+                    <el-select v-model="form.region2" placeholder="全部类型" class="all-width">
+                      <el-option label="抽查情况1" value="type1"></el-option>
+                      <el-option label="抽查情况2" value="type2"></el-option>
+                    </el-select>
+                  </el-form-item>
+                  <el-form-item label="创建时间"  class="search-form-one all-width" >
+                    <el-date-picker type="date"  class="all-width"   placeholder="选择日期" v-model="form.startDate" ></el-date-picker>
+                  </el-form-item>
+                  <el-form-item label="至"  class="search-form-one all-width">
+                    <!-- <span>至</span>   -->
+                    <el-date-picker class="all-width" type="date" placeholder="选择日期" v-model="form.endDate" ></el-date-picker>
+                  </el-form-item>
+            </div>
         </div>
 
-        <div class="search-form-one">
-              <el-form-item label="抽查情况">
-                <el-select v-model="form.region2" placeholder="全部类型">
-                  <el-option label="抽查情况1" value="type1"></el-option>
-                  <el-option label="抽查情况2" value="type2"></el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="创建时间">
-                <el-date-picker type="date" placeholder="选择日期" v-model="form.startDate" style="width:194px;"></el-date-picker>
-              </el-form-item>
-              <el-form-item label="至">
-                 <!-- <span>至</span>   -->
-                <el-date-picker type="date" placeholder="选择日期" v-model="form.endDate"  style="width: 194px;"></el-date-picker>
-              </el-form-item>
-        </div>
+
+        <div class="search-form-right"><el-button type="primary"  class="">搜索</el-button></div>
+        </section>
       </el-form>
       </section>
       <section class="search-table">
@@ -275,6 +281,27 @@
       padding: 16px 0;
     }
 
+}
+
+.search-flex{
+  display: flex;
+  padding-left:20px;
+  padding-right:20px;
+}
+.search-form-right{
+  width:60px;
+  margin-left: 20px;
+}
+.search-form-one{
+  flex:1
+}
+
+.search-form-flex{
+  display: flex;
+}
+
+.all-width{
+  width: 100% !important;
 }
 </style>
 

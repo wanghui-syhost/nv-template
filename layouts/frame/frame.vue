@@ -55,9 +55,11 @@ export default {
     bottom: 0;
     left: 0;
     right: 0;
+    min-width: 1280px;
+    overflow: auto;
 
     &.width-limited {
-        max-width: 1200px;
+        max-width: 1280px;
         margin: 0 auto;
 
         padding-top: 20px;
