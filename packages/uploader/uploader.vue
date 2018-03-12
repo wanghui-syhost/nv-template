@@ -92,7 +92,7 @@
                 </el-pagination>
             </div>
           </el-tab-pane>
-          
+
           <el-tab-pane>
             <span slot="label" name="second" ><i class="el-icon-menu"></i></span>
             <el-checkbox v-model="checkAll">全选</el-checkbox>
@@ -587,6 +587,10 @@
     },
     modifyComplete(row){
       let me = this;
+      if(this.rename.length >15){
+        me.$message.error('修改文件夹名称长度不能大于15');
+        return;
+      }
       if(row.IS_DIRECTORY === 'YES'){
           //文件夹重命名
           let data = {
