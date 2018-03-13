@@ -183,15 +183,20 @@ export default {
       },
       keyRules:[ 
               {required:true, message:'配置key不能为空', trigger: 'blur'},
+              {max: 30, message: '配置key长度不能超过30', trigger: 'blur' },
               {validator: dupValid, trigger: 'blur'},
               {validator: keyValid, trigger: 'blur'}
         ],
         
       rules: {
-        NAME:[{required:true, message:'配置名称不能为空', trigger: 'blur'}],
+        NAME:[
+          {required:true, message:'配置名称不能为空', trigger: 'blur'},
+          {max: 20, message: '配置名称长度不能超过20', trigger: 'blur' }
+        ],
         VALUE:[{required:true, message:'配置值不能为空', trigger: 'blur'}],
         KEY:[
           {required:true, message:'配置key不能为空', trigger: 'blur'},
+          {max: 30, message: '配置key长度不能超过30', trigger: 'blur' },
           {validator: keyValid, trigger: 'blur'}
           ]
       },

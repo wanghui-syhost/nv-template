@@ -162,23 +162,8 @@ import { getLedgerDatas, deleteLedger, saveLedger, updateLedger, validLedger } f
 export default {
   name: 'Tab',
   data() {
-    //台账标题
-     const titleValid = (rule, value, callback) => {
-      if (value != null && value != "") {
-        setTimeout(() => {
-          if (value.length > 30) {
-            callback(new Error("标题不能超过30长度"));
-          }else{
-            callback();
-          }
-        }, 1000);
-      } else {
-        callback();
-      }
-    };
-
-    var codeValid = (rule, value, callback) => {
-      var reg = /^[A-Za-z_]+$/; 
+    const codeValid = (rule, value, callback) => {
+      const reg = /^[A-Za-z_]+$/; 
       if(!value.match(reg)){
           callback(new Error('编号只能是字母和下划线'));
       } else {
@@ -186,7 +171,7 @@ export default {
           CODE: value
         };
         validLedger(params).then(response => {
-            var e = response.data; 
+            const e = response.data; 
             if(e == true){
               callback(new Error('该编号已存在'));
               return;
@@ -218,7 +203,7 @@ export default {
       addRules: {
         TITLE: [
           {required: true, message: '标题不能为空', trigger: 'blur'},
-          { validator: titleValid, trigger: 'blur'}
+          {max: 30, message: '标题长度不能超过30', trigger: 'blur' }
           ],
         TYPE: [{required: true, message: '台账排版类型不能为空', trigger: 'blur'}],
         CODE: [
@@ -228,8 +213,10 @@ export default {
       },
       modifyForm: {},
       modifyRules:{ 
-          TITLE: [{required: true, message: '标题不能为空', trigger: 'blur'},
-          { validator: titleValid, trigger: 'blur'}],
+          TITLE: [
+            {required: true, message: '标题不能为空', trigger: 'blur'},
+            {max: 30, message: '标题长度不能超过30', trigger: 'blur' }
+          ],
           TYPE: [{required: true, message: '台账排版类型不能为空', trigger: 'blur'}]
         }
     };

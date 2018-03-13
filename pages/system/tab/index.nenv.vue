@@ -183,7 +183,10 @@ export default {
         IS_DELETED: null // 是否删除 YES:是 NO:否 
       },
       addRules: {
-        TITLE: [{required: true, message: '标题不能为空', trigger: 'blur'}],
+        TITLE: [
+          {required: true, message: '标题不能为空', trigger: 'blur'},
+          {max: 30, message: '标题长度不能超过30', trigger: 'blur' }
+        ],
         TYPE: [{required: true, message: '选项卡类型不能为空', trigger: 'blur'}],
         CODE: [
           {required: true, message: '编号不能为空', trigger: 'blur'},
@@ -192,7 +195,10 @@ export default {
       },
       modifyForm: {},
       modifyRules:{ 
-          TITLE: [{required: true, message: '选项卡名称不能为空', trigger: 'blur'}],
+          TITLE: [
+            {required: true, message: '标题不能为空', trigger: 'blur'},
+            {max: 30, message: '标题长度不能超过30', trigger: 'blur' }
+            ],
           TYPE: [{required: true, message: '选项卡类型不能为空', trigger: 'blur'}]
         }
     };

@@ -116,21 +116,6 @@ import { getDictionaries, deleteDictionary, saveDictionary , validDictionary, up
 export default {
   name: "Dictionary",
   data() {
-    //类别名称
-     const nameValid = (rule, value, callback) => {
-      if (value != null && value != "") {
-        setTimeout(() => {
-          if (value.length > 20) {
-            callback(new Error("类别名称不能超过20长度"));
-          }else{
-            callback();
-          }
-        }, 1000);
-      } else {
-        callback();
-      }
-    };
-
     var codeValid = (rule, value, callback) => {
       var reg = /^[A-Za-z0-9_]+$/; 
       if(!value.match(reg)){
@@ -187,7 +172,7 @@ export default {
      addRules: {
         NAME: [
           {required: true, message: '类别名称不能为空', trigger: 'blur'},
-          {validator: nameValid, trigger: 'blur'}
+          {max: 20, message: '类别名称长度不能超过20', trigger: 'blur' }
           ],
         CODE: [
           {required: true, message: '类别代码不能为空', trigger: 'blur'},
@@ -199,7 +184,7 @@ export default {
       modifyRules:{
         NAME: [
           {required: true, message: '类别名称不能为空', trigger: 'blur'},
-          {validator: nameValid, trigger: 'blur'}
+          {max: 20, message: '类别名称长度不能超过20', trigger: 'blur' }
         ],
         /* CODE: [
           {required: true, message: '类别代码不能为空', trigger: 'blur'},
