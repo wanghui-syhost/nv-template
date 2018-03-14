@@ -28,16 +28,17 @@
               <span> {{scope.row.ROLE_IDS}}</span>
             </template>
           </el-table-column> -->
+           <el-table-column label="优先级" min-width="7%">
+            <template slot-scope="scope">
+              <span> {{scope.row.SORT}}</span>
+            </template>
+          </el-table-column>
           <el-table-column label="描述信息" min-width="25%">
             <template slot-scope="scope">
               <a :title="scope.row.DESCRIPTION"> {{scope.row.DESCRIPTION}}</a>
             </template>
           </el-table-column>
-          <el-table-column label="优先级" min-width="7%">
-            <template slot-scope="scope">
-              <span> {{scope.row.SORT}}</span>
-            </template>
-          </el-table-column>
+         
 
           <el-table-column label="操作" align="center" min-width="28">
             <template slot-scope="scope">
@@ -63,7 +64,22 @@
       <el-row type="flex" class="row-bg" justify="space-around">
         <el-col :span="12">
           <el-form-item label="首页地址" prop="VALUE">
-            <el-input v-model="addForm.VALUE" placeholder="请输入类别值" :maxlength="20">类别值</el-input>
+            <el-select v-model="addForm.VALUE">
+              <el-option
+                v-for ="item in homeSelectOptions"
+                :key="item.path"
+                :label="item.path"
+                :value="item.path"
+              />
+            </el-select>
+            <!-- <el-input v-model="addForm.VALUE" placeholder="请输入类别值" :maxlength="20">类别值</el-input> -->
+          </el-form-item>
+        </el-col>
+      </el-row>
+       <el-row type="flex" class="row-bg" justify="space-around">
+        <el-col :span="12">
+          <el-form-item label="优先级" prop="SORT">
+            <el-input v-model.number="addForm.SORT" placeholder="请输入优先级" :maxlength="3">优先级</el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -74,13 +90,7 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row type="flex" class="row-bg" justify="space-around">
-        <el-col :span="12">
-          <el-form-item label="优先级" prop="SORT">
-            <el-input v-model.number="addForm.SORT" placeholder="请输入优先级" :maxlength="3">优先级</el-input>
-          </el-form-item>
-        </el-col>
-      </el-row>
+     
 	
       <el-row type="flex" justify="center">
         <el-button @click="isShowAddDialog = false">取消</el-button>
@@ -133,15 +143,15 @@
       </el-row>
       <el-row type="flex" class="row-bg" justify="space-around">
         <el-col :span="12">
-          <el-form-item label="描述信息" prop="DESCRIPTION">
-            <el-input v-model="modifyForm.DESCRIPTION" placeholder="请输入描述信息" :maxlength="50">描述信息</el-input>
+          <el-form-item label="优先级" prop="SORT">
+            <el-input v-model.number="modifyForm.SORT" placeholder="请输入优先级" :maxlength="3">优先级</el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row type="flex" class="row-bg" justify="space-around">
         <el-col :span="12">
-          <el-form-item label="优先级" prop="SORT">
-            <el-input v-model.number="modifyForm.SORT" placeholder="请输入优先级" :maxlength="3">优先级</el-input>
+          <el-form-item label="描述信息" prop="DESCRIPTION">
+            <el-input v-model="modifyForm.DESCRIPTION" placeholder="请输入描述信息" :maxlength="50">描述信息</el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -240,9 +250,11 @@ export default {
         NAME: [{required: true, message: '首页名称不能为空', trigger: 'blur'}],
         VALUE:[
           {required: true, message: '首页地址不能为空', trigger: 'blur'},
-          {validator: codeValid, trigger: 'blur'}
+          {validator: codeValid, trigger: 'change, click'}
          ],
-        SORT: [{ validator: sortValid, trigger: 'blur'}]
+        SORT: [
+          {required: true, message: '优先级不能为空', trigger: 'blur'},
+          { validator: sortValid, trigger: 'blur'}]
       },
 
       modifyForm:{},
@@ -252,7 +264,10 @@ export default {
           {required: true, message: '首页地址不能为空', trigger: 'blur'},
           {validator: codeValid, trigger: 'blur'}
          ],
-        SORT: [{ validator: sortValid, trigger: 'blur'}]
+        SORT: [
+          {required: true, message: '优先级不能为空', trigger: 'blur'},
+          { validator: sortValid, trigger: 'blur'}
+        ]
       }
     };
   },
@@ -451,8 +466,10 @@ export default {
       });
     },
 
-     resetForm(formName) {
-      this.$refs[formName].resetFields();
+    resetForm(formName) {
+      if (this.$refs[formName]!==undefined) {
+        this.$refs[formName].resetFields();
+      }
     }
   }
 };

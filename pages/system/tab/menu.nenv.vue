@@ -178,13 +178,19 @@ export default {
         SORT: null // 排序序号
       },
       addRules: {
-        NAME: [{required: true, message: '菜单名称不能为空', trigger: 'blur'}],
+        NAME: [
+          {required: true, message: '菜单名称不能为空', trigger: 'blur'},
+          {max: 20, message: '菜单名称不能超过20', trigger: 'blur' }
+        ],
         URL: [{required: true, message: '菜单url不能为空', trigger: 'blur'}],
         SORT: [{validator:sortValid, trigger: 'blur'}]
       },
       modifyForm: {},
       modifyRules:{
-        NAME: [{required: true, message: '菜单名称不能为空', trigger: 'blur'}],
+        NAME: [
+          {required: true, message: '菜单名称不能为空', trigger: 'blur'},
+          {max: 20, message: '菜单名称不能超过20', trigger: 'blur' }
+        ],
         URL: [{required: true, message: '菜单url不能为空', trigger: 'blur'}],
         SORT: [{validator:sortValid, trigger: 'blur'}]
         }
@@ -330,7 +336,9 @@ export default {
     this.getList();
   },
   resetForm(formName) {
-    this.$refs[formName].resetFields();
+    if (this.$refs[formName]!==undefined) {
+      this.$refs[formName].resetFields();
+    }
   }
 }
 }

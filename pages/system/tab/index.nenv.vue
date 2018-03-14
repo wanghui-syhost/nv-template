@@ -19,7 +19,7 @@
         </el-table-column>
         <el-table-column label="编号" min-width="10%">
           <template slot-scope="scope">
-            <span> {{ scope.row.CODE }}</span>
+            <a :title=" scope.row.CODE"> {{ scope.row.CODE }}</a>
           </template>
         </el-table-column>
         <el-table-column label="选项卡类型" min-width="10%" align="center">
@@ -30,7 +30,7 @@
       
         <el-table-column label="描述" min-width="35%">
           <template slot-scope="scope">
-            <span> {{ scope.row.DESCRIPTION }}</span>
+            <a :title=" scope.row.DESCRIPTION"> {{ scope.row.DESCRIPTION }}</a>
           </template>
         </el-table-column>
         <!-- <el-table-column label="是否删除">
@@ -183,7 +183,10 @@ export default {
         IS_DELETED: null // 是否删除 YES:是 NO:否 
       },
       addRules: {
-        TITLE: [{required: true, message: '标题不能为空', trigger: 'blur'}],
+        TITLE: [
+          {required: true, message: '标题不能为空', trigger: 'blur'},
+          {max: 30, message: '标题长度不能超过30', trigger: 'blur' }
+        ],
         TYPE: [{required: true, message: '选项卡类型不能为空', trigger: 'blur'}],
         CODE: [
           {required: true, message: '编号不能为空', trigger: 'blur'},
@@ -192,7 +195,10 @@ export default {
       },
       modifyForm: {},
       modifyRules:{ 
-          TITLE: [{required: true, message: '选项卡名称不能为空', trigger: 'blur'}],
+          TITLE: [
+            {required: true, message: '标题不能为空', trigger: 'blur'},
+            {max: 30, message: '标题长度不能超过30', trigger: 'blur' }
+            ],
           TYPE: [{required: true, message: '选项卡类型不能为空', trigger: 'blur'}]
         }
     };
@@ -328,7 +334,9 @@ export default {
     this.getList();
   },
   resetForm(formName) {
-    this.$refs[formName].resetFields();
+    if (this.$refs[formName]!==undefined) {
+      this.$refs[formName].resetFields();
+    }
   }
 }
 }

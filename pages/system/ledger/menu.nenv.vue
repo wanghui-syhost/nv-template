@@ -193,21 +193,7 @@ import { getLedgerMenuDatas, deleteLedgerMenu,deleteParentMenu,saveLedgerMenu,
 export default {
   name: 'LedgerMenu',
   data() {
-    //菜单名称
-     const nameValid = (rule, value, callback) => {
-      if (value != null && value != "") {
-        setTimeout(() => {
-          if (value.length > 30) {
-            callback(new Error("菜单名称不能超过30长度"));
-          }else{
-            callback();
-          }
-        }, 1000);
-      } else {
-        callback();
-      }
-    };
-    var sortValid = (rule, value, callback) => {
+    const sortValid = (rule, value, callback) => {
       if(!/^[0-9]+$/.test(value)){
           callback(new Error('排序序号只能是数字'));
           return
@@ -257,7 +243,7 @@ export default {
       addRules: {
         NAME: [
           {required: true, message: '菜单名称不能为空', trigger: 'blur'},
-          {validator:nameValid, trigger: 'blur'}
+          {max: 30, message: '菜单名称长度不能超过30', trigger: 'blur' }
         ],
         URL: [{required: true, message: '菜单url不能为空', trigger: 'blur'}],
         SORT: [{required: true, message: '排序序号不能为空', trigger: 'blur'},
@@ -265,8 +251,10 @@ export default {
       },
       modifyForm: {},
       modifyRules:{
-        NAME: [{required: true, message: '菜单名称不能为空', trigger: 'blur'},
-              {validator:nameValid, trigger: 'blur'}],
+        NAME: [
+          {required: true, message: '菜单名称不能为空', trigger: 'blur'},
+          {max: 30, message: '菜单名称长度不能超过30', trigger: 'blur' }
+        ],
         URL: [{required: true, message: '菜单url不能为空', trigger: 'blur'}],
         SORT: [{required: true, message: '排序序号不能为空', trigger: 'blur'},
               {validator:sortValid, trigger: 'blur'}]
@@ -470,7 +458,9 @@ export default {
     this.getList();
   },
   resetForm(formName) {
-    this.$refs[formName].resetFields();
+    if (this.$refs[formName]!==undefined) {
+      this.$refs[formName].resetFields();
+    }
   }
 }
 }

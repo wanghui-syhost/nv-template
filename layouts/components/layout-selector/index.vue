@@ -1,5 +1,5 @@
 <template>
-    <el-dropdown @command="handleLayout" class="layout-selector">
+    <el-dropdown @command="handleLayout" class="layout-selector" v-if="layouts.length > 1">
         <span class="el-dropdown-link">
             导航显示
             <i class="el-icon-arrow-down el-icon--right"></i>
@@ -33,7 +33,8 @@ export default {
 <style lang="scss" scoped>
     .layout-selector {
         .el-dropdown-link {
-            color: #fff
+            color: #fff;
+            margin-right: 10px;
         }
     }
 </style>

@@ -51,33 +51,6 @@ export default {
   },
   
   data() {
-    const jobGroupValid = (rule, value, callback) => {
-      if (value != null && value != "") {
-        setTimeout(() => {
-          if (value.length > 30) {
-            callback(new Error("任务分组不能超过30长度"));
-          }else{
-            callback();
-          }
-        }, 1000);
-      } else {
-        callback();
-      }
-    };
-    //任务名称
-     const jobNameValid = (rule, value, callback) => {
-      if (value != null && value != "") {
-        setTimeout(() => {
-          if (value.length > 30) {
-            callback(new Error("任务名称不能超过30长度"));
-          }else{
-            callback();
-          }
-        }, 1000);
-      } else {
-        callback();
-      }
-    };
     return {
       addForm: {
         ID: null, // 主键ID
@@ -90,10 +63,10 @@ export default {
       addRules: {
         JOB_GROUP: [
           { required: true, message: '任务分组不能为空', trigger: 'blur'},
-          { validator: jobGroupValid, trigger: 'blur'}],
+          {max: 30, message: '任务分组长度不能超过30', trigger: 'blur' }],
         JOB_NAME: [
           { required: true, message: '任务名称不能为空', trigger: 'blur'},
-          { validator: jobNameValid, trigger: 'blur'}],
+          {max: 30, message: '任务名称长度不能超过30', trigger: 'blur' }],
       }
     };
   },

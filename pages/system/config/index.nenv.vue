@@ -20,7 +20,7 @@
           <el-table-column label="配置名称">
             <template slot-scope="scope">
                <a  v-show="!scope.row.isEdit" :title="scope.row.NAME">{{scope.row.NAME}}</a>
-               <el-input v-show="scope.row.isEdit" size="small" v-model="scope.row.NAME"></el-input>
+               <el-input v-show="scope.row.isEdit" size="small" v-model="scope.row.NAME" :maxlength="20" ></el-input>
             </template>
           </el-table-column>
           <el-table-column label="配置key">
@@ -31,7 +31,7 @@
           <el-table-column label="配置值">
             <template slot-scope="scope">
               <a  v-show="!scope.row.isEdit" :title="scope.row.VALUE">{{scope.row.VALUE}}</a>
-              <el-input v-show="scope.row.isEdit" size="small" v-model="scope.row.VALUE"></el-input>
+              <el-input v-show="scope.row.isEdit" size="small" v-model="scope.row.VALUE" :maxlength="50" ></el-input>
             </template>
           </el-table-column>
            <el-table-column label="操作" align="center">
@@ -85,21 +85,46 @@
 
   <!-- 批量新增 -->
     <el-dialog title="批量添加配置" :visible.sync="batchDialogVisible" size="small">
-      <el-form :model="dynamicValidateForm" ref="dynamicValidateForm"  label-width="120px">
+      <el-form :model="dynamicValidateForm" ref="dynamicValidateForm"  label-width="90px">
+        <el-row type="flex"  class="row-bg" justify="space-around">
+          <el-col :span="7">
+           <el-form-item label="配置名称"></el-form-item>
+          </el-col>
+          <el-col :span="7">
+            <el-form-item label="配置key"></el-form-item>
+          </el-col>
+          <el-col :span="7">
+            <el-form-item label="配置值"></el-form-item>
+          </el-col>
+          <el-col :span="3"></el-col>
+        </el-row>
         <el-row type="flex" class="row-bg" justify="space-around" 
         v-for="(domain, index) in dynamicValidateForm.domains"
          :key="domain.key">
-          <el-form-item label="配置名称"  :prop="'domains.' + index + '.NAME'" :rules="[{ required: true, message: '配置名称不能为空', trigger: 'blur'}]">
+         <el-col :span="7" >
+          <el-form-item style="margin-left:-75px;" :prop="'domains.' + index + '.NAME'" :rules="[{ required: true, message: '配置名称不能为空', trigger: 'blur'}]">
             <el-input v-model="domain.NAME" placeholder="请输入配置名称"></el-input>
           </el-form-item>
-          <el-form-item label="配置key"  :prop="'domains.' + index + '.KEY'" 
+         </el-col>
+         <el-col :span="7">
+          <el-form-item style="margin-left:-75px;" :prop="'domains.' + index + '.KEY'" 
           :rules="keyRules">
             <el-input v-model="domain.KEY" placeholder="请输入配置key"></el-input>
           </el-form-item>
-          <el-form-item label="配置值"  :prop="'domains.' + index + '.VALUE'" :rules="[{required:true, message:'配置值不能为空', trigger: 'blur'}]">
+         </el-col>
+         <el-col :span="7">
+          <el-form-item style="margin-left:-75px;" :prop="'domains.' + index + '.VALUE'" 
+            :rules="[
+              {required:true, message:'配置值不能为空', trigger: 'blur'},
+              {max:50, message:'配置值长度不能超过50', trigger: 'blur'}
+            ]"
+          >
             <el-input v-model="domain.VALUE" placeholder="请输入配置值"></el-input>
           </el-form-item>
+         </el-col>
+         <el-col :span="3">
            <el-button @click.prevent="removeDomain(domain)" style="margin-left:20px; height: 40px;">删除</el-button>
+         </el-col>
 	    </el-row>
       
 	
@@ -183,15 +208,23 @@ export default {
       },
       keyRules:[ 
               {required:true, message:'配置key不能为空', trigger: 'blur'},
+              {max: 30, message: '配置key长度不能超过30', trigger: 'blur' },
               {validator: dupValid, trigger: 'blur'},
               {validator: keyValid, trigger: 'blur'}
         ],
         
       rules: {
-        NAME:[{required:true, message:'配置名称不能为空', trigger: 'blur'}],
-        VALUE:[{required:true, message:'配置值不能为空', trigger: 'blur'}],
+        NAME:[
+          {required:true, message:'配置名称不能为空', trigger: 'blur'},
+          {max: 20, message: '配置名称长度不能超过20', trigger: 'blur' }
+        ],
+        VALUE:[
+          {required:true, message:'配置值不能为空', trigger: 'blur'},
+          {max:50, message:'配置值长度不能超过50', trigger: 'blur'}
+        ],
         KEY:[
           {required:true, message:'配置key不能为空', trigger: 'blur'},
+          {max: 30, message: '配置key长度不能超过30', trigger: 'blur' },
           {validator: keyValid, trigger: 'blur'}
           ]
       },
@@ -245,7 +278,8 @@ export default {
         row.isEdit = false;
         me.$message({
           showClose: true,
-          message: '修改成功'
+          message: '修改成功',
+          type: 'success'
         });
       }).catch(err=>{
         console.error(err);
@@ -335,7 +369,9 @@ export default {
     this.getList();
   },
   resetForm(formName) {
-    this.$refs[formName].resetFields();
+    if (this.$refs[formName]!==undefined) {
+      this.$refs[formName].resetFields();
+    }
   },
    removeDomain(item) {
     var index = this.dynamicValidateForm.domains.indexOf(item)

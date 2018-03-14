@@ -45,7 +45,9 @@ a.active li {
         color: #5F7094 !important;
     }
 }
-
+.el-dialog__wrapper {
+    min-width: 1280px;   
+}
 .el-dialog__header {
     background-color: #3B84F2;
     height: 16px;
@@ -85,4 +87,11 @@ a.active li {
 /**消息框**/
 .el-message{
     top: 50%;
+}
+/**分页**/
+.el-pager li{
+    font-weight: normal;
+}
+.el-pagination__jump{
+    margin-right:10px;
 }

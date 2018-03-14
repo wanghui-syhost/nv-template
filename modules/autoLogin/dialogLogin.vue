@@ -9,7 +9,7 @@
                     <el-input type="password" v-model="form.password" placeholder="请输入密码"/>
                 </el-form-item>
                 <el-form-item>
-                    <el-button @click="handlerLogin" class="login_btn"> 登陆 </el-button>
+                    <el-button @click="handlerLogin" class="login_btn"> 登录 </el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -33,7 +33,7 @@ export default {
             },
             rules: {
                 username: [
-                    { required: true, message: '请输入用户名', trigger: 'blur' }
+                    { required: true, message: '请输入账号', trigger: 'blur' }
                 ],
                 password: [
                     { required: true, message: '请输入密码', trigger: 'blur' }
@@ -88,6 +88,9 @@ button.login_btn {
 }
 .el-form-item__content .el-input--nenv {
     width: 100%!important;
+}
+.el-dialog__header{
+   height: auto;
 }
 </style>
 

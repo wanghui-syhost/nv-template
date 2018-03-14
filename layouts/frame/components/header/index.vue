@@ -138,6 +138,7 @@ export default {
     right: 0;
     display: flex;
     z-index: 1000;
+    min-width:1280px;
 
     height: 62px;
     background-color: #3b8cff;
