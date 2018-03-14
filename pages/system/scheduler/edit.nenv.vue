@@ -82,6 +82,9 @@ export default {
       close () {
         this.$emit('close')
       },
+      resetFields () {
+        this.$refs.addForm.resetFields()
+      },
       getData() {
         const self = this
         const { ID } = this
