@@ -12,7 +12,11 @@
     <section class="search-table">
       <el-table :data="list" v-loading.body="listLoading" element-loading-text="拼命加载中" @sort-change="sortChange" border fit highlight-current-row  style="width: 100%">
         <el-table-column label="分组" prop = "JOB_GROUP" min-width="8%" />
-        <el-table-column label="名称" prop = "JOB_NAME" sortable  min-width="8%" />
+        <el-table-column label="名称" prop = "JOB_NAME" sortable  min-width="8%">
+          <template slot-scope="scope">
+            <a :title="scope.row.JOB_NAME"> {{scope.row.JOB_NAME}}</a>
+          </template>  
+        </el-table-column>
         <el-table-column label="运行时间" prop = "CRON_EXPRESSION" min-width="10%" />
         <el-table-column label="状态" min-width="8%">
           <template slot-scope="scope">
@@ -20,8 +24,16 @@
             <!-- {{ scope.row.STATUS | statusFilter }} -->
           </template>
         </el-table-column>
-        <el-table-column label="任务描述" prop = "DESCRIPTION" min-width="14%" />
-        <el-table-column label="完整的类名" prop = "CLASS_NAME" min-width="15%" />
+        <el-table-column label="任务描述" prop = "DESCRIPTION" min-width="14%">
+          <template slot-scope="scope">
+            <a :title="scope.row.DESCRIPTION"> {{scope.row.DESCRIPTION}}</a>
+          </template>
+        </el-table-column>
+        <el-table-column label="完整的类名" prop = "CLASS_NAME" min-width="15%">
+          <template slot-scope="scope">
+            <a :title="scope.row.CLASS_NAME"> {{scope.row.CLASS_NAME}}</a>
+          </template>
+        </el-table-column>
         <el-table-column label="操作" align="center"  width="320">
           <template slot-scope="scope">
             <el-button size="small" type="primary" @click="showEdit(scope.row)">编辑</el-button>

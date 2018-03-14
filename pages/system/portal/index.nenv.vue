@@ -14,7 +14,7 @@
           
           <el-table-column label="首页名称" min-width="15%">
             <template slot-scope="scope">
-              <span> {{scope.row.NAME}}</span>
+              <a :title="scope.row.NAME"> {{scope.row.NAME}}</a>
             </template>
           </el-table-column>
       
