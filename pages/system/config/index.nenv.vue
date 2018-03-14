@@ -20,7 +20,7 @@
           <el-table-column label="配置名称">
             <template slot-scope="scope">
                <a  v-show="!scope.row.isEdit" :title="scope.row.NAME">{{scope.row.NAME}}</a>
-               <el-input v-show="scope.row.isEdit" size="small" v-model="scope.row.NAME"></el-input>
+               <el-input v-show="scope.row.isEdit" size="small" v-model="scope.row.NAME" :maxlength="20" ></el-input>
             </template>
           </el-table-column>
           <el-table-column label="配置key">
@@ -31,7 +31,7 @@
           <el-table-column label="配置值">
             <template slot-scope="scope">
               <a  v-show="!scope.row.isEdit" :title="scope.row.VALUE">{{scope.row.VALUE}}</a>
-              <el-input v-show="scope.row.isEdit" size="small" v-model="scope.row.VALUE"></el-input>
+              <el-input v-show="scope.row.isEdit" size="small" v-model="scope.row.VALUE" :maxlength="50" ></el-input>
             </template>
           </el-table-column>
            <el-table-column label="操作" align="center">
@@ -113,7 +113,12 @@
           </el-form-item>
          </el-col>
          <el-col :span="7">
-          <el-form-item style="margin-left:-75px;" :prop="'domains.' + index + '.VALUE'" :rules="[{required:true, message:'配置值不能为空', trigger: 'blur'}]">
+          <el-form-item style="margin-left:-75px;" :prop="'domains.' + index + '.VALUE'" 
+            :rules="[
+              {required:true, message:'配置值不能为空', trigger: 'blur'},
+              {max:50, message:'配置值长度不能超过50', trigger: 'blur'}
+            ]"
+          >
             <el-input v-model="domain.VALUE" placeholder="请输入配置值"></el-input>
           </el-form-item>
          </el-col>
@@ -213,7 +218,10 @@ export default {
           {required:true, message:'配置名称不能为空', trigger: 'blur'},
           {max: 20, message: '配置名称长度不能超过20', trigger: 'blur' }
         ],
-        VALUE:[{required:true, message:'配置值不能为空', trigger: 'blur'}],
+        VALUE:[
+          {required:true, message:'配置值不能为空', trigger: 'blur'},
+          {max:50, message:'配置值长度不能超过50', trigger: 'blur'}
+        ],
         KEY:[
           {required:true, message:'配置key不能为空', trigger: 'blur'},
           {max: 30, message: '配置key长度不能超过30', trigger: 'blur' },
@@ -270,7 +278,8 @@ export default {
         row.isEdit = false;
         me.$message({
           showClose: true,
-          message: '修改成功'
+          message: '修改成功',
+          type: 'success'
         });
       }).catch(err=>{
         console.error(err);
