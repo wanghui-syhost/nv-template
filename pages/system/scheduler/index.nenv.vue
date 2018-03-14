@@ -252,7 +252,7 @@ export default {
     },
 
     handleSizeChange(pageIndex) {
-      this.queryPrams.pageSize = pageIndex;
+      this.pageSize = pageIndex;
       this.getList();
     },
     handleCurrentChange(pageIndex) {
