@@ -43,7 +43,7 @@
 
     <!-- 新增 -->
     <el-dialog title="添加任务" :visible.sync="isShowAddDialog" size="small">
-      <scheduler-editor @close="closeAddDialog" ></scheduler-editor>
+      <scheduler-editor @close="closeAddDialog" ref="addDialog"></scheduler-editor>
     </el-dialog>
 
     <!-- 修改 -->
@@ -250,6 +250,13 @@ export default {
     resetForm(formName) {
       if (this.$refs[formName]!==undefined) {
         this.$refs[formName].resetFields();
+      }
+    }
+  },
+  watch: {
+    isShowAddDialog (val) {
+      if (!val) {
+        this.$refs.addDialog.resetFields()
       }
     }
   }
