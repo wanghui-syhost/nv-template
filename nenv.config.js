@@ -5,7 +5,7 @@ module.exports = {
   // 项目相关的配置
   project: {
     // 定义项目的标题
-    title: "欢迎来到盈峰环境智慧水务平台！",
+    title: "欢迎来到盈峰环境智慧水务平台",
   },
   proxy: {
     '/api/*': {
