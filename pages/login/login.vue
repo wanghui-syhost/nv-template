@@ -56,11 +56,11 @@ export default {
     },
     handleLogin(){
         let self = this
-        if(self.loginForm.loginName){
+        if(self.loginForm.loginName.length===0){
             self.$message.error("请输入用户名")
             return;
         }
-        if(self.loginForm.pwd){
+        if(self.loginForm.pwd.length===0){
             self.$message.error("请输入密码")
             return;
         }
