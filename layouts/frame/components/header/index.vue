@@ -127,7 +127,7 @@ export default {
 
     &__setting-item {
         // &:nth-last-child {
-            padding-bottom: 10px;
+            padding-bottom: 5px;
         // }
     }
 }

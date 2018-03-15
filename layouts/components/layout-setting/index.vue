@@ -4,7 +4,7 @@
             class="layout-setting__pane"
             ref="setting"
             trigger="click">
-            <div class="header__setting-item">
+            <div class="header__setting-item" style="padding-bottom:5px">
                 <el-switch
                     active-text="面包屑"
                     v-model="titleShow"/>
