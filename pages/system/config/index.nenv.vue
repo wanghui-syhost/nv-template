@@ -86,14 +86,14 @@
   <!-- 批量新增 -->
     <el-dialog title="批量添加配置" :visible.sync="batchDialogVisible" size="small">
       <el-form :model="dynamicValidateForm" ref="dynamicValidateForm"  label-width="90px">
-        <el-row type="flex"  class="row-bg" justify="space-around">
+        <el-row type="flex"  class="row-bg" justify="space-around" style="margin-bottom:-20px">
           <el-col :span="7">
            <el-form-item label="配置名称"></el-form-item>
           </el-col>
-          <el-col :span="7">
+          <el-col :span="7" style="margin-left:23px">
             <el-form-item label="配置key"></el-form-item>
           </el-col>
-          <el-col :span="7">
+          <el-col :span="7" style="margin-left:10px">
             <el-form-item label="配置值"></el-form-item>
           </el-col>
           <el-col :span="3"></el-col>
@@ -102,7 +102,7 @@
         v-for="(domain, index) in dynamicValidateForm.domains"
          :key="domain.key">
          <el-col :span="7" >
-          <el-form-item style="margin-left:-75px;" :prop="'domains.' + index + '.NAME'" :rules="[{ required: true, message: '配置名称不能为空', trigger: 'blur'}]">
+          <el-form-item style="margin-left:-95px;" :prop="'domains.' + index + '.NAME'" :rules="[{ required: true, message: '配置名称不能为空', trigger: 'blur'}]">
             <el-input v-model="domain.NAME" placeholder="请输入配置名称"></el-input>
           </el-form-item>
          </el-col>
@@ -123,7 +123,7 @@
           </el-form-item>
          </el-col>
          <el-col :span="3">
-           <el-button @click.prevent="removeDomain(domain)" style="margin-left:20px; height: 40px;">删除</el-button>
+           <el-button @click.prevent="removeDomain(domain)" style="margin-left:20px; height: 36px;">删除</el-button>
          </el-col>
 	    </el-row>
       

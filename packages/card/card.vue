@@ -173,6 +173,8 @@ export default {
 
     .search-form-row {
         .el-form-item {
+            margin-left: 20px;
+            margin-bottom: 15px;
             max-width: 25% !important;
         }
     }

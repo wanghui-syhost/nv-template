@@ -21,7 +21,7 @@
 					</template>
 				</el-menu>
 			</section>
-			<nv-dynamic-ledger ref="dynamicLedger" :nv-code="nvCode" :nv-embed="true" @nv-slider="slider"></nv-dynamic-ledger>
+			<nv-dynamic-ledger ref="dynamicLedger" class="ledger-main" :nv-code="nvCode" :nv-embed="true" @nv-slider="slider"></nv-dynamic-ledger>
 		</section>
 	</div>
 </template>
@@ -103,5 +103,9 @@
 		}
 		
 	}
-	
+
+.ledger-main {
+	margin-top: 16px;
+}
+
 </style>

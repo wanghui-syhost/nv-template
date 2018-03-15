@@ -152,7 +152,7 @@ export default {
         // float: left;
         text-align: left;
         overflow: hidden;
-        margin-right: 20px;
+        margin-right: 40px;
     }                   
     &__logo {
         height: 33px;
