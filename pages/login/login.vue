@@ -30,7 +30,7 @@
 <script>
 import md5 from '../../node_modules/md5';
 import vuex, { mapActions } from 'vuex'
-import utils from 'nenv/utils'
+// import utils from 'nenv/utils'
 export default {
   name: "login",
   data () {
@@ -400,21 +400,22 @@ export default {
     background-image: url(./assets/login/ic_login_bg.png);
     background-size: cover;
     &__main{
-        height:auto;
-        min-height: 800px;
+        height: 800px;
+        width: 100%;
+        /* min-height: 800px; */
         margin-top:80px;
         display: flex;
-        justify-content: center;
-        margin-left:auto;
+        justify-content: flex-start;
+        margin-left: calc(50% - 770px);
         margin-right:auto;
+        /* border:1px solid red; */
     }
     &__left{
         width: 550px;
         height: 800px;
-        min-width:550px ;
-        max-width: 550px;
         text-align: center;
         background: #FFF;
+        /* border:1px solid orange; */
     }
     &__form{
         text-align: center;
@@ -520,6 +521,7 @@ export default {
     &__right{
         flex:auto;
         max-width: 890px;
+        /* border:1px solid green; */
         background:url(./assets/login/ic_login_right.png);
 
     }
