@@ -212,7 +212,6 @@ export default {
         pageIndex: this.pageIndex,
         pageSize: this.pageSize
       }
-      console.log(pageParams)
       getTabMenuDatas(pageParams)
       .then(response => {
         this.listLoading = false;
@@ -257,7 +256,6 @@ export default {
   save() {
     this.$refs['addForm'].validate((valid) => {
         if (valid) {
-          console.log(this.addForm)
             saveTabMenu(this.addForm).then(response => {
                this.$message({
                  message: '保存成功',
@@ -326,15 +324,6 @@ export default {
   });
   },
 
-  
-  handleSizeChange(pageIndex) {
-    this.queryPrams.pageSize = pageIndex;
-    this.getList();
-  },
-  handleCurrentChange(pageIndex) {
-    this.pageIndex = pageIndex;
-    this.getList();
-  },
   resetForm(formName) {
     if (this.$refs[formName]!==undefined) {
       this.$refs[formName].resetFields();

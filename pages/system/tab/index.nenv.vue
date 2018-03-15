@@ -326,7 +326,7 @@ export default {
         this.$router.push({path:'/system/tab/menu',query:{CODE:row.CODE, TITLE: row.TITLE}});
     },
   handleSizeChange(pageIndex) {
-    this.queryPrams.pageSize = pageIndex;
+    this.pageSize = pageIndex;
     this.getList();
   },
   handleCurrentChange(pageIndex) {

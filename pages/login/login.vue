@@ -30,7 +30,6 @@
 <script>
 import md5 from '../../node_modules/md5';
 import vuex, { mapActions } from 'vuex'
-// import utils from 'nenv/utils'
 export default {
   name: "login",
   data () {
