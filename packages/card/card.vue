@@ -4,7 +4,7 @@
             <label class="nv-layout__top-label" v-if="isTitleShow">{{ acitveMenu.crumbName }}</label>
             <div :class="{'nv-layout-search-wrapper': true, 'isCollapsed': isCollapse}">
                 <slot name = "top"/>
-                <div class="nv-layout__bottom">
+                <div class="nv-layout__bottom" v-if="$slots.top && moreThenOne">
                     <span class="float-right" @click="handleCollapse">更过筛选</span>
                     <i :class="'el-icon-arrow-' + (isCollapse ? 'down' : 'up')"/>
                 </div>
@@ -26,12 +26,17 @@ export default {
         prefixType: {
             type: String,
             default: '一'
+        },
+        rowClass: {
+            type: String,
+            default: 'search-form-row'
         }
     },
     data () {
         return {
             isDynamicView: false,
             childCounter: 0,
+            moreThenOne: false,
             isCollapse: false,
             sectionChildrens: []
         }
@@ -48,6 +53,9 @@ export default {
             acitveMenu: state => state.acitveMenu,
         }),
         ...mapState(['isCardLayout', 'isShowTitle'])
+    },
+    updated () {
+        this.moreThenOne =  this.$el.getElementsByClassName('search-form-row').length > 1
     },
     methods: {
         handleCollapse () {
