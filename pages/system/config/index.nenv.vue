@@ -1,16 +1,26 @@
 <template>
   <nv-layout>
-      <section class="search-form" slot="top">
-        <el-form :inline="true">
-            <!-- 搜索框  -->
-  			<div class="search-form-one">
-          <el-form-item label="关键字">
-            <el-input v-model="KEYWORD" placeholder="请输入关键字" @keyup.enter.native = "getList" ></el-input>
-          </el-form-item>
-          <el-button type="infor" @click="getList">搜索</el-button>
-  				<el-button type="primary" @click="addInfo">新增</el-button>
-          <el-button type="primary" @click="batchAddInfo">批量添加</el-button>
-  			</div>
+      <section class="nv-layout-form search-form" slot="top">
+        <el-form >
+          <!-- 搜索框  -->
+          <section class="search-flex">
+            <div class="search-form-left">
+              <el-button type="primary" @click="addInfo">新增</el-button>
+              <el-button type="primary" @click="batchAddInfo">批量添加</el-button>
+            </div>
+
+            <div class="search-form-main">
+              <div class="search-form-row">
+                <el-form-item label="关键字" class="search-form-one" >
+                  <el-input v-model="KEYWORD" placeholder="请输入关键字" @keyup.enter.native = "getList" ></el-input>
+                </el-form-item>
+              
+                <el-form-item label-width="20px">
+                  <el-button  @click="getList();">搜索</el-button>
+                </el-form-item>
+              </div>
+            </div>
+          </section>
         </el-form>
       </section>
 
@@ -87,13 +97,13 @@
     <el-dialog title="批量添加配置" :visible.sync="batchDialogVisible" size="small">
       <el-form :model="dynamicValidateForm" ref="dynamicValidateForm"  label-width="90px">
         <el-row type="flex"  class="row-bg" justify="space-around" style="margin-bottom:-20px">
-          <el-col :span="7">
+          <el-col :span="7" style="margin-left:-22px">
            <el-form-item label="配置名称"></el-form-item>
           </el-col>
-          <el-col :span="7" style="margin-left:23px">
+          <el-col :span="7" style="margin-left:13px">
             <el-form-item label="配置key"></el-form-item>
           </el-col>
-          <el-col :span="7" style="margin-left:10px">
+          <el-col :span="7" style="margin-left:-5px">
             <el-form-item label="配置值"></el-form-item>
           </el-col>
           <el-col :span="3"></el-col>
@@ -390,3 +400,28 @@ export default {
 }
 }
 </script>
+
+<style lang="scss">
+
+.search-flex{
+  display: flex;
+  padding-left:20px;
+  padding-right:10px;
+  justify-content: flex-end;
+}
+.search-form-one{
+  flex:1
+}
+
+.search-form-main{
+  flex:1
+}
+
+.button-placeholader {
+  opacity: 0;
+}
+
+.all-width{
+  width: 100% !important;
+}
+</style>

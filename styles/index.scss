@@ -72,6 +72,15 @@ a.active li {
     font-size: 23px;
     top: 12px;
 }
+.el-form-item {
+    margin-left: 20px;
+    position: relative;
+}
+.el-form-item.is-required .el-form-item__label:before {
+    position: absolute;
+    left: -8px;
+}
+
 .el-form-item__content {
     .el-input--nenv  {
         //width: 194px;  

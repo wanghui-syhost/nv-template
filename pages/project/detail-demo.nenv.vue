@@ -10,7 +10,7 @@
 
           <div class="search-form-main">
             <div class="search-form-row">
-              <el-form-item label="关键字" class="search-form-one" >
+              <el-form-item label="关键字" class="search-form-one all-width" >
                 <el-input v-model="form.keyword" placeholder="请输入关键字"></el-input>
               </el-form-item>
               <el-form-item label="抽查情况" class="search-form-one">
@@ -32,7 +32,7 @@
             </div>
                 
             <div class="search-form-row">
-                  <el-form-item label="抽查情况"  class="search-form-one all-width">
+                  <el-form-item label="抽查情况"  class="search-form-one">
                     <el-select v-model="form.region2" placeholder="全部类型" class="all-width">
                       <el-option label="抽查情况1" value="type1"></el-option>
                       <el-option label="抽查情况2" value="type2"></el-option>

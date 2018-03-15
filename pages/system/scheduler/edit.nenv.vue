@@ -1,5 +1,5 @@
 <template>
-      <el-form :model="addForm" :rules="addRules" ref="addForm" label-width="120px" slot="top">
+      <el-form :model="addForm" :rules="addRules" ref="addForm" label-width="90px" slot="top">
         <el-row type="flex" class="row-bg" justify="space-between">
           <el-col :span="12">
             <el-form-item label="任务分组" prop="JOB_GROUP">

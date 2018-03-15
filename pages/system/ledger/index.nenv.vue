@@ -1,12 +1,16 @@
 <template>
   <nv-layout>
-    <section class="search-form" slot="top">
-      <el-form :inline="true">
-        <!-- 搜索框  -->
-        <div class="search-form-one">
-          <el-button type="primary" @click="addInfo">新增</el-button>
-        </div>
+    <section class="nv-layout-form search-form" slot="top">
+      <el-form ref="form" :model="form">
+        <section class="search-flex">
+          <div class="search-form-left">
+            <el-button type="primary" @click="addInfo">新增</el-button>
+          </div>
+          <div class="search-form-main">
+          </div>
+        </section>
       </el-form>
+      
     </section>
 
     <section class="search-table">
@@ -361,3 +365,27 @@ export default {
 }
 }
 </script>
+<style lang="scss">
+
+.search-flex{
+  display: flex;
+  padding-left:20px;
+  padding-right:10px;
+  justify-content: flex-end;
+}
+.search-form-one{
+  flex:1
+}
+
+.search-form-main{
+  flex:1
+}
+
+.button-placeholader {
+  opacity: 0;
+}
+
+.all-width{
+  width: 100% !important;
+}
+</style>
