@@ -3,17 +3,11 @@
   <section class="nv-layout-form search-form" slot="top">
       <el-form ref="form" :model="form" >
         <section class="search-flex">
-        <div class="search-form-one">
-           <div class="search-form-one search-form-flex">
+          <div class="search-form-one">
+            <div class="search-form-row search-form-flex">
               <el-form-item label="关键字" class="search-form-one" >
                 <el-input v-model="form.keyword" placeholder="请输入关键字"></el-input>
               </el-form-item>
-              <!-- <el-form-item>
-                <el-radio-group v-model="form.resource">
-                    <el-radio label="申请日期"></el-radio>
-                    <el-radio label="办结时间"></el-radio>
-                </el-radio-group>
-              </el-form-item> -->
               <el-form-item label="抽查情况" class="search-form-one">
                 <el-select v-model="form.region0" placeholder="全部类型" class="all-width">
                   <el-option label="抽查情况1" value="type1"></el-option>
@@ -28,8 +22,8 @@
                 </el-select>
               </el-form-item>
             </div>
-              
-            <div class="search-form-one search-form-flex">
+                
+            <div class="search-form-row search-form-flex" slot="top-collapse">
                   <el-form-item label="抽查情况"  class="search-form-one all-width">
                     <el-select v-model="form.region2" placeholder="全部类型" class="all-width">
                       <el-option label="抽查情况1" value="type1"></el-option>
@@ -44,13 +38,16 @@
                     <el-date-picker class="all-width" type="date" placeholder="选择日期" v-model="form.endDate" ></el-date-picker>
                   </el-form-item>
             </div>
-        </div>
+          </div>
 
 
-        <div class="search-form-right"><el-button type="primary"  class="">搜索</el-button></div>
+          <div class="search-form-right">
+            <el-button type="primary"  class="">搜索</el-button>
+            <el-button>新增</el-button>
+          </div>
         </section>
       </el-form>
-      </section>
+  </section>
       <section class="search-table">
         <el-table :data="list" v-loading.body="listLoading" element-loading-text="拼命加载中" border fit highlight-current-row>
           <el-table-column align="left" label='序号' min-width="5%">
@@ -290,7 +287,7 @@
   padding-right:20px;
 }
 .search-form-right{
-  width:60px;
+  width: 180px;
   margin-left: 20px;
 }
 .search-form-one{

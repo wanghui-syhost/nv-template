@@ -2,7 +2,13 @@
     <div class="nv-layout" :class="{'is-card-layout': isCardLayout}">
         <div class="nv-layout__top" :class="{'is-title-show': isTitleShow, 'only-title': !$slots.top}" v-if="isTitleShow || $slots.top" >
             <label class="nv-layout__top-label" v-if="isTitleShow">{{ acitveMenu.crumbName }}</label>
-            <slot name = "top"/>
+            <div :class="{'nv-layout-search-wrapper': true, 'isCollapsed': isCollapse}">
+                <slot name = "top"/>
+                <div class="nv-layout__bottom">
+                    <span class="float-right" @click="handleCollapse">更过筛选</span>
+                    <i :class="'el-icon-arrow-' + (isCollapse ? 'down' : 'up')"/>
+                </div>
+            </div>
         </div>
         <div class="nv-layout__main">
             <slot name="default" />
@@ -26,6 +32,7 @@ export default {
         return {
             isDynamicView: false,
             childCounter: 0,
+            isCollapse: false,
             sectionChildrens: []
         }
     },
@@ -43,6 +50,9 @@ export default {
         ...mapState(['isCardLayout', 'isShowTitle'])
     },
     methods: {
+        handleCollapse () {
+            this.isCollapse = !this.isCollapse
+        },
         addSection (child) {
             const self = this
             self.sectionChildrens.push(child)
@@ -99,6 +109,10 @@ export default {
         }
     }
 
+    &__bottom {
+        text-align: right;
+    }
+
     > * {
         background-color: #fff;
         margin: 0;
@@ -140,5 +154,16 @@ export default {
     }
 }
 </style>
+
+<style lang="scss">
+.nv-layout-search-wrapper {
+    &.isCollapsed {
+        .search-form-row + .search-form-row {
+            display: none !important;
+        }
+    }
+}
+</style>
+
 
 
