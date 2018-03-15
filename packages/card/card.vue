@@ -39,7 +39,7 @@ export default {
             isDynamicView: false,
             childCounter: 0,
             moreThenOne: false,
-            isCollapse: false,
+            isCollapse: true,
             sectionChildrens: []
         }
     },
