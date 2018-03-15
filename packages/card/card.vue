@@ -184,6 +184,10 @@ export default {
 
     display: flex;
 
+    .search-form {
+        flex-grow: 1;
+    }
+
     &.isCollapsed {
         .search-form-row + .search-form-row {
             display: none !important;
