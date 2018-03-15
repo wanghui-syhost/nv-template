@@ -5,8 +5,10 @@
             <div :class="{'nv-layout-search-wrapper': true, 'isCollapsed': isCollapse}">
                 <slot name = "top"/>
                 <div class="nv-layout__bottom" v-if="$slots.top && moreThenOne">
-                    <span class="float-right" @click="handleCollapse">更过筛选</span>
-                    <i :class="'el-icon-arrow-' + (isCollapse ? 'down' : 'up')"/>
+                    <a class="collapse-button" @click="handleCollapse">
+                        <span class="float-right" >更多筛选</span>
+                        <i :class="'el-icon-arrow-' + (isCollapse ? 'down' : 'up')"/>
+                    </a>
                 </div>
             </div>
         </div>
@@ -159,12 +161,29 @@ export default {
                 margin-bottom: 10px;
             }
         }
+
+
+    }
+
+    .collapse-button {
+        border: 1px solid #409EFF;
+        color: #409EFF;
+        margin-top: 2px;
+        padding: 9px 10px;
+        border-radius: 4px;
+        display: inline-block;
+        width: 80px;
+        font-size: 14px;
+        cursor: pointer;
     }
 }
 </style>
 
 <style lang="scss">
 .nv-layout-search-wrapper {
+
+    display: flex;
+
     &.isCollapsed {
         .search-form-row + .search-form-row {
             display: none !important;
@@ -172,6 +191,8 @@ export default {
     }
 
     .search-form-row {
+        display: flex;
+        justify-content: flex-end;
         .el-form-item {
             margin-left: 20px;
             margin-bottom: 15px;

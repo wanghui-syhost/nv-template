@@ -3,8 +3,13 @@
   <section class="nv-layout-form search-form" slot="top">
       <el-form ref="form" :model="form" >
         <section class="search-flex">
-          <div class="search-form-one">
-            <div class="search-form-row search-form-flex">
+
+          <div class="search-form-left">
+            <el-button  type="primary">新增</el-button>
+          </div>
+
+          <div class="search-form-main">
+            <div class="search-form-row">
               <el-form-item label="关键字" class="search-form-one" >
                 <el-input v-model="form.keyword" placeholder="请输入关键字"></el-input>
               </el-form-item>
@@ -22,11 +27,11 @@
                 </el-select>
               </el-form-item>
               <el-form-item label-width="20px">
-                <el-button type="primary"  class="">搜索</el-button>
+                <el-button>搜索</el-button>
               </el-form-item>
             </div>
                 
-            <div class="search-form-row search-form-flex" slot="top-collapse">
+            <div class="search-form-row">
                   <el-form-item label="抽查情况"  class="search-form-one all-width">
                     <el-select v-model="form.region2" placeholder="全部类型" class="all-width">
                       <el-option label="抽查情况1" value="type1"></el-option>
@@ -41,15 +46,12 @@
                     <el-date-picker class="all-width" type="date" placeholder="选择日期" v-model="form.endDate" ></el-date-picker>
                   </el-form-item>
                   <el-form-item label-width="20px" class="button-placeholader">
-                    <el-button type="primary"  class="">搜索</el-button>
+                    <el-button>搜索</el-button>
                   </el-form-item>
             </div>
           </div>
 
 
-          <div class="search-form-right">
-            <el-button>新增</el-button>
-          </div>
         </section>
       </el-form>
   </section>
@@ -278,30 +280,19 @@
 
 
 <style lang="scss">
-.home-detail{
-    &__page{
-      text-align: right;
-      padding: 16px 0;
-    }
-
-}
 
 .search-flex{
   display: flex;
   padding-left:20px;
-  padding-right:20px;
+  padding-right:10px;
   justify-content: flex-end;
-}
-.search-form-right{
-  width: 60px;
-  margin-left: 20px;
 }
 .search-form-one{
   flex:1
 }
 
-.search-form-flex{
-  display: flex;
+.search-form-main{
+  flex:1
 }
 
 .button-placeholader {
