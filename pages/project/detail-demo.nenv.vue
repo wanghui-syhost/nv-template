@@ -285,6 +285,7 @@
   display: flex;
   padding-left:20px;
   padding-right:20px;
+  justify-content: flex-end;
 }
 .search-form-right{
   width: 180px;
