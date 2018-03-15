@@ -21,6 +21,9 @@
                   <el-option label="抽查情况2" value="type2"></el-option>
                 </el-select>
               </el-form-item>
+              <el-form-item label-width="20px">
+                <el-button type="primary"  class="">搜索</el-button>
+              </el-form-item>
             </div>
                 
             <div class="search-form-row search-form-flex" slot="top-collapse">
@@ -37,12 +40,14 @@
                     <!-- <span>至</span>   -->
                     <el-date-picker class="all-width" type="date" placeholder="选择日期" v-model="form.endDate" ></el-date-picker>
                   </el-form-item>
+                  <el-form-item label-width="20px" class="button-placeholader">
+                    <el-button type="primary"  class="">搜索</el-button>
+                  </el-form-item>
             </div>
           </div>
 
 
           <div class="search-form-right">
-            <el-button type="primary"  class="">搜索</el-button>
             <el-button>新增</el-button>
           </div>
         </section>
@@ -288,7 +293,7 @@
   justify-content: flex-end;
 }
 .search-form-right{
-  width: 180px;
+  width: 60px;
   margin-left: 20px;
 }
 .search-form-one{
@@ -297,6 +302,10 @@
 
 .search-form-flex{
   display: flex;
+}
+
+.button-placeholader {
+  opacity: 0;
 }
 
 .all-width{

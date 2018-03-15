@@ -170,6 +170,12 @@ export default {
             display: none !important;
         }
     }
+
+    .search-form-row {
+        .el-form-item {
+            max-width: 25% !important;
+        }
+    }
 }
 </style>
 
