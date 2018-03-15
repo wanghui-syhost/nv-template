@@ -10,6 +10,7 @@
             <el-button @click="downloadChooseRows" type="primary">
                 下载
             </el-button>
+          
             <el-upload  class="upload-table__upload--btn" :action="uploadURL" 
               :on-success="success" 
               :before-upload="beforeUpload"
@@ -65,6 +66,7 @@
                         <i title="重命名" class="png-icon file-rename small" @click="reName(scope.row)"></i>
                         <i title="下载" class="png-icon file-upload  small" @click="download(scope.row)"></i>
                         <i title="删除" class="png-icon file-delete small" @click="removeItem(scope.row)"></i>
+                        <i title="移动到" class="png-icon file-txt small" @click="moveFolderTo(scope.row)"></i>
                     </template>
                 </el-table-column>
                 <el-table-column label="大小"  align="center" width="100">
@@ -127,11 +129,20 @@
                 <el-button type="primary" @click="confirmToAddFolder" :disabled="newFolderName.length<1">确 定</el-button>
             </div>
         </el-dialog>
+
+         <el-dialog title="移动文件夹" :visible.sync="moveFormVisible">
+           
+            <el-tree class="tree-folder" :data="folderList" ref="selectTree" :props="defaultProps" @node-click="handleNodeClick" :default-expand-all="true"></el-tree>
+            <div slot="footer" style="text-align:center">
+                <el-button @click="moveFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="moveConfirm" >确 定</el-button>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
 <script>
-  import { getTreeDocuments, FileRename, FileDelete, FileAdd, FileDownload, FileCreatedNewFolder,FileRenameFolder,FileDeleteFolder,deleteDirAndFiles,FileView} from './api';
+  import { getTreeDocuments, FileRename, FileDelete, FileAdd, FileDownload, FileCreatedNewFolder,FileRenameFolder,FileDeleteFolder,deleteDirAndFiles,FileView,getFolderList,moveFolder} from './api';
   export default {
     name: 'NvUploader',
     data () {
@@ -154,6 +165,8 @@
         lastId:'',
         // 新建文件夹的dialog
         dialogFormVisible:false,
+          // 新建文件夹的dialog
+        moveFormVisible:false,
         // 新建文件夹的名称
         newFolderName:'',
         // projectId:'736',
@@ -169,9 +182,18 @@
                 name: '文档中心'
             }
         ],
+        moveForm:{
+          ID:null,
+          PARENT_ID:null
+        },
         list: null,
         checkAll: false,//总全选
         isSearch: false,//新建文件夹时是否正在搜寻绑定
+        folderList:{},
+        defaultProps: {
+          children: 'children',
+          label: 'NAME'
+        },
       }
     },
     props: {
@@ -289,12 +311,77 @@
           this.listLoading = false;
         })
       },
-
+    moveFolderList() {
+      let me = this;
+      let dataFolder=[{
+          id: 1,
+          label: '一级 1',
+          children: [{
+            id: 4,
+            label: '二级 1-1',
+            children: [{
+              id: 9,
+              label: '三级 1-1-1'
+            }, {
+              id: 10,
+              label: '三级 1-1-2'
+            }]
+          }]
+        }, {
+          id: 2,
+          label: '一级 2',
+          children: [{
+            id: 5,
+            label: '二级 2-1'
+          }, {
+            id: 6,
+            label: '二级 2-2'
+          }]
+        }, {
+          id: 3,
+          label: '一级 3',
+          children: [{
+            id: 7,
+            label: '二级 3-1'
+          }, {
+            id: 8,
+            label: '二级 3-2'
+          }]
+        }];
+      me.listLoading = true;
+      getFolderList()
+      .then(response => {
+        this.listLoading = false;
+        const data = response.data;
+        if (data.list == undefined){
+            me.folderList = null;
+            return;
+        }
+        me.folderList = [{
+          NAME: '全部文件',
+          id:0,
+          children: data.list
+        }];
+        //me.folderList = dataFolder;
+      }).catch(err => {
+        console.log(err);
+      })
+    },
+      handleNodeClick(data) {
+        this.moveForm.PARENT_ID=data.ID;
+      },
       // 创建文件夹
       createdNewFolder(){
          // 先清空之前填写的信息
         this.newFolderName = "";
         this.dialogFormVisible = true;
+      },
+      
+      // 移动文件夹
+      moveFolderTo(row){
+        this.moveFolderList();
+        this.moveFormVisible = true;
+        this.moveForm.ID=row.ID;
       },
 
     // change select 
@@ -561,6 +648,25 @@
         me.fetchData(me.currentId);
        
       }).catch(err=>{
+          console.log(err)
+      })
+    },
+    moveConfirm(){
+        let  me=this;
+      	let reqParams = {
+							ID: me.moveForm.ID,
+							PARENT_ID:me.moveForm.PARENT_ID,
+            }
+        moveFolder(reqParams).then(resp=>{
+          let {code, msg, data} = resp.rawData;
+          if(code==0){
+           me.fetchData(me.currentId);
+           this.moveFormVisible=false;
+           me.$message.success("移动文件夹成功");
+          }else{
+            me.$message.error('移动文件夹失败');
+          }
+        }).catch(err=>{
           console.log(err)
       })
     },
@@ -842,6 +948,8 @@
     margin-right:5px;
     cursor: pointer;
   }
+
+  
 </style>
 <style rel="stylesheet/scss" scope>
 @media screen and (max-width: 1400px){
@@ -849,4 +957,6 @@
     width: 200px!important;  
   }
 }
+
+
 </style>
