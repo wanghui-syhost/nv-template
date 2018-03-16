@@ -1,34 +1,50 @@
 # web基础应用平台
 
 项目运行打包 依赖node
-node v6.11.3 LTS 版本 
+node v8.6 以上 LTS 版本 
 下载地址:
 https://nodejs.org/en/
 
+# 项目生成
 
-## bash
+1. 首先在管理员权限下执行 
+```
+> (c)npm install git+http://192.168.37.5/nenv/nenv.git -g
+```
+
+2. 新建工程目录
+选取任何路径作为工程目录，假设为A路径
+
+3. 克隆 nenv 脚手架并安装好依赖
+```
+> git clone http://192.168.37.5/nenv/nenv.git
+> cd nenv
+> (c)npm install
+```
+
+4. 生成项目
+在工程目录A路径，执行 
+```
+> nenv init -n 工程名称B
+```
+即可生成项目
+
+5. 安装依赖
+```
+> cd 工程名称B
+> (c)npm install
+```
+
+
+# 开发生产
+
+1. 开发  在项目路径内执行 npm run current/current-dev
+
+2. 生产  在项目路径内执行 npm run current-build
+
+## vue 代码规范
 
 ``` bash
-
-# 安装依赖 /Install dependencies
-npm install --registry=https://registry.npm.taobao.org
-
-# 安装失败可以采用cnpm 或yarn 阿里npm镜像 https://npm.taobao.org/
-
-> npm install -g cnpm --registry=https://registry.npm.taobao.org
-> cnpm install 
-或采用yarn安装
-> yarn install 
-
-
-npm install -g http-server
-# 开发环境 localhost:9999
-npm run dev
-
-# 生产环境打包
-npm run build
-
-
 # vue -eslint
 https://github.com/vuejs/eslint-plugin-vue-libs
 
@@ -37,48 +53,27 @@ https://github.com/vuejs/eslint-plugin-vue-libs
 
 ## 项目结构参考:
 ```
-build webpack的相关配置 请勿随意修改
-   |--build.js build 文件
-   |--check-version文件
-   |--dev-server 开发服务器
-   |--webpack.base.conf.js 基本配置 
-   |--webpack.dev.conf.js  开发配置
-   |--webpack.prod.conf.js 生产配置
+layouts 项目导航,可依据情况修改或增加
+   |--components 导航公工组件
+   |--frame 顶部侧边栏导航
+   |--halo 顶部导航
+   |--hola 侧边栏导航
+   |--mixins 导航公共混入
+   |--styles 导航公共样式
 
-.src 程序代码
-|--core
-    |--api api接口
-    |--assets 样式资源目录 css资源 图片 字体 第三方库 主题等
-    |--components 组件 公用组件 和自定义组件 业务组件
-    |--mock mockjs 模拟数据接口
-    |--router 路由配置
-      --index.js 路由和组件的配置
-    |--store  全局数据状态管理
-       |--modules 各个模块
-       |--index.js 数据状态出口文件
-       |--actions 动作 可以使异步函数等
-       |--getters 全局状态输出文件 vuex getters
-    |--styles 全局样式文件
-    |--utils 工具类 请求拦截 其他的一些工具类
-       |--fetch axios 请求拦截
-       |--validate 正则校验等
-       |--index 其他一些通用工具
-    |--views 页面 可以根据不同的模块逻辑划分不同的页面
-       |--login 登录界面
-    App.vue 程序根组件
-    config.js 全局配置
-    filters.js 全局filters 用于格式化字段 如时间日期的格式化等 价格的格式化等
-    global.js 全局函数 方便各个地方使用
-    main.js 程序入口
---project
-  project中所有结构和core一致 请参考上面
---favicon.ico favicon图标
---package.json 文件
---README.md 说明文件
-  
-  注意点:
-  1. project的store中现在只支持一个module 名称为project 所有的数据状态放在模块project下面
-  2.程序主入口在core-> main 中 需要引入库的请在npm中注册 js地图等可以在index.html直接注册
+modules 项目功能模块
+   |-- autoLogin 自动登陆
+   |-- notification 消息通知
+   |-- theme 主题模块
+packages 组件库
+   |-- ...
+pages 页面所在目录
+static 静态资源目录
+styles 全局样式
+entry.js 程序入口
+nenv.config.js 项目配置文件
+server.js mock服务
+
 
 
 ### 项目中常见问题和解决方案
