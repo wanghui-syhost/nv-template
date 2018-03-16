@@ -8,6 +8,7 @@
   "scripts": {
     "nenv": "node node_modules/nenv/bin/nenv dev",
     "current": "node ../nenv/bin/nenv",
+    "current-dev": "node ../nenv/bin/nenv",
     "current-build": "node ../nenv/bin/nenv build",
     "dev": "nenv dev",
     "build": "node node_modules/nenv/bin/nenv dev",

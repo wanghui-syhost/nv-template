@@ -166,6 +166,7 @@ export default {
       this.ID = row.ID;
     },
     closeEditDialog () {
+      this.ID = null
       this.isShowEditDialog = false;
       this.getList();
     },
