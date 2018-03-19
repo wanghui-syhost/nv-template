@@ -528,7 +528,8 @@
       debugger
       unfetch.download('file/download/compress', {
         params: {
-          ID: this.selectedIds
+        //  ID: this.selectedIds
+          ID: row.IS_DIRECTORY === 'YES' ? `DIR-${row.TREE_ID}` : `FILE-${row.TREE_ID}-${row.ID}`
         }
       })
     },
