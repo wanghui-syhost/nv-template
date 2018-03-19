@@ -48,10 +48,19 @@
           
            <el-table-column label="操作" align="center" min-width="40%">
             <template slot-scope="scope">
-               <el-button size="small" type="infor" @click="goDictionaryData(scope.row)" icon="information">小类</el-button>
-               <el-button size="small" type="infor" @click="setDictionaryStatus(scope.row, scope.row.STATUS == 'VALID' ? 'INVALID': 'VALID')">{{scope.row.STATUS == 'INVALID' ? '设为有效': '设为无效'}}</el-button>
-               <el-button size="small" type="primary" @click="modifyInfo(scope.row)">编辑</el-button>
-              <el-button size="small" type="danger" @click="removeInfo(scope.row)" icon="delete">删除</el-button>
+              <el-popover
+                ref="operation"
+                placement="left"
+                popperClass="operation-popover"
+                width="90"
+                trigger="hover"
+                >
+                <el-button size="small" type="infor" @click="goDictionaryData(scope.row)" icon="information">小类</el-button>
+                <el-button size="small" type="infor" @click="setDictionaryStatus(scope.row, scope.row.STATUS == 'VALID' ? 'INVALID': 'VALID')">{{scope.row.STATUS == 'INVALID' ? '设为有效': '设为无效'}}</el-button>
+                <el-button size="small" type="primary" @click="modifyInfo(scope.row)">编辑</el-button>
+                <el-button size="small" type="danger" @click="removeInfo(scope.row)" icon="delete">删除</el-button>
+              </el-popover>
+              <el-button v-popover:operation>操作</el-button>
             </template>
           </el-table-column>
 

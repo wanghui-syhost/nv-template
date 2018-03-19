@@ -162,4 +162,8 @@ a.active li {
     display: flex;
     flex-direction: column;
     justify-content: center;
+
+    .el-button + .el-button {
+        margin: 10px 0 0px 0;
+    }
 }
