@@ -13,7 +13,7 @@
 </script>
 <style scoped lang="scss">
     .main{
-    	height: 100%;
+        height: 100%;
     }
     .fade-enter-active, .fade-leave-active {
         transition: opacity .5s ease-in-out;

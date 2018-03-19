@@ -21,7 +21,7 @@ export default {
 
     }
   },
-  mounted() {
+  mounted () {
     // this.draw();
   },
   computed: {
@@ -30,7 +30,7 @@ export default {
     }
   },
   methods: {
-    draw() {
+    draw () {
       const el = this.$el
       const myChart = echarts.init(el)
       myChart.setOption(this.chartOption);

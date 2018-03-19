@@ -142,12 +142,24 @@ a.active li {
 }
 
 
-.el-table .el-button {
-    height: 28px;
-    padding: 6px 20px;
+.el-table, .operation-popover {
+    .el-button {
+        height: 28px;
+        padding: 6px 20px;
+    }
 }
 
 .el-table .el-tag {
     height: 28px;
     line-height: 26px;
+}
+
+.el-popover {
+    min-width: auto;
+}
+
+.operation-popover {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }

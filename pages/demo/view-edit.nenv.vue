@@ -27,6 +27,7 @@
             
             <nv-textarea v-model="nvTextareaResult2" :disabled = "false"/>
         </div>
+        <p>
         <div>
             <nv-date-picker v-model="nvDatePickResult"/>
             <nv-date-picker v-model="nvDatePickResult" :disabled = "false"/>                
@@ -74,5 +75,8 @@ export default {
 
 <style lang="scss" scoped>
 
+    .el-select {
+        width: auto;
+    }
 </style>
 
