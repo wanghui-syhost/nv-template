@@ -214,7 +214,7 @@
       selectedIds () {
         const { currentChooseRows } = this
         return  currentChooseRows.map(item => {
-          return item.IS_DIRECTORY === 'YES' ? `DIR-${item.TREE_ID}` : `FILE-${item.ID}`
+          return item.IS_DIRECTORY === 'YES' ? `DIR-${item.TREE_ID}` : `FILE-${item.TREE_ID}-${item.ID}`
         }).join(',')
       },
       treeId () {
@@ -380,7 +380,9 @@
     },
     downloadFile(row){
       unfetch.download(this.downloadFileUrl, {
-        ID: row.ID
+        params: {
+          ID: row.ID
+        }
       })
     },
     removeInfo(row) {
