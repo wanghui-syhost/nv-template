@@ -47,7 +47,7 @@ export function getFolderTreeList(params){
 // 批量修改角色文件夹关联数据
 export function batchUpdateRoleDocument(params){
 	return unfetch({
-		url:'/document/role/document/batchUpdate',
+		url:'/document/role/document/batch/update',
 		method: 'post',
 		data: params
 	});
