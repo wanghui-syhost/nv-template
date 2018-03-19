@@ -132,7 +132,7 @@
 
          <el-dialog title="移动文件夹" :visible.sync="moveFormVisible">
            
-            <el-tree class="tree-folder" :data="folderList" ref="selectTree" :props="defaultProps" @node-click="handleNodeClick" :default-expand-all="true"></el-tree>
+            <el-tree class="tree-folder" :data="folderList"  node-key="ID" :default-expanded-keys="[0]" :check-strictly="true"  :highlight-current="true"   ref="selectTree" :props="defaultProps" @node-click="handleNodeClick"  @node-expand="defaultCheck" :expand-on-click-node='false' ></el-tree>
             <div slot="footer" style="text-align:center">
                 <el-button @click="moveFormVisible = false">取 消</el-button>
                 <el-button type="primary" @click="moveConfirm" >确 定</el-button>
@@ -147,6 +147,7 @@
     name: 'NvUploader',
     data () {
       return {
+        treeId: 0,
         list: null,
         listLoading: true,
         pageIndex:1,
@@ -184,12 +185,13 @@
         ],
         moveForm:{
           ID:null,
-          PARENT_ID:null
+          PARENT_ID:null,
+          IS_DIRECTORY:null,
         },
         list: null,
         checkAll: false,//总全选
         isSearch: false,//新建文件夹时是否正在搜寻绑定
-        folderList:{},
+        folderList:[],
         defaultProps: {
           children: 'children',
           label: 'NAME'
@@ -273,7 +275,6 @@
         } else {
           tid = treeId;
         }
-
         getTreeDocuments({
           pageIndex: this.pageIndex,
           pageSize : this.pageSize,
@@ -311,43 +312,75 @@
           this.listLoading = false;
         })
       },
+
+      defaultCheck(nodeObj,checkObj,node)
+      {
+        
+        console.log("打印默认选中节点");
+         console.log(nodeObj);
+      },
     moveFolderList() {
       let me = this;
-      let dataFolder=[{
-          id: 1,
-          label: '一级 1',
-          children: [{
-            id: 4,
-            label: '二级 1-1',
-            children: [{
-              id: 9,
-              label: '三级 1-1-1'
-            }, {
-              id: 10,
-              label: '三级 1-1-2'
-            }]
+      let dataFolder=[ {
+            "CREATE_USER": "super",
+            "ID":0,
+            "CREATE_TIME": 1520911553000,
+            "PROJECT_ID": "736",
+            "NAME": "lsl3",
+            "PARENT_ID": "11E8266CE972FAD3A54A892C7B1E4F69",
+            "IS_DIRECTORY": "YES",
+            "children": [
+          {
+            "CREATE_USER": "super",
+            "ID":3,
+            "CREATE_TIME": 1520911553000,
+            "PROJECT_ID": "736",
+            "NAME": "lsl3_子节点",
+            "PARENT_ID": "11E8266CE972FAD3A54A892C7B1E4F69",
+            "IS_DIRECTORY": "YES"
+          },{
+            "CREATE_USER": "super",
+            "ID":3,
+            "CREATE_TIME": 1520911553000,
+            "PROJECT_ID": "736",
+            "NAME": "lsl3_子节点",
+            "PARENT_ID": "11E8266CE972FAD3A54A892C7B1E4F69",
+            "IS_DIRECTORY": "YES"
+          },{
+            "CREATE_USER": "super",
+            "ID":3,
+            "CREATE_TIME": 1520911553000,
+            "PROJECT_ID": "736",
+            "NAME": "lsl3_子节点",
+            "PARENT_ID": "11E8266CE972FAD3A54A892C7B1E4F69",
+            "IS_DIRECTORY": "YES"
+          },{
+            "CREATE_USER": "super",
+            "ID":3,
+            "CREATE_TIME": 1520911553000,
+            "PROJECT_ID": "736",
+            "NAME": "lsl3_子节点",
+            "PARENT_ID": "11E8266CE972FAD3A54A892C7B1E4F69",
+            "IS_DIRECTORY": "YES"
+          },{
+            "CREATE_USER": "super",
+            "ID":"3pppp",
+            "CREATE_TIME": 1520911553000,
+            "PROJECT_ID": "736",
+            "NAME": "lsl3_子节点",
+            "PARENT_ID": "11E8266CE972FAD3A54A892C7B1E4F69",
+            "IS_DIRECTORY": "YES",
+            "children":[{
+            "CREATE_USER": "super",
+            "ID":3,
+            "CREATE_TIME": 1520911553000,
+            "PROJECT_ID": "736",
+            "NAME": "lsl3_子节点",
+            "PARENT_ID": "11E8266CE972FAD3A54A892C7B1E4F69",
+            "IS_DIRECTORY": "YES"
+        }]
           }]
-        }, {
-          id: 2,
-          label: '一级 2',
-          children: [{
-            id: 5,
-            label: '二级 2-1'
-          }, {
-            id: 6,
-            label: '二级 2-2'
-          }]
-        }, {
-          id: 3,
-          label: '一级 3',
-          children: [{
-            id: 7,
-            label: '二级 3-1'
-          }, {
-            id: 8,
-            label: '二级 3-2'
-          }]
-        }];
+      }];
       me.listLoading = true;
       getFolderList()
       .then(response => {
@@ -357,12 +390,14 @@
             me.folderList = null;
             return;
         }
-        me.folderList = [{
-          NAME: '全部文件',
-          id:0,
-          children: data.list
-        }];
-        //me.folderList = dataFolder;
+       let nodeList=[{ 
+         //PARENT_ID: "ROOT",
+         IS_DIRECTORY: "YES",
+         NAME: '全部文件',
+         children:data.list,
+         ID:0}];
+
+       me.folderList = nodeList;
       }).catch(err => {
         console.log(err);
       })
@@ -382,6 +417,7 @@
         this.moveFolderList();
         this.moveFormVisible = true;
         this.moveForm.ID=row.ID;
+        this.moveForm.IS_DIRECTORY=row.IS_DIRECTORY;
       },
 
     // change select 
@@ -653,22 +689,31 @@
     },
     moveConfirm(){
         let  me=this;
-      	let reqParams = {
-							ID: me.moveForm.ID,
-							PARENT_ID:me.moveForm.PARENT_ID,
-            }
-        moveFolder(reqParams).then(resp=>{
-          let {code, msg, data} = resp.rawData;
-          if(code==0){
-           me.fetchData(me.currentId);
-           this.moveFormVisible=false;
-           me.$message.success("移动文件夹成功");
-          }else{
-            me.$message.error('移动文件夹失败');
-          }
-        }).catch(err=>{
-          console.log(err)
-      })
+        if(this.moveForm.PARENT_ID==null || this.moveForm.PARENT_ID==0){
+              me.$message.error("请选中文件夹");
+        }else{
+              debugger;
+              let reqParams = {
+                    ID: me.moveForm.ID,
+                    PARENT_ID:me.moveForm.PARENT_ID,
+                    IS_DIRECTORY:me.moveForm.IS_DIRECTORY,
+                  }
+                  console.log("移动请求参数：：：：");
+                  console.log(reqParams);
+              moveFolder(reqParams).then(resp=>{
+                let {code, msg, data} = resp.rawData;
+                if(code==0){
+                me.fetchData(me.currentId);
+                this.moveFormVisible=false;
+                me.$message.success("移动成功");
+                }else{
+                  me.$message.error('移动失败');
+                }
+              }).catch(err=>{
+                console.log(err)
+            })
+        }
+       
     },
     download(row){
       unfetch.download('file/download/compress', {
