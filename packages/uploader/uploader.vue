@@ -318,7 +318,9 @@
         return this.$message.info("请勾选要下载的文件")
       }
       unfetch.download('file/download/compress', {
-        ID: this.selectedIds
+        params: {
+          ID: this.selectedIds
+        }
       })
     },
     beforeUpload (file) {
@@ -521,9 +523,10 @@
       })
     },
     download (row) {
+      debugger
       unfetch.download('file/download/compress', {
         params: {
-          ID: row.IS_DIRECTORY == "YES" ? "DIR-"+row.TREE_ID : `FILE-${row.TREE_ID}-${row.ID}`
+          ID: this.selectedIds
         }
       })
     },
