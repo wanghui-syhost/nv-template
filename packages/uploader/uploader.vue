@@ -130,7 +130,7 @@
             </div>
         </el-dialog>
 
-         <el-dialog title="移动文件夹" :visible.sync="moveFormVisible">
+         <el-dialog title="移动文件夹" :visible.sync="moveFormVisible" style="overflow:scoll;height:500px;">
            
             <el-tree class="tree-folder" :data="folderList"  node-key="ID" :default-expanded-keys="[0]" :check-strictly="true"  :highlight-current="true"   ref="selectTree" :props="defaultProps" @node-click="handleNodeClick"  @node-expand="defaultCheck" :expand-on-click-node='false' ></el-tree>
             <div slot="footer" style="text-align:center">
@@ -321,66 +321,6 @@
       },
     moveFolderList() {
       let me = this;
-      let dataFolder=[ {
-            "CREATE_USER": "super",
-            "ID":0,
-            "CREATE_TIME": 1520911553000,
-            "PROJECT_ID": "736",
-            "NAME": "lsl3",
-            "PARENT_ID": "11E8266CE972FAD3A54A892C7B1E4F69",
-            "IS_DIRECTORY": "YES",
-            "children": [
-          {
-            "CREATE_USER": "super",
-            "ID":3,
-            "CREATE_TIME": 1520911553000,
-            "PROJECT_ID": "736",
-            "NAME": "lsl3_子节点",
-            "PARENT_ID": "11E8266CE972FAD3A54A892C7B1E4F69",
-            "IS_DIRECTORY": "YES"
-          },{
-            "CREATE_USER": "super",
-            "ID":3,
-            "CREATE_TIME": 1520911553000,
-            "PROJECT_ID": "736",
-            "NAME": "lsl3_子节点",
-            "PARENT_ID": "11E8266CE972FAD3A54A892C7B1E4F69",
-            "IS_DIRECTORY": "YES"
-          },{
-            "CREATE_USER": "super",
-            "ID":3,
-            "CREATE_TIME": 1520911553000,
-            "PROJECT_ID": "736",
-            "NAME": "lsl3_子节点",
-            "PARENT_ID": "11E8266CE972FAD3A54A892C7B1E4F69",
-            "IS_DIRECTORY": "YES"
-          },{
-            "CREATE_USER": "super",
-            "ID":3,
-            "CREATE_TIME": 1520911553000,
-            "PROJECT_ID": "736",
-            "NAME": "lsl3_子节点",
-            "PARENT_ID": "11E8266CE972FAD3A54A892C7B1E4F69",
-            "IS_DIRECTORY": "YES"
-          },{
-            "CREATE_USER": "super",
-            "ID":"3pppp",
-            "CREATE_TIME": 1520911553000,
-            "PROJECT_ID": "736",
-            "NAME": "lsl3_子节点",
-            "PARENT_ID": "11E8266CE972FAD3A54A892C7B1E4F69",
-            "IS_DIRECTORY": "YES",
-            "children":[{
-            "CREATE_USER": "super",
-            "ID":3,
-            "CREATE_TIME": 1520911553000,
-            "PROJECT_ID": "736",
-            "NAME": "lsl3_子节点",
-            "PARENT_ID": "11E8266CE972FAD3A54A892C7B1E4F69",
-            "IS_DIRECTORY": "YES"
-        }]
-          }]
-      }];
       me.listLoading = true;
       getFolderList()
       .then(response => {
@@ -396,7 +336,6 @@
          NAME: '全部文件',
          children:data.list,
          ID:0}];
-
        me.folderList = nodeList;
       }).catch(err => {
         console.log(err);
@@ -1001,7 +940,10 @@
    .file-label {
     width: 200px!important;  
   }
+
 }
+
+
 
 
 </style>
