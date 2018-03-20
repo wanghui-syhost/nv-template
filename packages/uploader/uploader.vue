@@ -369,12 +369,15 @@
               this.isUploading = false;
               me.$message.success('上传成功');
               me.fetchData(me.currentId);
-            }else{  
+            }else{
               me.$message.error(msg);
             }
+          }).catch(() => {
+            this.isUploading = false  
           });
 
       }else{
+          this.isUploading = false
           this.$message.info(msg);
       }
     },
