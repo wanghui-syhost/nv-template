@@ -72,7 +72,6 @@ export default {
             this.isCollapse = !this.isCollapse
         },
         handleParentClick (menu) {
-            console.log(menu.childrens ? menu.childrens[0].linkUrl : menu.linkUrl)
             this.$router.push(menu.childrens ? menu.childrens[0].linkUrl : menu.linkUrl)
         },
         addSection (child) {
