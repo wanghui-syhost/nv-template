@@ -208,7 +208,21 @@
       };
     },
     created () {
-      this.fetchData();
+      const self = this
+      self.fetchData();
+      history.pushState(null, null, document.URL)
+      window.onpopstate = function () {
+        if (self.levelList.length !== 1) {
+          history.pushState(null, null, document.URL)
+          const item = self.levelList[self.levelList.length - 2]
+          self.setParentCode(item.id, item.name, 'delete', item)
+        } else {
+          window.onpopstate = null
+        }
+      }
+    },
+    beforeDestory () {
+      window.onpopstate = null
     },
     computed: {
       selectedIds () {
@@ -447,6 +461,10 @@
     },
     // 修改父节点的值
     setParentCode (parentCode, name, type, item) {
+      console.log(...arguments)
+      //  this.$router.push({ path: this.$route.fullPath, query:{parentCode} })
+       //window.history.pushState({}, null, location.href)
+       // history.replaceState('x', null ,'www.baidu.com')
         //节点是文件不进入下一级
        if(type == 'NO'){
           //文件预览
