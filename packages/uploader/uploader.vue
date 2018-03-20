@@ -129,15 +129,16 @@
                 <el-button type="primary" @click="confirmToAddFolder" :disabled="newFolderName.length<1">确 定</el-button>
             </div>
         </el-dialog>
-
-         <el-dialog title="移动文件夹" :visible.sync="moveFormVisible" style="overflow:scoll;height:500px;">
+          <div >
+         <el-dialog class="dia_scroll" title="移动文件夹" :lock-scroll="false" :visible.sync="moveFormVisible" width="35%">
            
-            <el-tree class="tree-folder" :data="folderList"  node-key="ID" :default-expanded-keys="[0]" :check-strictly="true"  :highlight-current="true"   ref="selectTree" :props="defaultProps" @node-click="handleNodeClick"  @node-expand="defaultCheck" :expand-on-click-node='false' ></el-tree>
+            <el-tree class="tree-folder"  :data="folderList"  node-key="ID" :default-expanded-keys="[0]" :check-strictly="true"  :highlight-current="true"   ref="selectTree" :props="defaultProps" @node-click="handleNodeClick"  @node-expand="defaultCheck" :expand-on-click-node='false' ></el-tree>
             <div slot="footer" style="text-align:center">
                 <el-button @click="moveFormVisible = false">取 消</el-button>
                 <el-button type="primary" @click="moveConfirm" >确 定</el-button>
             </div>
         </el-dialog>
+        </div>
     </div>
 </template>
 
@@ -935,15 +936,25 @@
 
   
 </style>
-<style rel="stylesheet/scss" scope>
+<style rel="stylesheet/scss" lang="scss">
 @media screen and (max-width: 1400px){
    .file-label {
     width: 200px!important;  
   }
 
+};
+
+.dia_scroll {
+  .el-dialog__body {
+    height: 260px;
+    overflow: auto; 
+  }
 }
 
-
-
+.dia_scroll {
+  .el-dialog{
+    height: 420px;
+  }
+}
 
 </style>
