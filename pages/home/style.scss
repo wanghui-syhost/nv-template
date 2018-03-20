@@ -21,6 +21,16 @@ $icons: (
    file-pic: './assets/icons/file-pic'
 );
 
+$icons-hover: (
+    file-delete: './assets/icons/file-delete-hover',
+    file-rename: './assets/icons/file-rename-hover',
+    file-upload: './assets/icons/file-upload-hover',
+);
+
 i.png-icon {
     @include make-icons($icons)
+}
+
+i.png-icon {
+    @include make-icons($icons-hover , hover)
 }
