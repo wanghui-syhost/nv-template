@@ -1,7 +1,15 @@
 <template>
     <div class="nv-layout" :class="{'is-card-layout': isCardLayout}">
         <div class="nv-layout__top" :class="{'is-title-show': isTitleShow, 'only-title': !$slots.top}" v-if="isTitleShow || $slots.top" >
-            <label class="nv-layout__top-label" v-if="isTitleShow">{{ acitveMenu.crumbName }}</label>
+            <label class="nv-layout__top-label" v-if="isTitleShow">
+                <template v-for="parent in acitveMenu.parents" >
+                    <span class="nv-layout__crumb cursor" :key="parent.menuId" @click="handleParentClick(parent)">
+                        {{ parent.menuName }}
+                    </span>
+                    /
+                </template>
+                <span> {{ acitveMenu.menuName }} </span>
+            </label>
             <div :class="{'nv-layout-search-wrapper': true, 'isCollapsed': isCollapse}">
                 <slot name = "top"/>
                 <div class="nv-layout__bottom" v-if="$slots.top && moreThenOne">
@@ -62,6 +70,10 @@ export default {
     methods: {
         handleCollapse () {
             this.isCollapse = !this.isCollapse
+        },
+        handleParentClick (menu) {
+            console.log(menu.childrens ? menu.childrens[0].linkUrl : menu.linkUrl)
+            this.$router.push(menu.childrens ? menu.childrens[0].linkUrl : menu.linkUrl)
         },
         addSection (child) {
             const self = this
@@ -134,6 +146,12 @@ export default {
 
     &__main { 
         padding: 20px
+    }
+
+    &__crumb {
+        &:hover {
+            color: #3b8cff;
+        }
     }
 
     &.is-card-layout {
