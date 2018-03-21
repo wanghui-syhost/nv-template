@@ -155,7 +155,7 @@
     data () {
       return {
         list: [],
-        treeId: 0,
+        // treeId: 0,
         listLoading: true,
         pageIndex:1,
         pageSize:10,
