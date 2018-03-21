@@ -15,3 +15,5 @@ import './modules'
 
 
 import './styles/index.scss'
+
+// "nenv": "git+http://192.168.37.5/nenv/nenv.git"

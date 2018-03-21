@@ -448,17 +448,11 @@ export default {
   parentChange(val){
       this.PID = val;
   },
-  
-  handleSizeChange(pageIndex) {
-    this.queryPrams.pageSize = pageIndex;
-    this.getList();
-  },
-  handleCurrentChange(pageIndex) {
-    this.pageIndex = pageIndex;
-    this.getList();
-  },
+
   resetForm(formName) {
-    this.$refs[formName].resetFields();
+    if (this.$refs[formName]!==undefined) {
+      this.$refs[formName].resetFields();
+    }
   }
 }
 }

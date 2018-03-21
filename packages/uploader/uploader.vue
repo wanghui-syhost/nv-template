@@ -233,13 +233,27 @@
       };
     },
     created () {
-      this.fetchData();
+      const self = this
+      self.fetchData();
+      history.pushState(null, null, document.URL)
+      window.onpopstate = function () {
+        if (self.levelList.length !== 1) {
+          history.pushState(null, null, document.URL)
+          const item = self.levelList[self.levelList.length - 2]
+          self.setParentCode(item.id, item.name, 'delete', item)
+        } else {
+          window.onpopstate = null
+        }
+      }
+    },
+    beforeDestory () {
+      window.onpopstate = null
     },
     computed: {
       selectedIds () {
         const { currentChooseRows } = this
         return  currentChooseRows.map(item => {
-          return item.IS_DIRECTORY === 'YES' ? `DIR-${item.TREE_ID}` : `FILE-${item.ID}`
+          return item.IS_DIRECTORY === 'YES' ? `DIR-${item.TREE_ID}` : `FILE-${item.TREE_ID}-${item.ID}`
         }).join(',')
       },
       treeId () {
@@ -397,7 +411,9 @@
         return this.$message.info("请勾选要下载的文件")
       }
       unfetch.download('file/download/compress', {
-        ID: this.selectedIds
+        params: {
+          ID: this.selectedIds
+        }
       })
     },
     beforeUpload (file) {
@@ -446,18 +462,23 @@
               this.isUploading = false;
               me.$message.success('上传成功');
               me.fetchData(me.currentId);
-            }else{  
+            }else{
               me.$message.error(msg);
             }
+          }).catch(() => {
+            this.isUploading = false  
           });
 
       }else{
+          this.isUploading = false
           this.$message.info(msg);
       }
     },
     downloadFile(row){
       unfetch.download(this.downloadFileUrl, {
-        ID: row.ID
+        params: {
+          ID: row.ID
+        }
       })
     },
     removeInfo(row) {
@@ -519,6 +540,10 @@
     },
     // 修改父节点的值
     setParentCode (parentCode, name, type, item) {
+      console.log(...arguments)
+      //  this.$router.push({ path: this.$route.fullPath, query:{parentCode} })
+       //window.history.pushState({}, null, location.href)
+       // history.replaceState('x', null ,'www.baidu.com')
         //节点是文件不进入下一级
        if(type == 'NO'){
           //文件预览
@@ -627,10 +652,12 @@
         }
        
     },
-    download(row){
+    download (row) {
+      debugger
       unfetch.download('file/download/compress', {
         params: {
-          ID: row.IS_DIRECTORY == "YES" ? "DIR-"+row.TREE_ID : `FILE-${row.TREE_ID}-${row.ID}`
+        //  ID: this.selectedIds
+          ID: row.IS_DIRECTORY === 'YES' ? `DIR-${row.TREE_ID}` : `FILE-${row.TREE_ID}-${row.ID}`
         }
       })
     },

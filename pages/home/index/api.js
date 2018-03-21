@@ -1,5 +1,3 @@
-import unfetch from 'nenv/unfetch'
-
 export function getTrail(pageParams) {
   return unfetch({
     url: '/info/trails',

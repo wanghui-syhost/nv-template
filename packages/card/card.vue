@@ -1,8 +1,24 @@
 <template>
     <div class="nv-layout" :class="{'is-card-layout': isCardLayout}">
         <div class="nv-layout__top" :class="{'is-title-show': isTitleShow, 'only-title': !$slots.top}" v-if="isTitleShow || $slots.top" >
-            <label class="nv-layout__top-label" v-if="isTitleShow">{{ acitveMenu.crumbName }}</label>
-            <slot name = "top"/>
+            <label class="nv-layout__top-label" v-if="isTitleShow">
+                <template v-for="parent in acitveMenu.parents" >
+                    <span class="nv-layout__crumb cursor" :key="parent.menuId" @click="handleParentClick(parent)">
+                        {{ parent.menuName }}
+                    </span>
+                    /
+                </template>
+                <span> {{ acitveMenu.menuName }} </span>
+            </label>
+            <div :class="{'nv-layout-search-wrapper': true, 'isCollapsed': isCollapse}">
+                <slot name = "top"/>
+                <div class="nv-layout__bottom" v-if="$slots.top && moreThenOne">
+                    <a class="collapse-button" @click="handleCollapse">
+                        <span class="float-right" >更多筛选</span>
+                        <i :class="'el-icon-arrow-' + (isCollapse ? 'down' : 'up')"/>
+                    </a>
+                </div>
+            </div>
         </div>
         <div class="nv-layout__main">
             <slot name="default" />
@@ -20,12 +36,18 @@ export default {
         prefixType: {
             type: String,
             default: '一'
+        },
+        rowClass: {
+            type: String,
+            default: 'search-form-row'
         }
     },
     data () {
         return {
             isDynamicView: false,
             childCounter: 0,
+            moreThenOne: false,
+            isCollapse: true,
             sectionChildrens: []
         }
     },
@@ -42,7 +64,16 @@ export default {
         }),
         ...mapState(['isCardLayout', 'isShowTitle'])
     },
+    updated () {
+        this.moreThenOne =  this.$el.getElementsByClassName('search-form-row').length > 1
+    },
     methods: {
+        handleCollapse () {
+            this.isCollapse = !this.isCollapse
+        },
+        handleParentClick (menu) {
+            this.$router.push(menu.childrens ? menu.childrens[0].linkUrl : menu.linkUrl)
+        },
         addSection (child) {
             const self = this
             self.sectionChildrens.push(child)
@@ -99,6 +130,10 @@ export default {
         }
     }
 
+    &__bottom {
+        text-align: right;
+    }
+
     > * {
         background-color: #fff;
         margin: 0;
@@ -110,6 +145,12 @@ export default {
 
     &__main { 
         padding: 20px
+    }
+
+    &__crumb {
+        &:hover {
+            color: #3b8cff;
+        }
     }
 
     &.is-card-layout {
@@ -137,8 +178,50 @@ export default {
                 margin-bottom: 10px;
             }
         }
+
+
+    }
+
+    .collapse-button {
+        border: 1px solid #409EFF;
+        color: #409EFF;
+        margin-top: 2px;
+        padding: 9px 10px;
+        border-radius: 4px;
+        display: inline-block;
+        width: 80px;
+        font-size: 14px;
+        cursor: pointer;
     }
 }
 </style>
+
+<style lang="scss">
+.nv-layout-search-wrapper {
+
+    display: flex;
+
+    .search-form {
+        flex-grow: 1;
+    }
+
+    &.isCollapsed {
+        .search-form-row + .search-form-row {
+            display: none !important;
+        }
+    }
+
+    .search-form-row {
+        display: flex;
+        justify-content: flex-end;
+        .el-form-item {
+            margin-left: 20px;
+            margin-bottom: 15px;
+            max-width: 25% !important;
+        }
+    }
+}
+</style>
+
 
 

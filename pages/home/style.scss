@@ -21,6 +21,12 @@ $icons: (
    file-pic: './assets/icons/file-pic'
 );
 
+$icons-hover: (
+    file-delete: './assets/icons/file-delete-hover',
+    file-rename: './assets/icons/file-rename-hover',
+    file-upload: './assets/icons/file-upload-hover',
+);
+
 i.png-icon {
     @include make-icons($icons)
 }
@@ -44,3 +50,6 @@ i.png-icon {
         content: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAUCAYAAACXtf2DAAAA8klEQVRIS+2VT2rCQBjF34uKeoBCKS49g6CgpK4K7rR3US/QC7j0BG6UXEAQJaFXKHZRBANddWXwX17JqlCiEwXBRWY583vf+3gfM8OVY5czxBBiRVIOMYsWv8PDvllqLz7izs/t0XeeZwIaZqFWyFr1p9b0y8z+EVw7dgCwkEREYJnNHxoPL3M/CR8x3HgdH0JsNCeKhCDD0wYSgU8LGuSr4xE3bmcHXGSQtHmA7N7UQMLPTQ0IbFODswNPIzLehzSi+4koenofje1cAwg+A7fdF/h2jd6oIXuMoMB7tQVUGMZ/mcZC/wBZ3FPH92JtMvsFHMJzbBKBLjQAAAAASUVORK5CYII=);
       }
   }
+i.png-icon {
+    @include make-icons($icons-hover , hover)
+}

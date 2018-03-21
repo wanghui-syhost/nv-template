@@ -1,20 +1,28 @@
 <template>
   <nv-layout class="page-demo">
-      <section class="search-form" slot="top">
-        <el-form :inline="true">
-          <!-- 搜索框  -->
-          <div class="search-form-one">
-             <el-form-item label="字典名称">
-               <el-input v-model="NAME" placeholder="请输入字典名称" ></el-input>
-             </el-form-item>
-              <el-form-item label="字典状态">
-                <el-select v-model="STATUS" placeholder="">
-                  <el-option v-for="item in searchStatus" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                </el-select>
-              </el-form-item>
-              <el-button type="infor" @click="getList();">搜索</el-button>
-              <el-button type="primary" @click="addInfo">新增</el-button>
-          </div>
+      <section class="nv-layout-form search-form" slot="top">
+        <el-form  ref="form" :model="form">
+          <section class="search-flex">
+            <div class="search-form-left">
+               <el-button type="primary" @click="addInfo">新增</el-button>
+            </div>
+            <!-- 搜索框  -->
+            <div class="search-form-main">
+                <div class="search-form-row">
+                  <el-form-item label="字典名称" class="search-form-one">
+                    <el-input v-model="NAME" placeholder="请输入字典名称" ></el-input>
+                  </el-form-item>
+                  <el-form-item label="字典状态" class="search-form-one all-width">
+                    <el-select v-model="STATUS" placeholder="" class="all-width">
+                      <el-option v-for="item in searchStatus" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                    </el-select>
+                  </el-form-item>
+                  <el-form-item label-width="20px">
+                    <el-button type="infor" @click="getList();">搜索</el-button>
+                  </el-form-item>
+              </div>
+            </div>
+          </section>
         </el-form>
       </section>
 
@@ -40,10 +48,19 @@
           
            <el-table-column label="操作" align="center" min-width="40%">
             <template slot-scope="scope">
-               <el-button size="small" type="infor" @click="goDictionaryData(scope.row)" icon="information">小类</el-button>
-               <el-button size="small" type="infor" @click="setDictionaryStatus(scope.row, scope.row.STATUS == 'VALID' ? 'INVALID': 'VALID')">{{scope.row.STATUS == 'INVALID' ? '设为有效': '设为无效'}}</el-button>
-               <el-button size="small" type="primary" @click="modifyInfo(scope.row)">编辑</el-button>
-              <el-button size="small" type="danger" @click="removeInfo(scope.row)" icon="delete">删除</el-button>
+              <el-popover
+                ref="operation"
+                placement="left"
+                popperClass="operation-popover"
+                width="90"
+                trigger="hover"
+                >
+                <el-button size="small" type="infor" @click="goDictionaryData(scope.row)" icon="information">小类</el-button>
+                <el-button size="small" type="infor" @click="setDictionaryStatus(scope.row, scope.row.STATUS == 'VALID' ? 'INVALID': 'VALID')">{{scope.row.STATUS == 'INVALID' ? '设为有效': '设为无效'}}</el-button>
+                <el-button size="small" type="primary" @click="modifyInfo(scope.row)">编辑</el-button>
+                <el-button size="small" type="danger" @click="removeInfo(scope.row)" icon="delete">删除</el-button>
+              </el-popover>
+              <el-button v-popover:operation>操作</el-button>
             </template>
           </el-table-column>
 
@@ -351,7 +368,7 @@ export default {
     },
 
     handleSizeChange(pageIndex) {
-      this.queryPrams.pageSize = pageIndex;
+      this.pageSize = pageIndex;
       this.getList();
     },
 
@@ -360,9 +377,35 @@ export default {
       this.getList();
     },
     resetForm(formName) {
-      this.$refs[formName].resetFields();
+      if (this.$refs[formName]!==undefined) {
+        this.$refs[formName].resetFields();
+      }
     }
 
   }
 };
 </script>
+<style lang="scss">
+
+.search-flex{
+  display: flex;
+  padding-left:20px;
+  padding-right:10px;
+  justify-content: flex-end;
+}
+.search-form-one{
+  flex:1
+}
+
+.search-form-main{
+  flex:1
+}
+
+.button-placeholader {
+  opacity: 0;
+}
+
+.all-width{
+  width: 100% !important;
+}
+</style>

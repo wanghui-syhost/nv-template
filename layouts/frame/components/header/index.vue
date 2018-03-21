@@ -127,7 +127,7 @@ export default {
 
     &__setting-item {
         // &:nth-last-child {
-            padding-bottom: 10px;
+            padding-bottom: 5px;
         // }
     }
 }
@@ -138,7 +138,7 @@ export default {
     right: 0;
     display: flex;
     z-index: 1000;
-    min-width:1280px;
+    min-width:1240px;
 
     height: 62px;
     background-color: #3b8cff;
@@ -152,7 +152,7 @@ export default {
         // float: left;
         text-align: left;
         overflow: hidden;
-        margin-right: 20px;
+        margin-right: 40px;
     }                   
     &__logo {
         height: 33px;

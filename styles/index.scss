@@ -50,8 +50,8 @@ a.active li {
 }
 .el-dialog__header {
     background-color: #3B84F2;
-    height: 16px;
-    padding: 16px 18px;
+    //height: 16px;
+    padding: 15px 18px;
 }
 
 .el-dialog__title {
@@ -72,6 +72,15 @@ a.active li {
     font-size: 23px;
     top: 12px;
 }
+.el-form-item {
+    margin-left: 20px;
+    position: relative;
+}
+.el-form-item.is-required .el-form-item__label:before {
+    position: absolute;
+    left: -8px;
+}
+
 .el-form-item__content {
     .el-input--nenv  {
         //width: 194px;  
@@ -94,4 +103,70 @@ a.active li {
 }
 .el-pagination__jump{
     margin-right:10px;
+}
+
+.cursor {
+    cursor: pointer;
+}
+
+.el-select {
+    width: 100%;
+}
+
+.el-table th {
+    padding: 11px 0;
+    font-weight: normal;
+    //text-align: center;
+}
+.el-table td {
+    padding: 3px 0;
+}
+
+.el-table .sort-caret.ascending {
+    top: 0;
+}
+
+.el-table .caret-wrapper {
+    height: 24px;
+}
+
+.el-table .sort-caret.descending {
+    bottom: 1px;
+}
+
+
+.el-input__inner {
+    height: 36px;
+}
+
+.el-button {
+    height: 36px;
+    padding: 10px 20px;
+}
+
+
+.el-table, .operation-popover {
+    .el-button {
+        height: 28px;
+        padding: 6px 20px;
+    }
+}
+
+.el-table .el-tag {
+    height: 28px;
+    line-height: 26px;
+}
+
+.el-popover {
+    min-width: auto;
+}
+
+.operation-popover {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .el-button + .el-button {
+        margin: 10px 0 0px 0;
+    }
 }

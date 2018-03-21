@@ -1,26 +1,28 @@
 {
-  "name": "infore-base",
+  "name": "nv-template",
   "version": "2.0.0",
   "license": "MIT",
-  "description": "infore base",
-  "versiondate": "2017-11-20",
-  "author": "JUN <xuej@infore.com>",
+  "description": "nenv platform stardend platform",
+  "versiondate": "2018-03-16",
+  "author": "wanghui <wanghui2@infore.com>",
   "scripts": {
     "nenv": "node node_modules/nenv/bin/nenv dev",
+    "current": "node ../nenv/bin/nenv",
+    "current-dev": "node ../nenv/bin/nenv",
+    "current-build": "node ../nenv/bin/nenv build",
     "dev": "nenv dev",
-    "build": "nenv build",
+    "build": "node node_modules/nenv/bin/nenv dev",
     "lint": "eslint --ext .vue,.js src"
   },
   "dependencies": {
     "js-cookie": "^2.1.4",
-    "md5": "^2.2.1",
-    "nenv": "git+http://192.168.37.5/nenv/nenv.git"
+    "md5": "^2.2.1"
   },
   "devDependencies": {
   },
   "engines": {
-    "node": ">= 4.0.0",
-    "npm": ">= 3.0.0"
+    "node": ">= 8.9.0",
+    "npm": ">= 5.5.1"
   },
   "browserslist": [
     "> 1%",

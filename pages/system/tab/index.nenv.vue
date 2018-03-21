@@ -1,12 +1,18 @@
 <template>
   <nv-layout>
-    <section class="search-form" slot="top">
+    <section class="nv-layout-form search-form" slot="top">
       <el-form :inline="true">
         <!-- 搜索框  -->
-        <div class="search-form-one">
+        <section class="search-flex">
+          <div class="search-form-left">
           
-          <el-button type="primary" @click="addInfo">新增</el-button>
-        </div>
+            <el-button type="primary" @click="addInfo">新增</el-button>
+          </div>
+          <div class="search-form-main">
+            <div class="search-form-row">
+            </div>
+          </div>
+        </section>
       </el-form>
     </section>
 
@@ -326,7 +332,7 @@ export default {
         this.$router.push({path:'/system/tab/menu',query:{CODE:row.CODE, TITLE: row.TITLE}});
     },
   handleSizeChange(pageIndex) {
-    this.queryPrams.pageSize = pageIndex;
+    this.pageSize = pageIndex;
     this.getList();
   },
   handleCurrentChange(pageIndex) {
@@ -334,7 +340,9 @@ export default {
     this.getList();
   },
   resetForm(formName) {
-    this.$refs[formName].resetFields();
+    if (this.$refs[formName]!==undefined) {
+      this.$refs[formName].resetFields();
+    }
   }
 }
 }
