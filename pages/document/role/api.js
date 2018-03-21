@@ -52,6 +52,22 @@ export function batchUpdateRoleDocument(params){
 		data: params
 	});
 }
+// 批量修改角色人员关联数据
+export function batchUpdateRoleUser(params){
+	return unfetch({
+		url:'/role/user/batch/update',
+		method: 'post',
+		data: params
+	});
+}
+// 根据角色ID查询拥有该角色的人员
+export function getUsersByRoleId(params){
+	return unfetch({
+		url:'/role/user/get/user/by/role',
+		method: 'get',
+		params
+	});
+}
 
 
 

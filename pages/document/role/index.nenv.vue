@@ -26,6 +26,7 @@
           <template slot-scope="scope">
             <el-button size="small" type="primary" @click="showEdit(scope.row)">编辑</el-button>
             <el-button size="small" type="primary" @click="relateFolder(scope.row)">关联文件夹</el-button>
+            <el-button size="small" type="primary" @click="showUsersDialog(scope.row)">关联用户</el-button>
             <el-button size="small" type="danger" @click="removeInfo(scope.row)">删除</el-button>
           </template>
         </el-table-column>
@@ -55,16 +56,22 @@
       <folder-tree :id="ID" @close="closeFolderTreeDialog" ></folder-tree>
     </el-dialog>
 
+    <!-- 关联人员 -->
+    <el-dialog title="请选择人员" :visible.sync="isSelectUserDialog" width="800px">
+        <epersonchoose ref="personchoose" :result="currentChooseList" @sync-result="syncResult"  @get-choose-person="getChoosePerson" @cancel-choose-person="cancelChoose" ></epersonchoose>
+    </el-dialog>
+
   </nv-layout>
 </template>
 <script>
 import DocumentRoleEditor from "./edit.nenv";
 import FolderTree from "./folderTree.nenv";
+import epersonchoose from '../../../packages/epersonchoose/epersonchoose';
 
-import { getDocumentRoleDatas, deleteDocumentRole } from './api'
+import { getDocumentRoleDatas, deleteDocumentRole, batchUpdateRoleUser, getUsersByRoleId } from './api'
 export default {
   name: 'DocumentRole',
-  components: { DocumentRoleEditor, FolderTree },
+  components: { DocumentRoleEditor, FolderTree, epersonchoose },
   data() {
     return {
       isShowAddDialog: false,
@@ -79,6 +86,10 @@ export default {
       ID: null,
       ROLE_NAME: null,
       ROLE_KEY: null,
+
+      // 当前选择的人
+      currentChooseList:[],
+      isSelectUserDialog:false,
     };
   },
   created() {
@@ -105,6 +116,54 @@ export default {
         self.listLoading = false;
         console.log(err);
       })
+    },
+
+    // 获取选中的人员信息
+    getChoosePerson(choosePerson){
+      if(choosePerson.length == 0){
+        this.$message.info("请先选择移交给的人员！");
+        return
+      }
+      this.isSelectUserDialog = false
+      if(choosePerson && choosePerson.length>0){
+        this.currentChooseList =  choosePerson;
+        this.relateUser(choosePerson);
+      }else{
+        this.currentChooseList = [];
+      }
+    },
+
+    // 批量更新角色人员关系
+    relateUser(choosePerson) {
+        const self = this
+        self.listLoading = true;
+        let userIds = "";
+        choosePerson.forEach(user => {
+          userIds += user.userId + ",";
+        });
+
+        console.log(choosePerson);
+
+        batchUpdateRoleUser(
+          {
+            "ROLE_ID" : self.ID,
+            "USER_IDS" : userIds
+          }
+        ).then(({ data }) => {
+          self.listLoading = false;
+          self.$message.success("关联成功！");
+        }).catch(err => {
+          self.listLoading = false;
+          console.log(err);
+        })
+      },
+
+    cancelChoose(){
+        this.isSelectUserDialog = false;
+    },
+
+    syncResult(result){
+        this.currentChooseList = result;
     },
 
     removeInfo(row) {
@@ -142,6 +201,33 @@ export default {
   relateFolder(row){
     this.isShowFolderTreeDialog = true;
     this.ID = row.ID;
+  },
+  
+  // 展示选择人员控件时先查询之前选择的数据
+  showUsersDialog(row){
+    // 先清除选项
+    this.currentChooseList.splice(0,this.currentChooseList.length);
+    // 不知道为什么通过这种方式一直获得不到对象
+    // this.$refs.personchoose.clearResult();
+    this.isSelectUserDialog = true;
+    this.ID = row.ID;
+
+    const self = this;
+    getUsersByRoleId({"ROLE_ID": this.ID})
+    .then(({data}) => {
+      data.list.forEach(item => {
+        let user = {};
+        user.userId = item.ID;
+        user.userName = item.USERNAME;
+        user.nickName = item.NICKNAME;
+        user.mobile = item.MOBILE;
+        user.position = item.POSITION;
+        self.currentChooseList.push(user);
+      });
+    }).catch(err => {
+      self.listLoading = false;
+      console.log(err);
+    })
   },
   closeEditDialog () {
     this.isShowEditDialog = false;
