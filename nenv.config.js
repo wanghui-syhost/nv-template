@@ -19,16 +19,22 @@ module.exports = {
       }
     }
   },
-  // webpack(config, { dev }) {
-  //   if (true) { // 开发环境配置
-  //     config.plugins.push(
-  //       new webpack.DefinePlugin({
-  //         'process.env.BASE_URL': "'http://192.168.37.6:8089/api'"
-  //       }),
-  //     )
-  //   } else { // 生产环境配置
-      
-  //    }
-  //   return config
-  // }
+  webpack(config, { dev }, webpack) { 
+    // if (true) { // 开发环境配置
+    //   config.plugins.push(
+    //     new webpack.DefinePlugin({
+    //       'process.env.BASE_URL': "'http://192.168.37.6:8092'"
+    //     }),
+    //   )
+    // } else { // 生产环境配置
+    // }
+
+    config.plugins.push(
+      new webpack.DefinePlugin({
+        'process.env.SOCKET_URL': "'http://192.168.37.6:8092'"
+      })
+    )
+
+    return config
+  }
 }
