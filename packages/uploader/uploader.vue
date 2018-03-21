@@ -221,6 +221,10 @@
         type: String,
         required: false
       },
+      documentType: {
+        type: String,
+        required: false
+      }
     },
     mounted () {
       this.uploadHeaders ={
@@ -310,6 +314,7 @@
           pageSize : this.pageSize,
           PROJECT_ID : this.projectId,
           TYPE : this.type,
+          DOCUMENT_TYPE : this.documentType,
           TREE_ID: treeId  || this.treeId
         }).then(({ data = {} }) => {
           this.listLoading = false;
@@ -611,7 +616,8 @@
           PARENT_ID: cid ,
           NAME: this.newFolderName,
           PROJECT_ID: this.projectId,
-          TYPE: this.type
+          TYPE: this.type,
+          DOCUMENT_TYPE: this.documentType
       }).then(resp=>{
         me.dialogFormVisible= false;
         me.$message({

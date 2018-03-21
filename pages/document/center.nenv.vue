@@ -1,6 +1,6 @@
 <template>
     <nv-layout>
-        <nv-uploader projectName="文件管理" />
+        <nv-uploader projectName="文件管理" documentType="documentCenter" />
     </nv-layout>
 </template>
 <script>
