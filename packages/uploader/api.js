@@ -9,6 +9,10 @@ export function getTreeDocuments(reqParams) {
 export function FileRename(fileInfo) {
   return unfetch.put('/file/rename', fileInfo);
 }
+// 移动文件夹
+export function moveFolder(reqParams) {
+  return unfetch.put('/document/tree/move/directory', reqParams);
+}
 
 export function FileDelete(fileId) {
   return unfetch.delete('/file', {
@@ -16,6 +20,13 @@ export function FileDelete(fileId) {
       ID: fileId
     }
   });
+}
+
+//文件夹列表
+export function getFolderList(){
+  return unfetch({
+    url: '/document/tree/folder'
+  })
 }
 
 export function FileAdd(fileInfo) {

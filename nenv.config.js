@@ -9,9 +9,10 @@ module.exports = {
   },
   proxy: {
     '/api/*': {
-      target: 'http://192.168.37.6:8089', // 平台
+      // target: 'http://192.168.37.6:8089', // 平台
       // target: 'http://192.168.31.22:8089', // 刑光辉
-      // target: 'http://localhost:8080',// 本地
+      //target: 'http://localhost:8089',// 本地
+      target: 'http://192.168.31.159:8089',
       filter(pathname, req) {
         if (pathname.match(/\/api/)) {
           return true

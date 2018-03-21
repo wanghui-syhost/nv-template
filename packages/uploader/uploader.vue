@@ -10,6 +10,7 @@
             <el-button @click="downloadChooseRows" type="primary">
                 下载
             </el-button>
+          
             <el-upload  class="upload-table__upload--btn" :action="uploadURL" 
               :on-success="success" 
               :before-upload="beforeUpload"
@@ -65,6 +66,7 @@
                         <i title="重命名" class="png-icon file-rename small" @click="reName(scope.row)"></i>
                         <i title="下载" class="png-icon file-upload  small" @click="download(scope.row)"></i>
                         <i title="删除" class="png-icon file-delete small" @click="removeItem(scope.row)"></i>
+                        <i title="移动到" class="png-icon file-txt small" @click="moveFolderTo(scope.row)"></i>
                     </template>
                 </el-table-column>
                 <el-table-column label="大小"  align="center" width="100">
@@ -133,16 +135,27 @@
                 <el-button type="primary" @click="confirmToAddFolder" :disabled="newFolderName.length < 1">确 定</el-button>
             </div>
         </el-dialog>
+          <div >
+         <el-dialog class="dia_scroll" title="移动文件夹" :lock-scroll="false" :visible.sync="moveFormVisible" width="35%">
+           
+            <el-tree class="tree-folder"  :data="folderList"  node-key="ID" :default-expanded-keys="[0]" :check-strictly="true"  :highlight-current="true"   ref="selectTree" :props="defaultProps" @node-click="handleNodeClick"  @node-expand="defaultCheck" :expand-on-click-node='false' ></el-tree>
+            <div slot="footer" style="text-align:center">
+                <el-button @click="moveFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="moveConfirm" >确 定</el-button>
+            </div>
+        </el-dialog>
+        </div>
     </div>
 </template>
 
 <script>
-  import { getTreeDocuments, FileRename, FileDelete, FileAdd, FileDownload, FileCreatedNewFolder,FileRenameFolder,FileDeleteFolder,deleteDirAndFiles,FileView} from './api';
+  import { getTreeDocuments, FileRename, FileDelete, FileAdd, FileDownload, FileCreatedNewFolder,FileRenameFolder,FileDeleteFolder,deleteDirAndFiles,FileView,getFolderList,moveFolder} from './api';
   export default {
     name: 'NvUploader',
     data () {
       return {
         list: [],
+        treeId: 0,
         listLoading: true,
         pageIndex:1,
         pageSize:10,
@@ -160,6 +173,8 @@
         lastId: '',
         // 新建文件夹的dialog
         dialogFormVisible:false,
+          // 新建文件夹的dialog
+        moveFormVisible:false,
         // 新建文件夹的名称
         newFolderName: '',
         // projectId:'736',
@@ -175,8 +190,18 @@
                 name: '文档中心'
             }
         ],
+        moveForm:{
+          ID:null,
+          PARENT_ID:null,
+          IS_DIRECTORY:null,
+        },
         checkAll: false,//总全选
         isSearch: false,//新建文件夹时是否正在搜寻绑定
+        folderList:[],
+        defaultProps: {
+          children: 'children',
+          label: 'NAME'
+        },
       }
     },
     props: {
@@ -254,8 +279,18 @@
             return 'word'
         }
       },
-      fetchData (treeId = '') {
-        this.listLoading = true
+      fetchData(treeId='') {
+        this.listLoading = true;
+        var tid = '';
+        if(treeId == ''){
+          if (this.projectId == ''){
+            tid = 'ROOT';
+          } else {
+            tid = this.projectId;
+          }
+        } else {
+          tid = treeId;
+        }
         getTreeDocuments({
           pageIndex: this.pageIndex,
           pageSize : this.pageSize,
@@ -288,11 +323,55 @@
         })
       },
 
-    // 创建文件夹
-    createdNewFolder () {
-      // 先清空之前填写的信息
-      this.newFolderName = "";
-      this.dialogFormVisible = true;
+      defaultCheck(nodeObj,checkObj,node)
+      {
+        
+        console.log("打印默认选中节点");
+         console.log(nodeObj);
+      },
+    moveFolderList() {
+      let me = this;
+      me.listLoading = true;
+      getFolderList()
+      .then(response => {
+        this.listLoading = false;
+        const data = response.data;
+        if (data.list == undefined){
+            me.folderList = null;
+            return;
+        }
+       let nodeList=[{ 
+         //PARENT_ID: "ROOT",
+         IS_DIRECTORY: "YES",
+         NAME: '全部文件',
+         children:data.list,
+         ID:0}];
+       me.folderList = nodeList;
+      }).catch(err => {
+        console.log(err);
+      })
+    },
+      handleNodeClick(data) {
+        this.moveForm.PARENT_ID=data.ID;
+      },
+      // 创建文件夹
+      createdNewFolder(){
+         // 先清空之前填写的信息
+        this.newFolderName = "";
+        this.dialogFormVisible = true;
+      },
+      
+      // 移动文件夹
+      moveFolderTo(row){
+        this.moveFolderList();
+        this.moveFormVisible = true;
+        this.moveForm.ID=row.ID;
+        this.moveForm.IS_DIRECTORY=row.IS_DIRECTORY;
+      },
+
+    // change select 
+    changeSelect(value){
+      console.log("change", value);
     },
 
     handleSizeChange (pageSize) {
@@ -520,7 +599,35 @@
         me.$message.error("创建失败");
       })
     },
-    download (row) {
+    moveConfirm(){
+        let  me=this;
+        if(this.moveForm.PARENT_ID==null || this.moveForm.PARENT_ID==0){
+              me.$message.error("请选中文件夹");
+        }else{
+              debugger;
+              let reqParams = {
+                    ID: me.moveForm.ID,
+                    PARENT_ID:me.moveForm.PARENT_ID,
+                    IS_DIRECTORY:me.moveForm.IS_DIRECTORY,
+                  }
+                  console.log("移动请求参数：：：：");
+                  console.log(reqParams);
+              moveFolder(reqParams).then(resp=>{
+                let {code, msg, data} = resp.rawData;
+                if(code==0){
+                me.fetchData(me.currentId);
+                this.moveFormVisible=false;
+                me.$message.success("移动成功");
+                }else{
+                  me.$message.error('移动失败');
+                }
+              }).catch(err=>{
+                console.log(err)
+            })
+        }
+       
+    },
+    download(row){
       unfetch.download('file/download/compress', {
         params: {
           ID: row.IS_DIRECTORY == "YES" ? "DIR-"+row.TREE_ID : `FILE-${row.TREE_ID}-${row.ID}`
@@ -753,11 +860,28 @@
     margin-right:5px;
     cursor: pointer;
   }
+
+  
 </style>
-<style rel="stylesheet/scss" scope>
+<style rel="stylesheet/scss" lang="scss">
 @media screen and (max-width: 1400px){
    .file-label {
     width: 200px!important;  
   }
+
+};
+
+.dia_scroll {
+  .el-dialog__body {
+    height: 260px;
+    overflow: auto; 
+  }
 }
+
+.dia_scroll {
+  .el-dialog{
+    height: 420px;
+  }
+}
+
 </style>

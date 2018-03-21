@@ -292,6 +292,7 @@
       },
 
       clearResult(){
+        alert("清空数据");
         this.resultList = [];
         this.checkAll = false;
         this.checkedPersonIds = [];
