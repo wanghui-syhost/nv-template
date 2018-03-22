@@ -140,8 +140,12 @@
             </div>
         </el-dialog>
 
-        <el-dialog title="移至文件" :visible.sync="isSelectUserDialog" width="800px">
+           <el-dialog title="移至文件" :visible.sync="isSelectUserDialog" width="800px">
                  <epersonchoose ref="personchoose" :result="currentChooseList" @sync-result="syncResult"  @get-choose-person="getChoosePerson" @cancel-choose-person="cancelChoose" ></epersonchoose>
+            <div slot="footer" style="text-align:center">
+                <el-button @click="isSelectUserDialog = false">取 消</el-button>
+                <el-button type="primary" @click="confirmToFileArchive">确 定</el-button>
+            </div>
         </el-dialog>
          
          <el-dialog class="dia_scroll" title="移动文件夹" :lock-scroll="false" :visible.sync="moveFormVisible" width="35%">
@@ -495,6 +499,35 @@
   //     }
   //   });
   // },
+    // 批量移至文件夹
+   batchSave() {
+     this.$refs['fileArchiveForm'].validate((valid) => {
+          if (valid) {
+            const arr = this.fileArchiveForm.domains;
+            var data = {
+              CONFIGS: JSON.stringify(arr)
+            }
+            batchSaveFileArchive(data).then(response => {
+              this.$message({
+                message: response.rawData.msg,
+                type: "success"
+              });
+              this.resetForm('fileArchiveForm');
+              // 重新加载数据
+              this.getList();
+             // 隐藏弹出框
+              this.batchDialogVisible = false;
+            }).catch(e => {
+               this.$message({
+                  message: '添加失败',
+                  type: "error"
+                });
+            });
+        } else {
+        return false;
+      }
+    });
+  },
 
       // 获取选中的人员信息
     getChoosePerson(choosePerson){
