@@ -70,4 +70,14 @@ export function getUsersByRoleId(params){
 }
 
 
+// 查询角色拥有的操作权限数据
+export function getOperateList(params){
+	return unfetch({
+		url:'/role/operate/get/operate/by/role',
+		method: 'get',
+		params
+	});
+}
+
+
 

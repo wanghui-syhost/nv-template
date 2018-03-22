@@ -1,13 +1,13 @@
 <template>
     <div class="upload-table" v-loading.body="isUploading" element-loading-text="正在上传中，请稍等......">
         <section class="upload-table__from">
-            <el-button @click="createdNewFolder" type="primary" :disabled ="isSearch">
+            <el-button @click="createdNewFolder" type="primary" :disabled ="isSearch" v-show="isShowCreate">
                 新建文件夹
             </el-button>
-            <el-button @click="deleteSelectedAndChildren" type="primary">
+            <el-button @click="deleteSelectedAndChildren" type="primary" v-show="isShowDelete">
                 删除
             </el-button>
-            <el-button @click="downloadChooseRows" type="primary">
+            <el-button @click="downloadChooseRows" type="primary" v-show="isShowDownload">
                 下载
             </el-button>
           
@@ -18,7 +18,7 @@
               :headers="uploadHeaders" :data="fileData" 
               :show-file-list="false" 
               accept=".jpg, .jpeg, .png, .gif, .rar, .zip, .doc, .docx, .xls, .xlsx,  .ppt, .pptx, .pdf, .txt, .wps">
-                <el-button  type="primary" v-show="levelList.length > 1 && showUpload">上传</el-button>
+                <el-button  type="primary" v-show="levelList.length > 1 && showUpload && isShowUpload">上传</el-button>
             </el-upload>
             <el-input style="float: right; width:300px" icon="search"
                 placeholder="请输入关键字" 
@@ -63,10 +63,10 @@
                 </el-table-column>
                 <el-table-column label="" width="180">
                     <template slot-scope="scope">
-                        <i title="重命名" class="png-icon file-rename small" @click="reName(scope.row)"></i>
-                        <i title="下载" class="png-icon file-upload  small" @click="download(scope.row)"></i>
-                        <i title="删除" class="png-icon file-delete small" @click="removeItem(scope.row)"></i>
-                        <i title="移动到" class="png-icon file-txt small" @click="moveFolderTo(scope.row)"></i>
+                        <i title="重命名" class="png-icon file-rename small" v-show="isShowRename" @click="reName(scope.row)"></i>
+                        <i title="下载" class="png-icon file-upload  small" v-show="isShowDownload" @click="download(scope.row)"></i>
+                        <i title="删除" class="png-icon file-delete small" v-show="isShowDelete" @click="removeItem(scope.row)"></i>
+                        <i title="移动到" class="png-icon file-txt small" v-show="isShowRemove" @click="moveFolderTo(scope.row)"></i>
                     </template>
                 </el-table-column>
                 <el-table-column label="大小"  align="center" width="100">
@@ -149,12 +149,18 @@
 </template>
 
 <script>
-  import { getTreeDocuments, FileRename, FileDelete, FileAdd, FileDownload, FileCreatedNewFolder,FileRenameFolder,FileDeleteFolder,deleteDirAndFiles,FileView,getFolderList,moveFolder} from './api';
+  import { getTreeDocuments, FileRename, FileDelete, FileAdd, FileDownload, FileCreatedNewFolder,FileRenameFolder,FileDeleteFolder,deleteDirAndFiles,FileView,getFolderList,moveFolder, getOperatePermission} from './api';
   export default {
     name: 'NvUploader',
     data () {
       return {
         list: [],
+        isShowRename: false,
+        isShowDownload: false,
+        isShowDelete: false,
+        isShowRemove: false,
+        isShowUpload: false,
+        isShowCreate: false,
         // treeId: 0,
         listLoading: true,
         pageIndex:1,
@@ -249,6 +255,9 @@
           window.onpopstate = null
         }
       }
+
+      // 获取当前登录人的操作权限
+      this.fetchOperatePermission();
     },
     beforeDestory () {
       window.onpopstate = null
@@ -339,6 +348,32 @@
             this.totalCount =  data.totalCount || 0
         }).catch(err=>{
           this.listLoading = false;
+        })
+      },
+
+      // 获取当前登陆人的操作权限
+      fetchOperatePermission(){
+        const self = this;
+        getOperatePermission().then(({data = {}}) => {
+          const { list = [] } = data;
+          let operateStr = "";
+          list.forEach(item => {
+            if("RENAME" === item.OPERATE_NAME){
+              self.isShowRename = true;
+            } else if("DOWNLOAD" === item.OPERATE_NAME){
+              self.isShowDownload = true;
+            } else if("DELETE" === item.OPERATE_NAME){
+              self.isShowDelete = true;
+            } else if("REMOVE" === item.OPERATE_NAME){
+              self.isShowRemove = true;
+            } else if("CREATE" === item.OPERATE_NAME){
+              self.isShowCreate = true;
+            } else if("UPLOAD" === item.OPERATE_NAME){
+              self.isShowUpload = true;
+            }
+          });
+        }).catch(err=>{
+          
         })
       },
 

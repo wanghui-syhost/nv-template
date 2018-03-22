@@ -82,3 +82,13 @@ export function FileView(FILE_ID) {
     params: FILE_ID
   });
 }
+
+
+// 查询当前登陆人拥有的操作权限数据
+export function getOperatePermission(params){
+	return unfetch({
+		url:'/role/operate/get/operate/by/user',
+		method: 'get',
+		params
+	});
+}

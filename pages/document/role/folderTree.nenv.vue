@@ -2,12 +2,16 @@
   <div>
       <el-tree ref="tree" :data="list"  :props="defaultProps" node-key="ID" show-checkbox ></el-tree>
       <br/>
+      选择操作权限：
+      <nv-checkbox nv-code="DOCUMENT_OPERATE" v-model="operateList"/>
+      <br/>
+
       <el-button @click="close">取消</el-button>
       <el-button type="primary" @click="save">保存</el-button>
   </div>
 </template>
 <script>
-import { getFolderTreeList, batchUpdateRoleDocument } from './api'
+import { getFolderTreeList, batchUpdateRoleDocument, getOperateList } from './api'
 
 export default {
     name: 'FolderTree',
@@ -20,6 +24,7 @@ export default {
     data() {
       return {
         list: null,
+        operateList: [],
         defaultProps: {
           children: 'children',
           label: 'NAME'
@@ -70,6 +75,25 @@ export default {
         }).catch(err => {
           console.log(err);
         })
+
+
+        getOperateList({"ROLE_ID": ID})
+        .then(({data}) => {
+          if(data.list != null){
+            let operateStr = "";
+            data.list.forEach(item => {
+              operateStr += item.OPERATE_NAME + ",";
+            });
+            
+            if(operateStr != ""){
+              self.operateList = operateStr.slice(0,-1).split(",");
+            } else {
+              self.operateList = [];
+            }
+          }
+        }).catch(err => {
+          console.log(err);
+        })
       },
 
       // 保存角色与文件夹的关联关系
@@ -83,7 +107,8 @@ export default {
           batchUpdateRoleDocument(
             {
               "ROLE_ID": self.ID,
-              "DOCUMENT_IDS": self.$refs.tree.getCheckedKeys().join(",")
+              "DOCUMENT_IDS": self.$refs.tree.getCheckedKeys().join(","),
+              "OPERATE_NAMES": self.operateList.join(",")
             }
           ).then(({data}) => {
             self.$message({
