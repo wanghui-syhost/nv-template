@@ -92,3 +92,20 @@ export function getOperatePermission(params){
 		params
 	});
 }
+//批量移交文档
+export function batchSaveFileArchive(params) {
+  return unfetch({
+    url: '/file/archive/addBatch',
+    method: 'post',
+    data: params
+  });
+}
+
+// 根据角色ID查询拥有该角色的人员
+export function getUsersByRoleId(params){
+	return unfetch({
+		url:'/role/user/get/user/by/role',
+		method: 'get',
+		params
+	});
+}
