@@ -139,7 +139,7 @@ export default {
         self.listLoading = true;
         let userIds = "";
         choosePerson.forEach(user => {
-          userIds += user.userId + ",";
+          userIds += user.userName + ",";
         });
 
         console.log(choosePerson);
