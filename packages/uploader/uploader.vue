@@ -10,6 +10,9 @@
             <el-button @click="downloadChooseRows" type="primary" v-show="isShowDownload">
                 下载
             </el-button>
+            <el-button  type="primary">
+                移至
+            </el-button>
           
             <el-upload  class="upload-table__upload--btn" :action="uploadURL" 
               :on-success="success" 
@@ -63,10 +66,11 @@
                 </el-table-column>
                 <el-table-column label="" width="180">
                     <template slot-scope="scope">
-                        <i title="重命名" class="png-icon file-rename small" v-show="isShowRename" @click="reName(scope.row)"></i>
-                        <i title="下载" class="png-icon file-upload  small" v-show="isShowDownload" @click="download(scope.row)"></i>
-                        <i title="删除" class="png-icon file-delete small" v-show="isShowDelete" @click="removeItem(scope.row)"></i>
-                        <i title="移动到" class="png-icon file-txt small" v-show="isShowRemove" @click="moveFolderTo(scope.row)"></i>
+                        <i title="重命名" class="png-icon file-rename small" @click="reName(scope.row)"></i>
+                        <i title="下载" class="png-icon file-upload  small" @click="download(scope.row)"></i>
+                        <i title="删除" class="png-icon file-delete small" @click="removeItem(scope.row)"></i>
+                        <i title="移动到" class="png-icon file-txt small" @click="moveFolderTo(scope.row)"></i>
+                        <i title="移至" class="png-icon file-txt small" @click="handOnTo(scope.row)"></i>
                     </template>
                 </el-table-column>
                 <el-table-column label="大小"  align="center" width="100">
@@ -135,7 +139,15 @@
                 <el-button type="primary" @click="confirmToAddFolder" :disabled="newFolderName.length < 1">确 定</el-button>
             </div>
         </el-dialog>
-          <div >
+
+           <el-dialog title="移至文件" :visible.sync="isSelectUserDialog" width="800px">
+                 <epersonchoose ref="personchoose" :result="currentChooseList" @sync-result="syncResult"  @get-choose-person="getChoosePerson" @cancel-choose-person="cancelChoose" ></epersonchoose>
+            <div slot="footer" style="text-align:center">
+                <el-button @click="isSelectUserDialog = false">取 消</el-button>
+                <el-button type="primary" @click="confirmToFileArchive">确 定</el-button>
+            </div>
+        </el-dialog>
+         
          <el-dialog class="dia_scroll" title="移动文件夹" :lock-scroll="false" :visible.sync="moveFormVisible" width="35%">
            
             <el-tree class="tree-folder"  :data="folderList"  node-key="ID" :default-expanded-keys="[0]" :check-strictly="true"  :highlight-current="true"   ref="selectTree" :props="defaultProps" @node-click="handleNodeClick"  @node-expand="defaultCheck" :expand-on-click-node='false' ></el-tree>
@@ -144,13 +156,15 @@
                 <el-button type="primary" @click="moveConfirm" >确 定</el-button>
             </div>
         </el-dialog>
-        </div>
     </div>
 </template>
 
 <script>
-  import { getTreeDocuments, FileRename, FileDelete, FileAdd, FileDownload, FileCreatedNewFolder,FileRenameFolder,FileDeleteFolder,deleteDirAndFiles,FileView,getFolderList,moveFolder, getOperatePermission} from './api';
+  import epersonchoose from '../../packages/epersonchoose/epersonchoose';
+  import { getTreeDocuments, FileRename, FileDelete, FileAdd, FileDownload, FileCreatedNewFolder,FileRenameFolder,FileDeleteFolder,deleteDirAndFiles,FileView,
+  getFolderList,moveFolder,batchSaveFileArchive,getUsersByRoleId,getOperatePermission} from './api';
   export default {
+    components: {epersonchoose },
     name: 'NvUploader',
     data () {
       return {
@@ -173,6 +187,8 @@
         uploadHeaders:{},
         // 当前选择的rows;
         currentChooseRows:[],
+        nvOrganizeUserSelectResult: [],
+        currentChooseList:[],
         // 当前层次的ID
         currentId: '',
         // 上一层次的ID,
@@ -181,6 +197,7 @@
         dialogFormVisible:false,
           // 新建文件夹的dialog
         moveFormVisible:false,
+        isSelectUserDialog:false,
         // 新建文件夹的名称
         newFolderName: '',
         // projectId:'736',
@@ -422,6 +439,134 @@
         this.moveForm.ID=row.ID;
         this.moveForm.IS_DIRECTORY=row.IS_DIRECTORY;
       },
+
+         syncResult(result){
+        this.currentChooseList = result;
+    },
+    // 移至文件
+    handOnTo(row){
+      // 先清除选项
+    this.currentChooseList.splice(0,this.currentChooseList.length);
+    // 不知道为什么通过这种方式一直获得不到对象
+    // this.$refs.personchoose.clearResult();
+    this.isSelectUserDialog = true;
+    this.ID = row.ID;
+
+    const self = this;
+    getUsersByRoleId({"ROLE_ID": this.ID})
+    .then(({data}) => {
+      data.list.forEach(item => {
+        let user = {};
+        user.userId = item.ID;
+        user.userName = item.USERNAME;
+        user.nickName = item.NICKNAME;
+        user.mobile = item.MOBILE;
+        user.position = item.POSITION;
+        self.currentChooseList.push(user);
+      });
+    }).catch(err => {
+      self.listLoading = false;
+      console.log(err);
+    })
+    },
+
+  //   // 批量移至文件夹
+  //  batchSave() {
+  //    this.$refs['fileArchiveForm'].validate((valid) => {
+  //         if (valid) {
+  //           const arr = this.fileArchiveForm.domains;
+  //           var data = {
+  //             CONFIGS: JSON.stringify(arr)
+  //           }
+  //           batchSaveFileArchive(data).then(response => {
+  //             this.$message({
+  //               message: response.rawData.msg,
+  //               type: "success"
+  //             });
+  //             this.resetForm('fileArchiveForm');
+  //             // 重新加载数据
+  //             this.getList();
+  //            // 隐藏弹出框
+  //             this.batchDialogVisible = false;
+  //           }).catch(e => {
+  //              this.$message({
+  //                 message: '添加失败',
+  //                 type: "error"
+  //               });
+  //           });
+  //       } else {
+  //       return false;
+  //     }
+  //   });
+  // },
+    // 批量移至文件夹
+   batchSave() {
+     this.$refs['fileArchiveForm'].validate((valid) => {
+          if (valid) {
+            const arr = this.fileArchiveForm.domains;
+            var data = {
+              CONFIGS: JSON.stringify(arr)
+            }
+            batchSaveFileArchive(data).then(response => {
+              this.$message({
+                message: response.rawData.msg,
+                type: "success"
+              });
+              this.resetForm('fileArchiveForm');
+              // 重新加载数据
+              this.getList();
+             // 隐藏弹出框
+              this.batchDialogVisible = false;
+            }).catch(e => {
+               this.$message({
+                  message: '添加失败',
+                  type: "error"
+                });
+            });
+        } else {
+        return false;
+      }
+    });
+  },
+
+      // 获取选中的人员信息
+    getChoosePerson(choosePerson){
+      if(choosePerson.length == 0){
+        this.$message.info("请先选择移交给的人员！");
+        return
+      }
+      this.isSelectUserDialog = false
+      if(choosePerson && choosePerson.length>0){
+        this.currentChooseList =  choosePerson;
+        this.relateUser(choosePerson);
+      }else{
+        this.currentChooseList = [];
+      }
+    },
+
+  // 批量移至文件
+    batchSave(choosePerson) {
+        const self = this
+        self.listLoading = true;
+        let userIds = "";
+        choosePerson.forEach(user => {
+          userIds += user.userId + ",";
+        });
+
+        console.log(choosePerson);
+        const arr={"FILE_ID":self.ID,"RECIPIENT":userIds};
+        const param=JSON.stringify(arr);
+        batchSaveFileArchive(param).then(({ data }) => {
+          self.listLoading = false;
+          self.$message.success("移至成功！");
+        }).catch(err => {
+          self.listLoading = false;
+          console.log(err);
+        })
+      },
+    cancelChoose(){
+        this.isSelectUserDialog = false;
+    },
 
     // change select 
     changeSelect(value){
@@ -666,6 +811,34 @@
       })
     },
     moveConfirm(){
+        let  me=this;
+        if(this.moveForm.PARENT_ID==null || this.moveForm.PARENT_ID==0){
+              me.$message.error("请选中文件夹");
+        }else{
+              debugger;
+              let reqParams = {
+                    ID: me.moveForm.ID,
+                    PARENT_ID:me.moveForm.PARENT_ID,
+                    IS_DIRECTORY:me.moveForm.IS_DIRECTORY,
+                  }
+                  console.log("移动请求参数：：：：");
+                  console.log(reqParams);
+              moveFolder(reqParams).then(resp=>{
+                let {code, msg, data} = resp.rawData;
+                if(code==0){
+                me.fetchData(me.currentId);
+                this.moveFormVisible=false;
+                me.$message.success("移动成功");
+                }else{
+                  me.$message.error('移动失败');
+                }
+              }).catch(err=>{
+                console.log(err)
+            })
+        }
+       
+    },
+    confirmToFileArchive(){
         let  me=this;
         if(this.moveForm.PARENT_ID==null || this.moveForm.PARENT_ID==0){
               me.$message.error("请选中文件夹");
