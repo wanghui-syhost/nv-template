@@ -1,6 +1,6 @@
 <template>
     <nv-layout>
-        <nv-uploader projectName="文件管理" documentType="documentCenter" />
+        <nv-uploader projectName="文件管理" documentType="documentCenter"  type="knowledgeBank" />
     </nv-layout>
 </template>
 <script>
