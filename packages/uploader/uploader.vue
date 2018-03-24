@@ -10,8 +10,8 @@
             <el-button @click="downloadChooseRows" type="primary" v-show="isShowDownload">
                 下载
             </el-button>
-            <el-button  type="primary">
-                移至
+            <el-button   @click="batchHandOnToDialog()" v-show="levelList.length" type="primary">
+                移交
             </el-button>
           
             <el-upload  class="upload-table__upload--btn" :action="uploadURL" 
@@ -70,7 +70,8 @@
                         <i title="下载" class="png-icon file-upload  small" @click="download(scope.row)"></i>
                         <i title="删除" class="png-icon file-delete small" @click="removeItem(scope.row)"></i>
                         <i title="移动到" class="png-icon file-txt small" @click="moveFolderTo(scope.row)"></i>
-                        <i title="移至" class="png-icon file-txt small" @click="handOnTo(scope.row)"></i>
+                        <i title="移交" class="png-icon file-txt small" @click="handOnToDialog(scope.row)" v-if="scope.row.IS_DIRECTORY == 'NO'"></i>
+                        <i title="审核" class="png-icon file-folder small" @click="reviewedDialog(scope.row)" v-if="scope.row.IS_DIRECTORY == 'NO'"></i>
                     </template>
                 </el-table-column>
                 <el-table-column label="大小"  align="center" width="100">
@@ -86,7 +87,7 @@
                 </el-table-column>
                 <el-table-column align="center" label="更新时间" width="180">
                     <template slot-scope="scope">
-                        <span>{{scope.row.CREATE_TIME | DateTimeFilter(5)}}</span>
+                        <span>{{scope.row.CREATE_TIME | DateTimeFilter(0)}}</span>
                     </template>
                 </el-table-column>
             </el-table>
@@ -140,20 +141,74 @@
             </div>
         </el-dialog>
 
-           <el-dialog title="移至文件" :visible.sync="isSelectUserDialog" width="800px">
+        <el-dialog title="移至文件" :visible.sync="isSelectUserDialog" width="800px">
                  <epersonchoose ref="personchoose" :result="currentChooseList" @sync-result="syncResult"  @get-choose-person="getChoosePerson" @cancel-choose-person="cancelChoose" ></epersonchoose>
-            <div slot="footer" style="text-align:center">
-                <el-button @click="isSelectUserDialog = false">取 消</el-button>
-                <el-button type="primary" @click="confirmToFileArchive">确 定</el-button>
-            </div>
         </el-dialog>
          
          <el-dialog class="dia_scroll" title="移动文件夹" :lock-scroll="false" :visible.sync="moveFormVisible" width="35%">
-           
             <el-tree class="tree-folder"  :data="folderList"  node-key="ID" :default-expanded-keys="[0]" :check-strictly="true"  :highlight-current="true"   ref="selectTree" :props="defaultProps" @node-click="handleNodeClick"  @node-expand="defaultCheck" :expand-on-click-node='false' ></el-tree>
             <div slot="footer" style="text-align:center">
                 <el-button @click="moveFormVisible = false">取 消</el-button>
                 <el-button type="primary" @click="moveConfirm" >确 定</el-button>
+            </div>
+        </el-dialog>
+         <el-dialog class="dia_adopt_scroll" style="height:920px;" title="审核详情" :lock-scroll="false" :visible.sync="reviewedFormVisible" width="50%">
+              <el-form ref="form" :model="reviewedForm" label-width="120px">
+                <el-row type="flex">
+                  <el-col :span="8">
+                    <el-form-item label="文件名称" >
+                      <el-input v-model="reviewedForm.FILE_NAME"></el-input>
+                    </el-form-item>
+                </el-col>
+                   <el-col :span="8">
+                    <el-form-item  label="文件大小" >
+                      <el-input v-model="reviewedForm.FILE_SIZE"></el-input>
+                    </el-form-item>
+                </el-col>
+                   <el-col :span="8">
+                    <el-form-item  label="创建者" >
+                      <el-input v-model="reviewedForm.CREATE_USER"></el-input>
+                    </el-form-item>
+                </el-col>
+                </el-row>
+                <el-row type="flex">
+                  <el-col :span="24">
+                    <el-form-item label="审核意见">
+                      <el-input  type="textarea" :rows="6" placeholder="审核意见" v-model="reviewedForm.OPINION"></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+            </el-form>
+
+       <el-card class="box-card reply-card">
+				<div slot="header" class="clearfix">
+					<span>审核记录</span>
+				</div>
+	         <div v-for="item in adoptList" class="replyList">
+						<el-row  type="flex" class="row-bg replyList__header" justify="space-between">
+							<el-col :span="12">
+								<span v-if="item.FILE_STATUS==1">已移交，{{item.OPINION}}</span>
+								<span v-if="item.FILE_STATUS==2">审核通过，{{item.OPINION}}</span>
+								<span v-if="item.FILE_STATUS==3">驳回，{{item.OPINION}}</span>
+							</el-col>
+							<el-col :span="12" class="reply-date" style="text-align: right;">
+								<span>&nbsp;&nbsp;</span>
+							</el-col>
+						</el-row>
+						<el-row class="reply-content" :gutter="20">
+							<el-col :span="12">
+								<span>操作人 {{item.CREATE_USER}}</span>
+							</el-col>
+							<el-col :span="12" style="text-align: right;">
+								<span type="primary" >{{item.CREATE_TIME || DateTimeFilter(0)}}</span>
+							</el-col>
+						</el-row>
+					</div>
+					</el-card>
+            <div slot="footer" style="text-align:center">
+                <el-button @click="reviewedFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="adoptConfirm(3)" >驳回</el-button>
+                <el-button type="primary" @click="adoptConfirm(2)" >通过</el-button>
             </div>
         </el-dialog>
     </div>
@@ -162,25 +217,28 @@
 <script>
   import epersonchoose from '../../packages/epersonchoose/epersonchoose';
   import { getTreeDocuments, FileRename, FileDelete, FileAdd, FileDownload, FileCreatedNewFolder,FileRenameFolder,FileDeleteFolder,deleteDirAndFiles,FileView,
-  getFolderList,moveFolder,batchSaveFileArchive,getUsersByRoleId,getOperatePermission} from './api';
+  getFolderList,moveFolder,batchSaveFileArchive,saveFileArchive,getOperatePermission,adoptSave,getAdoptList} from './api';
   export default {
     components: {epersonchoose },
     name: 'NvUploader',
     data () {
       return {
         list: [],
+        adoptList:[],
         isShowRename: false,
         isShowDownload: false,
         isShowDelete: false,
         isShowRemove: false,
         isShowUpload: false,
         isShowCreate: false,
+        isflag:false,
         // treeId: 0,
         listLoading: true,
         pageIndex:1,
         pageSize:10,
         totalCount: 0,
         value: '',
+        isBatch:null,
         uploadURL: '/api/file/upload/project/type',
         fileData: {},
         isUploading:false, //上传中...图片
@@ -197,6 +255,7 @@
         dialogFormVisible:false,
           // 新建文件夹的dialog
         moveFormVisible:false,
+        reviewedFormVisible:false,
         isSelectUserDialog:false,
         // 新建文件夹的名称
         newFolderName: '',
@@ -217,6 +276,14 @@
           ID:null,
           PARENT_ID:null,
           IS_DIRECTORY:null,
+        },
+        reviewedForm:{
+          FILE_ID:null,
+          FILE_NAME:null,
+          OPINION:null,
+          FILE_STATUS:null,
+          FILE_SIZE:null,
+          CREATE_USER:null
         },
         checkAll: false,//总全选
         isSearch: false,//新建文件夹时是否正在搜寻绑定
@@ -288,7 +355,13 @@
       },
       treeId () {
         return this.projectId || 'ROOT'
-      }
+      },
+       selectedRowIds () {
+        const { currentChooseRows } = this
+        return  currentChooseRows.map(item => {
+          return item.ID
+        }).join(',')
+      },
     },
     // 过滤器，用于处理文件管理模块根据不同类型的文件格式显示不同的图标
     filters: {
@@ -439,96 +512,41 @@
         this.moveForm.ID=row.ID;
         this.moveForm.IS_DIRECTORY=row.IS_DIRECTORY;
       },
+    
+    // 移至文件
+    handOnToDialog(row){
+      // 先清除选项
+    this.currentChooseList.splice(0,this.currentChooseList.length);
+    this.isSelectUserDialog = true;
+    },
+    // 审核文件
+    reviewedDialog(row){
+         console.log(row);
+        this.reviewedForm.FILE_ID=row.ID;
+        this.reviewedForm.FILE_NAME=row.NAME;
+        this.reviewedForm.CREATE_USER=row.CREATE_USER;
+        this.reviewedForm.FILE_SIZE=row.FILE_SIZE;
+        this.getAdoptRecord();
+        this.reviewedFormVisible = true;
+      },
 
          syncResult(result){
         this.currentChooseList = result;
     },
-    // 移至文件
-    handOnTo(row){
-      // 先清除选项
-    this.currentChooseList.splice(0,this.currentChooseList.length);
-    // 不知道为什么通过这种方式一直获得不到对象
-    // this.$refs.personchoose.clearResult();
-    this.isSelectUserDialog = true;
-    this.ID = row.ID;
 
-    const self = this;
-    getUsersByRoleId({"ROLE_ID": this.ID})
-    .then(({data}) => {
-      data.list.forEach(item => {
-        let user = {};
-        user.userId = item.ID;
-        user.userName = item.USERNAME;
-        user.nickName = item.NICKNAME;
-        user.mobile = item.MOBILE;
-        user.position = item.POSITION;
-        self.currentChooseList.push(user);
-      });
-    }).catch(err => {
-      self.listLoading = false;
-      console.log(err);
-    })
+     // 批量移至文件
+    batchHandOnToDialog(){
+      const self=this;
+      self.currentChooseRows.forEach(item=>{
+         if('YES'===item.IS_DIRECTORY){
+            this.$message.info("只能进行文件移交");
+             self.isflag=true; 
+         }
+        });
+        if(!self.isflag){
+            this.isSelectUserDialog = true;
+        }
     },
-
-  //   // 批量移至文件夹
-  //  batchSave() {
-  //    this.$refs['fileArchiveForm'].validate((valid) => {
-  //         if (valid) {
-  //           const arr = this.fileArchiveForm.domains;
-  //           var data = {
-  //             CONFIGS: JSON.stringify(arr)
-  //           }
-  //           batchSaveFileArchive(data).then(response => {
-  //             this.$message({
-  //               message: response.rawData.msg,
-  //               type: "success"
-  //             });
-  //             this.resetForm('fileArchiveForm');
-  //             // 重新加载数据
-  //             this.getList();
-  //            // 隐藏弹出框
-  //             this.batchDialogVisible = false;
-  //           }).catch(e => {
-  //              this.$message({
-  //                 message: '添加失败',
-  //                 type: "error"
-  //               });
-  //           });
-  //       } else {
-  //       return false;
-  //     }
-  //   });
-  // },
-    // 批量移至文件夹
-   batchSave() {
-     this.$refs['fileArchiveForm'].validate((valid) => {
-          if (valid) {
-            const arr = this.fileArchiveForm.domains;
-            var data = {
-              CONFIGS: JSON.stringify(arr)
-            }
-            batchSaveFileArchive(data).then(response => {
-              this.$message({
-                message: response.rawData.msg,
-                type: "success"
-              });
-              this.resetForm('fileArchiveForm');
-              // 重新加载数据
-              this.getList();
-             // 隐藏弹出框
-              this.batchDialogVisible = false;
-            }).catch(e => {
-               this.$message({
-                  message: '添加失败',
-                  type: "error"
-                });
-            });
-        } else {
-        return false;
-      }
-    });
-  },
-
       // 获取选中的人员信息
     getChoosePerson(choosePerson){
       if(choosePerson.length == 0){
@@ -538,25 +556,32 @@
       this.isSelectUserDialog = false
       if(choosePerson && choosePerson.length>0){
         this.currentChooseList =  choosePerson;
-        this.relateUser(choosePerson);
+        if(this.currentChooseRows.length >= 1){
+           this.batchHandOn(choosePerson);
+        }else{
+           this.handOn(choosePerson);
+        }
       }else{
         this.currentChooseList = [];
       }
     },
 
   // 批量移至文件
-    batchSave(choosePerson) {
+    batchHandOn(choosePerson) {
         const self = this
         self.listLoading = true;
-        let userIds = "";
+        let userNames = "";
+        let fileIds = "";
         choosePerson.forEach(user => {
-          userIds += user.userId + ",";
+          userNames += user.userName + ",";
         });
-
-        console.log(choosePerson);
-        const arr={"FILE_ID":self.ID,"RECIPIENT":userIds};
-        const param=JSON.stringify(arr);
-        batchSaveFileArchive(param).then(({ data }) => {
+        self.currentChooseRows.map(item=>{
+            fileIds+=item.ID+","
+        })
+        fileIds=fileIds.substring(0, fileIds.lastIndexOf(','));
+        userNames=userNames.substr(0,userNames.lastIndexOf(','));
+        const arr={"FILE_IDS":fileIds,"RECIPIENT":userNames};
+        batchSaveFileArchive(arr).then(({ data }) => {
           self.listLoading = false;
           self.$message.success("移至成功！");
         }).catch(err => {
@@ -564,6 +589,74 @@
           console.log(err);
         })
       },
+    cancelChoose(){
+        this.isSelectUserDialog = false;
+    },
+  // 单个移至文件
+    handOn(choosePerson) {
+      debugger;
+        const self = this
+        self.listLoading = true;
+        let userNames = "";
+        choosePerson.map(user => {
+          userNames += user.userName+",";
+        })
+        userNames=userNames.substring(0, userNames.lastIndexOf(','));
+        console.log(choosePerson);
+        const arr={"FILE_ID":self.ID,"RECIPIENT":userNames};
+        //let param={dataList: JSON.stringify(arr)};
+        saveFileArchive(arr).then(({ data }) => {
+          self.listLoading = false;
+          self.$message.success("移至成功！");
+        }).catch(err => {
+          self.listLoading = false;
+          console.log(err);
+        })
+      },
+    cancelChoose(){
+        this.isSelectUserDialog = false;
+    },
+  
+    //审核
+    adoptConfirm(fileStatus) {
+        debugger;
+        const self = this
+        self.listLoading = true;
+        const arr={"FILE_STATUS":fileStatus,"FILE_ID":self.reviewedForm.FILE_ID,"OPINION":self.reviewedForm.OPINION};
+        //let param={dataList: JSON.stringify(arr)};
+        adoptSave(arr).then(({ data }) => {
+          self.listLoading = false;
+          if(fileStatus=="2"){
+           self.$message.success("审核成功！");
+          }else if(fileStatus=="3"){
+           self.$message.success("驳回成功！");
+          }
+         self.reviewedFormVisible=false;
+        }).catch(err => {
+          self.listLoading = false;
+          console.log(err);
+        })
+      },
+  //审核记录
+    getAdoptRecord() {
+      let self = this;
+      self.listLoading = true;
+      let arr={"FILE_ID":self.reviewedForm.FILE_ID};
+      getAdoptList(arr)
+      .then(response => {
+        debugger;
+        this.listLoading = false;
+        const data = response.data;
+        if (data == undefined){
+            self.adoptList = null;
+            return;
+        }
+       self.adoptList = data;
+      }).catch(err => {
+        console.log(err);
+      })
+    },
+	
     cancelChoose(){
         this.isSelectUserDialog = false;
     },
@@ -836,8 +929,7 @@
                 console.log(err)
             })
         }
-       
-    },
+},
     confirmToFileArchive(){
         let  me=this;
         if(this.moveForm.PARENT_ID==null || this.moveForm.PARENT_ID==0){
@@ -1102,7 +1194,7 @@
     cursor: pointer;
   }
 
-  
+	
 </style>
 <style rel="stylesheet/scss" lang="scss">
 @media screen and (max-width: 1400px){
@@ -1118,11 +1210,44 @@
     overflow: auto; 
   }
 }
+.dia_adopt_scroll {
+  .el-dialog__body {
+    height: 500px;
+    overflow: auto; 
+  }
+}
+.dia_adopt_scroll {
+  .el-dialog {
+    height: 650px;
+  }
+}
+
+
 
 .dia_scroll {
   .el-dialog{
     height: 420px;
   }
 }
+
+	.replyList {
+			border-top: 1px dashed rgb(230, 232, 238);
+			/*height: 88px;*/
+			width: 100%;
+			padding: 20px 0;
+			&__header { margin-bottom: 13px; font-size: #333; }
+			.reply-user {
+				width: 46px;
+				height: 18px;
+				margin-right: 10px !important;
+				border-radius: 4px;
+				border: 1px solid #398dee;
+				color: #398dee;
+				font-size: 12px;
+				text-align: center;
+				padding: 0 3px;
+				display: inline-block;
+			}
+    }
 
 </style>

@@ -100,11 +100,26 @@ export function batchSaveFileArchive(params) {
     data: params
   });
 }
-
-// 根据角色ID查询拥有该角色的人员
-export function getUsersByRoleId(params){
+//单个移交文档
+export function saveFileArchive(params) {
+  return unfetch({
+    url: '/file/archive/insert',
+    method: 'post',
+    data: params
+  });
+}
+//审核文档
+export function adoptSave(params) {
+  return unfetch({
+    url: '/file/archive/adopt/add',
+    method: 'post',
+    data: params
+  });
+}
+//审核记录
+export function getAdoptList(params){
 	return unfetch({
-		url:'/role/user/get/user/by/role',
+		url:'/file/archive/adopt/list',
 		method: 'get',
 		params
 	});
