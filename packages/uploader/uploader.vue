@@ -66,12 +66,21 @@
                 </el-table-column>
                 <el-table-column label="" width="180">
                     <template slot-scope="scope">
-                        <i title="重命名" class="png-icon file-rename small" @click="reName(scope.row)"></i>
+                        <i title="重命名" class="png-icon file-rename small" @click="reName(scope.row)" v-if="scope.row.FILE_STATUS!=2"></i>
                         <i title="下载" class="png-icon file-upload  small" @click="download(scope.row)"></i>
-                        <i title="删除" class="png-icon file-delete small" @click="removeItem(scope.row)"></i>
+                        <i title="删除" class="png-icon file-delete small" @click="removeItem(scope.row)" v-if="scope.row.FILE_STATUS!=2"></i>
                         <i title="移动到" class="png-icon file-txt small" @click="moveFolderTo(scope.row)"></i>
-                        <i title="移交" class="png-icon file-txt small" @click="handOnToDialog(scope.row)" v-if="scope.row.IS_DIRECTORY == 'NO'"></i>
-                        <i title="审核" class="png-icon file-folder small" @click="reviewedDialog(scope.row)" v-if="scope.row.IS_DIRECTORY == 'NO'"></i>
+                        <i title="移交" class="png-icon file-txt small" @click="handOnToDialog(scope.row)" v-if="scope.row.IS_DIRECTORY == 'NO' && scope.row.FILE_STATUS==0"></i>
+                        <i title="审核" class="png-icon file-folder small" @click="reviewedDialog(scope.row)" v-if="scope.row.IS_DIRECTORY == 'NO'  && scope.row.FILE_STATUS!=0"></i>
+                    </template>
+                </el-table-column>
+                <el-table-column label="文件状态"  align="center" width="100">
+                    <template slot-scope="scope">
+                        <span v-if=" scope.row.IS_DIRECTORY === 'YES'">-</span>
+                        <span v-else-if="scope.row.FILE_STATUS === '0'">未移交</span>
+                        <span v-else-if="scope.row.FILE_STATUS === '1'">已移交</span>
+                        <span v-else-if="scope.row.FILE_STATUS === '2'">已审核</span>
+                        <span v-else-if="scope.row.FILE_STATUS === '3'">驳回</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="大小"  align="center" width="100">
@@ -153,22 +162,20 @@
             </div>
         </el-dialog>
          <el-dialog class="dia_adopt_scroll" style="height:920px;" title="审核详情" :lock-scroll="false" :visible.sync="reviewedFormVisible" width="50%">
-              <el-form ref="form" :model="reviewedForm" label-width="120px">
-                <el-row type="flex">
+      
+        <el-form ref="form" :model="reviewedForm" label-width="120px">
+                <el-row type="flex" class="grid-content bg-purple">
                   <el-col :span="8">
-                    <el-form-item label="文件名称" >
-                      <el-input v-model="reviewedForm.FILE_NAME"></el-input>
-                    </el-form-item>
+                    <a class="file-label"  @click="setParentCode(reviewedForm.ID, reviewedForm.NAME,moveForm.IS_DIRECTORY)">{{reviewedForm.NAME }}</a>
                 </el-col>
                    <el-col :span="8">
-                    <el-form-item  label="文件大小" >
-                      <el-input v-model="reviewedForm.FILE_SIZE"></el-input>
-                    </el-form-item>
+                     {{reviewedForm.FILE_SIZE}}
                 </el-col>
-                   <el-col :span="8">
-                    <el-form-item  label="创建者" >
-                      <el-input v-model="reviewedForm.CREATE_USER"></el-input>
-                    </el-form-item>
+                   <el-col :span="4">
+                      {{ reviewedForm.USER_NAME }}
+                </el-col>
+                 <el-col :span="4">
+              <i title="下载" class="png-icon file-upload  small" @click="download(reviewedForm)"></i>
                 </el-col>
                 </el-row>
                 <el-row type="flex">
@@ -179,6 +186,7 @@
                   </el-col>
                 </el-row>
             </el-form>
+			
 
        <el-card class="box-card reply-card">
 				<div slot="header" class="clearfix">
@@ -197,7 +205,7 @@
 						</el-row>
 						<el-row class="reply-content" :gutter="20">
 							<el-col :span="12">
-								<span>操作人 {{item.CREATE_USER}}</span>
+								<span>操作人 {{item.USER_NAME}}</span>
 							</el-col>
 							<el-col :span="12" style="text-align: right;">
 								<span type="primary" >{{item.CREATE_TIME || DateTimeFilter(0)}}</span>
@@ -206,9 +214,9 @@
 					</div>
 					</el-card>
             <div slot="footer" style="text-align:center">
-                <el-button @click="reviewedFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="adoptConfirm(3)" >驳回</el-button>
-                <el-button type="primary" @click="adoptConfirm(2)" >通过</el-button>
+                <!-- <el-button @click="reviewedFormVisible = false">取 消</el-button> -->
+                <el-button type="primary" @click="adoptConfirm(3)" v-if="this.reviewedForm.FILE_STATUS!=2">驳回</el-button>
+                <el-button type="primary" @click="adoptConfirm(2)" v-if="this.reviewedForm.FILE_STATUS!=2">通过</el-button>
             </div>
         </el-dialog>
     </div>
@@ -232,6 +240,8 @@
         isShowUpload: false,
         isShowCreate: false,
         isflag:false,
+        FILE_ID:null,
+        fileInfo:null,
         // treeId: 0,
         listLoading: true,
         pageIndex:1,
@@ -239,6 +249,7 @@
         totalCount: 0,
         value: '',
         isBatch:null,
+       // listFileStatus:null,
         uploadURL: '/api/file/upload/project/type',
         fileData: {},
         isUploading:false, //上传中...图片
@@ -278,12 +289,12 @@
           IS_DIRECTORY:null,
         },
         reviewedForm:{
-          FILE_ID:null,
-          FILE_NAME:null,
+          ID:null,
+          NAME:null,
           OPINION:null,
           FILE_STATUS:null,
           FILE_SIZE:null,
-          CREATE_USER:null
+          USER_NAME:null
         },
         checkAll: false,//总全选
         isSearch: false,//新建文件夹时是否正在搜寻绑定
@@ -518,14 +529,18 @@
       // 先清除选项
     this.currentChooseList.splice(0,this.currentChooseList.length);
     this.isSelectUserDialog = true;
+    this.FILE_ID=row.ID
     },
     // 审核文件
     reviewedDialog(row){
-         console.log(row);
-        this.reviewedForm.FILE_ID=row.ID;
-        this.reviewedForm.FILE_NAME=row.NAME;
-        this.reviewedForm.CREATE_USER=row.CREATE_USER;
-        this.reviewedForm.FILE_SIZE=row.FILE_SIZE;
+        this.reviewedForm.OPINION="";
+        // this.reviewedForm.ID=row.ID;
+        // this.reviewedForm.NAME=row.NAME;
+        // this.reviewedForm.USER_NAME=row.USER_NAME;
+        // this.reviewedForm.FILE_SIZE=row.FILE_SIZE;
+        // this.reviewedForm.FILE_STATUS=row.FILE_STATUS;
+        this.reviewedForm=row;
+        this.moveForm.IS_DIRECTORY=row.IS_DIRECTORY;
         this.getAdoptRecord();
         this.reviewedFormVisible = true;
       },
@@ -538,13 +553,18 @@
     batchHandOnToDialog(){
       const self=this;
       self.currentChooseRows.forEach(item=>{
-         if('YES'===item.IS_DIRECTORY){
-            this.$message.info("只能进行文件移交");
+        debugger;
+         if("YES"===item.IS_DIRECTORY){
+            self.$message.info("只能进行文件移交");
+             self.isflag=true; 
+         }
+         if("NO"===item.IS_DIRECTORY && item.FILE_STATUS!=0){
+            self.$message.info("不能进行重复移交");
              self.isflag=true; 
          }
         });
         if(!self.isflag){
-            this.isSelectUserDialog = true;
+            self.isSelectUserDialog = true;
         }
     },
       // 获取选中的人员信息
@@ -583,7 +603,7 @@
         const arr={"FILE_IDS":fileIds,"RECIPIENT":userNames};
         batchSaveFileArchive(arr).then(({ data }) => {
           self.listLoading = false;
-          self.$message.success("移至成功！");
+          self.$message.success("移交成功！");
         }).catch(err => {
           self.listLoading = false;
           console.log(err);
@@ -603,11 +623,13 @@
         })
         userNames=userNames.substring(0, userNames.lastIndexOf(','));
         console.log(choosePerson);
-        const arr={"FILE_ID":self.ID,"RECIPIENT":userNames};
+        debugger;
+        const arr={"FILE_ID":self.FILE_ID,"RECIPIENT":userNames};
         //let param={dataList: JSON.stringify(arr)};
         saveFileArchive(arr).then(({ data }) => {
           self.listLoading = false;
-          self.$message.success("移至成功！");
+          self.$message.success("移交成功！");
+          this.fetchData(this.currentId);
         }).catch(err => {
           self.listLoading = false;
           console.log(err);
@@ -622,14 +644,16 @@
         debugger;
         const self = this
         self.listLoading = true;
-        const arr={"FILE_STATUS":fileStatus,"FILE_ID":self.reviewedForm.FILE_ID,"OPINION":self.reviewedForm.OPINION};
+        const arr={"FILE_STATUS":fileStatus,"FILE_ID":self.reviewedForm.ID,"OPINION":self.reviewedForm.OPINION};
         //let param={dataList: JSON.stringify(arr)};
         adoptSave(arr).then(({ data }) => {
           self.listLoading = false;
           if(fileStatus=="2"){
            self.$message.success("审核成功！");
+           this.fetchData(this.currentId);
           }else if(fileStatus=="3"){
            self.$message.success("驳回成功！");
+           this.fetchData(this.currentId);
           }
          self.reviewedFormVisible=false;
         }).catch(err => {
@@ -641,7 +665,7 @@
     getAdoptRecord() {
       let self = this;
       self.listLoading = true;
-      let arr={"FILE_ID":self.reviewedForm.FILE_ID};
+      let arr={"FILE_ID":self.reviewedForm.ID};
       getAdoptList(arr)
       .then(response => {
         debugger;
@@ -1250,4 +1274,19 @@
 			}
     }
 
+ .bg-purple {
+    background: rgb(245,245,245);
+  }
+
+  .grid-content {
+    border-radius: 4px;
+    min-height: 36px;
+  }
+
+   .el-row {
+    margin-bottom: 20px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
 </style>
