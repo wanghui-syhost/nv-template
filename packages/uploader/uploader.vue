@@ -64,23 +64,18 @@
                         </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="" width="180">
-                    <template slot-scope="scope">
-                        <i title="重命名" class="png-icon file-rename small" @click="reName(scope.row)" v-if="scope.row.FILE_STATUS!=2"></i>
-                        <i title="下载" class="png-icon file-upload  small" @click="download(scope.row)"></i>
-                        <i title="删除" class="png-icon file-delete small" @click="removeItem(scope.row)" v-if="scope.row.FILE_STATUS!=2"></i>
-                        <i title="移动到" class="png-icon file-txt small" @click="moveFolderTo(scope.row)"></i>
-                        <i title="移交" class="png-icon file-txt small" @click="handOnToDialog(scope.row)" v-if="scope.row.IS_DIRECTORY == 'NO' && scope.row.FILE_STATUS==0"></i>
-                        <i title="审核" class="png-icon file-folder small" @click="reviewedDialog(scope.row)" v-if="scope.row.IS_DIRECTORY == 'NO'  && scope.row.FILE_STATUS!=0"></i>
-                    </template>
-                </el-table-column>
+            
                 <el-table-column label="文件状态"  align="center" width="100">
                     <template slot-scope="scope">
+                      
                         <span v-if=" scope.row.IS_DIRECTORY === 'YES'">-</span>
-                        <span v-else-if="scope.row.FILE_STATUS === '0'">未移交</span>
-                        <span v-else-if="scope.row.FILE_STATUS === '1'">已移交</span>
-                        <span v-else-if="scope.row.FILE_STATUS === '2'">已审核</span>
-                        <span v-else-if="scope.row.FILE_STATUS === '3'">驳回</span>
+                        
+                          <span v-if="scope.row.FILE_STATUS === '0'"><div class="reply-user">未移交</div></span>
+                          <a class="file-name" @click="reviewedDialog(scope.row,0)">
+                          <span v-if="scope.row.FILE_STATUS === '1'"><div class="reply-user">待审核</div></span>
+                          <span v-if="scope.row.FILE_STATUS === '2'"><div class="reply-user">已归档</div></span>
+                          <span v-if="scope.row.FILE_STATUS === '3'"><div class="reply-user">被退回</div></span>
+                          </a>           
                     </template>
                 </el-table-column>
                 <el-table-column label="大小"  align="center" width="100">
@@ -97,6 +92,17 @@
                 <el-table-column align="center" label="更新时间" width="180">
                     <template slot-scope="scope">
                         <span>{{scope.row.CREATE_TIME | DateTimeFilter(0)}}</span>
+                    </template>
+                </el-table-column>
+                    <el-table-column label="" width="180">
+                    <template slot-scope="scope">
+                        <i title="重命名" class="png-icon file-rename small" @click="reName(scope.row)" v-if="scope.row.FILE_STATUS==3 ||  scope.row.FILE_STATUS==0 || scope.row.IS_DIRECTORY == 'YES'"></i>
+                        <i title="下载" class="png-icon file-upload  small" @click="download(scope.row)"></i>
+                        <i title="删除" class="png-icon file-delete small" @click="removeItem(scope.row)" v-if="scope.row.FILE_STATUS==3 || scope.row.FILE_STATUS==0 || scope.row.IS_DIRECTORY == 'YES'"></i>
+                        <i title="移动到" class="png-icon file-txt small" @click="moveFolderTo(scope.row)" v-if="scope.row.IS_DIRECTORY == 'NO' && scope.row.FILE_STATUS==3 || scope.row.IS_DIRECTORY == 'NO' && scope.row.FILE_STATUS==0"></i>
+                        <i title="移交" class="png-icon file-handon small" @click="handOnToDialog(scope.row)" v-if="userName==scope.row.CREATE_USER && scope.row.IS_DIRECTORY == 'NO' && scope.row.FILE_STATUS==0 || userName==scope.row.CREATE_USER && scope.row.IS_DIRECTORY == 'NO' && scope.row.FILE_STATUS==3"></i>
+                        <i title="审核" class="png-icon file-folder small" @click="reviewedDialog(scope.row,1)" v-if="scope.row.IS_DIRECTORY == 'NO'  && scope.row.FILE_STATUS==1 && userName==scope.row.RECIPIENT"></i>
+                        <!-- && userName==scope.row.RECIPIENT -->
                     </template>
                 </el-table-column>
             </el-table>
@@ -165,10 +171,10 @@
       
         <el-form ref="form" :model="reviewedForm" label-width="120px">
                 <el-row type="flex" class="grid-content bg-purple">
-                  <el-col :span="8">
+                  <el-col :span="12">
                     <a class="file-label"  @click="setParentCode(reviewedForm.ID, reviewedForm.NAME,moveForm.IS_DIRECTORY)">{{reviewedForm.NAME }}</a>
                 </el-col>
-                   <el-col :span="8">
+                   <el-col :span="4">
                      {{reviewedForm.FILE_SIZE}}
                 </el-col>
                    <el-col :span="4">
@@ -178,12 +184,16 @@
               <i title="下载" class="png-icon file-upload  small" @click="download(reviewedForm)"></i>
                 </el-col>
                 </el-row>
+                
                 <el-row type="flex">
                   <el-col :span="24">
+                     <span v-if="isShowTextArea==1">
                     <el-form-item label="审核意见">
                       <el-input  type="textarea" :rows="6" placeholder="审核意见" v-model="reviewedForm.OPINION"></el-input>
                     </el-form-item>
+                     </span>
                   </el-col>
+                 
                 </el-row>
             </el-form>
 			
@@ -214,9 +224,10 @@
 					</div>
 					</el-card>
             <div slot="footer" style="text-align:center">
-                <!-- <el-button @click="reviewedFormVisible = false">取 消</el-button> -->
-                <el-button type="primary" @click="adoptConfirm(3)" v-if="this.reviewedForm.FILE_STATUS!=2">驳回</el-button>
-                <el-button type="primary" @click="adoptConfirm(2)" v-if="this.reviewedForm.FILE_STATUS!=2">通过</el-button>
+              <span v-if="isShowTextArea==1">
+                <el-button type="primary" @click="adoptConfirm(3)" >驳回</el-button>
+                <el-button type="primary" @click="adoptConfirm(2)" >通过</el-button>
+                </span>
             </div>
         </el-dialog>
     </div>
@@ -224,6 +235,7 @@
 
 <script>
   import epersonchoose from '../../packages/epersonchoose/epersonchoose';
+  import vuex, { mapGetters, mapActions } from 'vuex';
   import { getTreeDocuments, FileRename, FileDelete, FileAdd, FileDownload, FileCreatedNewFolder,FileRenameFolder,FileDeleteFolder,deleteDirAndFiles,FileView,
   getFolderList,moveFolder,batchSaveFileArchive,saveFileArchive,getOperatePermission,adoptSave,getAdoptList} from './api';
   export default {
@@ -239,6 +251,7 @@
         isShowRemove: false,
         isShowUpload: false,
         isShowCreate: false,
+        isShowTextArea:null,
         isflag:false,
         FILE_ID:null,
         fileInfo:null,
@@ -327,6 +340,7 @@
         required: false
       }
     },
+ 
     mounted () {
       this.uploadHeaders ={
         'Authorization' : localStorage.getItem('user.token'),
@@ -337,6 +351,7 @@
 				type: this.type
       };
     },
+   
     created () {
       const self = this
       self.fetchData();
@@ -398,6 +413,11 @@
         return map[value] || 'file-other'
       }
     },
+     computed: {
+        ...vuex.mapState('user', {
+            userName: state => state.profile.userName
+        })
+    },
     methods: {
       // 获取列表数据
       calcFileImg (ext) {
@@ -427,6 +447,8 @@
           DOCUMENT_TYPE : this.documentType,
           TREE_ID: treeId  || this.treeId
         }).then(({ data = {} }) => {
+          console.log("文件列表");
+          console.log(data);
           this.listLoading = false;
             function calcFileImg(ext) {
                 switch (ext) {
@@ -532,17 +554,19 @@
     this.FILE_ID=row.ID
     },
     // 审核文件
-    reviewedDialog(row){
-        this.reviewedForm.OPINION="";
+    reviewedDialog(row,isShow){
+      const self=this;
+        self.reviewedForm.OPINION="";
         // this.reviewedForm.ID=row.ID;
         // this.reviewedForm.NAME=row.NAME;
         // this.reviewedForm.USER_NAME=row.USER_NAME;
         // this.reviewedForm.FILE_SIZE=row.FILE_SIZE;
         // this.reviewedForm.FILE_STATUS=row.FILE_STATUS;
-        this.reviewedForm=row;
-        this.moveForm.IS_DIRECTORY=row.IS_DIRECTORY;
-        this.getAdoptRecord();
-        this.reviewedFormVisible = true;
+        self.reviewedForm=row;
+        self.moveForm.IS_DIRECTORY=row.IS_DIRECTORY;
+        self.isShowTextArea =isShow == '1' ? ' 1' : ' 0';
+        self.getAdoptRecord();
+        self.reviewedFormVisible = true;
       },
 
          syncResult(result){
@@ -1245,6 +1269,19 @@
     height: 650px;
   }
 }
+
+.reply-user {
+				width: 46px;
+				height: 19px;
+				margin-right: 10px !important;
+				border-radius: 4px;
+				border: 1px solid #398dee;
+				color: #398dee;
+				font-size: 12px;
+				text-align: center;
+				padding: 0 3px;
+				display: inline-block;
+			}
 
 
 

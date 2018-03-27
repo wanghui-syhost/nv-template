@@ -18,13 +18,16 @@ $icons: (
    file-txt: './assets/icons/file-txt',
    file-upload: './assets/icons/file-upload',
    file-xls: './assets/icons/file-xls',
-   file-pic: './assets/icons/file-pic'
+   file-pic: './assets/icons/file-pic',
+   file-handon: './assets/icons/file-handon'
+  
 );
 
 $icons-hover: (
     file-delete: './assets/icons/file-delete-hover',
     file-rename: './assets/icons/file-rename-hover',
     file-upload: './assets/icons/file-upload-hover',
+    file-handon: './assets/icons/file-handon-hover'
 );
 
 i.png-icon {
