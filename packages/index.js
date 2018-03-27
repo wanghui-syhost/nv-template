@@ -12,6 +12,7 @@ import NvRegionSelect from './region-select'
 import NvIframe from './iframe'
 import NvDynamic from './dynamic'
 import NvCard from './card'
+import NvEditor from './editor'
 import NvPersonchooser from './epersonchoose'
 import NvDatePick from './datepicker'
 //import NvChart from './chart'
@@ -24,6 +25,7 @@ const components = [
   NvTextarea,
   NvDynamic,
   NvCard,
+  NvEditor,
   //NvChart,
   NvIframe,
   NvOrganizeUserSelector,
