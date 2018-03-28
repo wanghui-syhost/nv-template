@@ -753,7 +753,9 @@
           }
           let item = Object.assign({}, data, {
             TREE_ID : tid ,
-            PROJECT_ID: this.projectId
+            PROJECT_ID: this.projectId,
+            TYPE_BIG: this.documentType,
+            TYPE_SMALL: this.type,
           });
           let arr = [];
           arr.push(item);
