@@ -1,7 +1,7 @@
 <template>
     <div class="upload-table" v-loading.body="isUploading" element-loading-text="正在上传中，请稍等......">
-        <section class="upload-table__from">
-            <el-button @click="createdNewFolder" type="primary" :disabled ="isSearch" v-show="isShowCreate">
+        <section class="upload-table__from"><!-- isShowCreate -->
+            <el-button @click="createdNewFolder" type="primary" :disabled ="isSearch" v-show="true">
                 新建文件夹
             </el-button>
             <el-button @click="deleteSelectedAndChildren" type="primary" v-show="isShowDelete">
@@ -202,7 +202,7 @@
 				<div slot="header" class="clearfix">
 					<span>审核记录</span>
 				</div>
-	         <div v-for="item in adoptList" :key="item" class="replyList">
+	         <div v-for="item in adoptList" :key="item.ID" class="replyList">
 						<el-row  type="flex" class="row-bg replyList__header" justify="space-between">
 							<el-col :span="12">
 								<span v-if="item.FILE_STATUS==1">已移交，{{item.OPINION}}</span>
@@ -336,6 +336,11 @@
         required: false
       },
       documentType: {
+        type: String,
+        required: false
+      },
+      // 上传的文件是否需要写入到ES服务器
+      needIndex: {
         type: String,
         required: false
       }
@@ -780,6 +785,7 @@
             PROJECT_ID: this.projectId,
             TYPE_BIG: this.documentType,
             TYPE_SMALL: this.type,
+            NEED_INDEX: this.needIndex,
           });
           let arr = [];
           arr.push(item);

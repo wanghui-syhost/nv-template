@@ -1,7 +1,7 @@
 
 export function searchAttachment(params){
 	return unfetch({
-		url:'/demo/search/attachment',
+		url:'/document/tree/search/permission/pagination',
 		method: 'get',
 		params
 	});
