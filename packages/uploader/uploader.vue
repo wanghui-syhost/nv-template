@@ -202,7 +202,7 @@
 				<div slot="header" class="clearfix">
 					<span>审核记录</span>
 				</div>
-	         <div v-for="item in adoptList" class="replyList">
+	         <div v-for="item in adoptList" :key="item" class="replyList">
 						<el-row  type="flex" class="row-bg replyList__header" justify="space-between">
 							<el-col :span="12">
 								<span v-if="item.FILE_STATUS==1">已移交，{{item.OPINION}}</span>
