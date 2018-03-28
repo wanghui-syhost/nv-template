@@ -102,7 +102,6 @@
                         <i title="移动到" class="png-icon file-txt small" @click="moveFolderTo(scope.row)" v-if="scope.row.IS_DIRECTORY == 'NO' && scope.row.FILE_STATUS==3 || scope.row.IS_DIRECTORY == 'NO' && scope.row.FILE_STATUS==0"></i>
                         <i title="移交" class="png-icon file-handon small" @click="handOnToDialog(scope.row)" v-if="userName==scope.row.CREATE_USER && scope.row.IS_DIRECTORY == 'NO' && scope.row.FILE_STATUS==0 || userName==scope.row.CREATE_USER && scope.row.IS_DIRECTORY == 'NO' && scope.row.FILE_STATUS==3"></i>
                         <i title="审核" class="png-icon file-folder small" @click="reviewedDialog(scope.row,1)" v-if="scope.row.IS_DIRECTORY == 'NO'  && scope.row.FILE_STATUS==1 && userName==scope.row.RECIPIENT"></i>
-                        <!-- && userName==scope.row.RECIPIENT -->
                     </template>
                 </el-table-column>
             </el-table>
@@ -577,15 +576,19 @@
     batchHandOnToDialog(){
       const self=this;
       self.currentChooseRows.forEach(item=>{
-        debugger;
          if("YES"===item.IS_DIRECTORY){
             self.$message.info("只能进行文件移交");
              self.isflag=true; 
          }
-         if("NO"===item.IS_DIRECTORY && item.FILE_STATUS!=0){
-            self.$message.info("不能进行重复移交");
-             self.isflag=true; 
-         }
+          if(this.userName!== item.userName){
+              self.$message.info("非创建人不能进行移交");
+              self.isflag=true; 
+           }
+          if("NO"===item.IS_DIRECTORY && ( item.FILE_STATUS === '2' || item.FILE_STATUS === '1')){
+              self.$message.info("不能进行重复移交");
+              self.isflag=true; 
+          }
+       
         });
         if(!self.isflag){
             self.isSelectUserDialog = true;
@@ -638,7 +641,6 @@
     },
   // 单个移至文件
     handOn(choosePerson) {
-      debugger;
         const self = this
         self.listLoading = true;
         let userNames = "";
@@ -647,7 +649,6 @@
         })
         userNames=userNames.substring(0, userNames.lastIndexOf(','));
         console.log(choosePerson);
-        debugger;
         const arr={"FILE_ID":self.FILE_ID,"RECIPIENT":userNames};
         //let param={dataList: JSON.stringify(arr)};
         saveFileArchive(arr).then(({ data }) => {
@@ -665,7 +666,6 @@
   
     //审核
     adoptConfirm(fileStatus) {
-        debugger;
         const self = this
         self.listLoading = true;
         const arr={"FILE_STATUS":fileStatus,"FILE_ID":self.reviewedForm.ID,"OPINION":self.reviewedForm.OPINION};
@@ -692,7 +692,6 @@
       let arr={"FILE_ID":self.reviewedForm.ID};
       getAdoptList(arr)
       .then(response => {
-        debugger;
         this.listLoading = false;
         const data = response.data;
         if (data == undefined){
@@ -956,7 +955,6 @@
         if(this.moveForm.PARENT_ID==null || this.moveForm.PARENT_ID==0){
               me.$message.error("请选中文件夹");
         }else{
-              debugger;
               let reqParams = {
                     ID: me.moveForm.ID,
                     PARENT_ID:me.moveForm.PARENT_ID,
@@ -983,7 +981,6 @@
         if(this.moveForm.PARENT_ID==null || this.moveForm.PARENT_ID==0){
               me.$message.error("请选中文件夹");
         }else{
-              debugger;
               let reqParams = {
                     ID: me.moveForm.ID,
                     PARENT_ID:me.moveForm.PARENT_ID,
@@ -1007,7 +1004,6 @@
        
     },
     download (row) {
-      debugger
       unfetch.download('file/download/compress', {
         params: {
         //  ID: this.selectedIds
