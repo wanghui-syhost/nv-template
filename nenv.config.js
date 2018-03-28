@@ -8,12 +8,20 @@ module.exports = {
     title: "欢迎来到盈峰环境智慧水务平台",
   },
   proxy: {
-    '/api/*': {
+    '/api/*': { //平台api管理
       //target: 'http://192.168.37.6:8089', // 平台
-      // target: 'http://192.168.31.22:8089', // 邢光辉
+      // target: 'http://192.168.31.22:8089', // 邢光辉 ,   
       target: 'http://localhost:8089',// 本地
       filter(pathname, req) {
         if (pathname.match(/\/api/)) {
+          return true
+        }
+      }
+    },  
+    '/file/*': { // 平台文件管理
+      target: 'http://192.168.37.6:8088', 
+      filter(pathname, req) {
+        if (pathname.match(/\/file/)) {
           return true
         }
       }

@@ -16,10 +16,10 @@
   },
   "dependencies": {
     "js-cookie": "^2.1.4",
-    "md5": "^2.2.1"
+    "md5": "^2.2.1",
+    "wangeditor": "^3.1.0"
   },
-  "devDependencies": {
-  },
+  "devDependencies": {},
   "engines": {
     "node": ">= 8.9.0",
     "npm": ">= 5.5.1"
