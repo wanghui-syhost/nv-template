@@ -14,19 +14,23 @@
           </el-form>
         </div>
         <nv-layout-section :title="item.fileName" :key="item.id" v-for="item in list">
-            <span v-html="item.highlight"></span>
+          <div>
+            <span>{{ item.createUser }}</span>
+            <span>{{ item.updateTime | timeFilter }}</span>
+          </div>
+          <div v-html="item.highlight" @click="fileViewOrUpload(item.id)" style="cursor:pointer"></div>
         </nv-layout-section>
         <!-- 分页  -->
-            <div class="search-pagination">
-              <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageIndex" :page-sizes="[1, 2, 3, 4]"
-                :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper, slot" :total="totalCount">
-                <el-button>确定</el-button>
-              </el-pagination>
-            </div>
+        <div class="search-pagination">
+          <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageIndex" :page-sizes="[10, 20, 30, 40]"
+            :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper, slot" :total="totalCount">
+            <el-button>确定</el-button>
+          </el-pagination>
+        </div>
     </nv-layout>
 </template>
 <script>
-import { searchAttachment } from './api'
+import { searchAttachment, FileView } from './api'
 export default {
   name: 'SearchAttachment',
   data() {
@@ -35,19 +39,24 @@ export default {
       list: [],
       totalCount: 0,
       pageIndex: 1,
-      pageSize: 1,
+      pageSize: 10,
     };
   },
   created() {
     this.getList();
   },
+  filters: {
+    timeFilter: function (value) {
+      if (!value) return '-'
+      value = value.toString();
+      return value.substring(0, value.length-2);
+    }
+  },
   methods: {
     getList() {
       const self = this
       const { keyWord, list, totalCount, pageIndex, pageSize} = self;
-
       self.listLoading = true;
-
       searchAttachment(
         {
           pageIndex,
@@ -68,15 +77,32 @@ export default {
       this.getList();
     },
 
-      handleSizeChange(pageIndex) {
-        this.pageSize = pageIndex;
-        this.getList();
-      },
-      handleCurrentChange(pageIndex) {
-        this.pageIndex = pageIndex;
-        this.getList();
-      },
+    fileViewOrUpload(id){
+      let req = {
+        FILE_ID: id
+      };
+      this.listLoading = true;
+      FileView(req).then(({data})=>{
+          this.listLoading = false;
+          let me = this;
+          let url = data.fileUrl + data.filePath;
+          unfetch.open(url);
+      }).catch(err=>{
+        this.listLoading = false
+        this.$message.error('预览失败！');
+        console.error(err);
+      });
+      return;
+    },
 
+    handleSizeChange(pageIndex) {
+      this.pageSize = pageIndex;
+      this.getList();
+    },
+    handleCurrentChange(pageIndex) {
+      this.pageIndex = pageIndex;
+      this.getList();
+    },
 
   }
 }
