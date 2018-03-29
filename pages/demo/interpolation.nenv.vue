@@ -1,5 +1,5 @@
 <template>
-    <nv-layout>
+    <nv-layout :label="$t('common.USER_NAME')">
         {{ $t('common.USER_NAME') }}
     </nv-layout>
 </template>

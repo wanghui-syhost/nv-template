@@ -7,6 +7,7 @@ yarn-debug.log*
 yarn-error.log*
 ../maps/*
 .cache-loader
+nenv.config.js
 .project
 .vscode
 .nenv
