@@ -1,6 +1,6 @@
 <template>
-    <el-checkbox-group v-model="currentValue" :disabled = "isNvDisabled" :class="{'is-nv-disabled': isNvDisabled}">
-        <el-checkbox v-for="option in nvOptions" :label="option.VALUE" :key="option.VALUE">{{ option.NAME }}</el-checkbox>
+    <el-checkbox-group v-model="currentValue" @change="change" :max="max" :min="min" :disabled = "isNvDisabled" :class="{'is-nv-disabled': isNvDisabled}">
+        <el-checkbox v-for="option in nvOptions" :border="border" :label="option.VALUE" :key="option.VALUE">{{ option.NAME }}</el-checkbox>
     </el-checkbox-group>
 </template>
 <script>
@@ -18,6 +18,16 @@ export default {
         disabled: {
             type: Boolean,
             default: undefined
+        },
+        border:{
+            type:Boolean,
+            default:false
+        },
+        max:{
+            type:Number
+        },
+        min:{
+            type:Number
         }
    },
    data () {
@@ -31,6 +41,11 @@ export default {
            return self.disabled !== undefined ? self.disabled : self.$route.query['nv-view'] === 'true'
        }
    },
+   methods:{
+       change(...args){
+           this.$emit("change",...args);
+       }
+   }
 }
 </script>
 

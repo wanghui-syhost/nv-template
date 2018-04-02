@@ -1,6 +1,6 @@
 <template>
-    <el-radio-group v-model="currentValue" :disabled = "isNvDisabled" :class="{'is-nv-disabled': isNvDisabled}">
-        <el-radio v-for="option in nvOptions" :label="option.VALUE" :key="option.VALUE">{{ option.NAME }}</el-radio>
+    <el-radio-group v-model="currentValue" @change="change" :disabled = "isNvDisabled" :class="{'is-nv-disabled': isNvDisabled}">
+        <el-radio v-for="option in nvOptions" :border="border" :label="option.VALUE" :key="option.VALUE">{{ option.NAME }}</el-radio>
     </el-radio-group>
 </template>
 <script>
@@ -17,6 +17,9 @@ export default {
         disabled: {
             type: Boolean,
             default: undefined
+        },
+        border:{
+            type:Boolean
         }
    },
    data () {
@@ -30,6 +33,11 @@ export default {
            return self.disabled !== undefined ? self.disabled : self.$route.query['nv-view'] === 'true'
        }
    },
+   methods:{
+       change(...args){
+           this.$emit("change",...args);
+       }
+   }
 }
 </script>
 

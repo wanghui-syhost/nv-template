@@ -2,6 +2,9 @@
     <el-cascader
         :options="nvOptions"
         @active-item-change="handleItemChange"
+        
+        :separator="separator" :placeholder="placeholder" :disabled="disabled"
+        @change="change"
         v-model="currentValue"
         :props="props"
         />
@@ -20,6 +23,16 @@
         value: {
             type: Array,
             required: true
+        },
+        separator:{
+            type:String,
+            default:'/'
+        },
+        placeholder:{
+            type:String
+        },
+        disabled:{
+            type:Boolean
         }
     },
     data() {
@@ -110,7 +123,10 @@
             console.log('x')
             return self.recursivelyLoadData(self.nvOptions, val.slice(), self.depth)
       },
-
+      
+      change(...args){
+          this.$emit("change",...args);
+      }
     }
   };
 </script>

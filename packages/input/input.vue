@@ -1,5 +1,9 @@
 <template>
-    <el-input v-model="currentValue" :disabled = "isNvDisabled" :class="{'is-nv-disabled': isNvDisabled}" style="width:200px;"/>
+    <el-input v-model="currentValue" ref="nvInput"
+     :maxlength="maxlength" :minlength="minlength" :placeholder="placeholder" :prefix-icon="prefixIcon"
+     :suffix-icon="suffixIcon" :auto-complete="autoComplete" :readonly="readonly"
+     @blur="blur" @focus="focus" @change="change" @clear="clear"   
+     :disabled = "isNvDisabled" :class="{'is-nv-disabled': isNvDisabled}" style="width:200px;"/>
 </template>
 <script>
 import nvInpterMixins from "nenv/mixins/inputerMixins";
@@ -15,6 +19,27 @@ export default {
     disabled: {
       type: Boolean,
       default: undefined
+    },
+    maxlength:{
+      type:Number
+    },
+    minlength:{
+      type:Number
+    },
+    placeholder:{
+      type:String
+    },
+    prefixIcon:{
+      type:String
+    },
+    suffixIcon:{
+      type:String
+    },
+    autoComplete:{
+      type:String
+    },
+    readonly:{
+      type:String
     }
   },
   data() {
@@ -39,7 +64,19 @@ export default {
     }
   },
   methods: {
-    fetchOptions() {}
+    fetchOptions() {},
+    blur(...args){
+      this.$emit("blur",...args);
+    },
+    focus(...args){
+      this.$emit("focus",...args);
+    },
+    change(...args){
+      this.$emit("change",...args);
+    },
+    clear(...args){
+      this.$emit("clear",...args);
+    }
   }
 };
 </script>
