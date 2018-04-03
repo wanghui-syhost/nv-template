@@ -1,5 +1,8 @@
 <template>
-    <el-select v-model="currentValue" placeholder="请选择" :disabled = "isNvDisabled" :class="{'is-nv-disabled': isNvDisabled}">
+    <el-select v-model="currentValue" placeholder="请选择" 
+    :multiple="multiple" :multiple-limit="multipleLimit" :auto-complete="autoComplete"
+    :filterable="filterable" @change="change" @blur="blur" @focus="focus"
+    :disabled = "isNvDisabled" :class="{'is-nv-disabled': isNvDisabled}">
         <el-option
         v-for="option in nvOptionsExt"
         :key="option.VALUE"
@@ -29,7 +32,20 @@ export default {
         allSelectLabel: {
             type: String,
             default: '全部'
+        },
+        multiple:{
+            type:Boolean
+        },
+        multipleLimit:{
+            type:Number
+        },
+        autoComplete:{
+            type:String
+        },
+        filterable:{
+            type:Boolean
         }
+
     },
     data () {
         return {
@@ -55,6 +71,17 @@ export default {
            return self.disabled !== undefined ? self.disabled : self.$route.query['nv-view'] === 'true'
        }
    },
+   methods:{
+       change(...args){
+           this.$emit("change",...args)
+       },
+       blur(...args){
+           this.$emit("blur",...args)
+       },
+       focus(...args){
+           this.$emit("focus",...args)
+       }
+   }
 }
 </script>
 <style lang="scss" scoped>
