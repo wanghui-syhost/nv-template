@@ -9,54 +9,118 @@
   height: 300px;
 }
 </style>
-
 <script>
+import {getStatisticalPie } from './api'
+
 export default {
-  data: function () {
-    let data = []
-
-    for (let i = 0; i <= 360; i++) {
-        let t = i / 180 * Math.PI
-        let r = Math.sin(2 * t) * Math.cos(2 * t)
-        data.push([r, i])
-    }
-
+  created () {
+    this.getStatisticalPieMap()
+  },
+  data () {
     return {
-      polar: {
-        title: {
-          text: '极坐标双数值轴'
+      polar:{ 
+        tooltip: {
+          trigger: 'item',
+          formatter: "{a} <br/>{b}: {c} ({d}%)"
         },
         legend: {
-          data: ['line']
-        },
-        polar: {
-          center: ['50%', '54%']
-        },
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'cross'
-          }
-        },
-        angleAxis: {
-          type: 'value',
-          startAngle: 0
-        },
-        radiusAxis: {
-          min: 0
+          orient: 'vertical',
+          x: 'left',
+          data: []
         },
         series: [
           {
-            coordinateSystem: 'polar',
-            name: 'line',
-            type: 'line',
-            showSymbol: false,
-            data: data
+              name:'访问来源',
+              type:'pie',
+              selectedMode: 'single',
+              radius: [0, '30%'],
+
+              label: {
+                  normal: {
+                      position: 'inner'
+                  }
+              },
+              labelLine: {
+                  normal: {
+                      show: false
+                  }
+              },
+              data:[
+                  { value:335, name:'直达', selected:true },
+                  { value:679, name:'营销广告' },
+                  { value:1548, name:'搜索引擎' },
+                  { value:1548, name:'搜索引擎' }
+              ]
+          },
+          {
+              name:'访问来源',
+              type:'pie',
+              radius: ['40%', '55%'],
+              label: {
+                  normal: {
+                      formatter: '{a|{a}}{abg|}\n{hr|}\n  {b|{b}：}{c}  {per|{d}%}  ',
+                      backgroundColor: '#eee',
+                      borderColor: '#aaa',
+                      borderWidth: 1,
+                      borderRadius: 4,
+                      rich: {
+                          a: {
+                              color: '#999',
+                              lineHeight: 22,
+                              align: 'center'
+                          },
+                          hr: {
+                              borderColor: '#aaa',
+                              width: '100%',
+                              borderWidth: 0.5,
+                              height: 0
+                          },
+                          b: {
+                              fontSize: 16,
+                              lineHeight: 33
+                          },
+                          per: {
+                              color: '#eee',
+                              backgroundColor: '#334455',
+                              padding: [2, 4],
+                              borderRadius: 2
+                          }
+                      }
+                  }
+              },
+              data:[]
           }
-        ],
-        animationDuration: 2000
+        ]
       }
     }
-  }
+  },
+  methods: {
+    getStatisticalPieMap () {
+      const self = this
+      getStatisticalPie().then(({ data }) => {
+        self.listLoading = false;
+        data.list.forEach(item => {
+          const { series, legend } = self.polar
+          series[1].data.push({
+            name: item.NAME,
+            value: item.COU + 100
+          })
+          legend.data.push(item.NAME)
+        })
+      })
+      .then(() => {
+        // TODO 
+
+        return
+      })
+      .catch(err => {
+        self.listLoading = false;
+        console.log(err);
+      })
+  
+    }
+  
+}
+  
 }
 </script>
