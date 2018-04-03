@@ -15,8 +15,10 @@
     "lint": "eslint --ext .vue,.js src"
   },
   "dependencies": {
+    "echarts": "^4.0.4",
     "js-cookie": "^2.1.4",
     "md5": "^2.2.1",
+    "vue-echarts": "^3.0.7",
     "vue-i18n": "^7.6.0",
     "wangeditor": "^3.1.0"
   },

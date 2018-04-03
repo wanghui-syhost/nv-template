@@ -15,6 +15,8 @@ import NvCard from './card'
 import NvEditor from './editor'
 import NvPersonchooser from './epersonchoose'
 import NvDatePick from './datepicker'
+
+import Charts from './charts'
 //import NvChart from './chart'
 
 const components = [
@@ -35,7 +37,8 @@ const components = [
   NvUserSelector,
   NvRegionSelect,
   NvPersonchooser,
-  NvDatePick
+  NvDatePick,
+  Charts
 ]
 
 const install = function(Vue, opts = {}) {
