@@ -1,6 +1,6 @@
 <template>
     <nv-layout>
-        <div>
+        <div slot="top">
             <a href="http://echarts.baidu.com/examples/" target="_blank"> 更多示例 请参考echart 官网</a>
         </div>
         <nv-layout-section title="柱状图">
