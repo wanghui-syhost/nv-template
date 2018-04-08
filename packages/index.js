@@ -7,6 +7,7 @@ import NvTextarea from './textarea'
 import NvOrganizeUserSelector from './organize-user-selector'
 import NvScrollPane from './scroll-pane'
 import NvUploader from './uploader'
+import NvFormUploader from './form-uploader'
 import NvUserSelector from './user-selector'
 import NvRegionSelect from './region-select'
 import NvIframe from './iframe'
@@ -34,6 +35,7 @@ const components = [
   NvScrollPane,
   NvSelect,
   NvUploader,
+  NvFormUploader,
   NvUserSelector,
   NvRegionSelect,
   NvPersonchooser,
