@@ -1,7 +1,7 @@
 <template>
   <nv-layout>
     <div>
-      <el-select v-model="TYPE_SMALL" placeholder="请选择" style="width: 300px;">
+      <el-select v-model="TYPE_SMALL" placeholder="请选择" v-show="options != ''" style="width: 300px;float: left; margin-right: 30px">
         <el-option
           v-for="item in options"
           :key="item.VALUE"
@@ -14,6 +14,7 @@
         :before-upload="beforeUpload"
         :headers="uploadHeaders" :data="fileData" 
         :show-file-list="false" 
+        :multiple= true
         accept=".jpg, .jpeg, .png, .gif, .rar, .zip, .doc, .docx, .xls, .xlsx,  .ppt, .pptx, .pdf, .txt, .wps">
           <el-button  type="primary">上传</el-button>
       </el-upload>
@@ -71,7 +72,7 @@ export default {
     TYPE_BIG: {
       type: String,
       require: true,
-      default: 'SHENPI'
+      default: ''
     },
   },
   mounted () {
@@ -110,6 +111,7 @@ export default {
         .then(({ data }) => {
           self.listLoading = false;
           self.options = data || [];
+          console.log("self.options:"+self.options);
         })
         .catch(err => {
           console.log(err);
