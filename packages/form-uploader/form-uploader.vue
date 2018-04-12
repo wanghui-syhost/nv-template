@@ -33,6 +33,7 @@
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button size="small" type="danger" @click="deleteFile(scope.row)">删除</el-button>
+            <slot name="extra" :file="scope.row"/>
             <el-button size="small" type="primary" @click="download(scope.row)">下载</el-button>
           </template>
         </el-table-column>
@@ -91,6 +92,7 @@ export default {
     getList() {
       const self = this;
       const { TYPE_BIG } = self;
+      console.log(TYPE_BIG);
       self.listLoading = true;
       selectByFileType({TYPE_BIG})
         .then(({ data }) => {
@@ -144,6 +146,10 @@ export default {
           ID: row.ID
         }
       })
+    },
+
+      goDictionaryData(row){
+        this.$router.push({path:'/document/upload/data',query:{CODE:'SHENPI',NAME:row.NAME}});
     },
 
     // 文件预览或下载

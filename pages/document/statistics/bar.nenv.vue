@@ -22,7 +22,7 @@
 }
 </style>
 <script>
-import {getStatisticalBar2 } from './api'
+import {getStatisticalBar } from './api'
 
 export default {
   created () {
@@ -46,7 +46,7 @@ export default {
     getStatisticalBarMap() {
       const self = this;
       const params={"year":self.year};
-      getStatisticalBar2(params).then(({ data }) => {
+      getStatisticalBar(params).then(({ data }) => {
         self.listLoading = false;
       let  polar={ 
         legend: {},
