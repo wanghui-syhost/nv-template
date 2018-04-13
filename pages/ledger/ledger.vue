@@ -32,7 +32,7 @@
 			const self = this
 			return {
 				collapse: true,
-				defaultMenu: [],
+				defaultMenu: '',
 				defaultOpend: [],
 				SHOW_HEAD: true,
 				TITLE: '',
@@ -44,7 +44,7 @@
 		},
 		computed: {
 			nvCode() {
-				return this.$route.query['nv-code']
+				return this.$route.query['nv-code'] || this.$route.params.code
 			}
 		},
 		methods: {
