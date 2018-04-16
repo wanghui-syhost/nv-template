@@ -1,7 +1,7 @@
-import NvDatePick from './datepicker'
+import NvDatePickper from './datepicker'
 
-NvDatePick.install = function(Vue) {
-    Vue.component(NvDatePick.name, NvDatePick)
+NvDatePickper.install = function(Vue) {
+    Vue.component(NvDatePickper.name, NvDatePickper)
 }
 
-export default NvDatePick
+export default NvDatePickper
