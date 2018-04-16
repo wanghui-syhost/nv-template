@@ -10,8 +10,13 @@
             <el-button @click="downloadChooseRows" type="primary" v-show="isShowDownload">
                 下载
             </el-button>
+<<<<<<< Updated upstream
             <el-button   @click="batchHandOnToDialog()" v-show="levelList.length" type="primary">
                 移交
+=======
+            <el-button  type="primary">
+                移至
+>>>>>>> Stashed changes
             </el-button>
           
             <el-upload  class="upload-table__upload--btn" :action="uploadURL" 
@@ -67,6 +72,7 @@
             
                 <el-table-column label="文件状态"  align="center" width="100">
                     <template slot-scope="scope">
+<<<<<<< Updated upstream
                       
                         <span v-if=" scope.row.IS_DIRECTORY === 'YES'">-</span>
                         
@@ -76,6 +82,13 @@
                           <span v-if="scope.row.FILE_STATUS === '2'"><div class="reply-user">已归档</div></span>
                           <span v-if="scope.row.FILE_STATUS === '3'"><div class="reply-user">被退回</div></span>
                           </a>           
+=======
+                        <i title="重命名" class="png-icon file-rename small" @click="reName(scope.row)"></i>
+                        <i title="下载" class="png-icon file-upload  small" @click="download(scope.row)"></i>
+                        <i title="删除" class="png-icon file-delete small" @click="removeItem(scope.row)"></i>
+                        <i title="移动到" class="png-icon file-txt small" @click="moveFolderTo(scope.row)"></i>
+                        <i title="移至" class="png-icon file-txt small" @click="handOnTo(scope.row)"></i>
+>>>>>>> Stashed changes
                     </template>
                 </el-table-column>
                 <el-table-column label="大小"  align="center" width="100">
@@ -155,8 +168,17 @@
             </div>
         </el-dialog>
 
+<<<<<<< Updated upstream
         <el-dialog title="移至文件" :visible.sync="isSelectUserDialog" width="800px">
                  <epersonchoose ref="personchoose" :result="currentChooseList" @sync-result="syncResult"  @get-choose-person="getChoosePerson" @cancel-choose-person="cancelChoose" ></epersonchoose>
+=======
+           <el-dialog title="移至文件" :visible.sync="isSelectUserDialog" width="800px">
+                 <epersonchoose ref="personchoose" :result="currentChooseList" @sync-result="syncResult"  @get-choose-person="getChoosePerson" @cancel-choose-person="cancelChoose" ></epersonchoose>
+            <div slot="footer" style="text-align:center">
+                <el-button @click="isSelectUserDialog = false">取 消</el-button>
+                <el-button type="primary" @click="confirmToFileArchive">确 定</el-button>
+            </div>
+>>>>>>> Stashed changes
         </el-dialog>
          
          <el-dialog class="dia_scroll" title="移动文件夹" :lock-scroll="false" :visible.sync="moveFormVisible" width="35%">
@@ -166,6 +188,7 @@
                 <el-button type="primary" @click="moveConfirm" >确 定</el-button>
             </div>
         </el-dialog>
+<<<<<<< Updated upstream
          <el-dialog class="dia_adopt_scroll" style="height:920px;" title="审核详情" :lock-scroll="false" :visible.sync="reviewedFormVisible" width="50%">
       
         <el-form ref="form" :model="reviewedForm" label-width="120px">
@@ -229,14 +252,21 @@
                 </span>
             </div>
         </el-dialog>
+=======
+>>>>>>> Stashed changes
     </div>
 </template>
 
 <script>
   import epersonchoose from '../../packages/epersonchoose/epersonchoose';
+<<<<<<< Updated upstream
   import vuex, { mapGetters, mapActions } from 'vuex';
   import { getTreeDocuments, FileRename, FileDelete, FileAdd, FileDownload, FileCreatedNewFolder,FileRenameFolder,FileDeleteFolder,deleteDirAndFiles,FileView,
   getFolderList,moveFolder,batchSaveFileArchive,saveFileArchive,getOperatePermission,adoptSave,getAdoptList} from './api';
+=======
+  import { getTreeDocuments, FileRename, FileDelete, FileAdd, FileDownload, FileCreatedNewFolder,FileRenameFolder,FileDeleteFolder,deleteDirAndFiles,FileView,
+  getFolderList,moveFolder,batchSaveFileArchive,getUsersByRoleId} from './api';
+>>>>>>> Stashed changes
   export default {
     components: {epersonchoose },
     name: 'NvUploader',
@@ -278,7 +308,10 @@
         dialogFormVisible:false,
           // 新建文件夹的dialog
         moveFormVisible:false,
+<<<<<<< Updated upstream
         reviewedFormVisible:false,
+=======
+>>>>>>> Stashed changes
         isSelectUserDialog:false,
         // 新建文件夹的名称
         newFolderName: '',
@@ -713,6 +746,85 @@
         this.isSelectUserDialog = false;
     },
 
+         syncResult(result){
+        this.currentChooseList = result;
+    },
+    // 移至文件
+    handOnTo(row){
+      // 先清除选项
+    this.currentChooseList.splice(0,this.currentChooseList.length);
+    // 不知道为什么通过这种方式一直获得不到对象
+    // this.$refs.personchoose.clearResult();
+    this.isSelectUserDialog = true;
+    this.ID = row.ID;
+
+    const self = this;
+    getUsersByRoleId({"ROLE_ID": this.ID})
+    .then(({data}) => {
+      data.list.forEach(item => {
+        let user = {};
+        user.userId = item.ID;
+        user.userName = item.USERNAME;
+        user.nickName = item.NICKNAME;
+        user.mobile = item.MOBILE;
+        user.position = item.POSITION;
+        self.currentChooseList.push(user);
+      });
+    }).catch(err => {
+      self.listLoading = false;
+      console.log(err);
+    })
+    },
+
+    // 批量移至文件夹
+   batchSave() {
+     this.$refs['fileArchiveForm'].validate((valid) => {
+          if (valid) {
+            const arr = this.fileArchiveForm.domains;
+            var data = {
+              CONFIGS: JSON.stringify(arr)
+            }
+            batchSaveFileArchive(data).then(response => {
+              this.$message({
+                message: response.rawData.msg,
+                type: "success"
+              });
+              this.resetForm('fileArchiveForm');
+              // 重新加载数据
+              this.getList();
+             // 隐藏弹出框
+              this.batchDialogVisible = false;
+            }).catch(e => {
+               this.$message({
+                  message: '添加失败',
+                  type: "error"
+                });
+            });
+        } else {
+        return false;
+      }
+    });
+  },
+
+      // 获取选中的人员信息
+    getChoosePerson(choosePerson){
+      if(choosePerson.length == 0){
+        this.$message.info("请先选择移交给的人员！");
+        return
+      }
+      this.isSelectUserDialog = false
+      if(choosePerson && choosePerson.length>0){
+        this.currentChooseList =  choosePerson;
+        this.relateUser(choosePerson);
+      }else{
+        this.currentChooseList = [];
+      }
+    },
+
+        cancelChoose(){
+        this.isSelectUserDialog = false;
+    },
+
     // change select 
     changeSelect(value){
       console.log("change", value);
@@ -989,6 +1101,34 @@
         if(this.moveForm.PARENT_ID==null || this.moveForm.PARENT_ID==0){
               me.$message.error("请选中文件夹");
         }else{
+              let reqParams = {
+                    ID: me.moveForm.ID,
+                    PARENT_ID:me.moveForm.PARENT_ID,
+                    IS_DIRECTORY:me.moveForm.IS_DIRECTORY,
+                  }
+                  console.log("移动请求参数：：：：");
+                  console.log(reqParams);
+              moveFolder(reqParams).then(resp=>{
+                let {code, msg, data} = resp.rawData;
+                if(code==0){
+                me.fetchData(me.currentId);
+                this.moveFormVisible=false;
+                me.$message.success("移动成功");
+                }else{
+                  me.$message.error('移动失败');
+                }
+              }).catch(err=>{
+                console.log(err)
+            })
+        }
+       
+    },
+    confirmToFileArchive(){
+        let  me=this;
+        if(this.moveForm.PARENT_ID==null || this.moveForm.PARENT_ID==0){
+              me.$message.error("请选中文件夹");
+        }else{
+              debugger;
               let reqParams = {
                     ID: me.moveForm.ID,
                     PARENT_ID:me.moveForm.PARENT_ID,

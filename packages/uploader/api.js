@@ -83,6 +83,7 @@ export function FileView(FILE_ID) {
   });
 }
 
+<<<<<<< Updated upstream
 
 // 查询当前登陆人拥有的操作权限数据
 export function getOperatePermission(params){
@@ -94,12 +95,17 @@ export function getOperatePermission(params){
 }
 //批量移交文档
 export function batchSaveFileArchive(params) {
+=======
+//批量移至文档
+ function batchSaveFileArchive(params) {
+>>>>>>> Stashed changes
   return unfetch({
     url: '/file/archive/addBatch',
     method: 'post',
     data: params
   });
 }
+<<<<<<< Updated upstream
 //单个移交文档
 export function saveFileArchive(params) {
   return unfetch({
@@ -124,3 +130,13 @@ export function getAdoptList(params){
 		params
 	});
 }
+=======
+// 根据角色ID查询拥有该角色的人员
+export function getUsersByRoleId(params){
+	return unfetch({
+		url:'/role/user/get/user/by/role',
+		method: 'get',
+		params
+	});
+}
+>>>>>>> Stashed changes
