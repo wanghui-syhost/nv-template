@@ -8,15 +8,9 @@ module.exports = {
     title: "欢迎来到盈峰环境智慧水务平台",
   },
   proxy: {
-<<<<<<< Updated upstream
     '/api/*': { //平台api管理
       // target: 'http://192.168.37.6:8089', // 平台
       // target: 'http://192.168.31.22:8089', // 邢光辉 ,   
-=======
-    '/api/*': {
-      //target: 'http://192.168.37.6:8089', // 平台
-      // target: 'http://192.168.31.22:8089', // 邢光辉
->>>>>>> Stashed changes
       target: 'http://localhost:8089',// 本地
       filter(pathname, req) {
         if (pathname.match(/\/api/)) {
@@ -25,7 +19,7 @@ module.exports = {
       }
     },  
     '/file/*': { // 平台文件管理
-      target: 'http://192.168.37.6:8808', 
+      target: 'http://localhost:8808', 
       filter(pathname, req) {
         if (pathname.match(/\/file/)) {
           return true
