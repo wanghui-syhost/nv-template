@@ -113,8 +113,10 @@ export default {
       token: state => state.token
     })
   },
-  watch (val) {
-    this.editor.txt.html(val)
+  watch: {
+    value (val) {
+      this.editor.txt.html(val)
+    }
   }
 }
 </script>
