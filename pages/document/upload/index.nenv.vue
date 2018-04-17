@@ -1,9 +1,6 @@
 <template>
     <nv-layout>
-        <nv-form-uploader TYPE_BIG="SHENPI" > 
-            <template slot="extra" slot-scope="scope">
-                <el-button @click="fileTypeData(scope.file)">小类</el-button>
-            </template>
+        <nv-form-uploader TYPE_BIG="001" > 
         </nv-form-uploader>
     </nv-layout>
 </template>

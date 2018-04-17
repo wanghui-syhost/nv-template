@@ -13,7 +13,7 @@
 
       <div style="float: left; margin-bottom: 10px; margin-left: 20px; font-size: 14px">
         <el-breadcrumb separator=">">
-					<el-breadcrumb-item :to="{ path: '/system/dictionary/' }">数据字典</el-breadcrumb-item>
+					<el-breadcrumb-item :to="{ path: '/document/type/' }">文件类型</el-breadcrumb-item>
 					<el-breadcrumb-item>{{PNAME}}</el-breadcrumb-item>
 				</el-breadcrumb>
       </div>
