@@ -3,7 +3,9 @@
      :maxlength="maxlength" :minlength="minlength" :placeholder="placeholder" :prefix-icon="prefixIcon"
      :suffix-icon="suffixIcon" :auto-complete="autoComplete" :readonly="readonly"
      @blur="blur" @focus="focus" @change="change" @clear="clear"   
-     :disabled = "isNvDisabled" :class="{'is-nv-disabled': isNvDisabled}" style="width:200px;"/>
+     :disabled = "isNvDisabled" :class="{'is-nv-disabled': isNvDisabled}" style="width:200px;"> 
+    <slot slot = "prepend" name="prepend"/>
+     </el-input>
 </template>
 <script>
 import nvInpterMixins from "nenv/mixins/inputerMixins";
@@ -13,7 +15,7 @@ export default {
   // mixins: [nvInpterMixins],
   props: {
     value: {
-      type: String,
+      type: [String, Number],
       required: true
     },
     disabled: {

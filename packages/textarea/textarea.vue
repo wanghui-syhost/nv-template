@@ -15,7 +15,7 @@ export default {
    //mixins: [nvInpterMixins],
    props: {
         value: {
-            type: Array,
+            type: [String],
             required: true
         },
         disabled: {
