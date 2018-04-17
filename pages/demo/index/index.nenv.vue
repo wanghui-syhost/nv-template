@@ -32,6 +32,18 @@
           <p> {{ nvRadioResult }} </p>
         </blockquote>
       </div>
+
+      <div>
+        <h4>1.4日期选择器</h4>
+        <nv-date-picker v-model="nvDatePicker"/>
+        <blockquote>
+          <p>
+            选择结果:
+          </p>
+          <p> {{ nvDatePicker }} </p>
+        </blockquote>
+      </div>
+
     </nv-layout-section>
     
     <nv-layout-section title="省市区级联">
@@ -131,7 +143,8 @@ export default {
           VALUE: [] // 配置值
         }],
         email: ''
-      }
+      },
+      nvDatePicker:null
     }
   },
   methods: {
