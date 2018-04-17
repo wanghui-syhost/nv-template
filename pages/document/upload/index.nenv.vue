@@ -6,11 +6,6 @@
 </template>
 <script>
 export default {
-    name: 'FormUploader',
-    methods: {
-        fileTypeData (params) {
-            this.$router.push({ path: '/document/upload/data', query: { CODE: params.TYPE_BIG} })
-        }
-    }
+    name: 'FormUploader'
 }
 </script>
