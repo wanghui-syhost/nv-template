@@ -1,11 +1,17 @@
 <template>
-    <nv-layout :label="$t('common.USER_NAME')">
-        {{ $t('common.USER_NAME') }}
+    <nv-layout :label="$nt('INTERPOLATION.USERNAME')">
+        {{ $nt('INTERPOLATION.USERNAME') }}
+        {{ $nt('INTERPOLATION.SEX') }}
+        {{ $nt('INTERPOLATION.AGE') }}
+
+        {{ $nt('SEX.MAN') }}
+        {{ $nt('SEX.MAN') }}
+        {{ $nt('SEX.WOMAN') }}
     </nv-layout>
 </template>
 <script>
 export default {
-  
+    NAME: 'INTERPOLATION'
 }
 </script>
 <style lang="sass" scoped>
@@ -13,3 +19,4 @@ export default {
 </style>
 
 
+  
