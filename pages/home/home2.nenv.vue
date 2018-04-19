@@ -5,6 +5,7 @@
 </template>
 <script>
 export default {
+    name: 'SecondHome',
     title:'首页标题'
 }
 </script>

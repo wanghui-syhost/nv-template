@@ -11,7 +11,7 @@
 </template>
 <script>
 export default {
-    NAME: 'DemoInterpolation'
+    name: 'DemoInterpolation'
 }
 </script>
 <style lang="sass" scoped>
