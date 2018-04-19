@@ -152,7 +152,7 @@
 <script>
 import { getConfigDatas, saveConfig, batchSaveConfig, validConfigKey, updateConfig } from './api'
 export default {
-  name: 'Config',
+  name: 'SystemConfig',
   data() {
     var keyValid = (rule, value, callback) => {
       var reg = /^[A-Za-z0-9_\.]+$/; 

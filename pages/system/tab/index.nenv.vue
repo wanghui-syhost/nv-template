@@ -148,7 +148,7 @@
 <script>
 import { getTabDatas, deleteTab, saveTab, updateTab, validTab } from './api'
 export default {
-  name: 'Tab',
+  name: 'SystemTab',
   data() {
     var codeValid = (rule, value, callback) => {
       var reg = /^[A-Za-z_]+$/; 

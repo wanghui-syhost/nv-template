@@ -1,7 +1,7 @@
 <template>
   <nv-layout>
     <section class="nv-layout-form search-form" slot="top">
-      <el-form ref="form" :model="form">
+      <el-form ref="form">
         <section class="search-flex">
           <div class="search-form-left">
             <el-button type="primary" @click="addInfo">新增</el-button>
