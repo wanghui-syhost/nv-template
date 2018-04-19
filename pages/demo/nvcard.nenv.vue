@@ -47,7 +47,7 @@
 </template>
 <script>
 export default {
-    name: 'DEMO-CARD',
+    name: 'DemoCard',
     data () {
         return {
             content: "    ",

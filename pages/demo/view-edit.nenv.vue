@@ -36,7 +36,7 @@
 </template>
 <script>
 export default {
-    name: 'formEdit',
+    name: 'DemoViewEdit',
     data () {
         return {
             nvCheckBoxResult: [],

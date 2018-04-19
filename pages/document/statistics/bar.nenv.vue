@@ -25,6 +25,7 @@
 import {getStatisticalBar } from './api'
 
 export default {
+  name: 'DocmentBar',
   created () {
      this.getStatisticalBarMap();
     // this.getStatisticalPieTypeMap();

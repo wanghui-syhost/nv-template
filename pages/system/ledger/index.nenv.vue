@@ -164,7 +164,7 @@
 <script>
 import { getLedgerDatas, deleteLedger, saveLedger, updateLedger, validLedger } from './api'
 export default {
-  name: 'Tab',
+  name: 'SystemLedger',
   data() {
     const codeValid = (rule, value, callback) => {
       const reg = /^[A-Za-z_]+$/; 

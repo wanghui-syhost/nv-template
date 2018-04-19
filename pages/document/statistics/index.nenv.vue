@@ -25,6 +25,7 @@
 import {getStatisticalBar2 } from './api'
 
 export default {
+  name: 'DocumentStatistics',
   created () {
      this.getStatisticalBarMap();
     // this.getStatisticalPieTypeMap();

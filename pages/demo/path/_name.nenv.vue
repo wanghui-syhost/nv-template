@@ -5,6 +5,7 @@
 </template>
 <script>
 export default {
+    name:'DemoPathVab',
     created () {
         alert(`路径变量为： ${this.$route.params.name} `)
     }

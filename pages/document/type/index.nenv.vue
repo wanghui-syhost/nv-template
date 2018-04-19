@@ -131,7 +131,7 @@
 <script>
 import { getFileTypeList, deleteFileType, saveFileType , validFileType, updateFileType} from "./api";
 export default {
-  name: "AAABBCC",
+  name: "DocumentType",
   data() {
     var codeValid = (rule, value, callback) => {
       var reg = /^[A-Za-z0-9_]+$/; 

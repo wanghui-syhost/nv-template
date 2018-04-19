@@ -19,6 +19,7 @@
 import {getStatisticalPie,getStatisticalPieType } from './api'
 
 export default {
+  name: 'DocumentPie',
   created () {
     this.getStatisticalPieMap();
     this.getStatisticalPieTypeMap();

@@ -11,6 +11,7 @@
     "current-dev": "node ../nenv/bin/nenv",
     "current-build": "node ../nenv/bin/nenv build",
     "dev": "nenv dev",
+    "update": "node ../nenv/bin/nenv update",
     "build": "node node_modules/nenv/bin/nenv dev",
     "lint": "eslint --ext .vue,.js src"
   },
