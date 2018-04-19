@@ -31,7 +31,7 @@
 import md5 from '../../node_modules/md5';
 import vuex, { mapActions } from 'vuex'
 export default {
-  name: "login",
+  name: "Login",
   data () {
       return {
         focus:{
