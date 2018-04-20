@@ -35,8 +35,6 @@
 
 </template>
 <script>
-  const  TOKEN = localStorage.getItem('user.token')
-
   //import unfetch from 'unfetch'
   export default {
     name: 'nvPersonChoose',
@@ -133,9 +131,7 @@
       getOrganizes(){
         let me = this
         unfetch.get(me.reqOpt.url, {
-        headers: {
-          'Authorization': TOKEN
-        },
+
         params: {
           ORGANIZE_ID: me.reqOpt.organizeId
         }
@@ -149,9 +145,6 @@
     getUsersByOrganizeId() {
       let me = this
       unfetch.get(me.reqOpt.getUsersByOrganizeIdUrl, {
-        headers: {
-          'Authorization': TOKEN
-        },
         params: {
           ORGANIZE_ID: me.currentChooseGroupId
         }
