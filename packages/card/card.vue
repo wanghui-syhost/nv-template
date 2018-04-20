@@ -32,10 +32,7 @@ const { mapState ,mapGetters, mapActions } = createNamespacedHelpers(store.name)
 export default {
     name: 'NvLayout',
     props: {
-        isDynamic: {
-            type: Boolean,
-            default: false
-        },
+        isDynamic: false,
         prefixType: {
             type: String,
             default: '一'
@@ -56,7 +53,6 @@ export default {
     },
     created () {
         this.$parent.$emit('configNvlayout', this)
-        console.log(this.$slots)
     },
     computed: {
         isTitleShow () {

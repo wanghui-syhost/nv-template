@@ -8,24 +8,7 @@
             <el-button  type="primary">新增</el-button>
           </div>
 
-          <el-form-item label="关键字" class="search-form-one all-width" slot="search-item">
-                <el-input v-model="form.keyword" placeholder="请输入关键字"></el-input>
-              </el-form-item>
-          <el-form-item label="抽查情况" class="search-form-one" slot="search-item">
-                <el-select v-model="form.region0" placeholder="全部类型" class="all-width">
-                  <el-option label="抽查情况1" value="type1"></el-option>
-                  <el-option label="抽查情况2" value="type2"></el-option>
-                </el-select>
-          </el-form-item>
-
-          <el-form-item label="抽查情况" class="search-form-one" slot="search-item">
-                <el-select v-model="form.region1" placeholder="全部类型" class="all-width">
-                  <el-option label="抽查情况1" value="type1"></el-option>
-                  <el-option label="抽查情况2" value="type2"></el-option>
-                </el-select>
-          </el-form-item>
-
-          <!-- <div class="search-form-main">
+          <div class="search-form-main">
             <div class="search-form-row">
               <el-form-item label="关键字" class="search-form-one all-width" >
                 <el-input v-model="form.keyword" placeholder="请输入关键字"></el-input>
@@ -59,14 +42,14 @@
                     <el-date-picker type="date"  class="all-width"   placeholder="选择日期" v-model="form.startDate" ></el-date-picker>
                   </el-form-item>
                   <el-form-item label="至"  class="search-form-one all-width">
-                    <span>至</span>  
+                    <!-- <span>至</span>   -->
                     <el-date-picker class="all-width" type="date" placeholder="选择日期" v-model="form.endDate" ></el-date-picker>
                   </el-form-item>
                   <el-form-item label-width="20px" class="button-placeholader">
                     <el-button>搜索</el-button>
                   </el-form-item>
             </div>
-          </div> -->
+          </div>
 
 
         </section>
@@ -159,7 +142,7 @@
 <script>
   import { getInfo, modifyInfo, deleteInfo } from './api';
   export default {
-    name: 'DemoDetailList',
+    name: 'homeDetailList',
     data() {
       return {
         form: {
