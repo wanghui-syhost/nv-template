@@ -39,7 +39,7 @@
 
   //import unfetch from 'unfetch'
   export default {
-    name: 'epersonchoose',
+    name: 'nvPersonChoose',
     props: {
       // 请求参数
       reqOpt: {

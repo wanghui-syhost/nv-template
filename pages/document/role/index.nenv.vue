@@ -58,7 +58,7 @@
 
     <!-- 关联人员 -->
     <el-dialog title="请选择人员" :visible.sync="isSelectUserDialog" width="800px">
-        <epersonchoose ref="personchoose" :result="currentChooseList" @sync-result="syncResult"  @get-choose-person="getChoosePerson" @cancel-choose-person="cancelChoose" ></epersonchoose>
+        <nv-person-choose ref="personchoose" :result="currentChooseList" @sync-result="syncResult"  @get-choose-person="getChoosePerson" @cancel-choose-person="cancelChoose" ></nv-person-choose>
     </el-dialog>
 
   </nv-layout>
@@ -66,12 +66,11 @@
 <script>
 import DocumentRoleEditor from "./edit.nenv";
 import FolderTree from "./folderTree.nenv";
-import epersonchoose from '../../../packages/epersonchoose/epersonchoose';
 
 import { getDocumentRoleDatas, deleteDocumentRole, batchUpdateRoleUser, getUsersByRoleId } from './api'
 export default {
   name: 'DocumentRole',
-  components: { DocumentRoleEditor, FolderTree, epersonchoose },
+  components: { DocumentRoleEditor, FolderTree },
   data() {
     return {
       isShowAddDialog: false,

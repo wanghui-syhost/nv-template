@@ -9,9 +9,9 @@ module.exports = {
   },
   proxy: {
     '/api/*': { //平台api管理
-      // target: 'http://192.168.37.6:8089', // 平台
+      target: 'http://192.168.37.6:8089', // 平台
       // target: 'http://192.168.31.22:8089', // 邢光辉 ,   
-      target: 'http://localhost:8089',// 本地
+      // target: 'http://localhost:8089',// 本地
       filter(pathname, req) {
         if (pathname.match(/\/api/)) {
           return true
@@ -31,11 +31,17 @@ module.exports = {
     // if (true) { // 开发环境配置
     //   config.plugins.push(
     //     new webpack.DefinePlugin({
-    //       'process.env.BASE_URL': "'http://192.168.37.6:8092'"
+    //       'process.env.BASE_URL': "'/gis'"
     //     }),
     //   )
     // } else { // 生产环境配置
     // }
+
+    config.plugins.push(
+      new webpack.DefinePlugin({
+        'process.env.SSO_URL': "'http://192.168.37.6.8089'"
+      })
+    )
 
     config.plugins.push(
       new webpack.DefinePlugin({

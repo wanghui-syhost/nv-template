@@ -156,7 +156,7 @@
         </el-dialog>
 
         <el-dialog title="移至文件" :visible.sync="isSelectUserDialog" width="800px">
-                 <epersonchoose ref="personchoose" :result="currentChooseList" @sync-result="syncResult"  @get-choose-person="getChoosePerson" @cancel-choose-person="cancelChoose" ></epersonchoose>
+                 <nv-person-choose ref="personchoose" :result="currentChooseList" @sync-result="syncResult"  @get-choose-person="getChoosePerson" @cancel-choose-person="cancelChoose" ></nv-person-choose>
         </el-dialog>
          
          <el-dialog class="dia_scroll" title="移动文件夹" :lock-scroll="false" :visible.sync="moveFormVisible" width="35%">
@@ -233,12 +233,10 @@
 </template>
 
 <script>
-  import epersonchoose from '../../packages/epersonchoose/epersonchoose';
   import vuex, { mapGetters, mapActions } from 'vuex';
   import { getTreeDocuments, FileRename, FileDelete, FileAdd, FileDownload, FileCreatedNewFolder,FileRenameFolder,FileDeleteFolder,deleteDirAndFiles,FileView,
   getFolderList,moveFolder,batchSaveFileArchive,saveFileArchive,getOperatePermission,adoptSave,getAdoptList} from './api';
   export default {
-    components: {epersonchoose },
     name: 'NvUploader',
     data () {
       return {

@@ -17,12 +17,12 @@
         </el-tag>
 		</div>
         <el-dialog :title="title" :visible.sync="isShowDialog" width="800px">
-            <epersonchoose :result="currentChooseList" @sync-result="syncResult"  @get-choose-person="getChoosePerson" @cancel-choose-person="cancelChoose" ></epersonchoose>
+            <nv-person-choose :result="currentChooseList" @sync-result="syncResult"  @get-choose-person="getChoosePerson" @cancel-choose-person="cancelChoose" ></nv-person-choose>
         </el-dialog>
     </section>
 </template>
 <script>
-import epersonchoose from './epersonchoose'
+import NvPersonChoose from './nv-person-choose'
 
 export default {
     name:'NvPersonChooser',
@@ -46,7 +46,7 @@ export default {
         }
     },
     components:{
-        epersonchoose
+        NvPersonChoose
     },
     created(){
         this.currentChooseList = this.currentPersonList;

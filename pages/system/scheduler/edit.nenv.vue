@@ -1,4 +1,5 @@
 <template>
+<nv-layout>
       <el-form :model="addForm" :rules="addRules" ref="addForm" label-width="90px" slot="top">
         <el-row type="flex" class="row-bg" justify="space-between">
           <el-col :span="12">
@@ -38,6 +39,7 @@
           <el-button type="primary" @click="saveOrEdit();">保存</el-button>
         </el-row>
       </el-form >
+      </nv-layout>
 </template>
 <script>
 import { getScheduler, saveScheduler,updateScheduler } from './api'
