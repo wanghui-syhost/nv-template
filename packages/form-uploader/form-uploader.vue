@@ -1,5 +1,5 @@
 <template>
-  <nv-layout>
+  <div>
     <div>
       <el-select v-model="TYPE_SMALL" placeholder="请选择" v-show="options != ''" style="width: 300px;float: left; margin-right: 30px">
         <el-option
@@ -39,7 +39,7 @@
         </el-table-column>
       </el-table>
     </div>
-  </nv-layout>
+  </div>
 </template>
 <script>
 import { selectOptionByFileType, selectByFileType, FileDelete, FileView, FileAdd } from "./api";
