@@ -14,7 +14,7 @@ import NvIframe from './iframe'
 import NvDynamic from './dynamic'
 import NvCard from './card'
 import NvEditor from './editor'
-import NvPersonchooser from './epersonchoose'
+import NvPersonchooser from './nv-person-chooser'
 import NvDatePick from './datepicker'
 
 import Charts from './charts'
