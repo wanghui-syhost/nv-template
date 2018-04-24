@@ -7,50 +7,38 @@
           <div class="search-form-left">
             <el-button  type="primary">新增</el-button>
           </div>
-
-          <div class="search-form-main">
-            <div class="search-form-row">
-              <el-form-item label="关键字" class="search-form-one all-width" >
-                <el-input v-model="form.keyword" placeholder="请输入关键字"></el-input>
+          <nv-layout-form>
+              <el-form-item label-width="20px" slot="search-button">
+                <el-button>搜索</el-button>
               </el-form-item>
-              <el-form-item label="抽查情况" class="search-form-one">
+              <el-form-item label="关键字" slot="search-item">
+                <el-input suffix-icon="search" v-model="form.keyword" placeholder="请输入关键字"></el-input>
+              </el-form-item>
+              <el-form-item label="抽查情" slot="search-item">
                 <el-select v-model="form.region0" placeholder="全部类型" class="all-width">
-                  <el-option label="抽查情况1" value="type1"></el-option>
+                  <el-option label="抽查情" value="type1"></el-option>
                   <el-option label="抽查情况2" value="type2"></el-option>
                 </el-select>
               </el-form-item>
-
-              <el-form-item label="抽查情况" class="search-form-one">
+              <el-form-item label="抽查情况" slot="search-item">
                 <el-select v-model="form.region1" placeholder="全部类型" class="all-width">
                   <el-option label="抽查情况1" value="type1"></el-option>
                   <el-option label="抽查情况2" value="type2"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label-width="20px">
-                <el-button>搜索</el-button>
+              <el-form-item label="抽查况" slot="search-item">
+                <el-select v-model="form.region2" placeholder="全部类型" class="all-width">
+                  <el-option label="抽查情况1" value="type1"></el-option>
+                  <el-option label="抽查情况2" value="type2"></el-option>
+                </el-select>
               </el-form-item>
-            </div>
-                
-            <div class="search-form-row">
-                  <el-form-item label="抽查情况"  class="search-form-one">
-                    <el-select v-model="form.region2" placeholder="全部类型" class="all-width">
-                      <el-option label="抽查情况1" value="type1"></el-option>
-                      <el-option label="抽查情况2" value="type2"></el-option>
-                    </el-select>
-                  </el-form-item>
-                  <el-form-item label="创建时间"  class="search-form-one all-width" >
-                    <el-date-picker type="date"  class="all-width"   placeholder="选择日期" v-model="form.startDate" ></el-date-picker>
-                  </el-form-item>
-                  <el-form-item label="至"  class="search-form-one all-width">
-                    <!-- <span>至</span>   -->
-                    <el-date-picker class="all-width" type="date" placeholder="选择日期" v-model="form.endDate" ></el-date-picker>
-                  </el-form-item>
-                  <el-form-item label-width="20px" class="button-placeholader">
-                    <el-button>搜索</el-button>
-                  </el-form-item>
-            </div>
-          </div>
-
+              <el-form-item label="创建时间" slot="search-item">
+                <el-date-picker type="date"  class="all-width"   placeholder="选择日期" v-model="form.startDate" ></el-date-picker>
+              </el-form-item>
+              <el-form-item label="至" slot="search-item">
+                <el-date-picker class="all-width" type="date" placeholder="选择日期" v-model="form.endDate" ></el-date-picker>
+              </el-form-item>
+          </nv-layout-form>
 
         </section>
       </el-form>
@@ -285,7 +273,7 @@
   display: flex;
   padding-left:20px;
   padding-right:10px;
-  justify-content: flex-end;
+  justify-content: flex-start;
 }
 .search-form-one{
   flex:1

@@ -1,0 +1,53 @@
+.nv-layout-form {
+    position: relative;
+    &_wrapper {
+        display: flex;
+        position: relative;
+    };
+    &_holder {
+        position: absolute;
+        right: 0;
+        cursor: pointer;
+        border: 1px solid #3C8CFF;
+        color: #3C8CFF;
+        border-radius: 4px;
+        margin-top: 2px;
+        padding: 8px 6px;
+    };
+    .nv-layout-form_main {
+        margin-right: 100px;
+        width: 384px;
+    }
+    &_popover {
+        background-color: #fff;
+        border-radius: 4px;
+        box-shadow: 0 0 4px 0 #9ea8af;
+        padding: 8px 12px;
+        position: absolute;
+        z-index: 100;
+        right: 0;
+
+        &.double {
+            min-width: 460px;
+        }
+
+        &.single {
+            max-width: 260px;
+        }
+    }
+
+    &_line {
+        &.full {
+            > * {
+                display: inline-block;
+                max-width: 47%;
+                margin-left: 6%;
+            }
+        }
+        > * {
+            &:first-child {
+                 margin-left: 0 !important;
+            }
+        }
+    }
+}
