@@ -50,7 +50,7 @@ export default {
 <style rel="stylesheet/scss" lang="scss" scoped>
 
 .frame-wrapper {
-    position: absolute;
+    position: relative;
     top: 0;
     bottom: 0;
     left: 0;
