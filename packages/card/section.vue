@@ -36,6 +36,7 @@ export default {
     .top {
         position: relative;
         margin: 20px 0 10px 0;
+        font-size: 0;
     }
 
     .is-card-layout {
@@ -43,7 +44,7 @@ export default {
             margin-top: 0;
         }
         .title {
-            color: red;
+            //color: red;
             &-line {
                 border: none
             }
@@ -67,7 +68,7 @@ export default {
         font-size: 20px;
         font-weight: 800;
         color: #333;
-        padding: 0 10px 0 0;
+        padding: 0 10px;
         background-color: #fff;
         z-index: 1;
         &:before {

@@ -99,7 +99,7 @@ export default {
         right: 0;
         left: 0;
         overflow-x: hidden;
-        overflow-y: auto;
+        //overflow-y: auto;
         //border-radius: 4px;
         //box-shadow: 0 0 4px 0 #bfc4b6;
 
