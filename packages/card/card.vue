@@ -1,5 +1,5 @@
 <template>
-    <div class="nv-layout" :class="{'is-card-layout': isCardLayout}">
+    <div class="nv-layout" :class="{'is-card-layout': isCardLayout, 'embed': isDynamicView}">
         <div class="nv-layout__top" :class="{'is-title-show': isTitleShow, 'only-title': !$slots.top}" v-if="isTitleShow || $slots.top" >
             <label class="nv-layout__top-label" v-if="isTitleShow">
                 <template v-for="parent in acitveMenu.parents" >
@@ -20,7 +20,7 @@
                 </div>
             </div>
         </div>
-        <div class="nv-layout__main">
+        <div class="nv-layout__main" v-if="$slots.default">
             <slot name="default" />
         </div>
     </div>
@@ -110,6 +110,9 @@ export default {
     min-height: 100%;
     background-color: #fff;
     box-shadow: 0 2px 4px 0 rgba(226, 226, 226, 0.5);
+    &.embed {
+        box-shadow: none;
+    }
     border-radius: 4px;
 
     &__top {
