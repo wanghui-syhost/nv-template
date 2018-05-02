@@ -48,7 +48,7 @@
         <!-- 面包屑导航 -->
         <div class="uploader-top">
             <div class="selector">
-              <el-checkbox v-model="isAllSelected">全选</el-checkbox>
+              <el-checkbox v-model="isAllSelected" :disabled="!list.length">全选</el-checkbox>
             </div>
             <el-breadcrumb class="nav" separator=" > ">
                 <el-breadcrumb-item v-for="(item,index)  in levelList" :key="item.id">
