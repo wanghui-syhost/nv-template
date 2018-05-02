@@ -2,7 +2,21 @@ export function getTreeDocuments(reqParams) {
   return unfetch({
     url: '/document/tree/documents',
     params: reqParams
-  });
+  }).then((data = {}) => {
+    const userName = nenv.raw.store.state.user.profile.userName
+    data.data.list.map(file => {
+      file.permisson = {
+        rename: [0, 3].indexOf(file.FILE_STATUS) > -1 || file.IS_DIRECTORY === 'YES',
+        download: true,
+        delete: [0, 3].indexOf(file.FILE_STATUS) > -1 || file.IS_DIRECTORY === 'YES',
+        move: [0, 3].indexOf(file.FILE_STATUS) && file.IS_DIRECTORY === 'NO',
+        deliver: file.CREATE_USER === userName && file.IS_DIRECTORY === 'NO' && [0,3].indexOf(file.FILE_STATUS) > -1,
+        review: file.IS_DIRECTORY === 'NO' && file.FILE_STATUS === 1 && file.RECIPIENT
+      }
+      return file
+    })
+    return Promise.resolve(data)
+  })
 }
 
 // 文件重命名

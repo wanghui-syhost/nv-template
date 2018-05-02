@@ -3,7 +3,7 @@
     <!-- <h2>平台组件</h2> -->
     <nv-layout-section title="输入控件">
       <div>
-        <h4>1.1多选框</h4>
+        <h4 v-nv-view.display>1.1多选框</h4>
         <nv-checkbox nv-code="HOBBY" v-model="nvCheckboxResult"/>
         <blockquote>
           <p>

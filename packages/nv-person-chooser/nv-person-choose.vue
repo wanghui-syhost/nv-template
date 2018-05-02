@@ -35,7 +35,6 @@
 
 </template>
 <script>
-  //import unfetch from 'unfetch'
   export default {
     name: 'nvPersonChoose',
     props: {
@@ -75,9 +74,10 @@
         default(){
           return []
         }
+      },
+      value: {
+        required: true
       }
-
-
 
     },
     data() {
