@@ -334,12 +334,13 @@ export default {
   computed: {
     isAllSelected: {
       get () {
-        for (let file of this.list) {
+        const { list } = this
+        for (let file of list) {
           if (!file.isChecked) {
             return false
           }
         }
-        return true
+        return  !!list.length
       },
       set (val) {
         const { list, isDispayBlock } = this
@@ -348,7 +349,7 @@ export default {
       }
     },
     componentType() {
-      return (this.isDispayBlock ? "block" : "list") + "-shape";
+      return `${this.isDispayBlock ? "block" : "list"}-shape`
     },
     selectedFiles () {
       return this.list.filter(file => file.isChecked)
