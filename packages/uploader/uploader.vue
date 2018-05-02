@@ -902,12 +902,7 @@ export default {
         this.showUpload = "search" !== type;
       }
       this.currentId = parentCode;
-      if (
-        parentCode != null &&
-        parentCode != "" &&
-        "search" !== type &&
-        "search" !== parentCode
-      ) {
+      if ( parentCode != null && parentCode != "" && "search" !== type && "search" !== parentCode) {
         this.fetchData(parentCode);
       }
     },

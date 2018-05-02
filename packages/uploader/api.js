@@ -4,6 +4,7 @@ export function getTreeDocuments(reqParams) {
     params: reqParams
   }).then((data = {}) => {
     const userName = nenv.raw.store.state.user.profile.userName
+    data.data.list = data.data.list || []
     data.data.list.map(file => {
       file.permisson = {
         rename: [0, 3].indexOf(file.FILE_STATUS) > -1 || file.IS_DIRECTORY === 'YES',
