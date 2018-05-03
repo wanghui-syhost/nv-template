@@ -15,8 +15,24 @@
         padding: 8px 6px;
     };
     .nv-layout-form_main {
-        margin-right: 100px;
-        width: 384px;
+        margin:0 100px 0 12px;
+        width: 364px;
+
+        > * {
+            display: inline-block;
+            max-width: 320px;
+        }
+
+        .search {
+            &-main {
+                > * {
+                    margin: 0;
+                }
+            }
+            &-btn {
+                margin-left: 10px;
+            }
+        }
     }
     &_popover {
         background-color: #fff;
@@ -24,6 +40,7 @@
         box-shadow: 0 0 4px 0 #9ea8af;
         padding: 8px 12px;
         position: absolute;
+        margin-top: 20px;
         z-index: 100;
         right: 0;
 
@@ -37,6 +54,17 @@
     }
 
     &_line {
+
+        > * {
+            margin-bottom: 0;
+        }
+
+        margin-bottom: 16px;
+
+        &:last-child {
+            margin-bottom:  0;
+        }
+
         &.full {
             > * {
                 display: inline-block;

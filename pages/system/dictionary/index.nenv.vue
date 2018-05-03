@@ -7,21 +7,17 @@
                <el-button type="primary" @click="addInfo">新增</el-button>
             </div>
             <!-- 搜索框  -->
-            <div class="search-form-main">
-                <div class="search-form-row">
-                  <el-form-item label="字典名称" class="search-form-one">
+            <nv-layout-form>
+                  <el-button type="infor" @click="getList();" slot="search-button">搜索</el-button>
+                  <el-form-item label="字典名称" slot='search-item'>
                     <el-input v-model="NAME" placeholder="请输入字典名称" ></el-input>
                   </el-form-item>
-                  <el-form-item label="字典状态" class="search-form-one all-width">
-                    <el-select v-model="STATUS" placeholder="" class="all-width">
+                  <el-form-item label="字典状态" slot='search-item'>
+                    <el-select v-model="STATUS" :value = "STATUS"  placeholder="" class="all-width">
                       <el-option v-for="item in searchStatus" :key="item.value" :label="item.label" :value="item.value"></el-option>
                     </el-select>
                   </el-form-item>
-                  <el-form-item label-width="20px">
-                    <el-button type="infor" @click="getList();">搜索</el-button>
-                  </el-form-item>
-              </div>
-            </div>
+            </nv-layout-form>
           </section>
         </el-form>
       </section>
