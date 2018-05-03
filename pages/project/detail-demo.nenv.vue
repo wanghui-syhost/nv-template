@@ -8,9 +8,9 @@
             <el-button  type="primary">新增</el-button>
           </div>
           <nv-layout-form>
-              <el-form-item label-width="20px" slot="search-button">
-                <el-button>搜索</el-button>
-              </el-form-item>
+              <!-- <el-form-item label-width="20px" slot="search-button"> -->
+                <el-button slot="search-button">搜索</el-button>
+              <!-- </el-form-item> -->
               <el-form-item label="关键字" slot="search-item">
                 <el-input suffix-icon="search" v-model="form.keyword" placeholder="请输入关键字"></el-input>
               </el-form-item>
