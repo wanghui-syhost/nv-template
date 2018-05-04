@@ -16,6 +16,12 @@
                     v-model="cardLayout"
                 />
             </div>
+            <div class="header__setting-item">
+                <el-switch
+                    active-text="居右"
+                    v-model="extraRight"
+                />
+            </div>
         </el-popover>
         <el-button class="layout-setting__btn" v-popover:setting>设置</el-button>
     </div>
@@ -40,11 +46,19 @@ export default {
                 return this.isCardLayout
             }
         },
-        ...mapState('nv-layout', ['isShowTitle', 'isCardLayout']),
+        extraRight: {
+            set () {
+                this.changeExtraDirection()
+            },
+            get () {
+                return this.isExtraRight
+            }
+        },
+        ...mapState('nv-layout', ['isShowTitle', 'isCardLayout', 'isExtraRight']),
     },
     methods: {
         ...mapActions('nv-layout',
-            ['changeLayout', 'changeShowTitle']
+            ['changeLayout', 'changeShowTitle', 'changeExtraDirection']
         )
     }
 }

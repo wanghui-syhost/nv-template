@@ -1,4 +1,6 @@
 import './nv-layout-form.scss'
+import { mapState } from 'vuex'
+import store from './store'
 export default {
     name: 'NvLayoutForm',
     data () {
@@ -14,13 +16,21 @@ export default {
     created () {
         console.log(this.$slots)
     },
+    computed: {
+        ...mapState(store.name, ['isExtraRight'])
+    },
     render (h) {
         const self = this
-        const { $slots, isCollapse } = self
+        const { $slots, isCollapse, isExtraRight } = self
         const hasSearchBtn = !!$slots['search-button']
 
-        const mainSlot = $slots['search-item'][0]
-        const otherSlots = $slots['search-item'].slice(1)
+        const filteredMainSlot = $slots['search-item'].filter(item => item.tag)
+
+        const mainSlot = filteredMainSlot[0]
+        const otherSlots = filteredMainSlot.slice(1)
+        const extraSlots = $slots['extra-item']
+
+        console.log(otherSlots)
 
         const innerSlotsLength = otherSlots.length
         const otherSlotsVNodes = []
@@ -39,56 +49,72 @@ export default {
                 )
         }
 
-        return h(
-            'div',
-            {
-                staticClass: 'nv-layout-form'
-            },
-            [
-                h (
-                    'div',
+        return  h('section',
                     {
-                        staticClass: 'nv-layout-form_wrapper'
+                        staticClass: 'nv-layout-formater'
                     },
                     [
                         h(
-                            'div', 
+                            'div',
                             {
-                                staticClass: 'nv-layout-form_main',
-                                class: {'has-button': hasSearchBtn}
+                                staticClass: 'nv-layout-form'
                             },
                             [
-                                h('div', { staticClass: 'search-main'}, [mainSlot]),
-                                h('div', { staticClass: 'search-btn'}, [$slots['search-button']])
+                                h (
+                                    'div',
+                                    {
+                                        staticClass: 'nv-layout-form_wrapper'
+                                    },
+                                    [
+                                        h(
+                                            'div', 
+                                            {
+                                                staticClass: 'nv-layout-form_main',
+                                                class: {'has-button': hasSearchBtn}
+                                            },
+                                            [
+                                                h('div', { staticClass: 'search-main'}, [mainSlot]),
+                                                h('div', { staticClass: 'search-btn'}, [$slots['search-button']])
+                                            ]
+                                        ),
+                                        ...otherSlotsVNodes.length > 0 ? [
+                                            h(
+                                                'a',
+                                                {
+                                                    staticClass: 'nv-layout-form_holder',
+                                                    on: {
+                                                        click: self.handleCollapse
+                                                    }
+                                                },
+                                                [
+                                                    "更多筛选",
+                                                    h('i', { staticClass: isCollapse ? 'el-icon-arrow-down' : 'el-icon-arrow-up' })
+                                                ]
+                                            ),
+                                            !isCollapse
+                                            ? h(
+                                                'div',
+                                                {
+                                                    staticClass: 'nv-layout-form_popover',
+                                                    class: innerSlotsLength > 3 ? 'double' : 'single'
+                                                },
+                                                otherSlotsVNodes
+                                            )
+                                            : null
+                                        ]: null ,
+                                    ]
+                                )
                             ]
                         ),
                         h(
-                            'a',
+                            'div',
                             {
-                                staticClass: 'nv-layout-form_holder',
-                                on: {
-                                    click: self.handleCollapse
-                                }
+                                staticClass: 'extra-wrapper'
                             },
-                            [
-                                "更多筛选",
-                                h('i', { staticClass: isCollapse ? 'el-icon-arrow-down' : 'el-icon-arrow-up' })
-                            ]
-                        ),
-                    ]
-                ),
-                isCollapse 
-                ? null 
-                : h(
-                    'div',
-                    {
-                        staticClass: 'nv-layout-form_popover',
-                        class: innerSlotsLength > 3 ? 'double' : 'single'
-                    },
-                    otherSlotsVNodes
+                            extraSlots
+                        )
+                    ][isExtraRight ? 'reverse' : 'slice']()
                 )
-            ]
-        )
     }
 }
 
