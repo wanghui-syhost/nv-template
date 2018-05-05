@@ -1,16 +1,18 @@
 <template>
-    <div class="frame-wrapper" :class="{'width-limited': isWithLimited}">
+    <div class="frame-wrapper" :class="{'width-limited': isWithLimited, 'has-sidebar': hasSidebar}">
         <div class="frame__header-wrapper">
             <frame-header :menus = "menus" :active-top-menu="activeTopMenu || {}"/>
         </div>
         <div class="frame__sidebar-wrapper" v-if="hasSidebar">
+            <div class="frame_sidebar-inner">
             <frame-sidebar class="sidebar-container" :routes="activeTopMenu.childrens || []"/>
+            </div>
         </div>
         <div class="frame__body">
-            <div class="frame-wrapper">
+            <!-- <div class="frame-container-wrapper"> -->
                 <div class="frame-main-container" :class= "{'has-sidebar': hasSidebar } ">
                     <frame-main />
-                </div>
+                <!-- </div> -->
             </div>
         </div>
     </div>
@@ -50,61 +52,84 @@ export default {
 <style rel="stylesheet/scss" lang="scss" scoped>
 
 .frame-wrapper {
-    position: relative;
-    top: 0;
-    bottom: 0;
+    position: absolute;
+    top: 62px;
+    //bottom: 0;
     left: 0;
     right: 0;
-    min-width: 1280px;
-    /*overflow: auto;*/
+    min-height: calc(100vh - 62px);
+    //min-width: 1280px;
+    //overflow: hidden;
+    //overflow-x: auto;
 
     &.width-limited {
-        width: 1280px;
+        max-width: 1280px;
         margin: 0 auto;
 
-        padding-top: 20px;
+        margin-top: 20px;
         .frame__sidebar-wrapper {
-            padding-top: 0;
-            top: 82px;
+            padding-top: 20px;
+            //top: 82px;
         }
     }
 }
 
 .frame__sidebar-wrapper {
-    width: 180px;
+    width: 200px;
     position: fixed;
     top: 62px;
-    padding-top: 20px;
+    //padding-top: 20px;
     bottom: 0;
     z-index: 1001;
-    background-color: #fff;
-    overflow: hidden;
-    box-shadow: 0 0 4px 0 #BFC4B6;
+    background-color: #E8ECF0;
+    overflow: auto;
     transition: all .28s ease-out;
 }
 
+.frame_sidebar-inner {
+    width: 180px;
+    height: 100%;
+    box-shadow: 0 0 4px 0 #BFC4B6;
+    overflow: auto;
+}
+
 .frame__body {
-    position: absolute;
-    width: 100%;
-    top: 82px;
+    //position: absolute;
+    //float: left;
+    //padding-left: 200px;
+    max-width: calc(100vw - 200px);
+    min-height: 100%;
+    width: calc(100% - 200px);
+    margin-left: 200px;
+    top: 0;
+    //margin-top: 82px;
+    //padding-top: 20px;
     bottom: 0px;
-    // overflow: hidden;
+    left: 200px;
+    right: 0;
+    //overflow: auto;
+    // overflow-x: auto;
+    // overflow-y: scroll;
+
 
     .frame-main-container {
         transition: all .28s ease-out;
-        position: absolute;
-        top: 0;
-        // bottom: 0;
-        width: auto;
-        right: 0;
-        left: 0;
-        overflow-x: hidden;
+        position: relative;
+        //position: absolute;
+        min-height: 100%;
+        //top: 82px;
+        //bottom: 0;
+        //width: auto;
+        //right: 0;
+        //left: 0;
+        //min-width: 1080px;
+        //overflow-x: scroll;
         //overflow-y: auto;
         //border-radius: 4px;
         //box-shadow: 0 0 4px 0 #bfc4b6;
 
         &.has-sidebar {
-            margin-left: 200px;
+           // margin-left: 200px;
         }
     }
 }
