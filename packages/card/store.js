@@ -9,7 +9,7 @@ export default {
     state: {
         isCardLayout: false,
         isShowTitle: true,
-        isExtraRight: true,
+        isExtraRight: false,
     },
     mutations: {
         [types.CHANGE_LAYOUT] (state, layout) {

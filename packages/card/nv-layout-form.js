@@ -12,29 +12,26 @@ export default {
         handleCollapse () {
             this.isCollapse = !this.isCollapse
         },
-    },
-    created () {
-        console.log(this.$slots)
+        checkOnlyOne (vnode) {
+            return vnode && vnode.componentOptions.propsData.nvLayout === 'full'
+        }
     },
     computed: {
         ...mapState(store.name, ['isExtraRight'])
     },
     render (h) {
         const self = this
-        const { $slots, isCollapse, isExtraRight } = self
+        const { $slots, isCollapse, isExtraRight, checkOnlyOne } = self
         const hasSearchBtn = !!$slots['search-button']
 
-        const filteredMainSlot = $slots['search-item'].filter(item => item.tag)
+        const filteredMainSlot = ($slots['search-item'] || []).filter(item => item.tag)
 
         const mainSlot = filteredMainSlot[0]
         const otherSlots = filteredMainSlot.slice(1)
         const extraSlots = $slots['extra-item']
 
-        console.log(otherSlots)
-
         const innerSlotsLength = otherSlots.length
         const otherSlotsVNodes = []
-
 
         for (let i = 0; i < innerSlotsLength; i++) {
                 otherSlotsVNodes.push(
@@ -42,9 +39,14 @@ export default {
                         'div', 
                         { 
                             staticClass: 'nv-layout-form_line',
-                            class: {full: !(innerSlotsLength < 4), half: innerSlotsLength < 4}
-                        }, 
-                        innerSlotsLength < 4 ? [otherSlots[i]] : [otherSlots[i], otherSlots[++i]]
+                            class: {
+                                full: !(innerSlotsLength < 4),
+                                half: innerSlotsLength < 4, 
+                                'only-one': checkOnlyOne(otherSlots[i])
+                            }
+                        },
+                        // 检测是否单独为一行
+                        (innerSlotsLength < 4 || checkOnlyOne(otherSlots[i]) || checkOnlyOne(otherSlots[i+1])? [otherSlots[i]] : (  [otherSlots[i], otherSlots[++i]]))
                     )
                 )
         }
@@ -70,7 +72,7 @@ export default {
                                             'div', 
                                             {
                                                 staticClass: 'nv-layout-form_main',
-                                                class: {'has-button': hasSearchBtn}
+                                                class: {'has-button': hasSearchBtn, 'without-collapse': !otherSlotsVNodes.length}
                                             },
                                             [
                                                 h('div', { staticClass: 'search-main'}, [mainSlot]),
@@ -101,7 +103,7 @@ export default {
                                                 otherSlotsVNodes
                                             )
                                             : null
-                                        ]: null ,
+                                        ]: [] ,
                                     ]
                                 )
                             ]

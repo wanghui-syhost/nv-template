@@ -6,21 +6,26 @@
         &_wrapper {
             display: flex;
             position: relative;
-            width: 476px;
+            //width: 476px;
         };
         &_holder {
             position: absolute;
             right: 0;
             cursor: pointer;
-            border: 1px solid #3C8CFF;
-            color: #3C8CFF;
+            border: 1px solid #409EFF;
+            color: #409EFF;
+            font-size: 14px;
             border-radius: 4px;
             margin-top: 2px;
             padding: 8px 6px;
         };
         .nv-layout-form_main {
-            margin:0 100px 0 12px;
-            width: 364px;
+            margin:0 84px 0 12px;
+            width: 398px;
+
+            &.without-collapse {
+                margin-right: 0;
+            }
 
             > * {
                 display: inline-block;
@@ -34,7 +39,9 @@
                     }
                 }
                 &-btn {
-                    margin-left: 10px;
+                    width: 90px;
+                    text-align: center;
+                    margin: 0 14px;
                 }
             }
         }
@@ -75,6 +82,12 @@
                     display: inline-block;
                     max-width: 47%;
                     margin-left: 6%;
+                }
+
+                &.only-one {
+                    > * {
+                        max-width: unset;
+                    }
                 }
             }
             > * {
