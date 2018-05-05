@@ -8,7 +8,7 @@
             <frame-sidebar class="sidebar-container" :routes="activeTopMenu.childrens || []"/>
             </div>
         </div>
-        <div class="frame__body">
+        <div class="frame__body" :class= "{'has-sidebar': hasSidebar } ">
             <!-- <div class="frame-container-wrapper"> -->
                 <div class="frame-main-container" :class= "{'has-sidebar': hasSidebar } ">
                     <frame-main />
@@ -98,14 +98,18 @@ export default {
     //padding-left: 200px;
     max-width: calc(100vw - 200px);
     min-height: 100%;
-    width: calc(100% - 200px);
-    margin-left: 200px;
+    width: 100%;
     top: 0;
     //margin-top: 82px;
     //padding-top: 20px;
     bottom: 0px;
     left: 200px;
     right: 0;
+
+    &.has-sidebar {
+        margin-left: 200px;
+        width: calc(100% - 200px);
+    }
     //overflow: auto;
     // overflow-x: auto;
     // overflow-y: scroll;
