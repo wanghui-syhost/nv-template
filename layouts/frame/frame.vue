@@ -90,7 +90,6 @@ export default {
     width: 180px;
     height: 100%;
     box-shadow: 0 0 4px 0 #BFC4B6;
-    overflow: auto;
 }
 
 .frame__body {
