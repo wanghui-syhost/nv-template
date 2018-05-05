@@ -53,7 +53,7 @@
 				this.TITLE = sliderMenus.ledger.TITLE;
 				this.routes = sliderMenus.menus;
 				console.log(sliderMenus)
-				this.defaultMenu = [sliderMenus.menus[0].children[0].ID]
+				this.defaultMenu = sliderMenus.menus[0].children[0].ID
 				this.defaultOpend = [sliderMenus.menus[0].ID]
 			},
 			menuClick(item) {
