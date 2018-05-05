@@ -3,16 +3,11 @@
     <section class="nv-layout-form search-form" slot="top">
       <el-form :inline="true">
         <!-- 搜索框  -->
-        <section class="search-flex">
-          <div class="search-form-left">
-          
-            <el-button type="primary" @click="addInfo">新增</el-button>
-          </div>
-          <div class="search-form-main">
-            <div class="search-form-row">
-            </div>
-          </div>
-        </section>
+        <nv-layout-form>
+          <template slot="extra-item">
+          <el-button type="primary" @click="addInfo">新增</el-button>
+          </template>
+        </nv-layout-form>
       </el-form>
     </section>
 

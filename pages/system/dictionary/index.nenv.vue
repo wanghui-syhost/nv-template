@@ -2,23 +2,23 @@
   <nv-layout class="page-demo">
       <section class="nv-layout-form search-form" slot="top">
         <el-form  ref="form">
-          <section class="search-flex">
-            <div class="search-form-left">
-               <el-button type="primary" @click="addInfo">新增</el-button>
-            </div>
             <!-- 搜索框  -->
             <nv-layout-form>
-                  <el-button type="infor" @click="getList();" slot="search-button">搜索</el-button>
-                  <el-form-item label="字典名称" slot='search-item'>
-                    <el-input v-model="NAME" placeholder="请输入字典名称" ></el-input>
-                  </el-form-item>
-                  <el-form-item label="字典状态" slot='search-item'>
-                    <el-select v-model="STATUS" :value = "STATUS"  placeholder="" class="all-width">
-                      <el-option v-for="item in searchStatus" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                    </el-select>
-                  </el-form-item>
+                  <el-button type="primary" @click="getList();"  icon="el-icon-search"  slot="search-button">搜索</el-button>
+                  <template slot='search-item'>
+                    <el-form-item label="字典名称">
+                      <el-input v-model="NAME" placeholder="请输入字典名称" ></el-input>
+                    </el-form-item>
+                    <el-form-item label="字典状态">
+                      <el-select v-model="STATUS" :value = "STATUS"  placeholder="" class="all-width">
+                        <el-option v-for="item in searchStatus" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </template>
+                  <template slot="extra-item">
+                    <el-button type="primary" @click="addInfo">新增</el-button>
+                  </template>
             </nv-layout-form>
-          </section>
         </el-form>
       </section>
 
@@ -387,21 +387,5 @@ export default {
   display: flex;
   padding-left:20px;
   padding-right:10px;
-  justify-content: flex-end;
-}
-.search-form-one{
-  flex:1
-}
-
-.search-form-main{
-  flex:1
-}
-
-.button-placeholader {
-  opacity: 0;
-}
-
-.all-width{
-  width: 100% !important;
 }
 </style>

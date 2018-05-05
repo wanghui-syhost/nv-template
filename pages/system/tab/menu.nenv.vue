@@ -3,10 +3,9 @@
     <section class="search-form" style="padding:10px 0" slot="top">
       <el-form>
         <!-- 搜索框  -->
-        <div class="search-form-one">
-          
-          <el-button type="primary" @click="addInfo">新增</el-button>
-        </div>
+        <nv-layout-form>
+          <el-button slot="extra-item" type="primary" @click="addInfo">新增</el-button>
+        </nv-layout-form>
       </el-form>
     </section>
       <div style="float: left; margin-bottom: 10px; margin-left: 20px; font-size: 14px">

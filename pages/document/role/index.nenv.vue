@@ -1,9 +1,23 @@
 <template>
   <nv-layout>
     <section class="search-form" slot="top">
-      <el-form :inline="true">
+      <el-form >
         <!-- 搜索框  -->
-        <div class="search-form-one">
+          <nv-layout-form>
+            <el-button type="primary" @click="getList();" slot="search-button" icon="el-icon-search">搜索</el-button>
+            <template slot="search-item">
+              <el-form-item label="角色名称" >
+                <el-input v-model="ROLE_NAME" placeholder="请输入角色名称" size="middle" @keyup.enter.native = "getList"></el-input>
+              </el-form-item>
+              <el-form-item label="角色KEY">
+                <el-input v-model="ROLE_KEY" placeholder="请输入角色KEY" size="middle" @keyup.enter.native = "getList"></el-input>
+              </el-form-item>
+            </template>
+            <template slot="extra-item">
+              <el-button type="primary" @click="showAdd">新增</el-button>
+            </template>
+          </nv-layout-form>
+        <!-- <div class="search-form-one">
           
           <el-form-item label="角色名称">
             <el-input v-model="ROLE_NAME" placeholder="请输入角色名称" size="middle" @keyup.enter.native = "getList"></el-input>
@@ -12,8 +26,8 @@
             <el-input v-model="ROLE_KEY" placeholder="请输入角色KEY" size="middle" @keyup.enter.native = "getList"></el-input>
           </el-form-item>
           <el-button type="primary" @click="getList();">搜索</el-button>
-          <el-button type="primary" @click="showAdd">新增</el-button>
-        </div>
+
+        </div> -->
       </el-form>
     </section>
 
