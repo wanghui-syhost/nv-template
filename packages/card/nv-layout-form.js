@@ -14,7 +14,22 @@ export default {
         },
         checkOnlyOne (vnode) {
             return vnode && vnode.componentOptions.propsData.nvLayout === 'full'
+        },
+        forceCollapse (event) {
+            const self = this
+            const { $el } = this
+            const target = event.target
+            if (target !== $el && !$el.contains(target) ) {
+                self.isCollapse = true
+            }
         }
+    },
+    created () {
+        const self = this
+        window.addEventListener('click', this.forceCollapse)
+    },
+    beforeDestroy () {
+        window.removeEventListener('click', this.forceCollapse)
     },
     computed: {
         ...mapState(store.name, ['isExtraRight'])
