@@ -4,9 +4,11 @@
      :suffix-icon="suffixIcon" :auto-complete="autoComplete" :readonly="readonly"
      @blur="blur" @focus="focus" @change="change" @clear="clear"   
      :rows = "rows"
-     :disabled = "isNvDisabled" :class="{'is-nv-disabled': isNvDisabled}"> 
+     :disabled = "isNvDisabled" :class="{'is-nv-disabled': isNvDisabled}">
+    <slot slot = "append" name="append"/>
     <slot slot = "prepend" name="prepend"/>
     <slot slot = "suffix" name="suffix"/>
+    <slot slot = "prefix" name="prefix" />
      </el-input>
 </template>
 <script>
