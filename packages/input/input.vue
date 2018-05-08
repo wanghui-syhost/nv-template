@@ -3,7 +3,7 @@
      :maxlength="maxlength" :minlength="minlength" :placeholder="placeholder" :prefix-icon="prefixIcon"
      :suffix-icon="suffixIcon" :auto-complete="autoComplete" :readonly="readonly"
      @blur="blur" @focus="focus" @change="change" @clear="clear"   
-     :row = "row"
+     :rows = "rows"
      :disabled = "isNvDisabled" :class="{'is-nv-disabled': isNvDisabled}"> 
     <slot slot = "prepend" name="prepend"/>
     <slot slot = "suffix" name="suffix"/>
@@ -45,7 +45,10 @@ export default {
     readonly:{
       type:String
     },
-    row: {
+    type: {
+      type: String,
+    },
+    rows: {
       
     }
   },
