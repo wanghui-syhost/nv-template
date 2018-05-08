@@ -21,7 +21,7 @@
         };
         .nv-layout-form_main {
             margin:0 84px 0 12px;
-            width: 398px;
+            min-width: 398px;
 
             &.without-collapse {
                 margin-right: 0;

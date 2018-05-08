@@ -2,7 +2,7 @@
     <el-input v-model="currentValue" ref="nvInput"
      :maxlength="maxlength" :minlength="minlength" :placeholder="placeholder" :prefix-icon="prefixIcon"
      :suffix-icon="suffixIcon" :auto-complete="autoComplete" :readonly="readonly"
-     @blur="blur" @focus="focus" @change="change" @clear="clear"   
+     @blur="blur" @focus="focus" @change="change" @clear="clear"  :type="type"
      :rows = "rows"
      :disabled = "isNvDisabled" :class="{'is-nv-disabled': isNvDisabled}">
     <slot slot = "append" name="append"/>
