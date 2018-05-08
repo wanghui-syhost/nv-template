@@ -3,8 +3,10 @@
      :maxlength="maxlength" :minlength="minlength" :placeholder="placeholder" :prefix-icon="prefixIcon"
      :suffix-icon="suffixIcon" :auto-complete="autoComplete" :readonly="readonly"
      @blur="blur" @focus="focus" @change="change" @clear="clear"   
-     :disabled = "isNvDisabled" :class="{'is-nv-disabled': isNvDisabled}" style="width:200px;"> 
+     :row = "row"
+     :disabled = "isNvDisabled" :class="{'is-nv-disabled': isNvDisabled}"> 
     <slot slot = "prepend" name="prepend"/>
+    <slot slot = "suffix" name="suffix"/>
      </el-input>
 </template>
 <script>
@@ -15,7 +17,7 @@ export default {
   // mixins: [nvInpterMixins],
   props: {
     value: {
-      type: [String, Number],
+      // type: [String, Number],
       required: true
     },
     disabled: {
@@ -42,6 +44,9 @@ export default {
     },
     readonly:{
       type:String
+    },
+    row: {
+      
     }
   },
   data() {
