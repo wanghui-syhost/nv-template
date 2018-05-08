@@ -26,7 +26,7 @@ export default {
         default:true
     },
     value: {
-        type:String
+        //type:String
     },
     size:{
         type:String
