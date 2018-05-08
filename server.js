@@ -89,6 +89,7 @@ module.exports = function (router, mockjs) {
   // 动态选项卡接口
   router.get('/api/tab/menus', function (req, res, next) {
     const { CODE } = req.query
+    return next()
     switch (CODE) {
       case 'PROJECT_TAB':
         res.reply(

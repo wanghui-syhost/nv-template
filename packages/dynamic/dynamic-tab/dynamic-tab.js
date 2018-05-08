@@ -3,7 +3,7 @@ export default {
     props: {
         nvUrl: {
             type: String,
-            default: '/tab/menus'
+            default: '/tab/valid/menus'
         },
         nvCode: String
     },
