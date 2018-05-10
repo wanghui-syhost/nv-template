@@ -26,7 +26,8 @@ export const router = {
     redirect: '/home',
     children: [{
         path: '/home',
-        component
+        component,
+        meta: { nvPermisson: false }
     }]
 }
 

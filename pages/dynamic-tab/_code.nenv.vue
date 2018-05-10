@@ -6,6 +6,7 @@
 <script>
 export default {
     name: 'DynamicTab',
+    meta: { nvPermisson: false },
     computed: {
         nvCode () {
             return this.$route.query['nv-code'] || this.$route.params.code

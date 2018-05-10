@@ -4,14 +4,17 @@ import Err401 from './401.vue'
 export const router = [
   {
     path: '/err401',
-    component: Err401
+    component: Err401,
+    meta: { nvPermisson: false }
   },
   {
     path: '/err404',
-    component: Err404
+    component: Err404,
+    meta: { nvPermisson: false }
   },
   {
     path: '*',
-    component: Err404
+    component: Err404,
+    meta: { nvPermisson: false }
   }
 ]
