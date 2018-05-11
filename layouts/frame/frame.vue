@@ -90,6 +90,7 @@ export default {
     width: 180px;
     height: 100%;
     box-shadow: 0 0 4px 0 #BFC4B6;
+    overflow-x: hidden;
 }
 
 .frame__body {
@@ -120,6 +121,7 @@ export default {
         position: relative;
         //position: absolute;
         min-height: 100%;
+        min-height: calc(100vh - 62px);
         //top: 82px;
         //bottom: 0;
         //width: auto;
