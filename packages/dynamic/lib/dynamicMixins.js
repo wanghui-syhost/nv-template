@@ -23,7 +23,6 @@ export default {
                     return 'nv-iframe'
                 } else {
                     const match = this.$router.match(path)
-                    console.log(match)
                     const { matched, params } = match
                     const { components } = matched[matched.length - 1]
 
