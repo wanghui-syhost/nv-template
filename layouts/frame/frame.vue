@@ -97,7 +97,7 @@ export default {
     //position: absolute;
     //float: left;
     //padding-left: 200px;
-    max-width: calc(100vw - 200px);
+    // max-width: calc(100vw - 200px);
     min-height: 100%;
     width: 100%;
     top: 0;
@@ -106,6 +106,7 @@ export default {
     bottom: 0px;
     left: 200px;
     right: 0;
+    margin: auto;
 
     &.has-sidebar {
         margin-left: 200px;
