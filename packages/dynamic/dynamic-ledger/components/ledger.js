@@ -39,22 +39,6 @@ export default {
             	self.$emit('nv-slider', data);
             	data = data.menus;
             	self.loopMenus(data);
-                /*data = data.map(tab => {
-                    const path = tab.URL.split('?')
-                    let query = path[1]
-                    if (query) {
-                        query = query.split('&')
-                        const kv = {}
-                        for (let q of query) {
-                            q = q.split('=')
-                            kv[q[0]] = q[1]
-                        }
-                        tab.query = kv
-                    }
-                    tab.path = path[0]
-                    delete tab.URL
-                    return tab
-                })*/
                 self.isLoading = false
                 self.menus = data
                 function findRealTab (data) {
@@ -91,7 +75,6 @@ export default {
                 if (tab.children && tab.children.length > 0) {
                 	self.loopMenus(tab.children);
                 }
-                //return tab
             })
         },
         handleTabClick (tab) {

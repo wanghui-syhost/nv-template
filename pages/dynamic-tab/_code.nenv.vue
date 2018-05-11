@@ -7,9 +7,14 @@
 export default {
     name: 'DynamicTab',
     meta: { nvPermisson: false },
+    props: {
+        nvProps: {
+            type: Object
+        }
+    },
     computed: {
         nvCode () {
-            return this.$route.query['nv-code'] || this.$route.params.code
+            return this.nvProps.code || this.$route.query['nv-code'] || this.$route.params.code
         }
     }
 }
