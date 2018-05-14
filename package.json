@@ -16,6 +16,7 @@
     "lint": "eslint --ext .vue,.js src"
   },
   "dependencies": {
+    "@riophae/vue-treeselect": "^0.0.27",
     "echarts": "^4.0.4",
     "js-cookie": "^2.1.4",
     "md5": "^2.2.1",

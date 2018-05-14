@@ -63,11 +63,12 @@
 
     <nv-layout-section title="组织人员选择器">
       <h4>3.1 人员选择器</h4>
-      <nv-organize-user-selector :multi="true"  v-model="nvOrganizeUserSelectResult" />
+      <nv-user-selector  v-model="nvUserSelectResult" />
       <h4>3.2 组织选择器</h4>
-      <nv-organize-user-selector :only-organize="true" :multi="true"  v-model="nvOrganizeSelectResult" />
-      <h4>3.3 人员选择器 (数据量大时使用)</h4>
-      <nv-person-chooser></nv-person-chooser>
+      <nv-organize-selector v-model="nvOrganizeSelectResult" :multiple="false"/>
+      <!-- <nv-organize-user-selector :only-organize="true" :multi="true"  v-model="nvOrganizeUserSelectResult"  /> -->
+      <!-- <h4>3.3 人员选择器 (数据量大时使用)</h4>
+      <nv-person-chooser  v-model="nvPersonChooserResult" ></nv-person-chooser> -->
     </nv-layout-section>
 
     <nv-layout-section title="子表配置">
@@ -131,8 +132,11 @@ export default {
       nvSelectResult: '',
       nvRegionSelectedResult:["44","4406","440606"],
       nvRegionSelectedResult2: [],
-      nvOrganizeSelectResult: [],
-      nvOrganizeUserSelectResult: [],
+
+      nvUserSelectResult:["super","xuej"],
+
+      nvOrganizeSelectResult: "11E7FFD873DAFEC3833FE150B4BB19CD",
+ 
        keyRules:[ 
               {required:true, message:'请选择性别', trigger:'changeTitle'}
         ],

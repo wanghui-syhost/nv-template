@@ -1,11 +1,11 @@
 <template>
     <section>
         <div class="nv-organize-user-dialog__input" @click="showDialog">
-        <span v-if = "personList.length === 0" class="nv-organize-user-dialog__placeholder" >
+        <span v-if = "currentChooseList.length === 0" class="nv-organize-user-dialog__placeholder" >
             {{ placeholder }}
         </span>
         <el-tag 
-            v-for = "node in personList" 
+            v-for = "node in currentChooseList" 
             :key="node.id" 
             size = "small"
             :title="node.userName"
@@ -32,7 +32,7 @@ export default {
             placeholder: '请选择人员',
             title: '请选择人员',
 
-            personList:[],
+            //personList:[],
             // 当前选择的人
             currentChooseList:[]
         }
@@ -44,10 +44,22 @@ export default {
                 return []
             }
         }
+
     },
     components:{
         NvPersonChoose
     },
+
+    model:{
+       prop:'currentPersonList',
+       event:'change'
+    },
+
+   watch:{
+     currentPersonList(val){
+         this.currentChooseList = val;
+     }
+   },
     created(){
         this.currentChooseList = this.currentPersonList;
     },
@@ -55,24 +67,27 @@ export default {
         showDialog(){
             this.isShowDialog = true
         },
-    getChoosePerson(choosePerson){
-        debugger
-        this.isShowDialog = false
-        if(choosePerson && choosePerson.length>0){
-            this.personList = choosePerson;
-            this.currentChooseList =  choosePerson;
-        }else{
-            this.personList = [];
-            this.currentChooseList = [];
+        getChoosePerson(choosePerson){
+            //debugger
+            this.isShowDialog = false
+            if(choosePerson && choosePerson.length>0){
+                //this.personList = choosePerson;
+                this.currentChooseList =  choosePerson;
+            }else{
+                //this.personList = [];
+                this.currentChooseList = [];
+            }
+         },
+        cancelChoose(){
+            this.isShowDialog = false;
+        },
+        syncResult(result){
+            this.currentChooseList = result;
+        },
+        onchange:function(){
+            this.$emit('change',this.currentPersonList);
         }
-    },
-    cancelChoose(){
-        this.isShowDialog = false;
-    },
-    syncResult(result){
-        this.currentChooseList = result;
     }
-  }
 };
 </script>
 

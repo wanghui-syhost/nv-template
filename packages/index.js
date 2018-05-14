@@ -9,6 +9,7 @@ import NvScrollPane from './scroll-pane'
 import NvUploader from './uploader'
 import NvFormUploader from './form-uploader'
 import NvUserSelector from './user-selector'
+import NvOrganizeSelector from './organize-selector'
 import NvRegionSelect from './region-select'
 import NvIframe from './iframe'
 import NvDynamic from './dynamic'
@@ -37,6 +38,7 @@ const components = [
   NvUploader,
   NvFormUploader,
   NvUserSelector,
+  NvOrganizeSelector,
   NvRegionSelect,
   NvPersonchooser,
   NvDatePick,

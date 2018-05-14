@@ -38,6 +38,7 @@
   export default {
     name: 'nvPersonChoose',
     props: {
+
       // 请求参数
       reqOpt: {
         type: Object,
@@ -75,9 +76,9 @@
           return []
         }
       },
-      value: {
-        required: true
-      }
+      // value: {
+      //   required: true
+      // }
 
     },
     data() {
@@ -106,10 +107,20 @@
       }
 
     },
+
+    // computed:{
+    //  resultList(){
+    //    return  this.result;
+    //  }
+    // },
+
     watch: {
       filterText(val) {
         console.log(val)
         this.$refs.organizeTree.filter(val);
+      },
+      result(val){
+        this.resultList = val;
       }
     },
     created() {
