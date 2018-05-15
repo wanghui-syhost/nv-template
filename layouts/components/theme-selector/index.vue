@@ -1,7 +1,7 @@
 <template>
   <div class="theme-selector">
     <a @click="openThemeDialog">切换主题色</a>
-    <el-color-picker v-model="color" ></el-color-picker>
+    <el-color-picker ref="picker" class="theme-pick" v-model="color" size="mini"></el-color-picker>
   </div>
 </template>
 <script>
@@ -19,7 +19,7 @@ export default {
             return this.themePalette.primaryColor
         },
         set (val) {
-            //this.theming({ palette: { primaryColor: val} })
+            this.theming({ palette: { primaryColor: val} })
         }
     },
     ...mapState('platform', {
@@ -31,7 +31,8 @@ export default {
   },
   methods: {
       openThemeDialog () {
-          this.themeDialogVisible = true
+          //this.themeDialogVisible = true
+          console.log(this.$refs.picker.$el)
       },
       ...mapActions('platform', ['theming'])
   }
@@ -40,6 +41,9 @@ export default {
 <style>
     .theme-selector {
         display: inline-block;
+    }
+    .theme-pick {
+        vertical-align: middle;
     }
 </style>
 

@@ -96,9 +96,13 @@ export default {
                                         ),
                                         ...otherSlotsVNodes.length > 0 ? [
                                             h(
-                                                'a',
+                                                'el-button',
                                                 {
                                                     staticClass: 'nv-layout-form_holder',
+                                                    attrs: {
+                                                        type: 'primary',
+                                                        plain: true
+                                                    },
                                                     on: {
                                                         click: self.handleCollapse
                                                     }

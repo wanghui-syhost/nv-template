@@ -1,5 +1,5 @@
 <template>
-    <header class="e-header">
+    <header class="e-header bg-primary">
         <div class="e-header__left">
             <i class="e-header__logo png-icon logo-theme" />
             <a class="e-header__title" href="/" :title="project.title">{{ project.title }}</a>
@@ -33,7 +33,7 @@
             </layout-setting>
             <layout-select />
             <span class="e-header__loginuser" @click="dialogVisible = true">{{ nickName }}</span>
-            <!-- <theme-select/> -->
+            <theme-select/>
             <logout />
         </div>
 
@@ -128,7 +128,7 @@
 
 <script>
 import layoutSelect from '@layouts/components/layout-selector'
-// import themeSelect from '@layouts/components/theme-selector'
+import themeSelect from '@layouts/components/theme-selector'
 import LayoutSetting from '@layouts/components/layout-setting'
 import Logout from '@layouts/components/logout.vue'
 import OuterLink from '../nav-link/outer-link' 
@@ -193,7 +193,7 @@ export default {
         };
     },
     name: 'FrameHeader',
-    components: { layoutSelect, OuterLink, InnerLink, LayoutSetting, Logout, /*themeSelect */},
+    components: { layoutSelect, OuterLink, InnerLink, LayoutSetting, Logout, themeSelect},
     props: {
         menus: {
             type: Array,
@@ -313,7 +313,7 @@ export default {
     z-index: 1000;
 
     height: 62px;
-    background-color: #3b8cff;
+    // background-color: #3b8cff;
     a, & {
         color: #fff;
     }

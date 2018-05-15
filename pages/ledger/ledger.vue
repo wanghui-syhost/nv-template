@@ -79,7 +79,7 @@
 			text-indent: 20px;
 			font-size: 18px;
 			color: #FFFFFF;
-			background: rgba(48, 150, 250, 1);
+			// background: rgba(48, 150, 250, 1);
 		}
 		
 		.ledger-body {

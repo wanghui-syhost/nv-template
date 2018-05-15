@@ -192,6 +192,7 @@ import { getLedgerMenuDatas, deleteLedgerMenu,deleteParentMenu,saveLedgerMenu,
   updateLedgerMenu,getParentsMenu, validLedgerMenuSort } from './api'
 export default {
   name: 'LedgerMenu',
+  meta: { nvPermission: false },
   data() {
     const sortValid = (rule, value, callback) => {
       if(!/^[0-9]+$/.test(value)){

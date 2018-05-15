@@ -128,7 +128,7 @@ export default {
                 width: 6px;
                 border-radius: 6px;
                 height: 100%;
-                background-color: #3b8cff;
+                // background-color: #3b8cff;
             }
         }
     }

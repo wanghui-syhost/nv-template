@@ -46,7 +46,7 @@
         </section>
 
         <!-- 面包屑导航 -->
-        <div class="uploader-top">
+        <div class="uploader-top bg-primary">
             <div class="selector">
               <el-checkbox v-model="isAllSelected" :disabled="!list.length">全选</el-checkbox>
             </div>
@@ -1149,7 +1149,7 @@ export default {
   &-top {
     margin: 10px 0;
     padding: 10px 0;
-    background-color: #f6f7fb;
+    //background-color: #f6f7fb;
     vertical-align: middle;
     .selector,
     .nav {
