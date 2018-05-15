@@ -44,6 +44,9 @@ export default {
       multiple:{
         type:Boolean,
         default:true
+      },
+      nvCode:{
+        type:Object
       }
   },
     model:{
@@ -51,7 +54,7 @@ export default {
        event:'change'
   },
   data: () => ({
-    value: null,
+    value:null,
     options: [],
 
     normalizer(node/*, id */) {

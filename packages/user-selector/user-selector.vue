@@ -54,7 +54,7 @@ export default {
   },
 
   data: () => ({
-
+    value:null,
     options: [],
 
     normalizer(node/*, id */) {

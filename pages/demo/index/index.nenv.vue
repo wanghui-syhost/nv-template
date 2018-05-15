@@ -67,8 +67,9 @@
       <h4>3.2 组织选择器</h4>
       <nv-organize-selector v-model="nvOrganizeSelectResult" :multiple="false"/>
       <!-- <nv-organize-user-selector :only-organize="true" :multi="true"  v-model="nvOrganizeUserSelectResult"  /> -->
-      <!-- <h4>3.3 人员选择器 (数据量大时使用)</h4>
-      <nv-person-chooser  v-model="nvPersonChooserResult" ></nv-person-chooser> -->
+      <h4>3.3 人员选择器 (数据量大时使用)</h4>
+      <nv-user-selector-dynamic  v-model="nvUserSelectDynamicResult" />
+
     </nv-layout-section>
 
     <nv-layout-section title="子表配置">
@@ -136,10 +137,11 @@ export default {
       nvUserSelectResult:["super","xuej"],
 
       nvOrganizeSelectResult: "11E7FFD873DAFEC3833FE150B4BB19CD",
- 
-       keyRules:[ 
+      nvUserSelectDynamicResult:[{id:"super",text:"超级管理员"}],
+      
+      keyRules:[ 
               {required:true, message:'请选择性别', trigger:'changeTitle'}
-        ],
+      ],
       dynamicValidateForm: {
         domains: [{
           NAME: '', // 配置名称

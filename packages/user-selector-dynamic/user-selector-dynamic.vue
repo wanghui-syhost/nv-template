@@ -6,7 +6,8 @@
   placeholder="请选择"
   :load-options="loadOptions"
    search-nested
-  :disable-branch-nodes="true"
+  disable-branch-nodes="true"
+  value-format="object"
   v-model="value"
   />
 </template>
@@ -41,6 +42,12 @@ export default {
             id: ""
           }
         }
+      },
+      value:{
+        type:Object
+      },
+      nvCode:{
+        type:Object
       }
   },
   model:{
@@ -48,7 +55,7 @@ export default {
        event:'change'
   },
   data: () => ({
-    value: null,
+    value: [],
     options: [
 
     ],
