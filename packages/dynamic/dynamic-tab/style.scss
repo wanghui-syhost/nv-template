@@ -22,7 +22,7 @@
         cursor: pointer;
         position: relative;
         &.active {
-            color: #338BF1;
+            // color: #338BF1;
             &:after {
                 position: absolute;
                 content: '';
@@ -30,7 +30,7 @@
                 left: 5px;
                 height: 2px;
                 width: calc(100% - 10px);
-                background-color: #338BF1;
+                // background-color: #338BF1;
             }
         }
     }
