@@ -6,6 +6,7 @@
   placeholder="请选择"
    search-nested
   v-model="value"
+    :value-format="valueFormat"
   />
 
 </template>
@@ -44,6 +45,10 @@ export default {
       multiple:{
         type:Boolean,
         default:true
+      },
+      valueFormat:{
+        type:String,
+        default:'id'
       },
       nvCode:{
         type:Object

@@ -1,13 +1,13 @@
 <template>
 <treeselect
-  :multiple="true"
+  :multiple="multiple"
   :options="options"
   :normalizer="normalizer"
   placeholder="请选择"
   :load-options="loadOptions"
    search-nested
-  disable-branch-nodes="true"
-  value-format="object"
+  :disable-branch-nodes="true"
+  :value-format="valueFormat"
   v-model="value"
   />
 </template>
@@ -48,6 +48,14 @@ export default {
       },
       nvCode:{
         type:Object
+      },
+      valueFormat:{
+        type:String,
+        default:'object'
+      },
+      multiple:{
+        type:Boolean,
+        default:true
       }
   },
   model:{

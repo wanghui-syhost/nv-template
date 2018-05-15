@@ -7,6 +7,7 @@
    search-nested
   :disable-branch-nodes="true"
   v-model="value"
+    :value-format="valueFormat"
   />
 </template>
 
@@ -41,6 +42,10 @@ export default {
       },
       value:{
         type:Object
+      },
+      valueFormat:{
+        type:String,
+        default:'id'
       },
       multiple:{
         type:Boolean,
