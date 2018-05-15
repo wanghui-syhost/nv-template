@@ -1,6 +1,0 @@
-import ssoback from './ssoback'
-
-export const router = ssoback
-
-export const routerDepth = 1
-
