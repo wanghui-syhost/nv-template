@@ -9,6 +9,7 @@ const vm = new DialogLogin().$mount(elt)
 
 
 unfetch.onTokenExpired = function (callback) {
+    return callback()
     if (unfetch.successed) {
         if (!vm.dialogVisible) {
             vm.dialogVisible = true

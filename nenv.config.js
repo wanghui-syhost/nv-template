@@ -39,7 +39,9 @@ module.exports = {
 
     config.plugins.push(
       new webpack.DefinePlugin({
-        'process.env.SSO_URL': "'http://192.168.37.6.8089'"
+        'process.env.SSO_URL': "'http://192.168.37.6:8090/sso/index.html#/'",
+        'process.env.SSO_CALLBACK_URL': "'http://localhost:8808/#/sso'",
+        // 'process.env.LOGIN_PATH': '/sso'
       })
     )
 
