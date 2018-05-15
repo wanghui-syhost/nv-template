@@ -6,7 +6,7 @@ import { mapActions } from 'vuex'
 export default {
     name: 'sso-callback',
     title:'登录',
-    meta: { nvPermisson: false },
+    meta: { nvPermission: false },
     computed: {
         token () {
             return this.$route.query.token;
