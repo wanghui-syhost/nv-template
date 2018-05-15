@@ -12,3 +12,4 @@ nenv.config.js
 .vscode
 .nenv
 *.gz
+/.idea/
