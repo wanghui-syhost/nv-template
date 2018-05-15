@@ -139,12 +139,67 @@ module.exports = function (router, mockjs) {
       default:
         next()
     }
+  })
+  
+  // 动态选项卡接口
+  router.get('/api/tab/valid/menus', function (req, res, next) {
+    const { CODE } = req.query
+    return next()
+    switch (CODE) {
+      case 'PROJECT_TAB':
+        res.reply(
+          [
+            {
+              "IS_DELETED": "NO",
+              "APPLICATION_KEY": "business",
+              "CREATE_USER": "11E787B2A7179B4E9911D583E7E8BEA9",
+              "TAB_CODE": "PROJECT_TAB",
+              "SORT": 1,
+              "UPDATE_USER": "11E787B2A7179B4E9911D583E7E8BEA9",
+              "ID": "11E7F0F02A5EE997934301ED9C206E0X",
+              "CREATE_TIME": 1515029995000,
+              "UPDATE_TIME": 1515029995000,
+              "URL": "/project/alert?a=a&b=b&c=3",
+              "NAME": "内部页面"
+            },
+            {
+              "IS_DELETED": "NO",
+              "APPLICATION_KEY": "business",
+              "CREATE_USER": "11E787B2A7179B4E9911D583E7E8BEA9",
+              "TAB_CODE": "PROJECT_TAB",
+              "SORT": 1,
+              "UPDATE_USER": "11E787B2A7179B4E9911D583E7E8BEA9",
+              "ID": "11E7F0F02A5EE997934301ED9C206E01",
+              "CREATE_TIME": 1515029995000,
+              "UPDATE_TIME": 1515029995000,
+              "URL": "http://www.baiduc.com",
+              "NAME": "项目详情1"
+            },
+            {
+              "IS_DELETED": "NO",
+              "APPLICATION_KEY": "business",
+              "CREATE_USER": "11E787B2A7179B4E9911D583E7E8BEA9",
+              "TAB_CODE": "PROJECT_TAB",
+              "SORT": 2,
+              "UPDATE_USER": "11E787B2A7179B4E9911D583E7E8BEA9",
+              "ID": "11E7F0F02380A465934301ED9C206E01",
+              "CREATE_TIME": 1515029984000,
+              "UPDATE_TIME": 1515029984000,
+              "URL": "http://www.baidu.com",
+              "NAME": "百度"
+            }
+          ]
+        )
+        break;
+      default:
+        next()
+    }
 	})
   
   // 动态台账
   router.get('/api/ledger/valid/menus', function (req, res, next) {
       const { CODE } = req.query
-      return next() 
+      // return next() 
       switch ( CODE ) {
         case 'FIRST_LEDGER':
           res.reply({
@@ -220,7 +275,20 @@ module.exports = function (router, mockjs) {
                 UPDATE_TIME: 1516329347000,
                 URL: "/project/alert",
                 NAME: "内嵌页面",
-              }
+              },
+              {
+                IS_DELETED: "NO",
+                APPLICATION_KEY: "business",
+                LEDGER_CODE: "FIRST_LEDGER",
+                CREATE_USER: "11E787B2A7179B4E9911D583E7E8BEA9",
+                UPDATE_USER: "11E787B2A7179B4E9911D583E7E8BEA9",
+                SORT: 2,
+                ID: "11E7F047C30617B68247CBE8414DC77B",
+                CREATE_TIME: 1516329345000,
+                UPDATE_TIME: 1516329347000,
+                URL: "/dynamic-tab/PROJECT_TAB",
+                NAME: "内嵌动态选项卡",
+              },
             ]
           })
           break

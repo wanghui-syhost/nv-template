@@ -25,8 +25,11 @@ export default {
 </script>
 <style lang="scss" scoped>
     .nv-iframe {
+        //position: absolute;
+        //left: 0;
+        //right: 0;
         width: 100%;
-        height: 100%;
+        min-height: 100%;
         border: none
     }
 </style>

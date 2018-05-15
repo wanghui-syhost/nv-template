@@ -27,7 +27,7 @@ export const router = {
     children: [{
         path: '/home',
         component,
-        meta: { nvPermisson: false }
+        meta: { nvPermission: false }
     }]
 }
 

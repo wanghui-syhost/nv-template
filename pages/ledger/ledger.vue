@@ -28,7 +28,7 @@
 <script>
 	export default {
 		name: 'StardardLedger',
-		meta: { nvPermisson: false},
+		meta: { nvPermission: false},
 		data() {
 			const self = this
 			return {

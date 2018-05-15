@@ -32,7 +32,7 @@ import md5 from '../../node_modules/md5';
 import vuex, { mapActions } from 'vuex'
 export default {
   name: "Login",
-  meta: { nvPermisson: false },
+  meta: { nvPermission: false },
   data () {
       return {
         focus:{

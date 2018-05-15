@@ -5,16 +5,16 @@ export const router = [
   {
     path: '/err401',
     component: Err401,
-    meta: { nvPermisson: false }
+    meta: { nvPermission: false }
   },
   {
     path: '/err404',
     component: Err404,
-    meta: { nvPermisson: false }
+    meta: { nvPermission: false }
   },
   {
     path: '*',
     component: Err404,
-    meta: { nvPermisson: false }
+    meta: { nvPermission: false }
   }
 ]
