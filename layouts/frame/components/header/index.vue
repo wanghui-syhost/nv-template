@@ -33,7 +33,7 @@
             </layout-setting>
             <layout-select />
             <span class="e-header__loginuser" @click="dialogVisible = true">{{ nickName }}</span>
-            <theme-select/>
+            <!-- <theme-select/> -->
             <logout />
         </div>
 
@@ -128,7 +128,7 @@
 
 <script>
 import layoutSelect from '@layouts/components/layout-selector'
-import themeSelect from '@layouts/components/theme-selector'
+// import themeSelect from '@layouts/components/theme-selector'
 import LayoutSetting from '@layouts/components/layout-setting'
 import Logout from '@layouts/components/logout.vue'
 import OuterLink from '../nav-link/outer-link' 
@@ -193,7 +193,7 @@ export default {
         };
     },
     name: 'FrameHeader',
-    components: { layoutSelect, OuterLink, InnerLink, LayoutSetting, Logout, themeSelect },
+    components: { layoutSelect, OuterLink, InnerLink, LayoutSetting, Logout, /*themeSelect */},
     props: {
         menus: {
             type: Array,
