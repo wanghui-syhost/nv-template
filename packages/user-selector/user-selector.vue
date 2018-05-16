@@ -1,18 +1,19 @@
 <template>
-<treeselect
+<treeselect 
   :multiple="multiple"
   :options="options"
   :normalizer="normalizer"
   placeholder="请选择"
    search-nested
   :disable-branch-nodes="true"
-  v-model="value"
-    :value-format="valueFormat"
+  v-model="currentValue"
+  :value-format="valueFormat"
   />
 </template>
 
 <script>
   import nvInpterMixins from 'nenv/mixins/inputerMixins'
+
   import Treeselect from '@riophae/vue-treeselect'
   import '@riophae/vue-treeselect/dist/vue-treeselect.css'
   import { LOAD_CHILDREN_OPTIONS } from '@riophae/vue-treeselect'
@@ -41,7 +42,7 @@ export default {
         }
       },
       value:{
-        type:Object
+        type:[Array,String,Object]
       },
       valueFormat:{
         type:String,
@@ -72,6 +73,17 @@ export default {
 
   }),
 
+  computed:{
+    currentValue: {
+      get() {
+        return this.value;
+      },
+      set(val) {
+        this.$emit("input", val);
+      }
+    }
+  },
+
   created(){
      this.getOrganizes();
   },
@@ -93,7 +105,6 @@ export default {
 
 
 </script>
-
 
 <style>
 .vue-treeselect__menu{

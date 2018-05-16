@@ -5,7 +5,7 @@
   :normalizer="normalizer"
   placeholder="请选择"
    search-nested
-  v-model="value"
+  v-model="currentValue"
     :value-format="valueFormat"
   />
 
@@ -40,7 +40,7 @@ export default {
         }
       },
       value:{
-        type:Object
+        type:[Object,Array,String]
       },
       multiple:{
         type:Boolean,
@@ -49,9 +49,6 @@ export default {
       valueFormat:{
         type:String,
         default:'id'
-      },
-      nvCode:{
-        type:Object
       }
   },
     model:{
@@ -75,7 +72,16 @@ export default {
   created(){
      this.getOrganizes();
   },
-
+  computed:{
+    currentValue: {
+      get() {
+        return this.value;
+      },
+      set(val) {
+        this.$emit("input", val);
+      }
+    }
+  },
   methods: {
       //获取组织
       getOrganizes(){

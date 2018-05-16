@@ -8,7 +8,7 @@
    search-nested
   :disable-branch-nodes="true"
   :value-format="valueFormat"
-  v-model="value"
+  v-model="currentValue"
   />
 </template>
 
@@ -44,7 +44,7 @@ export default {
         }
       },
       value:{
-        type:Object
+        type:[Object,Array,String]
       },
       nvCode:{
         type:Object
@@ -62,6 +62,18 @@ export default {
        prop:'value',
        event:'change'
   },
+
+  computed:{
+    currentValue: {
+      get() {
+        return this.value;
+      },
+      set(val) {
+        this.$emit("input", val);
+      }
+    }
+  },
+
   data: () => ({
     //value: [],
     options: [
