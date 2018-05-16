@@ -21,7 +21,7 @@ export default {
   name: 'NvUserSelector',
     // register the component
   components: { Treeselect },
-  mixins: [nvInpterMixins],
+  // mixins: [nvInpterMixins],
   props:{
       // 请求参数
       reqOpt: {
@@ -59,7 +59,7 @@ export default {
   },
 
   data: () => ({
-    value:null,
+    //value:null,
     options: [],
 
     normalizer(node/*, id */) {

@@ -23,7 +23,7 @@ export default {
   name: 'NvUserSelectorDynamic',
     // register the component
   components: { Treeselect },
-  mixins: [nvInpterMixins],
+  // mixins: [nvInpterMixins],
   props:{
       // 请求参数
       reqOpt: {
@@ -63,7 +63,7 @@ export default {
        event:'change'
   },
   data: () => ({
-    value: [],
+    //value: [],
     options: [
 
     ],

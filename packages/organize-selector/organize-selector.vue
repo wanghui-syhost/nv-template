@@ -20,7 +20,7 @@ export default {
   name: 'NvOrganizeSelector',
     // register the component
   components: { Treeselect },
-  mixins: [nvInpterMixins],
+  // mixins: [nvInpterMixins],
   props:{
       // 请求参数
       reqOpt: {
@@ -59,7 +59,7 @@ export default {
        event:'change'
   },
   data: () => ({
-    value:null,
+    
     options: [],
 
     normalizer(node/*, id */) {
