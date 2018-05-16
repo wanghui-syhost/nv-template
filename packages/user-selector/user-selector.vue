@@ -93,3 +93,10 @@ export default {
 
 
 </script>
+
+
+<style>
+.vue-treeselect__menu{
+  z-index:999999
+}
+</style>
