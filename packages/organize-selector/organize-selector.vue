@@ -56,7 +56,7 @@ export default {
        event:'change'
   },
   data: () => ({
-    
+    value:null,
     options: [],
 
     normalizer(node/*, id */) {
@@ -72,13 +72,13 @@ export default {
   created(){
      this.getOrganizes();
   },
-  computed:{
+  computed: {
     currentValue: {
-      get() {
-        return this.value;
+      get () {
+        return this.value
       },
-      set(val) {
-        this.$emit("input", val);
+      set (val) {
+        this.$emit('input', val)
       }
     }
   },
@@ -99,7 +99,6 @@ export default {
 
 
 </script>
-
 
 <style>
 .vue-treeselect__menu{

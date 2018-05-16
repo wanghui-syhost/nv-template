@@ -69,7 +69,8 @@
       <!-- <nv-organize-user-selector :only-organize="true" :multi="true"  v-model="nvOrganizeUserSelectResult"  /> -->
       <h4>3.3 人员选择器 (数据量大时使用)</h4>
       <nv-user-selector-dynamic  v-model="nvUserSelectDynamicResult" />
-
+      <h4>3.3 人员选择器 (手机号)</h4>
+      <nv-user-selector-tel />
     </nv-layout-section>
 
     <nv-layout-section title="子表配置">

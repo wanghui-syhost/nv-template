@@ -46,9 +46,6 @@ export default {
       value:{
         type:[Object,Array,String]
       },
-      nvCode:{
-        type:Object
-      },
       valueFormat:{
         type:String,
         default:'object'
@@ -58,24 +55,9 @@ export default {
         default:true
       }
   },
-  model:{
-       prop:'value',
-       event:'change'
-  },
-
-  computed:{
-    currentValue: {
-      get() {
-        return this.value;
-      },
-      set(val) {
-        this.$emit("input", val);
-      }
-    }
-  },
 
   data: () => ({
-    //value: [],
+    value: [],
     options: [
 
     ],
@@ -93,7 +75,16 @@ export default {
   created(){
      this.getOrganizes();
   },
-
+  computed: {
+    currentValue: {
+      get () {
+        return this.value
+      },
+      set (val) {
+        this.$emit('input', val)
+      }
+    }
+  },
   methods: {
       //获取组织
       getOrganizes(){

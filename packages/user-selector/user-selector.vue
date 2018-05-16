@@ -6,14 +6,13 @@
   placeholder="请选择"
    search-nested
   :disable-branch-nodes="true"
-  v-model="currentValue"
   :value-format="valueFormat"
+  v-model="currentValue"
   />
 </template>
 
 <script>
   import nvInpterMixins from 'nenv/mixins/inputerMixins'
-
   import Treeselect from '@riophae/vue-treeselect'
   import '@riophae/vue-treeselect/dist/vue-treeselect.css'
   import { LOAD_CHILDREN_OPTIONS } from '@riophae/vue-treeselect'
@@ -22,7 +21,7 @@ export default {
   name: 'NvUserSelector',
     // register the component
   components: { Treeselect },
-  // mixins: [nvInpterMixins],
+  //mixins: [nvInpterMixins],
   props:{
       // 请求参数
       reqOpt: {
@@ -42,7 +41,7 @@ export default {
         }
       },
       value:{
-        type:[Array,String,Object]
+        type:[Object,Array,String]
       },
       valueFormat:{
         type:String,
@@ -51,41 +50,35 @@ export default {
       multiple:{
         type:Boolean,
         default:true
+      },
+      isTelephone:{
+        type:Boolean,
+        default:false
       }
   },
 
-  model:{
-       prop:'value',
-       event:'change'
-  },
 
   data: () => ({
     //value:null,
     options: [],
+    
 
-    normalizer(node/*, id */) {
-      return {
-        id: node.id,
-        label: node.text,
-        children: node.children
-      }
-    },
 
   }),
 
-  computed:{
-    currentValue: {
-      get() {
-        return this.value;
-      },
-      set(val) {
-        this.$emit("input", val);
-      }
-    }
-  },
-
   created(){
      this.getOrganizes();
+  },
+  
+  computed: {
+    currentValue: {
+      get () {
+        return this.value
+      },
+      set (val) {
+        this.$emit('input', val)
+      }
+    }
   },
 
   methods: {
@@ -99,7 +92,30 @@ export default {
             }).then(function ({data}) {          
                 me.options =  data; 
             })
+      },
+      normalizer(node/*, id */) {
+
+      var id = node.id;
+      var label=node.text;
+      var isDisabled = false;
+     
+      if(this.isTelephone && node.attributes){
+        if(node.attributes.molile){
+          //id = node.attributes.molile;
+          label = node.text+'('+node.attributes.molile+')' ;
+        }else{
+           isDisabled = true;
+        }
+
       }
+
+      return {
+        id: id,
+        label: label,
+        children: node.children,
+        isDisabled:isDisabled
+      }
+    },
   }
 }
 
