@@ -60,6 +60,10 @@ export default {
         type:String,
         default:'yyyy-MM-dd'
     },
+    disabled: {
+        type: Boolean,
+        default: false
+    },
     unlinkPanels:{
         type:Boolean,
         default:false
