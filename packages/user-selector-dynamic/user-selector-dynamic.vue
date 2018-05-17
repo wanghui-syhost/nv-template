@@ -57,9 +57,7 @@ export default {
   },
 
   data: () => ({
-    value: [],
     options: [
-
     ],
     organizes:[],
     normalizer(node/*, id */) {
