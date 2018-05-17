@@ -10,7 +10,8 @@
   border-radius: $--border-radius-small;
   box-shadow: $--dialog-box-shadow;
   box-sizing: border-box;
-  width: 50%;
+  width: 65%;
+  min-width: 800px;
 
   @include when(fullscreen) {
     width: 100%;
@@ -32,6 +33,7 @@
 
   @include e(header) {
     padding: $--dialog-padding-primary;
+    background-color: $--color-primary;
     padding-bottom: 10px;
   }
 
@@ -60,11 +62,11 @@
   @include e(title) {
     line-height: $--dialog-line-height;
     font-size: $--dialog-title-font-size;
-    color: $--color-text-primary;
+    color: #fff;
   }
 
   @include e(body) {
-    padding: 30px 20px;
+    padding: 25px 20px;
     color: $--color-text-regular;
     font-size: $--dialog-font-size;
   }

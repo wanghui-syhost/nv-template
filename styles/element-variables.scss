@@ -80,7 +80,7 @@ $--fill-base: $--color-white !default;
 
 /* Font
 -------------------------- */
-$--font-path: './src/fonts' !default;
+$--font-path: '/static/theme-nenv/fonts' !default;
 $--font-size-base: 14px !default;
 $--font-size-small: 13px !default;
 $--font-size-large: 18px !default;
@@ -316,7 +316,7 @@ $--notification-danger-color: $--color-danger !default;
 $--input-font-size: $--font-size-base !default;
 $--input-color: $--color-text-regular !default;
 $--input-width: 140px !default;
-$--input-height: 40px !default;
+$--input-height: 36px !default;
 $--input-border: $--border-base !default;
 $--input-border-color: $--border-color-base !default;
 $--input-border-radius: $--border-radius-base !default;
@@ -396,7 +396,7 @@ $--tab-vertical-header-count-fill: $--color-text-secondary !default;
 $--button-font-size: 14px !default;
 $--button-font-weight: $--font-weight-primary !default;
 $--button-border-radius: $--border-radius-base !default;
-$--button-padding-vertical: 12px !default;
+$--button-padding-vertical: 10px !default;
 $--button-padding-horizontal: 20px !default;
 
 $--button-medium-font-size: 14px !default;
@@ -471,7 +471,7 @@ $--dialog-close-hover-color: $--color-primary !default;
 $--dialog-title-font-size: $--font-size-large !default;
 $--dialog-font-size: 14px !default;
 $--dialog-line-height: $--font-line-height-primary !default;
-$--dialog-padding-primary: 20px !default;
+$--dialog-padding-primary: 15px !default;
 
 /* Table
 -------------------------- */

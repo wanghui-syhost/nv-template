@@ -2,6 +2,12 @@
 # yarn lockfile v1
 
 
+"@riophae/vue-treeselect@^0.0.27":
+  version "0.0.27"
+  resolved "https://registry.yarnpkg.com/@riophae/vue-treeselect/-/vue-treeselect-0.0.27.tgz#b4b134459c6a5e5caf5ee13690c37d2874a7bc27"
+  dependencies:
+    fuzzysearch "^1.0.3"
+
 charenc@~0.0.1:
   version "0.0.2"
   resolved "http://registry.npm.taobao.org/charenc/download/charenc-0.0.2.tgz#c0a1d2f3a7092e03774bfa83f14c0fc5790a8667"
@@ -19,6 +25,10 @@ echarts@^4.0.4:
 element-theme-chalk@^2.3.8:
   version "2.3.8"
   resolved "https://registry.yarnpkg.com/element-theme-chalk/-/element-theme-chalk-2.3.8.tgz#ee11063c3272ffd294d321e29a54da832ba30642"
+
+fuzzysearch@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/fuzzysearch/-/fuzzysearch-1.0.3.tgz#dffc80f6d6b04223f2226aa79dd194231096d008"
 
 is-buffer@~1.1.1:
   version "1.1.6"

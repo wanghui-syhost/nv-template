@@ -56,7 +56,6 @@ export default {
        event:'change'
   },
   data: () => ({
-    value:null,
     options: [],
 
     normalizer(node/*, id */) {

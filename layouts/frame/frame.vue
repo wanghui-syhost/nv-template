@@ -99,7 +99,7 @@ export default {
     //padding-left: 200px;
     // max-width: calc(100vw - 200px);
     min-height: 100%;
-    width: 100%;
+    // width: 100%;
     top: 0;
     //margin-top: 82px;
     //padding-top: 20px;
