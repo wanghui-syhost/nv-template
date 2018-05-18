@@ -54,7 +54,7 @@ export default {
     },
     rangeSeparator:{
         type:String,
-        default:'-'
+        default:'至'
     },
     valueFormat:{
         type:String,
