@@ -97,6 +97,7 @@
 
   thead {
     color: $--table-header-color;
+    background-color:  $--color-primary-light-2;
     font-weight: 500;
 
     &.is-group {

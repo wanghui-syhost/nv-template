@@ -2,7 +2,7 @@
     <el-cascader
         :options="nvOptions"
         @active-item-change="handleItemChange"
-        
+        :clearable="clearable"
         :separator="separator" :placeholder="placeholder" :disabled="disabled"
         @change="change"
         v-model="currentValue"
@@ -30,6 +30,10 @@
         },
         placeholder:{
             type:String
+        },
+        clearable: {
+            type: Boolean,
+            default: false
         },
         disabled:{
             type:Boolean
