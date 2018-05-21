@@ -6,8 +6,9 @@
 <script>
 export default {
     name:'DemoPathVab',
+    meta: { nvPermission: false },
     created () {
-        alert(`路径变量为： ${this.$route.params.name} `)
+        // alert(`路径变量为： ${this.$route.params.name} `)
     }
 }
 </script>

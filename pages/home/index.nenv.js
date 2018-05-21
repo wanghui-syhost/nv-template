@@ -1,6 +1,7 @@
 import { mapState } from 'vuex'
 const component = {
     name: 'HomeContainer',
+    meta: { nvPermission: false },
     computed: {
         homeComponent () {
             const self = this
@@ -21,13 +22,15 @@ const store = {
     
 }
 
-export const router = {
-    path: '/',
-    redirect: '/home',
-    children: [{
-        path: '/home',
-        component,
-        meta: { nvPermission: false }
-    }]
-}
+export const router = component
+
+// export const router = {
+//     path: '/',
+//     redirect: '/home',
+//     children: [{
+//         path: '/home',
+//         component,
+//         meta: { nvPermission: false }
+//     }]
+// }
 
