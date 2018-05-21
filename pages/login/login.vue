@@ -5,7 +5,7 @@
             <div class="login__form">
                 <div class="login__info">
                     <span class="login__logo"></span>
-                    <span class="login__title">盈峰环境智慧水务平台
+                    <span class="login__title">{{ project.login_page_title }}
                         <span class="login__title-desc">infore environmental intelligent water service platform</span>
                     </span>
                 </div>
@@ -46,6 +46,16 @@ export default {
         },
       }
   },
+  props: {
+        header: {
+            type: Object,
+            default () {
+                return {
+                    login_page_title: nenv.project.login_page_title
+                }
+            }
+        },
+    },
   methods:{
     onFocus(type){
         let me = this

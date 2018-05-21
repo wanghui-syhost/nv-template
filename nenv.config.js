@@ -6,6 +6,7 @@ module.exports = {
   project: {
     // 定义项目的标题
     title: "欢迎来到盈峰环境智慧水务平台",
+    login_page_title: "盈峰环境智慧水务平台",
   },
   proxy: {
     '/api/*': { //平台api管理
