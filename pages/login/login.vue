@@ -6,7 +6,7 @@
                 <div class="login__info">
                     <span class="login__logo"></span>
                     <span class="login__title">{{ project.login_page_title }}
-                        <span class="login__title-desc">infore environmental intelligent water service platform</span>
+                        <span class="login__title-desc">{{project.login_page_title_en}}</span>
                     </span>
                 </div>
                 <div>
@@ -51,7 +51,8 @@ export default {
             type: Object,
             default () {
                 return {
-                    login_page_title: nenv.project.login_page_title
+                    login_page_title: nenv.project.login_page_title,
+                    login_page_title_en: nenv.project.login_page_title_en
                 }
             }
         },
@@ -299,7 +300,7 @@ export default {
         width:60px;
         height:60px; 
         display: inline-block;
-        background:  url(./assets/login/ic_login_logo_60x60.png);
+        background:  url(./assets/login/ic_login_logo2_60x60.png);
         border-radius: 4px ; 
     }
     &__title{
@@ -440,7 +441,7 @@ export default {
         width:60px;
         height:60px; 
         display: inline-block;
-        background:  url(./assets/login/ic_login_logo_60x60.png);
+        background:  url(./assets/login/ic_login_logo2_60x60.png);
         border-radius: 4px ; 
     }
     &__title{
