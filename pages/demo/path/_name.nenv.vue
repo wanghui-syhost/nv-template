@@ -7,6 +7,11 @@
 export default {
     name:'DemoPathVab',
     meta: { nvPermission: false },
+    props: {
+        nvProps: {
+
+        }
+    },
     created () {
         // alert(`路径变量为： ${this.$route.params.name} `)
     }
