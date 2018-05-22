@@ -1,3 +1,4 @@
+import dynamicMixins from '../lib/dynamicMixins'
 export default {
     name: 'NvDynamicTab',
     props: {
@@ -7,42 +8,12 @@ export default {
         },
         nvCode: String
     },
+    mixins: [ dynamicMixins ],
     data () {
         return {
             isLoading: false,
             currentTab: {},
             tabs: []
-        }
-    },
-    computed: {
-        realComponent () {
-            const self = this
-            const { currentTab } = self
-            const { path } = currentTab
-            const { flatRoutes } = window.nenv
-            if (/https?:\/\//.exec(path)) {
-                return 'nv-iframe'
-            } else {
-                for (let flatRoute of flatRoutes) {
-                    if (flatRoute.path === path) {
-                        return flatRoute.component
-                    }
-                }
-            }
-        },
-        realComponentProps () {
-            const self = this
-            const { currentTab } = self
-            const { path } = currentTab
-            if (/https?:\/\//.exec(path)) {
-                return {
-                    nvUrl : path,
-                    ...currentTab.query
-                }
-            } else {
-
-            }
-            
         }
     },
     created () {
