@@ -3,10 +3,16 @@
         <section class="nv-layout-form search-form" slot="top">
             <el-form ref="form" :model="form" >
                 <nv-layout-form>
-                    <el-button slot="search-button" type="primary" icon="el-icon-search">搜索</el-button>
+                    <el-button slot="search-button" @click="searchData" type="primary" icon="el-icon-search">搜索</el-button>
                     <template slot="search-item">
-                        <el-form-item label="关键字">
-                            <el-input suffix-icon="search" v-model="form.keyword" placeholder="请输入关键字"></el-input>
+                        <el-form-item label="项目名">
+                            <el-input suffix-icon="search" v-model="form.PROJECT_NAME" placeholder="请输入关键字"></el-input>
+                        </el-form-item>
+                        <el-form-item label="流程类型">
+                            <el-select v-model="form.PROC_TYPE" placeholder="请选择流程类型">
+                                <el-option label="请假流程" value="PROCESS_LEAVE"></el-option>
+                                <el-option label="其它流程" value="OTHER"></el-option>
+                            </el-select>
                         </el-form-item>
                     </template>
                     <!-- <template slot="extra-item">
@@ -18,7 +24,7 @@
             </el-form>
         </section>
         <section class="search-table">
-            <el-table :data="tableData" ement-loading-text="拼命加载中" border fit highlight-current-row>
+            <el-table :data="tableData" v-loading.body="listLoading" element-loading-text="拼命加载中..." border fit highlight-current-row>
                 <el-table-column prop="ROW_ID" align="center" label="序号" min-width="5%"></el-table-column>
                 <el-table-column prop="PROJECT_NAME" label="流程名称" align="center" min-width="10%"></el-table-column>
                 <el-table-column prop="PROC_TYPE" label="流程类型" align="center" min-width="10%">
@@ -54,7 +60,8 @@ export default {
     data() {
         return {
             form:{
-                keyword: ''
+                PROJECT_NAME: null,
+                PROC_TYPE: null
             },
             listLoading: true,
             pageIndex: 1,
@@ -79,7 +86,9 @@ export default {
             this.listLoading = true;
             const pagePrams = {
                 page: this.pageIndex,
-                rows : this.pageSize
+                rows : this.pageSize,
+                PROCESS_TYPE: this.form.PROC_TYPE,
+                PROJECT_NAME: this.form.PROJECT_NAME
             }
             unfetch({
                 url: '/workFlow/getMyTask',
@@ -88,7 +97,7 @@ export default {
             }).then(({data}) => {
                 this.listLoading = false;
                 this.tableData = data.list.map(v => {
-                v.isEdit = false;
+                //v.isEdit = false;
                 return v
             });
             this.totalCount = data.totalCount;
@@ -107,7 +116,10 @@ export default {
         handleCurrentChange(pageIndex){
             this.pageIndex = pageIndex;
             this.fetchData();
-        }  
+        },
+        searchData(){
+            this.fetchData();
+        }
     }
 }
 </script>
