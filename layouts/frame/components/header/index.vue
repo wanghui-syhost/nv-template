@@ -255,7 +255,6 @@ export default {
             //newNickName = this.newNickName;
         },
         saveInfo(){
-            alert(this.newNickName+"_"+this.newMobile);
             unfetch({
                 url: '/user/editInfo',
                 method: 'put',
