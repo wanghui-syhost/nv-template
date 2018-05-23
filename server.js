@@ -144,11 +144,7 @@ module.exports = function (router, mockjs) {
   // 动态选项卡接口
   router.get('/api/tab/valid/menus', function (req, res, next) {
     const { CODE } = req.query
-<<<<<<< Updated upstream
     // return next()
-=======
-    return next()
->>>>>>> Stashed changes
     switch (CODE) {
       case 'PROJECT_TAB':
         res.reply(
@@ -189,13 +185,8 @@ module.exports = function (router, mockjs) {
               "ID": "11E7F0F02380A465934301ED9C206E01",
               "CREATE_TIME": 1515029984000,
               "UPDATE_TIME": 1515029984000,
-<<<<<<< Updated upstream
               "URL": "/demo/path/you",
               "NAME": "参数"
-=======
-              "URL": "http://www.baidu.com",
-              "NAME": "百度"
->>>>>>> Stashed changes
             }
           ]
         )
