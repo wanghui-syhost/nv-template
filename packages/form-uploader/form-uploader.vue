@@ -9,7 +9,8 @@
           :value="item.VALUE">
         </el-option>
       </el-select>
-      <el-upload  class="upload-table__upload--btn" :action="uploadURL" 
+      <el-upload  class="upload-table__upload--btn" :action="uploadURL"
+        v-if = "canUpload"
         :on-success="success" 
         :before-upload="beforeUpload"
         :headers="uploadHeaders" :data="fileData" 
@@ -30,7 +31,7 @@
         <el-table-column label="文件大小" prop = "FILE_SIZE" />
         <el-table-column label="文件类型" prop = "TYPE" />
         <el-table-column label="上传时间" prop = "CREATE_TIME" />
-        <el-table-column label="操作">
+        <el-table-column label="操作" v-if="canOperate">
           <template slot-scope="scope">
             <el-button size="small" type="danger" @click="deleteFile(scope.row)">删除</el-button>
             <slot name="extra" :file="scope.row"/>
@@ -45,6 +46,16 @@
 import { selectOptionByFileType, selectByFileType, FileDelete, FileView, FileAdd } from "./api";
 export default {
   name: "NvFormUploader",
+  props: {
+    canUpload: {
+      type: Boolean,
+      default: true
+    },
+    canOperate: {
+      type: Boolean,
+      default: true
+    }
+  },
   data() {
     return {
       listLoading: false,
