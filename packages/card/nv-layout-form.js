@@ -46,6 +46,7 @@ export default {
         const extraSlots = $slots['extra-item']
 
         const innerSlotsLength = otherSlots.length
+        const double = otherSlots.find(slot => slot.componentOptions.propsData.nvLayout === 'full') || innerSlotsLength > 3
         const otherSlotsVNodes = []
 
         for (let i = 0; i < innerSlotsLength; i++) {
@@ -117,7 +118,7 @@ export default {
                                                 'div',
                                                 {
                                                     staticClass: 'nv-layout-form_popover',
-                                                    class: innerSlotsLength > 3 ? 'double' : 'single'
+                                                    class: double ? 'double' : 'single'
                                                 },
                                                 otherSlotsVNodes
                                             )

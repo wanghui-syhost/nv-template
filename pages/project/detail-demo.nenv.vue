@@ -26,7 +26,7 @@
                 <!-- <el-form-item  label-width="0">
                   <el-date-picker class="all-width" type="date" placeholder="选择日期" v-model="form.endDate" ></el-date-picker>
                 </el-form-item> -->
-                <el-form-item label="抽查况">
+                <!-- <el-form-item label="抽查况">
                   <el-select v-model="form.region2" placeholder="全部类型" class="all-width">
                     <el-option label="抽查情况1" value="type1"></el-option>
                     <el-option label="抽查情况2" value="type2"></el-option>
@@ -66,7 +66,7 @@
               <template slot="extra-item">
                 <el-button  type="primary">新增</el-button>
                                 <el-button  type="primary">新增</el-button>
-                                                <el-button  type="primary">新增</el-button>
+                                                <el-button  type="primary">新增</el-button> -->
               </template>
           </nv-layout-form>
       </el-form>
