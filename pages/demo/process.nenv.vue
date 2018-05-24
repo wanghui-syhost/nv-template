@@ -38,7 +38,13 @@
                 <el-table-column prop="START_TIME" label="发起时间" align="center" min-width="10%"></el-table-column>
                 <el-table-column prop="USED_TIME" label="经历时间" align="center" min-width="10%"></el-table-column>
                 <el-table-column prop="STATUS" label="状态" align="center" min-width="10%"></el-table-column>
-                <el-table-column prop="" label="操作" align="center" min-width="10%"></el-table-column>
+                <el-table-column prop="" label="操作" align="center" min-width="10%">
+                    <template slot-scope="scope">
+                        <div class="opt-cell">
+                            <el-button type="primary" size="small" icon="information" @click="viewInfo(scope.row)" plain>查看详情</el-button>
+                        </div>
+                    </template>
+                </el-table-column>
             </el-table>
         </section>
         <div class="home-detail__page">
@@ -119,6 +125,10 @@ export default {
         },
         searchData(){
             this.fetchData();
+        },
+        viewInfo(row){
+            this.$router.push({path:'/demo/process-detail', query:{BUSINESS_ID:row.BUSINESS_ID, PROC_TYPE:row.PROC_TYPE, PROC_INST_ID: row.PROC_INST_ID}});
+            console.log(row);
         }
     }
 }
