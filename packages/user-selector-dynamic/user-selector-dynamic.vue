@@ -9,6 +9,7 @@
   :disable-branch-nodes="true"
   :value-format="valueFormat"
   v-model="currentValue"
+    :disabled="disabled"
   />
 </template>
 
@@ -53,6 +54,10 @@ export default {
       multiple:{
         type:Boolean,
         default:true
+      },
+      disabled:{
+        type:Boolean,
+        default:false
       }
   },
 

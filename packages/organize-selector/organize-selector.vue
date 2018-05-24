@@ -7,6 +7,7 @@
    search-nested
   v-model="currentValue"
     :value-format="valueFormat"
+      :disabled="disabled"
   />
 
 </template>
@@ -49,6 +50,10 @@ export default {
       valueFormat:{
         type:String,
         default:'id'
+      },
+      disabled:{
+        type:Boolean,
+        default:false
       }
   },
     model:{

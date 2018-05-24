@@ -8,6 +8,7 @@
   :disable-branch-nodes="true"
   :value-format="valueFormat"
   v-model="currentValue"
+  :disabled="disabled"
   />
 </template>
 
@@ -52,6 +53,10 @@ export default {
         default:true
       },
       isTelephone:{
+        type:Boolean,
+        default:false
+      },
+      disabled:{
         type:Boolean,
         default:false
       }
