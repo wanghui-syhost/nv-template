@@ -14,7 +14,7 @@
       </div>
       <div>
         <h4>1.2下拉框</h4>
-        <nv-select nv-code="PROCESS" v-model="nvSelectResult"></nv-select>
+        <nv-select nv-code="PROCESS" ref='x' v-model="nvSelectResult"></nv-select>
         <blockquote>
           <p>
             选择结果:

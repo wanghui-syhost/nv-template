@@ -12,4 +12,5 @@ nenv.config.js
 .nenv
 *.gz
 /.idea/
+/modules/icons
 static/theme-nenv
