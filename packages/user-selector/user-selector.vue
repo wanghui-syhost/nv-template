@@ -106,7 +106,7 @@ export default {
      
       if(this.isTelephone && node.attributes){
         if(node.attributes.molile){
-          //id = node.attributes.molile;
+          id = node.text+'('+node.attributes.molile+')';
           label = node.text+'('+node.attributes.molile+')' ;
         }else{
            isDisabled = true;
