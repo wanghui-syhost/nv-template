@@ -65,7 +65,7 @@
                                 <i class="el-icon-arrow-right"></i>
                                 </span>
                                 <span class="fright" v-show="isEdit">
-                                <el-input v-show="isEdit" size="small" placeholder="请输入电话" v-model="newMobile"></el-input>
+                                    <el-input v-show="isEdit" size="small" placeholder="请输入电话" v-model="newMobile"></el-input>
                                 </span>
                             </li>
                             <li>

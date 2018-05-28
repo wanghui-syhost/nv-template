@@ -78,11 +78,13 @@ export default {
             }).then(({ data }) => {
                 console.log(data);
                 this.processInstanceId = data;
-                this.acitvityImg = "/api/workFlow/getActivitiProccessImage?processInstanceId="+data,
-
-                    alert("流程新建成功");
+                this.acitvityImg = "/api/workFlow/viewImg?processInstanceId="+data,
+                this.$message({message:'流程创建成功!', type: 'success'});
                 //this.dialogVisible = false;
-            });
+            }).catch(err=>{
+                this.$message.error(err.msg);
+                console.log(err);
+            })
         },getActivitiProccessImage(){
             this.dialogVisible = true;
             

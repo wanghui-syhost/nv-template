@@ -54,8 +54,10 @@
                     <el-table-column prop="PROC_DATE" label="操作时间" align="center" min-width="10%"></el-table-column>
                 </el-table>
             </el-tab-pane>
-            <el-tab-pane label="流程图" name="third">
-                <img :src="acitvityImg" />
+            <el-tab-pane label="流程图" name="third" v-loading.body="imgLoading" element-loading-text="拼命加载中...">
+                <div style="height:400px; width100%">
+                    <img :src="acitvityImg" />
+                </div>
             </el-tab-pane>
         </el-tabs>
         
@@ -101,6 +103,7 @@ export default {
             acitvityImg: "",
             tableData: [],
             listLoading: false,
+            imgLoading: false,
             operation: "",
             nvUserSelectDynamicResult:[],
             form: {
@@ -128,9 +131,13 @@ export default {
     },
     methods: {
         handleClick(tab, event) {
-            console.log(tab.name);
+            
             if(tab.name == "third"){
-                this.acitvityImg = "/api/workFlow/getActivitiProccessImage?processInstanceId="+this.PROC_INST_ID;
+                console.log(tab.name);
+                this.imgLoading = true;
+                debugger;
+                this.acitvityImg = "/api/workFlow/viewImg?processInstanceId="+this.PROC_INST_ID;
+                this.imgLoading = false;
             }else if(tab.name == "second"){
                 this.listLoading = true;
                 const pagePrams = {
@@ -150,9 +157,6 @@ export default {
                     console.log(err);
                 })
             }
-        },
-        getActivitiProccessImage(){
-            this.acitvityImg = "/api/workFlow/getActivitiProccessImage?processInstanceId="+this.PROC_INST_ID;
         },
         pass(){
             this.operation = "PASS";
@@ -183,6 +187,9 @@ export default {
                 }else{
                     this.dialogVisible2 = false;
                 }
+            }).catch(err=>{
+                this.$message.error(err.msg);
+                console.log(err);
             })
         },
         typeIndex(index){
