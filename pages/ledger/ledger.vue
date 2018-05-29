@@ -1,5 +1,5 @@
 <template>
-	<div class="standard-ledger">
+	<div class="standard-ledger" :class="{'has-header': SHOW_HEAD}">
 		<header class="ledger-header" v-if="SHOW_HEAD">
 			{{TITLE}}
 		</header>
@@ -53,8 +53,7 @@
 				this.SHOW_HEAD = sliderMenus.ledger.SHOW_HEAD;
 				this.TITLE = sliderMenus.ledger.TITLE;
 				this.routes = sliderMenus.menus;
-				console.log(sliderMenus)
-				this.defaultMenu = sliderMenus.menus[0].children[0].ID
+				this.defaultMenu = sliderMenus.menus[0].children ? sliderMenus.menus[0].children[0].ID : sliderMenus.menus[0].ID
 				this.defaultOpend = [sliderMenus.menus[0].ID]
 			},
 			menuClick(item) {
@@ -65,47 +64,60 @@
 	}
 </script>
 <style lang="scss" scoped>
-	.standard-ledger {
-		position: absolute;
-		top: 0;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		
-		.ledger-header {
-			width: 100%;
-			height: 62px;
-			line-height: 62px;
-			text-indent: 20px;
-			font-size: 18px;
-			color: #FFFFFF;
-			// background: rgba(48, 150, 250, 1);
-		}
-		
-		.ledger-body {
-			display: flex;
-			height: calc(100% - 62px);
-			width: 100%;
-			overflow: hidden;
-			.ledger-slider {
-				width: 180px;
-				height: 100%;
-				overflow: hidden;
-				margin-right: 20px;
-				background-color: #FFFFFF;
-				box-shadow: 0 0 4px #BFC4B6;
-			}
-			.nv-ledger {
-				flex: 1;
-				border: 1px solid #CCCCCC;
-				background-color: #FFFFFF;
-				box-shadow: 0 0 4px #AFC5DE;
-			}
-		}
-		
+.standard-ledger {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	
+	.ledger-header {
+		width: 100%;
+		height: 62px;
+		line-height: 62px;
+		text-indent: 20px;
+		font-size: 18px;
+		color: #FFFFFF;
+		// background: rgba(48, 150, 250, 1);
 	}
 
+	.ledger-body {
+		display: flex;
+		width: 100%;
+		height: 100%;
+		overflow: auto;
+		.ledger-slider {
+			position: fixed;
+			width: 180px;
+			height: 100%;
+			top: 0;
+			bottom: 0;
+			overflow: auto;
+			margin-right: 20px;
+			background-color: #FFFFFF;
+			box-shadow: 0 0 4px #BFC4B6;
+		}
+		.nv-ledger {
+			flex: 1;
+			border: 1px solid #CCCCCC;
+			background-color: #FFFFFF;
+			box-shadow: 0 0 4px #AFC5DE;
+		}
+	}
+
+	&.has-header {
+		.ledger-slider {
+			top: 62px;
+		}
+		.ledger-body {
+			height: calc(100% - 62px);
+		}
+	}
+	
+}
+
 .ledger-main {
+	margin-left: 200px;
 	margin-top: 16px;
 }
 
