@@ -61,8 +61,7 @@ export default {
         default:'yyyy-MM-dd'
     },
     disabled: {
-        type: Boolean,
-        default: false
+        type: Boolean
     },
     unlinkPanels:{
         type:Boolean,
