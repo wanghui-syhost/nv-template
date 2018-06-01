@@ -60,6 +60,11 @@ export default {
             nvLayout.isDynamicView = true
         }
     },
+    watch: {
+        nvCode () {
+            this.fetchTabs()
+        }
+    },
     render (h) {
         const self = this
         return h(
