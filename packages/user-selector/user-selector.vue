@@ -8,7 +8,7 @@
   :disable-branch-nodes="true"
   :value-format="valueFormat"
   v-model="currentValue"
-  :disabled="disabled"
+  @select="select"
   />
 </template>
 
@@ -55,10 +55,6 @@ export default {
       isTelephone:{
         type:Boolean,
         default:false
-      },
-      disabled:{
-        type:Boolean,
-        default:false
       }
   },
 
@@ -94,7 +90,13 @@ export default {
             params: {
                 ORGANIZE_ID: me.reqOpt.organizeId
                 }
-            }).then(function ({data}) {          
+            }).then(function ({data}) {  
+                //
+                if(data){
+                  data.forEach(node => {
+                    me.setOra(node);
+                  });
+                }
                 me.options =  data; 
             })
       },
@@ -106,7 +108,7 @@ export default {
      
       if(this.isTelephone && node.attributes){
         if(node.attributes.molile){
-          id = node.text+'('+node.attributes.molile+')';
+          //id = node.attributes.molile;
           label = node.text+'('+node.attributes.molile+')' ;
         }else{
            isDisabled = true;
@@ -121,6 +123,22 @@ export default {
         isDisabled:isDisabled
       }
     },
+    select(node,id){
+      this.$emit('select',node);
+    },
+    //设置组织
+    setOra(parentNode){
+      const self = this;
+      if(parentNode.children){
+        parentNode.children.forEach(element => {
+          if(element.children){
+            self.setOra(element);
+          }else{
+            element.parentText = parentNode.text;
+          }
+        });
+      }
+    }
   }
 }
 

@@ -9,7 +9,7 @@
   :disable-branch-nodes="true"
   :value-format="valueFormat"
   v-model="currentValue"
-    :disabled="disabled"
+    @select="select"
   />
 </template>
 
@@ -54,10 +54,6 @@ export default {
       multiple:{
         type:Boolean,
         default:true
-      },
-      disabled:{
-        type:Boolean,
-        default:false
       }
   },
 
@@ -121,7 +117,7 @@ export default {
                parentNode.children = [];
             } 
            data.forEach(item => {
-              parentNode.children.push({id:item.userName,text:item.nickName});
+              parentNode.children.push({id:item.userName,text:item.nickName,parentText:parentNode.text});
            });
          }; 
       })
@@ -149,6 +145,9 @@ export default {
         }
        }
        return  result || null;
+    },
+    select(node,id){
+      this.$emit('select',node);
     },
   }
 }
