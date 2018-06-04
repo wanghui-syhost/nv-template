@@ -13,7 +13,7 @@
 </script>
 <style scoped lang="scss">
     .main{
-        min-height: 100%;
+        height: 100%;
         min-width: 1063px;
     }
     .fade-enter-active, .fade-leave-active {

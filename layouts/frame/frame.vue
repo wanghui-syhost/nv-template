@@ -121,8 +121,8 @@ export default {
         transition: all .28s ease-out;
         position: relative;
         //position: absolute;
-        min-height: 100%;
-        min-height: calc(100vh - 62px);
+        // min-height: 100%;
+        height: calc(100vh - 62px);
         //top: 82px;
         //bottom: 0;
         //width: auto;
