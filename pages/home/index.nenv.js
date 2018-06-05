@@ -2,6 +2,21 @@ import { mapState } from 'vuex'
 const component = {
     name: 'HomeContainer',
     meta: { nvPermission: false },
+    data () {
+        return {
+            isloaded: false
+        }
+    },
+    beforeRouteEnter (to, from, next) {
+        return next(vm => {
+            const homePath = '/home/' + vm.home || 'index'
+            nenv.pageLoader.loadPage(homePath).then(() => {
+                vm.isloaded = true
+            }).catch(() => {
+                vm.isloaded = true
+            })
+        })
+    },
     computed: {
         homeComponent () {
             const self = this
@@ -14,7 +29,7 @@ const component = {
         })
     },
     render (h) {
-        return h(this.homeComponent)
+        return this.isloaded ? h(this.homeComponent) : null
     }
 }
 
