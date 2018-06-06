@@ -46,16 +46,6 @@
 import { selectOptionByFileType, selectByFileType, FileDelete, FileView, FileAdd } from "./api";
 export default {
   name: "NvFormUploader",
-  props: {
-    canUpload: {
-      type: Boolean,
-      default: true
-    },
-    canOperate: {
-      type: Boolean,
-      default: true
-    }
-  },
   data() {
     return {
       listLoading: false,
@@ -68,6 +58,14 @@ export default {
     };
   },
   props: {
+    canUpload: {
+      type: Boolean,
+      default: true
+    },
+    canOperate: {
+      type: Boolean,
+      default: true
+    }
     // 项目ID，默认为''
     projectId: {
       type: String,
