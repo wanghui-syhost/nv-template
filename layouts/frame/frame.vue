@@ -38,7 +38,7 @@ export default {
         ...mapState(['isWithLimited']),
         hasSidebar () {
             const { childrens } = this.activeTopMenu
-            return childrens && childrens.length > 0
+            return childrens && childrens.length > 0 && this.$route.query['nv-no-sidebar'] !== 'true'
         }
     },
     methods: {
