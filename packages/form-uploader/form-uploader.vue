@@ -65,7 +65,7 @@ export default {
     canOperate: {
       type: Boolean,
       default: true
-    }
+    },
     // 项目ID，默认为''
     projectId: {
       type: String,
